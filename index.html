@@ -115,17 +115,22 @@ border-radius: 15px;
 	font-family: var(--font-family);
 }
 ul {
-  list-style-type: none;
   margin: 0;
   margin-top: 5px;
+  margin-bottom: 5px;
   overflow: hidden;
   font-size: 20px;
   background: #EDEDE6;
   border-radius: 15px;
 }
-
-li {
+.m{
+  list-style-type: none;
+}
+.menu{
   float: left;
+}
+.change{
+ margin-bottom: 2px;
 }
 
 li a {
@@ -147,11 +152,9 @@ li a:hover {
 <div class="header rcorners1">
   <h1>ThatOneUnoriginal Project Pages</h1>
 </div>
-<ul>
-  <li><a class="active" href="index.html">Home</a></li>
-  <li><a href="#news">News</a></li>
-  <li><a href="#contact">Contact</a></li>
-  <li><a href="#about">About</a></li>
+<ul class="m">
+  <li class="menu"><a class="active" href="index.html">Home</a></li>
+  <li class="menu"><a href="changelogs.html">Change Logs</a></li>
 </ul>
 <h1 style="padding-top:10px; padding-left:10px; font-size: 40px">Welcome!</h1>
 
@@ -210,7 +213,7 @@ li a:hover {
 <div class="contentPills">
 	<h1 style="font-size: 40px">Fixed Find Jobs Listing</h1>
 	<div class="tags">https://create.roblox.com/talent/search/jobs</div><br>
-	<h2 style="font-size: 35px">Description</h2https://create.roblox.com/talent/search/jobs
+	<h2 style="font-size: 35px">Description</h2>
 	<p>Modifies viewing Job Listings on the Find Jobs on create.roblox.com to Create a Better Searching Experience.</p>
 		<div class="comingSoonPill">
 			<h2 style="font-size: 35px">Coming Soon</h2>
