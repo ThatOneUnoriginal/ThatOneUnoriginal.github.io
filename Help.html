@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>ThatOneUnoriginal.Github.io</title>
+</head>
+
+<style>
+:root{
+	--font-family: Public Sans
+}
+p {
+  font-family: var(--font-family);
+  font-size: 18px;
+  margin: 5px;
+}
+h1, h2{
+  font-family: var(--font-family);
+  color: #000000;
+  margin: 0;
+}
+h3{
+  font-family: var(--font-family);
+  color: #000000;
+  margin: 0;
+  padding-left: 10px;
+}
+h4{
+  font-family: var(--font-family);
+  color: #000000;
+  margin: 0;
+  padding-left: 15px;
+}
+
+.rcorners1 {
+  border-radius: 25px;
+}
+
+.header, .footer {
+  padding-left: 10px;
+  padding-bottom: 10px;
+  padding-top: 10px;
+  text-align: left;
+  background: #EDEDE6;
+  font-size: 30px;
+}
+.alert{
+  background: #F3D3D3;
+}
+
+.contentPills{
+	margin-bottom: 15px;
+	background: #EDEDE6;
+	color: #000000;
+	max-width: 90%;
+	border-radius: 25px;
+	padding-left: 20px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+.comingSoonPill{
+	margin-bottom: 15px;
+	background: #F6D390;
+	color: #000000;
+	max-width: 80%;
+	border-radius: 25px;
+	padding-left: 20px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	border-left: 10px solid #FDBA39;
+	border-top: 5px solid  #FDBA39;
+}
+.warningPill{
+	margin-bottom: 15px;
+	background: #f69a90;
+	color: #000000;
+	max-width: 90%;
+	border-radius: 25px;
+	padding-left: 20px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	border-left: 10px solid #ff7a6b;
+	border-top: 5px solid #ff7a6b;
+}
+.imgPills{
+max-width: 60%;
+border-radius: 15px;
+}
+
+.button{
+	border: none;
+	padding: 16px 32px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 20px;
+	margin: 4px 2px;
+	transition-duration: 0.4s;
+	cursor: pointer;
+	border-radius: 15px;
+}
+.buttonSocial{
+	border: none;
+	padding: 16px 16px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 20px;
+	height: 56px;
+	width: 56px;
+	margin: 4px 2px;
+	transition-duration: 0.4s;
+	cursor: pointer;
+	border-radius: 15px;
+}
+.buttonGitHub{
+	background: #333;
+	color: #ebebeb;
+}
+.X{
+	background: #333;
+}
+.X:hover{
+	background: #000;
+}
+.Bsky{
+	background: #0560FF;
+}
+.Bsky:hover{
+	background: #0255e6;
+}
+.Rblx{
+	background: #6347FF;
+}
+.Rblx:hover{
+	background: #5233ff;
+}
+.RblxStd{
+	background: #00A0FF;
+}
+.RblxStd:hover{
+	background: #008ee3;
+}
+.buttonGitHub:hover{
+	background: #1f1f1f;
+	color: #ffff;
+}
+.buttonUserStyles{
+	background: #00F6EB;
+	color: #000;
+}
+.buttonUserStyles:hover{
+	background: #00c5bc
+}
+.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.aGit{
+  text-decoration: none;
+  color: #ffff;
+}
+.aUser{
+  text-decoration: none;
+  color: #000;
+}
+.tags{
+	background: #DEDEDE;
+	border: none;
+	padding: 16px 32px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 20px;
+	margin: 4px 2px;
+	transition-duration: 0.4s;
+	cursor: pointer;
+	border-radius: 15px;
+	font-family: var(--font-family);
+}
+ul {
+  margin: 0;
+  margin-top: 5px;
+  margin-bottom: 10px;
+  overflow: hidden;
+  font-size: 20px;
+  background: #EDEDE6;
+  border-radius: 15px;
+}
+.ula, ol{
+	background: #F1F1F1;
+}
+.m{
+  list-style-type: none;
+}
+.menu{
+  float: left;
+}
+.change{
+ margin-bottom: 2px;
+ font-family: var(--font-family);
+}
+
+li a {
+  font-family: var(--font-family);
+  display: block;
+  color: black;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+li a:hover {
+  background-color: #D7D7D7;
+}
+
+.collapsible {
+  background-color: #333333;
+  color: white;
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  border-radius: 15px;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 15px;
+}
+.acttive, .collapsible:hover {
+  background-color: #1c1c1c;
+}
+.collapsible:after {
+  content: '\002B';
+  color: white;
+  font-weight: bold;
+  float: right;
+  margin-left: 5px;
+}
+
+.acttive:after {
+  content: "\2212";
+}
+
+.content {
+  padding: 0 18px;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.2s ease-out;
+  background-color: #f1f1f1;
+}
+</style>
+<body style="background-color:#F4F4ED;">
+<div class="header rcorners1">
+  <h1>ThatOneUnoriginal Project Pages</h1>
+</div>
+<ul class="m">
+  <li class="menu"><a class="active" href="index.html">Home</a></li>
+  <li class="menu"><a href="changelogs.html">Change Logs</a></li>
+  <li class="menu"><a href="Help.html">Help Pages</a></li>
+  <li class="menu"><a href="About.html">About Me</a></li>
+</ul>
+
+<div class="contentPills">
+	<h1 style="font-size: 40px">How to Install Stylus</h1>
+	<button class="collapsible">Expand/Retract</button>
+	<div class="content">
+	<p>To download the Stylus extension, go to the <a href="https://chromewebstore.google.com/detail/stylus/clngdbkpkpeebahjckkjfobafhncgmne">here (Chrome, Opera, Edge, etc..)</a> or <a href="https://addons.mozilla.org/en-GB/firefox/addon/styl-us/">here (Firefox)</a> to download the Stylus extension.</p>
+	<br>
+	<p>Note for Opera users you may need to follow <a href="https://github.com/openstyles/stylus/wiki/Opera,-Outdated-Stylus">this</a> workaround for an outdated version of the Stylus extension in Opera addons gallery.</p>
+	<br>
+	<p>Stylus is not supported on Safari though an alternative extension <a href="https://cascadea.app">Cascadea</a> is available on the Mac App Store that works (exclusively) on Safari.</p> 
+	</div>
+</div>
+
+<div class="contentPills">
+	<h1 style="font-size: 40px">How to Install On Mobile</h1>
+	<button class="collapsible">Expand/Retract</button>
+	<div class="content">	
+	<p>To install the Stylus extension on mobile, you will need a browser that supports the usage of web extensions. I'd recommend downloading <a href="https://kiwibrowser.com">Kiwi Browser</a> (Android). Apart from that installing Stylus is the same as installing the extension on desktop/laptop.</p>
+	</div>
+</div>
+
+<div class="contentPills">
+	<h1 style="font-size: 40px">How to Install Theme</h1>
+	<button class="collapsible">Expand/Retract</button>
+	<div class="content">
+	<p>On each of the listings, there will be a link to the UserStyles Listing and GitHub Repo (if it exists)</p>
+	<h2 style="font-size: 20px">Through UserStyles</h2>
+	<p>To install a style through the userstyles listing click the "UserStyle Listing" button to be brought to the UserStyles.world listing.</p>
+	<br>
+	<p>Once here scroll down untill you see the "Install" button. This'll open up a Stylus tab to where you can click the "Install style" button to intall the style (if the Style has any variables you can change them here before installing.)</p>
+	<h2 style="font-size: 20px">Through GitHub</h2>
+	<p>If applicable, to install a style through GitHub first click the "GitHub Repo" buttom to be brought to its GitHub Repo page. Once here find the "Releases" section and download the latest version of the style (the user.css file) or find the user.css file on the file list and download from there (it will also be the latest available version.)</p>
+	<br>
+	<p>Once you've downloaded the user.css file, open up the Stylus extension and go to the "Manage" section of the extension. Finally create a new stlye and Drag and Drop the File Over the Window or Open the File, Select Everything and Paste it In.</p>
+	</div>
+</div>
+
+<div class="contentPills">
+	<h1 style="font-size: 40px">How to Update Theme</h1>
+	<button class="collapsible">Expand/Retract</button>
+	<div class="content">
+	<p>To update the Stylus theme, navigate to the "Manage" section of the Stylus extension, search for the style/theme in question, and press the magnifying glass with the two circular arrows icon. If there's an update available, press the download button (note this will overwrite any local edits.</p>
+	</div>
+</div>
+
+<div class="contentPills">
+	<h1 style="font-size: 40px">How to Disable Theme</h1>
+	<button class="collapsible">Expand/Retract</button>
+	<div class="content">
+	<p>To disable the Stylus theme, navigate to the "Manage" section of the Stylus extension, search for the style/theme in question, and uncheck it to disable it. Alternatively navigate to the page that it effects, open the Stylus extension and uncheck the style/theme from there. To re-enable go through the same steps but make sure the style/theme is checked.</p>
+	</div>
+</div>
+
+<div class="contentPills">
+	<h1 style="font-size: 40px">How to Uninstall Theme</h1>
+	<button class="collapsible">Expand/Retract</button>
+	<div class="content">
+	<p>To uninstall the Stylus theme, navigate to the "Manage" section of the Stylus extension, search for the style/theme in question, press the "x" button, then finally press "Delete." Alternatively navigate to the page that it effects, press the three dots, press "Delete" and press "Delete" once more to confirm the deletion.</p>
+	</div>
+</div>
+
+<div class="contentPills">
+	<h1 style="font-size: 40px">How to Access Variables</h1>
+	<button class="collapsible">Expand/Retract</button>
+	<div class="content">
+	<p>If applicable, to change the variables of a style/theme navigate to the "Manage" section of the Stylus extension, search for the style/theme in question, press the gear icon (which indicates it has variables), then change the variables in the popup that appears. Alternatively navigate to the page that it effects and press the gear icon to change the variables from there (recommended as it can allow you to easily see what it does without having to change tabs.)</p>
+	</div>
+</div>
+
+<div class="contentPills">
+	<h1 style="font-size: 40px">How to Change Fonts</h1>
+		<button class="collapsible">Expand/Retract</button>
+		<div class="content">
+			<p>On the <b>DevForum Condensed</b>, <b>DevForum Modified</b> and <b>DevForum Modified Mobile</b> styles, there is an option to change the font and header font types.</p>
+			<br>
+			<p>There are two options when changing the font option. Firstly, use your system fonts (fonts pre-installed or otherwise installed onto the system) or importing them from an external source.</p>
+			<h2 style="font-size: 35px">How to Find System Fonts</h2>
+				<h3 style="font-size: 30px; font-weight: 500">Windows</h3>
+					<ul class="ula">
+						<li class="change" style="font-weight:500"><q>Control Panel > Fonts</q> (Windows 7, 10)</li>
+						<li class="change" style="font-weight:500"><q>Control Panel > Appearnace and Personlization > Fonts</q> (Windows 8.1)</li>
+						<li class="change" style="font-weight:500"><q>Settings > Personalisation > Fonts</q> (Windows 11)</li>
+					</ul>	
+				<h3 style="font-size: 30px; font-weight: 500">MacOS</h3>
+					<ul class="ula">
+						<li class="change" style="font-weight:500">Open the <q>Font Book</q> Application and Select <q>My Fonts</q> or <q>All User Fonts</q> (MacOS Ventura 13, Sonoma 14)</li>
+						<li class="change" style="font-weight:500">Open the <q>Font Book</q> Application and Select <q>User</q> or <q>Computer</q> (MacOS Big Sur 11, Monterey 12)</li>
+					</ul>
+				<h3 style="font-size: 30px; font-weight: 500">Linux</h3>
+					<ul class="ula">
+						<li class="change" style="font-weight:500">This'll change depending on the Linux distribution you're using, search up <q>How to Manage Fonts on [Insert Linux Distro + Version]</q> or <q>How to See Downloaded/System Fonts on [Insert Linux Distro + Version]</q></li>
+					</ul>
+				<h3 style="font-size: 30px; font-weight: 500">iOS/iPadOS</h3>
+					<ol>
+						<li class="change" style="font-weight:500">Open Settings</li>
+						<li class="change" style="font-weight:500">Select General</li>
+						<li class="change" style="font-weight:500">Select Fonts</li>
+					</ol>
+				<h3 style="font-size: 30px; font-weight: 500">Android</h3>
+			<h2 style="font-size: 35px">How to Install System Fonts</h2>
+				<h3 style="font-size: 30px; font-weight: 500">Windows</h3>
+					<ol>
+						<li class="change" style="font-weight:500">Download the font files. These often come in compressed <q>.zip</q> folders. In one .zip tolder, you might find several variations of the same font such as "light" and "heavy."</li>
+						<li class="change" style="font-weight:500">If the fonts are zipped, unzip them by right-clicking the .zip folder and then clicking Extract. Now you'll see the available TrueType and/or OpenType font files. Don'y worry about choosing between the OTF or TFF files, the difference between the two are not consequential for regular daily computer use.</li>
+						<li class="change" style="font-weight:500">Right click the fonts you want and click install. If the font comes in several variations, find the one that doesn't have and variations (usually denoted by the file that doesn't have a keyword like "Light" or "Heavy" after the name.)</li>
+					</ol>
+				<p>Alternatively you can go to the Fonts folder and drag the font files into it. Windows will automatically install them once you do this.</p>
+				<h3 style="font-size: 30px; font-weight: 500">MacOS</h3>
+					<ol>
+						<li class="change" style="font-weight:500">Download the font files. If the fonts are zipped, double click on the zipped file to unzip it. You'll see the available font files.</li>
+						<li class="change" style="font-weight:500">
+							Install the font by;
+							<ol>
+								<li class="change" style="font-weight:500">In the Font Book app, choose File > Add Fonts to Current User. In the window that appears, double-click the font file or;</li>
+								<li class="change" style="font-weight:500">Drag the font file to the Font Book App icon in the Dock, then click Install in the dialouge box that appears or;</li>
+								<li class="change" style="font-weight:500">Drag the font file on Font Book window or;</li>
+								<li class="change" style="font-weight:500">Double Click the font file in the Finder, then click install in the dialouge box that appears</li>
+							</ol>
+						</li>
+					</ol>
+				<h3 style="font-size: 30px; font-weight: 500">Linux</h3>
+					<ul class="ula">
+						<li class="change" style="font-weight:500">This'll change depending on the Linux distribution you're using, search up <q>How to Install Fonts on [Insert Linux Distro + Version]</q></li>
+					</ul>
+				<h3 style="font-size: 30px; font-weight: 500">iOS/iPadOS</h3>
+					<p>Use an application like <a href="https://apps.apple.com/us/app/adobe-creative-cloud/id852473028?xs=1&xcust=1698682519943vjnz">Adobe Creative Cloud</a>, <a href="https://apps.apple.com/us/app/font-diner/id1480286620?xs=1">Font Diner</a>, <a href="https://apps.apple.com/us/app/anyfont/id821560738?xs=1">AnyFont</a> to install fonts onto your phone/tablet.</p>
+				<h3 style="font-size: 30px; font-weight: 500">Android</h3>
+					<h4 style="font-size: 25px; font-weight: 400">Samsung</h4>
+						<ol>
+							<li class="change" style="font-weight:400">Open the Galaxy Store</li>
+							<li class="change" style="font-weight:400">Go to the Apps section, Find Popular Categories, then select Fonts</li>
+							<li class="change" style="font-weight:400">Download a Font</li>
+						</ol>
+					<p>Alternatively, you may need to download an app like #mono_ or zFont to download fonts onto Android. Most of these apps should provide a step by step guide on how to properly use them, so I'll leave it at that with how to use that method.</p>
+			<h2 style="font-size: 35px">How to Import Fonts</h2>
+				<p>The advantage of importing fonts is that you will not need to install the font onto your system (which is particularly good for Android and iOS/iPadOS where installing fonts is not as friendly and customizable. A disadvantage is that they will be overwritten whenever an update is made (updates will always overwrite Local Edits.) So you'll have to save the imports before updating the style. You'll also have to modify the source code yourself, albeit it shouldn't be too difficult.</p>
+				<br>
+				<p>Depending on the service you're using to get the fonts from, you'll have to fetch a different link. Below is an example of how the link should look like from a few vendors;</p>
+				<br>
+				<p><b>Google Fonts:</b> https://fonts.googleapis.com/css?family=<i>Font+Name</i> (ex: <a href="https://fonts.googleapis.com/css?family=Open+Sans">https://fonts.googleapis.com/css?family=Open+Sans</a>)</p>
+				<p><b>CDN Fonts:</b> https://fonts.cdnfonts.com/css/<i>font-name</i> (ex: <a href="https://fonts.cdnfonts.com/css/chalet-newyork">https://fonts.cdnfonts.com/css/chalet-newyork</a>)</p>
+				<p><b>Font Library:</b>https://fontlibrary.org//face/<i>font-name</i> (ex: <a href="https://fontlibrary.org//face/archivo-narrow">https://fontlibrary.org//face/archivo-narrow</a>)</p>
+				<br>
+				<p>Once you've grabbed this, open the extension and press the pencil icon, this'll open up a new Stylus tab with the code of the stylus theme. Once there scroll down until you find "@-moz-document". Make a line between this and the right of the stylus theme and type <q>@import url('');</q> and insert the URL between the ' ' (ex: @import url('https://fonts.cdnfonts.com/css/open-dyslexic');)</p>
+				<div class="warningPill">
+				<h2 style="font-size: 35px">Warning</h2>
+				<p>Whenever you update, Stylus will overwrite any local edits made to the Stylus theme, so if you have installed/inserted fonts through this method, save the imports you added somewhere else and add them back in once you've updated! Otherwise they wont appear.</p>
+		</div>
+			<h2 style="font-size: 35px">How to Change Fonts</h2>
+				<p>Once you've chosen one of the above options when choosing the font you want to use, remember the font name then go to the variables section of the theme/stylus. You should find a variable with the name "Font Type" or "Heading Font Type" and replace the pre-selected font with the font of your choice</p>
+		</div>		
+</div>
+
+<div class="footer rcorners1">
+	<h2>Social channels:<h1>
+	<button class="buttonSocial X"><a href="https://twitter.com/That1Unoriginal"><img width="100%" height="100%" src="https://upload.wikimedia.org/wikipedia/commons/5/53/X_logo_2023_original.svg" style="filter: invert(100%);"></a></img></button>
+	<button class="buttonSocial Bsky"><a href="https://bsky.app/profile/t1u.bsky.social"><img width="100%" height="100%" src="https://upload.wikimedia.org/wikipedia/commons/1/16/Font_Awesome_5_solid_cloud.svg" style="filter: invert(100%);"></a></button>
+	<button class="buttonSocial Rblx"><a href="https://www.roblox.com/users/647551049/profile"><img width="100%" height="100%" src="https://upload.wikimedia.org/wikipedia/commons/3/3a/Roblox_player_icon_black.svg" style="filter: invert(100%);"></a></button>
+	<button class="buttonSocial RblxStd"><a href="https://devforum.roblox.com/u/thatoneunoriginal/summary"><img width="100%" height="100%" src="https://static.wikia.nocookie.net/logopedia/images/3/33/Roblox_Studio_2022_%28Print%29.svg/revision/latest?cb=20221103141736" style="filter: invert(100%);"></a></button>
+</div>
+<script>
+var coll = document.getElementsByClassName("collapsible");
+var i;
+
+for (i = 0; i < coll.length; i++) {
+  coll[i].addEventListener("click", function() {
+    this.classList.toggle("acttive");
+    var content = this.nextElementSibling;
+    if (content.style.maxHeight){
+      content.style.maxHeight = null;
+    } else {
+      content.style.maxHeight = content.scrollHeight + "px";
+    } 
+  });
+}
+</script>
+</body>
+</html>

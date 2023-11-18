@@ -22,7 +22,7 @@ h1, h2 {
   border-radius: 25px;
 }
 
-.header {
+.header, .footer {
   padding-left: 10px;
   padding-bottom: 10px;
   padding-top: 10px;
@@ -44,14 +44,14 @@ h1, h2 {
 	padding-top: 10px;
 	padding-bottom: 10px;
 }
-.DevForumCondensed{
-	background: #d8daeb;
+.DevForumCondensed, .contentCondensed{
+	background: #d8daeb !important;
 }
-.SpotifyLight{
-	background: #d8ebdd;
+.SpotifyLight, .contentSpot{
+	background: #d8ebdd !important;
 }
-.DevForumModified{
-	background: #D8E7EB;
+.DevForumModified, .contentModified{
+	background: #D8E7EB !important;
 }
 .comingSoonPill{
 	margin-bottom: 15px;
@@ -155,6 +155,78 @@ li a {
 li a:hover {
   background-color: #D7D7D7;
 }
+.collapsible {
+  background-color: #333333;
+  color: white;
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  border-radius: 15px;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 15px;
+}
+.acttive, .collapsible:hover {
+  background-color: #1c1c1c;
+}
+.collapsible:after {
+  content: '\002B';
+  color: white;
+  font-weight: bold;
+  float: right;
+  margin-left: 5px;
+}
+
+.acttive:after {
+  content: "\2212";
+}
+
+.content {
+  padding: 0 18px;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.2s ease-out;
+  background-color: #f1f1f1;
+}
+.buttonSocial{
+	border: none;
+	padding: 16px 16px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 20px;
+	height: 56px;
+	width: 56px;
+	margin: 4px 2px;
+	transition-duration: 0.4s;
+	cursor: pointer;
+	border-radius: 15px;
+}
+.X{
+	background: #333;
+}
+.X:hover{
+	background: #000;
+}
+.Bsky{
+	background: #0560FF;
+}
+.Bsky:hover{
+	background: #0255e6;
+}
+.Rblx{
+	background: #6347FF;
+}
+.Rblx:hover{
+	background: #5233ff;
+}
+.RblxStd{
+	background: #00A0FF;
+}
+.RblxStd:hover{
+	background: #008ee3;
+}
 </style>
 
 <body style="background-color:#F4F4ED;">
@@ -164,31 +236,37 @@ li a:hover {
 <ul class="m">
   <li class="menu"><a class="active" href="index.html">Home</a></li>
   <li class="menu"><a href="changelogs.html">Change Logs</a></li>
+  <li class="menu"><a href="Help.html">Help Pages</a></li>
+  <li class="menu"><a href="About.html">About Me</a></li>
 </ul>
 <div class="contentPills DevForumModified">
 	<h1 style="font-size: 40px">DevForum Modified v1.1</h1>
 	<div class="tags">Soon</div><br>
-	<h2 style="font-size: 35px">Description</h2>
-	<ul class="DevForumModified">
+<button class="collapsible">Expand/Retract</button>
+<div class="content contentModified">
+<ul class="DevForumModified">
   		<li class="change" style="font-weight: 500">To be Revealed, Stay Tuned!</li>
-	</ul>		
+	</ul>
+	</div>		
 	<button class="button buttonGitHub disabled" >GitHub Update Listing</a></button>
 </div>
 <div class="contentPills DevForumCondensed">
 	<h1 style="font-size: 40px">DevForum Condensed v1.7</h1>
 	<div class="tags">Soon</div><br>
-	<h2 style="font-size: 35px">Description</h2>
-	<ul class="DevForumCondensed">
+<button class="collapsible">Expand/Retract</button>
+<div class="content contentCondensed">
+<ul class="DevForumCondensed">
   		<li class="change" style="font-weight: 500">To be Revealed, Stay Tuned!</li>
-	</ul>		
+	</ul>
+	</div>		
 	<button class="button buttonGitHub disabled" >GitHub Update Listing</a></button>
 </div>
 
 <div class="contentPills SpotifyLight">
 <h1 style="font-size: 40px">Spotify Light v1.2.1</h1>
 <div class="tags">October 30, 2023</div><br>
-<h2 style="font-size: 35px">Description</h2>
-<ul class="SpotifyLight">
+<button class="collapsible">Expand/Retract</button>
+<div class="content contentSpot"><ul class="SpotifyLight">
 	<li class="change" style="font-weight: 500">Modified Concerts Page to Fit Light Theme</li>
 	<li class="change" style="font-weight: 500">Modified Audio Books to Fit Light Theme</li>
 	<li class="change" style="font-weight: 500">Modified Loading Animation to Fit Light Theme</li>
@@ -197,13 +275,15 @@ li a:hover {
 	<li class="change" style="font-weight: 500">Modified Automatically Generated Transcript Notice to Fit Light Theme</li>
 
 </ul>
+</div>
 	<button class="button buttonGitHub" ><a href="https://github.com/ThatOneUnoriginal/Spotify-Light/releases/tag/v1.2.1" class="aGit">GitHub Update Listing</a></button>
 </div>
 
 <div class="contentPills DevForumCondensed">
 <h1 style="font-size: 40px">DevForum Condensed v1.6</h1>
 <div class="tags">October 28, 2023</div><br>
-<h2 style="font-size: 35px">Description</h2>
+<button class="collapsible collapsibleCondensed">Expand/Retract</button>
+<div class="content contentCondensed">
 <ul class="DevForumCondensed">
 	<li class="change" style="font-weight: 500">Condensed Bages Section</li>
 	<li class="change" style="font-weight: 500">Condensed User Card Popup</li>
@@ -217,13 +297,15 @@ li a:hover {
 	<li class="change" style="font-weight: 500">Changed ThemeType to LogoThemeType to Hopefully Prevent Confusion</li>
 
 </ul>
+</div>
 	<button class="button buttonGitHub" ><a href="https://github.com/ThatOneUnoriginal/DevForum-Condensed/releases/tag/v1.6" class="aGit">GitHub Update Listing</a></button>
 </div>
 
 <div class="contentPills SpotifyLight">
 <h1 style="font-size: 40px">Spotify Light v1.1</h1>
 <div class="tags">October 27, 2023</div><br>
-<h2 style="font-size: 35px">Description</h2>
+<button class="collapsible">Expand/Retract</button>
+<div class="content contentSpot">
 <ul class="SpotifyLight">
 	<li class="change" style="font-weight: 500">Modified Artist Pick to Fit Light Theme</li>
 	<li class="change" style="font-weight: 500">Modified Device Selection Popup to Fit Light Theme</li>
@@ -244,13 +326,15 @@ li a:hover {
 	<li class="change" style="font-weight: 500">Modifed the Expand Button to Fit Light Theme</li>
 	<li class="change" style="font-weight: 500">Outline when Hovering over Song Titles Now Fits with Light Theme</li>
 </ul>
+</div>
 	<button class="button buttonGitHub" ><a href="https://github.com/ThatOneUnoriginal/Spotify-Light/releases/tag/v1.1" class="aGit">GitHub Update Listing</a></button>
 </div>
 
 <div class="contentPills DevForumCondensed">
 <h1 style="font-size: 40px">DevForum Condensed v1.5</h1>
 <div class="tags">October 24, 2023</div><br>
-<h2 style="font-size: 35px">Description</h2>
+<button class="collapsible">Expand/Retract</button>
+<div class="content contentCondensed">
 <ul class="DevForumCondensed">
 	<li class="change" style="font-weight: 500">Ability to Disable Condensing/Style</li>
 	<li class="change" style="font-weight: 500">Abilty to change Font Size with <b>FontSize</b></li>
@@ -278,13 +362,15 @@ li a:hover {
 		</ul>
 	<li class="change" style="font-weight: 500">Ability to Disable Every Style Customisation Except Wide Posts (and a few others) with <b>WidePostOnly</b></li>
 </ul>
+</div>
 	<button class="button buttonGitHub" ><a href="https://github.com/ThatOneUnoriginal/DevForum-Condensed/releases/tag/v1.5" class="aGit">GitHub Update Listing</a></button>
 </div>
 
 <div class="contentPills DevForumCondensed">
 <h1 style="font-size: 40px">DevForum Condensed v1.4</h1>
 <div class="tags">October 23, 2023</div><br>
-<h2 style="font-size: 35px">Description</h2>
+<button class="collapsible">Expand/Retract</button>
+<div class="content contentCondensed">
 <ul class="DevForumCondensed">
 	<li class="change" style="font-weight: 500">Ability to Remove Footer</li>
 	<ul class="DevForumCondensed">
@@ -297,15 +383,16 @@ li a:hover {
 	<li class="change" style="font-weight: 500">Ability to Remove Tags Under Topics in Topic List</li>
 	<li class="change" style="font-weight: 500">Ability to Remove Replies, Views, and Activity Sections on Topic List</li>
 	<li class="change" style="font-weight: 500">Ability to Remove Subcateogies when Viewing Category Pages</li>
-
 </ul>
+</div>
 	<button class="button buttonGitHub" ><a href="https://github.com/ThatOneUnoriginal/DevForum-Condensed/releases/tag/v1.5" class="aGit">GitHub Update Listing</a></button>
 </div>
 
 <div class="contentPills DevForumCondensed">
 <h1 style="font-size: 40px">DevForum Condensed v1.3</h1>
 <div class="tags">October 23, 2023</div><br>
-<h2 style="font-size: 35px">Description</h2>
+<button class="collapsible">Expand/Retract</button>
+<div class="content contentCondensed">
 <ul class="DevForumCondensed">
 	<li class="change" style="font-weight: 500">Custom "DevForum Condensed" Logo and Icon Swaps Default</li>
 	<ul class="DevForumCondensed">
@@ -320,19 +407,47 @@ li a:hover {
 	<ul class="DevForumCondensed">
 		<li class="change" style:"font-weight:500">This can be Enabled/Disabled by Changing the "Swap Font to OpenDyslexic"</li>
 </ul>
-</ul>		
+</ul>
+</div>		
 	<button class="button buttonGitHub" ><a href="https://github.com/ThatOneUnoriginal/DevForum-Condensed/releases/tag/v1.3" class="aGit">GitHub Update Listing</a></button>
 </div>
 
 <div class="contentPills DevForumCondensed">
 	<h1 style="font-size: 40px">DevForum Condensed v1.2</h1>
 	<div class="tags">October 22, 2023</div><br>
-	<h2 style="font-size: 35px">Description</h2>
+<button class="collapsible">Expand/Retract</button>
+<div class="content contentCondensed">
 	<ul class="DevForumCondensed">
   		<li class="change" style="font-weight: 500">Condensed More Sections of the Website</li>
   		<li class="change" style="font-weight: 500">Removed Colour Modificaitions; Will make the theme/sytle work seamlessly regardless of theme chosen</li>
-	</ul>		
+	</ul>	
+</div>	
 	<button class="button buttonGitHub" ><a href="https://github.com/ThatOneUnoriginal/DevForum-Condensed/releases/tag/v1.2" class="aGit">GitHub Update Listing</a></button>
 </div>
+
+<div class="footer rcorners1">
+	<h2>Social channels:<h1>
+	<button class="buttonSocial X"><a href="https://twitter.com/That1Unoriginal"><img width="100%" height="100%" src="https://upload.wikimedia.org/wikipedia/commons/5/53/X_logo_2023_original.svg" style="filter: invert(100%);"></a></img></button>
+	<button class="buttonSocial Bsky"><a href="https://bsky.app/profile/t1u.bsky.social"><img width="100%" height="100%" src="https://upload.wikimedia.org/wikipedia/commons/1/16/Font_Awesome_5_solid_cloud.svg" style="filter: invert(100%);"></a></button>
+	<button class="buttonSocial Rblx"><a href="https://www.roblox.com/users/647551049/profile"><img width="100%" height="100%" src="https://upload.wikimedia.org/wikipedia/commons/3/3a/Roblox_player_icon_black.svg" style="filter: invert(100%);"></a></button>
+	<button class="buttonSocial RblxStd"><a href="https://devforum.roblox.com/u/thatoneunoriginal/summary"><img width="100%" height="100%" src="https://static.wikia.nocookie.net/logopedia/images/3/33/Roblox_Studio_2022_%28Print%29.svg/revision/latest?cb=20221103141736" style="filter: invert(100%);"></a></button>
+</div>
+<script>
+var coll = document.getElementsByClassName("collapsible");
+var i;
+
+for (i = 0; i < coll.length; i++) {
+  coll[i].addEventListener("click", function() {
+    this.classList.toggle("acttive");
+    var content = this.nextElementSibling;
+    if (content.style.maxHeight){
+      content.style.maxHeight = null;
+    } else {
+      content.style.maxHeight = content.scrollHeight + "px";
+    } 
+  });
+}
+</script>
+
 </body>
 </html>
