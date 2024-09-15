@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Image Grid</title>
+    <style>
+        :root {
+            --bg-color: #f4f4f4;
+            --text-color: #333;
+            --tile-bg: #fff;
+            --tile-shadow: rgba(0,0,0,0.1);
+            --add-tile-bg: #e0e0e0;
+            --add-tile-hover: #d0d0d0;
+            --button-bg: #4CAF50;
+            --button-color: white;
+        }
+        .dark-mode {
+            --bg-color: #333;
+            --text-color: #f4f4f4;
+            --tile-bg: #555;
+            --tile-shadow: rgba(0,0,0,0.3);
+            --add-tile-bg: #444;
+            --add-tile-hover: #666;
+            --button-bg: #45a049;
+            --button-color: #f4f4f4;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s;
+        }
+        h1 {
+            text-align: center;
+        }
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .theme-toggle button, #tag-filter {
+            padding: 5px 10px;
+            cursor: pointer;
+            background-color: var(--button-bg);
+            color: var(--button-color);
+            border: none;
+            border-radius: 4px;
+        }
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+        .image-item {
+            aspect-ratio: 1 / 1;
+            position: relative;
+            background-color: var(--tile-bg);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px var(--tile-shadow);
+        }
+        .image-container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        img {
+            min-width: 100%;
+            min-height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+        img:hover {
+            transform: scale(1.05);
+        }
+        .add-image {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: var(--add-tile-bg);
+            cursor: pointer;
+            font-size: 48px;
+            transition: background-color 0.3s ease;
+        }
+        .add-image:hover {
+            background-color: var(--add-tile-hover);
+        }
+        #file-input {
+            display: none;
+        }
+        .tile-buttons {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            display: flex;
+        }
+        .tile-buttons button {
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-left: 5px;
+        }
+        .tags {
+            position: absolute;
+            bottom: 5px;
+            left: 5px;
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .tag {
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-size: 12px;
+            margin-right: 3px;
+            margin-bottom: 3px;
+        }
+        @media screen and (max-width: 600px) {
+            .image-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Interactive Image Grid</h1>
+    <div class="controls">
+        <div class="theme-toggle">
+            <button id="light-mode">Light Mode</button>
+            <button id="dark-mode">Dark Mode</button>
+        </div>
+        <select id="tag-filter">
+            <option value="all">All Tags</option>
+        </select>
+    </div>
+    <div class="image-grid" id="image-grid">
+        <div class="image-item add-image" id="add-image">
+            +
+        </div>
+    </div>
+    <input type="file" id="file-input" accept="image/*">
+
+    <script>
+        const imageGrid = document.getElementById('image-grid');
+        const addImageButton = document.getElementById('add-image');
+        const fileInput = document.getElementById('file-input');
+        const lightModeBtn = document.getElementById('light-mode');
+        const darkModeBtn = document.getElementById('dark-mode');
+        const tagFilter = document.getElementById('tag-filter');
+
+        let tiles = [];
+        let allTags = new Set();
+
+        // Theme management
+        function setTheme(theme) {
+            document.body.className = theme;
+            localStorage.setItem('theme', theme);
+        }
+
+        function applyStoredTheme() {
+            const storedTheme = localStorage.getItem('theme') || '';
+            setTheme(storedTheme);
+        }
+
+        lightModeBtn.addEventListener('click', () => setTheme(''));
+        darkModeBtn.addEventListener('click', () => setTheme('dark-mode'));
+
+        // Apply theme on load
+        applyStoredTheme();
+
+        // Load saved tiles
+        function loadSavedTiles() {
+            tiles = JSON.parse(localStorage.getItem('imageTiles')) || [];
+            tiles.forEach(tile => {
+                createImageTile(tile);
+                tile.tags.forEach(tag => allTags.add(tag));
+            });
+            updateTagFilter();
+        }
+
+        // Save tiles
+        function saveTiles() {
+            localStorage.setItem('imageTiles', JSON.stringify(tiles));
+        }
+
+        // Create image tile
+        function createImageTile(tileData) {
+            const newImageItem = document.createElement('div');
+            newImageItem.className = 'image-item';
+            newImageItem.innerHTML = `
+                <a href="${tileData.link}" target="_blank" class="image-container">
+                    <img src="${tileData.imageData}" alt="User uploaded image">
+                </a>
+                <div class="tile-buttons">
+                    <button class="edit-image-btn" title="Edit Image">🖼️</button>
+                    <button class="edit-tags-btn" title="Edit Tags">🏷️</button>
+                    <button class="share-btn" title="Share">📤</button>
+                    <button class="delete-btn" title="Delete">×</button>
+                </div>
+                <div class="tags">
+                    ${tileData.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                </div>
+            `;
+            imageGrid.insertBefore(newImageItem, addImageButton);
+
+            // Add edit image functionality
+            newImageItem.querySelector('.edit-image-btn').addEventListener('click', (e) => {
+                e.stopPropagation();
+                editImage(tileData, newImageItem);
+            });
+
+            // Add edit tags functionality
+            newImageItem.querySelector('.edit-tags-btn').addEventListener('click', (e) => {
+                e.stopPropagation();
+                editTags(tileData, newImageItem);
+            });
+
+            // Add share functionality
+            newImageItem.querySelector('.share-btn').addEventListener('click', (e) => {
+                e.stopPropagation();
+                shareTile(tileData);
+            });
+
+            // Add delete functionality
+            newImageItem.querySelector('.delete-btn').addEventListener('click', (e) => {
+                e.stopPropagation();
+                deleteTile(tileData, newImageItem);
+            });
+        }
+
+        // Edit image
+        function editImage(tileData, tileElement) {
+            const newLink = prompt("Enter a new link for this image:", tileData.link);
+            if (newLink !== null) {
+                tileData.link = newLink;
+                tileElement.querySelector('a').href = newLink;
+            }
+
+            const newImageData = prompt("Enter a new image URL (leave blank to keep current image):");
+            if (newImageData) {
+                tileData.imageData = newImageData;
+                tileElement.querySelector('img').src = newImageData;
+            }
+
+            saveTiles();
+        }
+
+        // Edit tags
+        function editTags(tileData, tileElement) {
+            const newTags = prompt("Enter tags separated by commas:", tileData.tags.join(', '));
+            if (newTags !== null) {
+                tileData.tags = newTags.split(',').map(tag => tag.trim()).filter(tag => tag);
+                updateTileTags(tileElement, tileData.tags);
+                saveTiles();
+                updateTagFilter();
+            }
+        }
+
+        // Share tile
+        function shareTile(tileData) {
+            navigator.clipboard.writeText(tileData.link).then(() => {
+                alert("Link copied to clipboard!");
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+            });
+        }
+
+        // Delete tile
+        function deleteTile(tileData, tileElement) {
+            tiles = tiles.filter(tile => tile !== tileData);
+            imageGrid.removeChild(tileElement);
+            saveTiles();
+            updateTagFilter();
+        }
+
+        // Update tile tags
+        function updateTileTags(tileElement, tags) {
+            const tagsContainer = tileElement.querySelector('.tags');
+            tagsContainer.innerHTML = tags.map(tag => `<span class="tag">${tag}</span>`).join('');
+            updateAllTags();
+        }
+
+        // Update all tags
+        function updateAllTags() {
+            allTags.clear();
+            tiles.forEach(tile => tile.tags.forEach(tag => allTags.add(tag)));
+            updateTagFilter();
+        }
+
+        // Update tag filter dropdown
+        function updateTagFilter() {
+            const currentFilter = tagFilter.value;
+            tagFilter.innerHTML = '<option value="all">All Tags</option>';
+            allTags.forEach(tag => {
+                const option = document.createElement('option');
+                option.value = tag;
+                option.textContent = tag;
+                tagFilter.appendChild(option);
+            });
+            tagFilter.value = currentFilter;
+            filterTiles();
+        }
+
+        // Filter tiles based on selected tag
+        function filterTiles() {
+            const selectedTag = tagFilter.value;
+            tiles.forEach((tile, index) => {
+                const tileElement = imageGrid.children[index];
+                if (selectedTag === 'all' || tile.tags.includes(selectedTag)) {
+                    tileElement.style.display = '';
+                } else {
+                    tileElement.style.display = 'none';
+                }
+            });
+        }
+
+        // Handle file selection
+        fileInput.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const imageData = e.target.result;
+                    const link = prompt("Enter a link for this image:", "https://");
+                    if (link) {
+                        const tags = prompt("Enter tags separated by commas:").split(',').map(tag => tag.trim()).filter(tag => tag);
+                        const newTile = { imageData, link, tags };
+                        tiles.push(newTile);
+                        createImageTile(newTile);
+                        saveTiles();
+                        updateTagFilter();
+                    }
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Trigger file input when add button is clicked
+        addImageButton.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        // Filter tiles when tag is selected
+        tagFilter.addEventListener('change', filterTiles);
+
+        // Load saved tiles on page load
+        loadSavedTiles();
+    </script>
+</body>
+</html>
