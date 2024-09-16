@@ -13,6 +13,7 @@
             --add-tile-bg: #e0e0e0;
             --add-tile-hover: #d0d0d0;
             --button-bg: #4CAF50;
+            --button-bg-hover: #45a049;
             --button-color: white;
         }
         .dark-mode {
@@ -23,6 +24,7 @@
             --add-tile-bg: #444;
             --add-tile-hover: #666;
             --button-bg: #45a049;
+            --button-bg-hover: #3e8e41;
             --button-color: #f4f4f4;
         }
         body {
@@ -54,6 +56,9 @@
             border: none;
             border-radius: 4px;
             margin-right: 5px;
+        }
+        .theme-toggle button:hover, #tag-filter:hover, #export-btn:hover, #import-btn:hover {
+            background-color: var(--button-bg-hover)
         }
         .image-grid {
             display: grid;
