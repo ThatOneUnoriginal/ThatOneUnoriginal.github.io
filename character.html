@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Image Grid</title>
+    <title>Character Bookmarking Tool</title>
     <style>
         :root {
             --bg-color: #f4f4f4;
@@ -35,6 +35,9 @@
             transition: background-color 0.3s, color 0.3s;
         }
         h1 {
+            text-align: center;
+        }
+        p{
             text-align: center;
         }
         .controls {
@@ -142,7 +145,13 @@
     </style>
 </head>
 <body>
-    <h1>Interactive Image Grid</h1>
+    <h1>Character Bookmarking Tool</h1>
+    <p>Found a character on an AI platform that is interesting, unique, or just find overal enjoyable to interact with? This tool allows you to easily bookmark the character so that you don't forget about it!</p>
+    <p>To bookmark a character; Firstly click the "+" button to curate a new tile. This will appear at the end of the grid. You will be prompted to upload an image from your device, then prompted to include a hyperlink that will be associated with that tile. Finally you'll be prompted to add tags to the image (this is optional but can help with further organisation.) After you've done all of this the tile should appear on the grid. If you click/tap the grid image it will redirect you to the link that is associated with that tile. So if you were to link https://twitter.com to a tile, clicking/tapping it would bring you to Twitter.</p>
+    <p>If you want to update the tags associated with a tile, click the 🏷️ button on the tile and you'll be prompted to be able to change the tags.</p>
+    <p>If you want to update the image, click the 🖼️ button on the tile, skip the hyperlink prompt (included through the same button) and provide a html link to the image.</p>
+    <p>If you want to update the hyperlink attached to the tile, click the 🖼️ button on the tile and change the hyperlink. If you don't want to change the image, just ignore the prompt to change it afterwards.</p>
+    <p><b>Note: I recommend strongly that you export the data whenever you make changes (update tiles, add tiles, remove tiles) as the data is stored locally. So if you are to switch browers, switch devices, or for whatever reason the cookies/website data is deleted, any data on the website will be deleted in the process. When you export your data you'll get prompted to save a .json file, keep this and use it to import the data through the "import" button.</b></p>
     <div class="controls">
         <div class="theme-toggle">
             <button id="light-mode">Light Mode</button>
