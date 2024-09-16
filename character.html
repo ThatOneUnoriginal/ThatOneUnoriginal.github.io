@@ -43,13 +43,14 @@
             align-items: center;
             margin-bottom: 20px;
         }
-        .theme-toggle button, #tag-filter {
+        .theme-toggle button, #tag-filter, #export-btn, #import-btn {
             padding: 5px 10px;
             cursor: pointer;
             background-color: var(--button-bg);
             color: var(--button-color);
             border: none;
             border-radius: 4px;
+            margin-right: 5px;
         }
         .image-grid {
             display: grid;
@@ -94,7 +95,7 @@
         .add-image:hover {
             background-color: var(--add-tile-hover);
         }
-        #file-input {
+        #file-input, #import-file-input {
             display: none;
         }
         .tile-buttons {
@@ -146,6 +147,8 @@
         <div class="theme-toggle">
             <button id="light-mode">Light Mode</button>
             <button id="dark-mode">Dark Mode</button>
+            <button id="export-btn">Export</button>
+            <button id="import-btn">Import</button>
         </div>
         <select id="tag-filter">
             <option value="all">All Tags</option>
@@ -157,6 +160,7 @@
         </div>
     </div>
     <input type="file" id="file-input" accept="image/*">
+    <input type="file" id="import-file-input" accept="application/json">
 
     <script>
         const imageGrid = document.getElementById('image-grid');
@@ -165,6 +169,9 @@
         const lightModeBtn = document.getElementById('light-mode');
         const darkModeBtn = document.getElementById('dark-mode');
         const tagFilter = document.getElementById('tag-filter');
+        const exportBtn = document.getElementById('export-btn');
+        const importBtn = document.getElementById('import-btn');
+        const importFileInput = document.getElementById('import-file-input');
 
         let tiles = [];
         let allTags = new Set();
@@ -360,6 +367,48 @@
 
         // Filter tiles when tag is selected
         tagFilter.addEventListener('change', filterTiles);
+
+        // Export functionality
+        exportBtn.addEventListener('click', () => {
+            const dataStr = JSON.stringify(tiles);
+            const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+            const exportFileDefaultName = 'image_grid_data.json';
+
+            const linkElement = document.createElement('a');
+            linkElement.setAttribute('href', dataUri);
+            linkElement.setAttribute('download', exportFileDefaultName);
+            linkElement.click();
+        });
+
+        // Import functionality
+        importBtn.addEventListener('click', () => {
+            importFileInput.click();
+        });
+
+        importFileInput.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    try {
+                        const importedTiles = JSON.parse(e.target.result);
+                        tiles = importedTiles;
+                        imageGrid.innerHTML = '';
+                        imageGrid.appendChild(addImageButton);
+                        tiles.forEach(tile => {
+                            createImageTile(tile);
+                            tile.tags.forEach(tag => allTags.add(tag));
+                        });
+                        saveTiles();
+                        updateTagFilter();
+                    } catch (error) {
+                        console.error('Error parsing imported data:', error);
+                        alert('Error importing data. Please make sure the file is in the correct format.');
+                    }
+                };
+                reader.readAsText(file);
+            }
+        });
 
         // Load saved tiles on page load
         loadSavedTiles();
