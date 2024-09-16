@@ -142,6 +142,9 @@
             margin-right: 3px;
             margin-bottom: 3px;
         }
+        .tag:hover{
+            background-color: rgba(0, 0, 0, 0.7);
+        }
         @media screen and (max-width: 600px) {
             .image-grid {
                 grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
@@ -163,6 +166,7 @@
             <button id="dark-mode">Dark Mode</button>
             <button id="export-btn">Export</button>
             <button id="import-btn">Import</button>
+            <button id="blur-nsfw-btn">Blur NSFW</button>
         </div>
         <select id="tag-filter">
             <option value="all">All Tags</option>
@@ -186,9 +190,11 @@
         const exportBtn = document.getElementById('export-btn');
         const importBtn = document.getElementById('import-btn');
         const importFileInput = document.getElementById('import-file-input');
+        const blurNSFWBtn = document.getElementById('blur-nsfw-btn');
 
         let tiles = [];
         let allTags = new Set();
+        let isBlurred = false; // Track blur status
 
         // Theme management
         function setTheme(theme) {
@@ -268,21 +274,43 @@
         }
 
         // Edit image
-        function editImage(tileData, tileElement) {
-            const newLink = prompt("Enter a new link for this image:", tileData.link);
-            if (newLink !== null) {
-                tileData.link = newLink;
-                tileElement.querySelector('a').href = newLink;
-            }
+// Edit image
+function editImage(tileData, tileElement) {
+    const newLink = prompt("Enter a new link for this image:", tileData.link);
+    if (newLink !== null) {
+        tileData.link = newLink;
+        tileElement.querySelector('a').href = newLink;
+    }
 
-            const newImageData = prompt("Enter a new image URL (leave blank to keep current image):");
-            if (newImageData) {
+    // Create an input element to upload a new image
+    const imageUploadInput = document.createElement('input');
+    imageUploadInput.type = 'file';
+    imageUploadInput.accept = 'image/*'; // Accept image files only
+
+    // Listen for the file selection
+    imageUploadInput.addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                const newImageData = e.target.result;
+                // Update the tile with the new image
                 tileData.imageData = newImageData;
                 tileElement.querySelector('img').src = newImageData;
-            }
 
-            saveTiles();
+                saveTiles(); // Save changes after the image has been updated
+            };
+
+            // Read the image file as a data URL
+            reader.readAsDataURL(file);
         }
+    });
+
+    // Trigger the file input
+    imageUploadInput.click();
+}
+
 
         // Edit tags
         function editTags(tileData, tileElement) {
@@ -423,7 +451,31 @@
                 reader.readAsText(file);
             }
         });
+// Function to toggle blur on NSFW content
+function toggleBlurNSFW() {
+    const nsfwTags = ['18+']; // Tags considered NSFW
+    const imageItems = document.querySelectorAll('.image-item');
 
+    imageItems.forEach(item => {
+        const tags = Array.from(item.querySelectorAll('.tag')).map(tag => tag.textContent);
+
+        if (nsfwTags.some(tag => tags.includes(tag))) {
+            const img = item.querySelector('img');
+            if (isBlurred) {
+                img.style.filter = 'none'; // Unblur
+            } else {
+                img.style.filter = 'blur(10px)'; // Apply blur
+            }
+        }
+    });
+
+    // Toggle button text and blur state
+    isBlurred = !isBlurred;
+    blurNSFWBtn.textContent = isBlurred ? 'Unblur NSFW' : 'Blur NSFW';
+}
+
+// Add event listener to the button
+blurNSFWBtn.addEventListener('click', toggleBlurNSFW);
         // Load saved tiles on page load
         loadSavedTiles();
     </script>
