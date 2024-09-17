@@ -363,11 +363,16 @@
                 e.stopPropagation();
                 deleteTile(tileData, newImageItem);
             });
+
+            // Add edit URL functionality
+            newImageItem.querySelector('.edit-url-btn').addEventListener('click', (e) => {
+                e.stopPropagation();
+                editUrl(tileData, newImageItem);
+            });
         }
 
         // Edit image
-// Edit image
-function editImage(tileData, tileElement) {
+    function editImage(tileData, tileElement) {
     // Create an input element to upload a new image
     const imageUploadInput = document.createElement('input');
     imageUploadInput.type = 'file';
@@ -638,7 +643,19 @@ function selectRandomCharacter() {
 
 // Event listener for the random character button
 randomCharacterBtn.addEventListener('click', selectRandomCharacter);
+function editUrl(tileData, tileElement) {
+    // Prompt the user for a new URL
+    const newUrl = prompt("Enter a new URL for this tile:", tileData.link);
 
+    // If the user provided a URL (and didn't leave it blank), update the link
+    if (newUrl !== null && newUrl.trim() !== "") {
+        tileData.link = newUrl.trim();
+        tileElement.querySelector('a').href = tileData.link;
+
+        // Save changes
+        saveTiles();
+    }
+}
     </script>
 </body>
 </html>
