@@ -4,8 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Character Bookmarking Tool</title>
-    <style>
-        
+    <style>      
         :root {
             --bg-color: #f4f4f4;
             --text-color: #333;
@@ -13,11 +12,12 @@
             --tile-shadow: rgba(0,0,0,0.1);
             --add-tile-bg: #e0e0e0;
             --add-tile-hover: #d0d0d0;
-            --button-bg: #4CAF50;
-            --button-bg-hover: #45a049;
+            --button-bg: #4c8247;
+            --button-bg-hover: #43713e;
             --button-color: white;
             --popup-color: #dfdfdf;
         }
+
         .dark-mode {
             --bg-color: #333;
             --text-color: #f4f4f4;
@@ -25,11 +25,12 @@
             --tile-shadow: rgba(0,0,0,0.3);
             --add-tile-bg: #444;
             --add-tile-hover: #666;
-            --button-bg: #45a049;
-            --button-bg-hover: #3e8e41;
+            --button-bg: #43713e;
+            --button-bg-hover: #396135;
             --button-color: #f4f4f4;
             --popup-color: #2f2f2f;
         }
+
         body {
             font-family: Arial, sans-serif;
             line-height: 1.6;
@@ -39,18 +40,18 @@
             color: var(--text-color);
             transition: background-color 0.3s, color 0.3s;
         }
-        h1 {
+
+        h1,p {
             text-align: center;
         }
-        p{
-            text-align: center;
-        }
+
         .controls {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
         }
+
         .theme-toggle button, #tag-filter, #export-btn, #import-btn {
             padding: 5px 10px;
             cursor: pointer;
@@ -60,15 +61,18 @@
             border-radius: 4px;
             margin-right: 5px;
         }
+
         .theme-toggle button:hover, #tag-filter:hover, #export-btn:hover, #import-btn:hover {
             background-color: var(--button-bg-hover)
         }
+
         .image-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
             gap: 20px;
             padding: 20px;
         }
+
         .image-item {
             aspect-ratio: 1 / 1;
             position: relative;
@@ -77,6 +81,7 @@
             overflow: hidden;
             box-shadow: 0 2px 4px var(--tile-shadow);
         }
+
         .image-container {
             width: 100%;
             height: 100%;
@@ -85,6 +90,7 @@
             align-items: center;
             overflow: hidden;
         }
+
         img {
             min-width: 100%;
             min-height: 100%;
@@ -94,6 +100,7 @@
         img:hover {
             transform: scale(1.05);
         }
+
         .add-image {
             display: flex;
             justify-content: center;
@@ -103,12 +110,15 @@
             font-size: 48px;
             transition: background-color 0.3s ease;
         }
+
         .add-image:hover {
             background-color: var(--add-tile-hover);
         }
-        #file-input, #import-file-input {
+        
+        #file-input, #import-file-input, .popup.hidden{
             display: none;
         }
+
         .tile-buttons {
             position: absolute;
             top: 5px;
@@ -116,6 +126,7 @@
             display: flex;
             flex-wrap: wrap;
         }
+
         .tile-buttons button {
             background-color: rgba(0, 0, 0, 0.5);
             color: white;
@@ -131,6 +142,7 @@
             margin-left: 5px;
             margin-bottom: 3px;
         }
+
         .tags {
             position: absolute;
             bottom: 5px;
@@ -138,6 +150,7 @@
             display: flex;
             flex-wrap: wrap;
         }
+
         .tag {
             background-color: rgba(0, 0, 0, 0.5);
             color: white;
@@ -147,6 +160,7 @@
             margin-right: 3px;
             margin-bottom: 3px;
         }
+
         .tag:hover{
             background-color: rgba(0, 0, 0, 0.7);
         }
@@ -155,73 +169,74 @@
                 grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
             }
         }
-        #popup-close-btn {
-    margin-top: 10px;
-    padding: 5px 10px;
-    background-color: #f44336; /* Red color for close button */
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-#popup-close-btn:hover {
-    background-color: #e53935;
-}
 
-.popup {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: var(--popup-color);
-    border: 2px solid #000;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    z-index: 1000;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 300px;
-}
-.popup.hidden {
-    display: none;
-}
-#popup-content {
-    text-align: center;
-    position: relative;
-    z-index: 1010;
-}
-.popup-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.4);
-    z-index: 1000;
-}
-#popup-image {
-    width: 230px;
-    height: 230px;
-    object-fit: cover;  /* Crop image proportionally */
-    border-radius: 8px;
-    max-width: 100%;
-    max-height: 100%;
-    display: block;
-}
-.nsfw-outline {
-    border: 3px solid red;
-}
-.popup.nsfw-outline {
-    border: 3px solid red;
-}
-.blurred-image {
-    filter: blur(10px);
-}
-.star-outline {
-    border: 3px solid green;
-}
+        #popup-close-btn {
+            margin-top: 10px;
+            padding: 5px 10px;
+            background-color: #f44336;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #popup-close-btn:hover {
+            background-color: #e53935;
+        }
+
+        .popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: var(--popup-color);
+            border: 2px solid #000;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 300px;
+        }
+
+        #popup-content {
+            text-align: center;
+            position: relative;
+            z-index: 1010;
+        }
+
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 1000;
+        }
+
+        #popup-image {
+           width: 230px;
+           height: 230px;
+           object-fit: cover;  
+            border-radius: 8px;
+            max-width: 100%;
+            max-height: 100%;
+            display: block;
+        }
+
+        .nsfw-outline, .popup.nsfw-outline {
+            border: 3px solid red;
+        }
+
+        .blurred-image {
+            filter: blur(10px);
+        }
+        .star-outline {
+            border: 3px solid green;
+        }
     </style>
 </head>
 <body>
@@ -280,7 +295,7 @@
         let tiles = [];
         let allTags = new Set();
         let isBlurred = false; // Track blur status
-
+        
         // Theme management
         function setTheme(theme) {
             document.body.className = theme;
