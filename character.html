@@ -114,6 +114,7 @@
             top: 5px;
             right: 5px;
             display: flex;
+            flex-wrap: wrap;
         }
         .tile-buttons button {
             background-color: rgba(0, 0, 0, 0.5);
@@ -128,6 +129,7 @@
             justify-content: center;
             align-items: center;
             margin-left: 5px;
+            margin-bottom: 3px;
         }
         .tags {
             position: absolute;
@@ -216,6 +218,9 @@
 }
 .blurred-image {
     filter: blur(10px);
+}
+.star-outline {
+    border: 3px solid green;
 }
     </style>
 </head>
@@ -315,12 +320,16 @@
             if (tileData.tags.includes('18+')) {
                 newImageItem.classList.add('nsfw-outline');
             }
+            if (tileData.tags.includes('⭐')) {
+                newImageItem.classList.add('star-outline');
+            }
             newImageItem.innerHTML = `
                 <a href="${tileData.link}" target="_blank" class="image-container">
                     <img src="${tileData.imageData}" alt="User uploaded image">
                 </a>
                 <div class="tile-buttons">
                     <button class="edit-image-btn" title="Edit Image">🖼️</button>
+                    <button class="edit-url-btn" title="Edit URL">🔗</button>
                     <button class="edit-tags-btn" title="Edit Tags">🏷️</button>
                     <button class="share-btn" title="Share">📤</button>
                     <button class="delete-btn" title="Delete">×</button>
@@ -359,12 +368,6 @@
         // Edit image
 // Edit image
 function editImage(tileData, tileElement) {
-    const newLink = prompt("Enter a new link for this image:", tileData.link);
-    if (newLink !== null) {
-        tileData.link = newLink;
-        tileElement.querySelector('a').href = newLink;
-    }
-
     // Create an input element to upload a new image
     const imageUploadInput = document.createElement('input');
     imageUploadInput.type = 'file';
@@ -402,18 +405,15 @@ function editImage(tileData, tileElement) {
                 tileData.tags = newTags.split(',').map(tag => tag.trim()).filter(tag => tag);
                 updateTileTags(tileElement, tileData.tags);
                 
-                // Check for 18+ tag and update outline
-                if (tileData.tags.includes('18+')) {
-                    tileElement.classList.add('nsfw-outline');
-                } else {
-                    tileElement.classList.remove('nsfw-outline');
-                }
+                // Check for 18+ and ⭐ tags and update outlines
+                tileElement.classList.toggle('nsfw-outline', tileData.tags.includes('18+'));
+                tileElement.classList.toggle('star-outline', tileData.tags.includes('⭐'));
                 
                 saveTiles();
                 updateTagFilter();
             }
         }
-
+        
         // Share tile
         function shareTile(tileData) {
             navigator.clipboard.writeText(tileData.link).then(() => {
