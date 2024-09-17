@@ -97,6 +97,7 @@
             object-fit: cover;
             transition: transform 0.3s ease;
         }
+
         img:hover {
             transform: scale(1.05);
         }
@@ -192,19 +193,35 @@
             background-color: var(--popup-color);
             border: 2px solid #000;
             padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
             z-index: 1000;
             display: flex;
             flex-direction: column;
             align-items: center;
-            width: 300px;
+            max-width: 800px;
+            animation: float 5s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translate(-50%, -50%);
+            }
+            50% {
+                transform: translate(-50%, -52%);
+            }
+            100% {
+                transform: translate(-50%, -50%);
+            }
+        }
+
+        #popup-image-container {
+            flex: 0 0 auto;
+            margin-right: 20px;
         }
 
         #popup-content {
-            text-align: center;
             position: relative;
-            z-index: 1010;
         }
 
         .popup-overlay {
@@ -218,13 +235,108 @@
         }
 
         #popup-image {
-           width: 230px;
-           height: 230px;
-           object-fit: cover;  
+            min-width: unset;
+            width: 250px;
+            height: 250px;
+            object-fit: cover;  
             border-radius: 8px;
-            max-width: 100%;
-            max-height: 100%;
-            display: block;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .popup-info {
+            flex: 1;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 15px;
+            overflow-y: auto;
+            max-height: 250px;
+        }
+
+        .popup-info h3 {
+            margin-top: 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            padding-bottom: 5px;
+        }
+
+        .popup-info p {
+            margin: 10px 0;
+        }
+
+        #popup-tags {
+            font-style: italic;
+        }
+
+        #popup-link {
+            display: inline-block;
+            margin-top: 15px;
+            background-color: var(--button-bg);
+            color: var(--button-color);
+            padding: 8px 15px;
+            border-radius: 4px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+        #popup-link:hover {
+            background-color: var(--button-bg-hover);
+        }
+
+        #popup-close {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background-color: var(--button-bg);
+            color: var(--button-color);
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        #popup-close:hover {
+            background-color: var(--button-bg-hover);
+        }
+
+        #popup-close-btn {
+            display: none; /* Hide the old close button */
+        }
+
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            backdrop-filter: blur(5px);
+        }
+
+        /* Responsive design for smaller screens */
+        @media (max-width: 600px) {
+            #popup-content {
+                flex-direction: column;
+            }
+
+            #popup-image-container {
+                margin-right: 0;
+                margin-bottom: 20px;
+            }
+
+            #popup-image {
+                width: 100%;
+                height: auto;
+            }
+
+            .popup-info {
+                max-height: none;
+            }
         }
 
         .nsfw-outline, .popup.nsfw-outline {
@@ -269,12 +381,16 @@
 <div id="character-popup" class="popup hidden">
     <div id="popup-content">
         <span id="popup-close">&times;</span>
-        <div id="popup-info">
-            <img id="popup-image" src="" alt="Character Image">
+        <img id="popup-image" src="" alt="Character Image">
+        <div class="popup-info">
+            <h3 id="popup-name"></h3>
+            <p id="popup-platform"></p>
+            <p id="popup-age"></p>
+            <p id="popup-description"></p>
             <p id="popup-tags"></p>
-            <a id="popup-link" href="#" target="_blank">View Profile</a>
-            <button id="popup-close-btn">Close</button> <!-- New close button -->
         </div>
+        <a id="popup-link" href="#" target="_blank">View Profile</a>
+        <button id="popup-close-btn">Close</button>
     </div>
 </div>
     <div class="image-grid" id="image-grid">
@@ -351,6 +467,7 @@
                     <button class="edit-image-btn" title="Edit Image">🖼️</button>
                     <button class="edit-url-btn" title="Edit URL">🔗</button>
                     <button class="edit-tags-btn" title="Edit Tags">🏷️</button>
+                    <button class="edit-info-btn" title="Edit Info">ℹ️</button>
                     <button class="share-btn" title="Share">📤</button>
                     <button class="delete-btn" title="Delete">×</button>
                 </div>
@@ -389,7 +506,28 @@
                 e.stopPropagation();
                 editUrl(tileData, newImageItem);
             });
+            // Add edit info functionality
+            newImageItem.querySelector('.edit-info-btn').addEventListener('click', (e) => {
+                e.stopPropagation();
+                editInfo(tileData, newImageItem);
+            });
         }
+
+        function editInfo(tileData, tileElement) {
+            const name = prompt("Enter character name:", tileData.name || "");
+            const platform = prompt("Enter platform:", tileData.platform || "");
+            const age = prompt("Enter age:", tileData.age || "");
+            const description = prompt("Enter description:", tileData.description || "");
+
+            if (name !== null) tileData.name = name;
+            if (platform !== null) tileData.platform = platform;
+            if (age !== null) tileData.age = age;
+            if (description !== null) tileData.description = description;
+
+            saveTiles();
+            updateTagFilter();
+        }
+
         function updateTileOutline(tileElement, tags) {
             tileElement.classList.remove('nsfw-outline', 'star-outline', 'special-outline');
             const hasNSFW = tags.includes('18+');
@@ -433,7 +571,9 @@
     // Trigger the file input
     imageUploadInput.click();
 }
-
+        function createTileData(imageData, link, tags, name, platform, age, description) {
+            return { imageData, link, tags, name, platform, age, description };
+        }
 
         // Edit tags
         function editTags(tileData, tileElement) {
@@ -474,7 +614,11 @@
         // Update all tags
         function updateAllTags() {
             allTags.clear();
-            tiles.forEach(tile => tile.tags.forEach(tag => allTags.add(tag)));
+            tiles.forEach(tile => {
+                tile.tags.forEach(tag => allTags.add(tag));
+                if (tile.platform) allTags.add(tile.platform);
+                if (tile.age) allTags.add(tile.age);
+            });
             updateTagFilter();
         }
 
@@ -497,7 +641,10 @@
             const selectedTag = tagFilter.value;
             tiles.forEach((tile, index) => {
                 const tileElement = imageGrid.children[index];
-                if (selectedTag === 'all' || tile.tags.includes(selectedTag)) {
+                if (selectedTag === 'all' || 
+                    tile.tags.includes(selectedTag) || 
+                    tile.platform === selectedTag || 
+                    tile.age === selectedTag) {
                     tileElement.style.display = '';
                 } else {
                     tileElement.style.display = 'none';
@@ -515,7 +662,11 @@
                     const link = prompt("Enter a link for this image:", "https://");
                     if (link) {
                         const tags = prompt("Enter tags separated by commas:").split(',').map(tag => tag.trim()).filter(tag => tag);
-                        const newTile = { imageData, link, tags };
+                        const name = prompt("Enter character name:");
+                        const platform = prompt("Enter platform:");
+                        const age = prompt("Enter age:");
+                        const description = prompt("Enter description:");
+                        const newTile = createTileData(imageData, link, tags, name, platform, age, description);
                         tiles.push(newTile);
                         createImageTile(newTile);
                         saveTiles();
@@ -630,38 +781,29 @@ function selectRandomCharacter() {
                 return;
             }
 
-            // Pick a random character
             const randomIndex = Math.floor(Math.random() * characters.length);
             const selectedCharacter = characters[randomIndex];
+            const tileData = tiles[randomIndex];
 
-            // Extract data
-            const imageSrc = selectedCharacter.querySelector('img').src;
-            const linkHref = selectedCharacter.querySelector('a').href;
-            const tags = Array.from(selectedCharacter.querySelectorAll('.tag')).map(tag => tag.textContent);
+            popupImage.src = tileData.imageData;
+            popupLink.href = tileData.link;
+            
+            document.getElementById('popup-name').textContent = tileData.name || 'Unknown';
+            document.getElementById('popup-platform').textContent = `Platform: ${tileData.platform || 'N/A'}`;
+            document.getElementById('popup-age').textContent = `Age: ${tileData.age || 'N/A'}`;
+            document.getElementById('popup-description').textContent = tileData.description || 'No description available.';
+            document.getElementById('popup-tags').textContent = `Tags: ${tileData.tags.join(', ')}`;
 
-            // Populate the popup
-            popupImage.src = imageSrc;
-            popupLink.href = linkHref;
-            popupTags.textContent = `Tags: ${tags.join(', ')}`;
+            updateTileOutline(characterPopup, tileData.tags);
 
-            // Check for 18+ tag and apply red border if found
-            if (tags.includes('18+')) {
-                characterPopup.classList.add('nsfw-outline');
-                // Apply blur if NSFW blur is enabled
-                if (isBlurred) {
-                    popupImage.classList.add('blurred-image');
-                } else {
-                    popupImage.classList.remove('blurred-image');
-                }
+            if (isBlurred && tileData.tags.includes('18+')) {
+                popupImage.classList.add('blurred-image');
             } else {
-                characterPopup.classList.remove('nsfw-outline');
                 popupImage.classList.remove('blurred-image');
             }
 
-            // Show the popup
             characterPopup.classList.remove('hidden');
         }
-
         // Modify the closePopup function
         function closePopup() {
             characterPopup.classList.add('hidden');
