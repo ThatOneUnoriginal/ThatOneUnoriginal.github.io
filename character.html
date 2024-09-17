@@ -234,8 +234,13 @@
         .blurred-image {
             filter: blur(10px);
         }
+
         .star-outline {
             border: 3px solid green;
+        }
+
+        .special-outline {
+            border: 3px solid purple;
         }
     </style>
 </head>
@@ -385,7 +390,19 @@
                 editUrl(tileData, newImageItem);
             });
         }
-
+        function updateTileOutline(tileElement, tags) {
+            tileElement.classList.remove('nsfw-outline', 'star-outline', 'special-outline');
+            const hasNSFW = tags.includes('18+');
+            const hasStar = tags.includes('⭐');
+            
+            if (hasNSFW && hasStar) {
+                tileElement.classList.add('special-outline');
+            } else if (hasNSFW) {
+                tileElement.classList.add('nsfw-outline');
+            } else if (hasStar) {
+                tileElement.classList.add('star-outline');
+            }
+        }
         // Edit image
     function editImage(tileData, tileElement) {
     // Create an input element to upload a new image
@@ -424,11 +441,7 @@
             if (newTags !== null) {
                 tileData.tags = newTags.split(',').map(tag => tag.trim()).filter(tag => tag);
                 updateTileTags(tileElement, tileData.tags);
-                
-                // Check for 18+ and ⭐ tags and update outlines
-                tileElement.classList.toggle('nsfw-outline', tileData.tags.includes('18+'));
-                tileElement.classList.toggle('star-outline', tileData.tags.includes('⭐'));
-                
+                updateTileOutline(tileElement, tileData.tags);
                 saveTiles();
                 updateTagFilter();
             }
