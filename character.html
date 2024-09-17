@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Character Bookmarking Tool</title>
     <style>
+        
         :root {
             --bg-color: #f4f4f4;
             --text-color: #333;
@@ -15,6 +16,7 @@
             --button-bg: #4CAF50;
             --button-bg-hover: #45a049;
             --button-color: white;
+            --popup-color: #dfdfdf;
         }
         .dark-mode {
             --bg-color: #333;
@@ -26,6 +28,7 @@
             --button-bg: #45a049;
             --button-bg-hover: #3e8e41;
             --button-color: #f4f4f4;
+            --popup-color: #2f2f2f;
         }
         body {
             font-family: Arial, sans-serif;
@@ -150,6 +153,63 @@
                 grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
             }
         }
+        #popup-close-btn {
+    margin-top: 10px;
+    padding: 5px 10px;
+    background-color: #f44336; /* Red color for close button */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+#popup-close-btn:hover {
+    background-color: #e53935;
+}
+
+.popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: var(--popup-color);
+    border: 2px solid #000;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 300px;
+}
+.popup.hidden {
+    display: none;
+}
+#popup-content {
+    text-align: center;
+    position: relative;
+    z-index: 1010;
+}
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 1000;
+}
+#popup-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;  /* Crop image proportionally */
+    border-radius: 8px;
+    max-width: 100%;
+    max-height: 100%;
+    display: block;
+}
+
+
     </style>
 </head>
 <body>
@@ -167,11 +227,24 @@
             <button id="export-btn">Export</button>
             <button id="import-btn">Import</button>
             <button id="blur-nsfw-btn">Blur NSFW</button>
-        </div>
+            <button id="random-character-btn">Select Random Character</button>
+        </div>    
         <select id="tag-filter">
             <option value="all">All Tags</option>
         </select>
     </div>
+<!-- Popup Structure -->
+<div id="character-popup" class="popup hidden">
+    <div id="popup-content">
+        <span id="popup-close">&times;</span>
+        <div id="popup-info">
+            <img id="popup-image" src="" alt="Character Image">
+            <p id="popup-tags"></p>
+            <a id="popup-link" href="#" target="_blank">View Profile</a>
+            <button id="popup-close-btn">Close</button> <!-- New close button -->
+        </div>
+    </div>
+</div>
     <div class="image-grid" id="image-grid">
         <div class="image-item add-image" id="add-image">
             +
@@ -478,6 +551,60 @@ function toggleBlurNSFW() {
 blurNSFWBtn.addEventListener('click', toggleBlurNSFW);
         // Load saved tiles on page load
         loadSavedTiles();
+        const randomCharacterBtn = document.getElementById('random-character-btn');
+const characterPopup = document.getElementById('character-popup');
+const popupContent = document.getElementById('popup-content');
+const popupClose = document.getElementById('popup-close');
+const popupCloseBtn = document.getElementById('popup-close-btn');
+const popupImage = document.getElementById('popup-image');
+const popupTags = document.getElementById('popup-tags');
+const popupLink = document.getElementById('popup-link');
+
+// Close popup function
+function closePopup() {
+    characterPopup.classList.add('hidden');
+    characterPopup.classList.remove('red-border');
+}
+
+// Event listeners for closing popup
+popupClose.addEventListener('click', closePopup);
+popupCloseBtn.addEventListener('click', closePopup);
+
+
+// Function to pick a random character
+function selectRandomCharacter() {
+    const characters = Array.from(document.querySelectorAll('.image-item:not(.add-image)'));
+    if (characters.length === 0) {
+        alert('No characters available.');
+        return;
+    }
+
+    // Pick a random character
+    const randomIndex = Math.floor(Math.random() * characters.length);
+    const selectedCharacter = characters[randomIndex];
+
+    // Extract data
+    const imageSrc = selectedCharacter.querySelector('img').src;
+    const linkHref = selectedCharacter.querySelector('a').href;
+    const tags = Array.from(selectedCharacter.querySelectorAll('.tag')).map(tag => tag.textContent);
+
+    // Populate the popup
+    popupImage.src = imageSrc;
+    popupLink.href = linkHref;
+    popupTags.textContent = `Tags: ${tags.join(', ')}`;
+
+    // Check for 18+ tag and apply red border if found
+    if (tags.includes('18+')) {
+        characterPopup.classList.add('red-border');
+    }
+
+    // Show the popup
+    characterPopup.classList.remove('hidden');
+}
+
+// Event listener for the random character button
+randomCharacterBtn.addEventListener('click', selectRandomCharacter);
+
     </script>
 </body>
 </html>
