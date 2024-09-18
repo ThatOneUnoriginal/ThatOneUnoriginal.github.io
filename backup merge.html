@@ -124,6 +124,7 @@
             white-space: pre-wrap;
             word-wrap: break-word;
             transition: background-color 0.3s ease, color 0.3s ease;
+            display: block;
         }
 
         body.dark-mode pre {
@@ -141,6 +142,34 @@
             cursor: pointer;
             transition: background-color 0.3s ease;
             margin-top: 10px;
+        }
+
+        .output-controls {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 10px;
+        }
+
+        .collapse-expand-button {
+            background-color: #4facfe;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 5px 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .collapse-expand-button:hover {
+            background-color: #00c2fe;
+        }
+
+        body.dark-mode .collapse-expand-button {
+            background-color: #00c2fe;
+        }
+
+        .collapsed {
+            display: none;
         }
 
         /* Popup Modal Styles */
@@ -192,6 +221,13 @@
         <button id="saveButton" onclick="saveJSON()">Save Merged JSON</button>
         <button id="clearButton" onclick="clearData()">Clear Data</button>
         <button class="dark-mode-toggle" onclick="toggleDarkMode()">Toggle Dark Mode</button>
+        
+        <!-- Output Controls -->
+        <div class="output-controls">
+            <button class="collapse-expand-button" onclick="toggleOutput()">Collapse</button>
+        </div>
+        
+        <!-- Output Area -->
         <pre id="output"></pre>
     </div>
 
@@ -204,10 +240,31 @@
             <button onclick="handleNSFW(false)">Remove NSFW</button>
         </div>
     </div>
-
+    <!-- New Modal for Invalid Links -->
+    <div id="invalidLinkModal" class="modal">
+        <div class="modal-content">
+            <h2>Warning: Invalid Links</h2>
+            <p>Some items don't have valid hyperlinks. Do you want to remove them?</p>
+            <button onclick="handleInvalidLinks(false)">Keep All</button>
+            <button onclick="handleInvalidLinks(true)">Remove Invalid Links</button>
+        </div>
+    </div>
+    <div id="favoritesModal" class="modal">
+        <div class="modal-content">
+            <h2>Favorites Detected</h2>
+            <p>Some items are marked as favorites (⭐). How would you like to handle them?</p>
+            <button onclick="handleFavorites('file1')">Keep favorites from file 1</button>
+            <button onclick="handleFavorites('file2')">Keep favorites from file 2</button>
+            <button onclick="handleFavorites('both')">Keep favorites from both files</button>
+            <button onclick="handleFavorites('remove')">Remove all favorites</button>
+        </div>
+    </div>
     <script>
         let mergedData = null;
+        let file1Data = null;
+        let file2Data = null;
         let nsfwData = [];
+        let isOutputCollapsed = false;
 
         function mergeJSON() {
             const file1 = document.getElementById('file1').files[0];
@@ -224,10 +281,10 @@
             reader1.onload = function(e1) {
                 reader2.onload = function(e2) {
                     try {
-                        const json1 = JSON.parse(e1.target.result);
-                        const json2 = JSON.parse(e2.target.result);
+                        file1Data = JSON.parse(e1.target.result);
+                        file2Data = JSON.parse(e2.target.result);
                         
-                        let combined = [...json1, ...json2];
+                        let combined = [...file1Data, ...file2Data];
 
                         const uniqueMap = new Map();
                         combined.forEach(item => {
@@ -239,7 +296,11 @@
                         mergedData = Array.from(uniqueMap.values()).map(item => ({
                             imageData: item.imageData || "",
                             link: item.link || "https://",
-                            tags: Array.isArray(item.tags) ? item.tags : []
+                            tags: Array.isArray(item.tags) ? item.tags : [],
+                            platform: item.platform || "",
+                            name: item.name || "",
+                            description: item.description || "",
+                            age: item.age || ""
                         }));
 
                         checkForNSFWContent(mergedData);
@@ -259,7 +320,7 @@
             if (nsfwData.length > 0) {
                 document.getElementById('nsfwModal').style.display = "block";
             } else {
-                displayMergedData(data);
+                checkForInvalidLinks(data);
             }
         }
 
@@ -267,14 +328,80 @@
             document.getElementById('nsfwModal').style.display = "none";
 
             if (allow) {
-                displayMergedData(mergedData);
+                checkForInvalidLinks(mergedData);
             } else {
                 const filteredData = mergedData.filter(item => !item.tags.includes("18+"));
-                displayMergedData(filteredData);
+                checkForInvalidLinks(filteredData);
             }
         }
 
+        function checkForInvalidLinks(data) {
+            const invalidLinkData = data.filter(item => !item.link || item.link === "https://");
+
+            if (invalidLinkData.length > 0) {
+                document.getElementById('invalidLinkModal').style.display = "block";
+            } else {
+                checkForFavorites(data);
+            }
+        }
+
+        function handleInvalidLinks(remove) {
+            document.getElementById('invalidLinkModal').style.display = "none";
+
+            if (remove) {
+                const filteredData = mergedData.filter(item => item.link && item.link !== "https://");
+                checkForFavorites(filteredData);
+            } else {
+                checkForFavorites(mergedData);
+            }
+        }
+
+        function checkForFavorites(data) {
+            const favoritesData = data.filter(item => item.tags.includes("⭐"));
+
+            if (favoritesData.length > 0) {
+                document.getElementById('favoritesModal').style.display = "block";
+            } else {
+                displayMergedData(data);
+            }
+        }
+
+        function handleFavorites(option) {
+            document.getElementById('favoritesModal').style.display = "none";
+            let filteredData;
+
+            switch(option) {
+                case 'file1':
+                    filteredData = mergedData.map(item => {
+                        const file1Item = file1Data.find(f1 => f1.link === item.link);
+                        if (file1Item && file1Item.tags.includes("⭐")) {
+                            return { ...item, tags: item.tags.includes("⭐") ? item.tags : [...item.tags, "⭐"] };
+                        }
+                        return { ...item, tags: item.tags.filter(tag => tag !== "⭐") };
+                    });
+                    break;
+                case 'file2':
+                    filteredData = mergedData.map(item => {
+                        const file2Item = file2Data.find(f2 => f2.link === item.link);
+                        if (file2Item && file2Item.tags.includes("⭐")) {
+                            return { ...item, tags: item.tags.includes("⭐") ? item.tags : [...item.tags, "⭐"] };
+                        }
+                        return { ...item, tags: item.tags.filter(tag => tag !== "⭐") };
+                    });
+                    break;
+                case 'both':
+                    filteredData = mergedData;
+                    break;
+                case 'remove':
+                    filteredData = mergedData.map(item => ({ ...item, tags: item.tags.filter(tag => tag !== "⭐") }));
+                    break;
+            }
+
+            displayMergedData(filteredData);
+        }
+
         function displayMergedData(data) {
+            mergedData = data;
             document.getElementById('output').textContent = JSON.stringify(data, null, 2);
             document.getElementById('saveButton').style.display = 'inline-block';
         }
@@ -306,6 +433,21 @@
             document.body.classList.toggle('dark-mode');
             const darkModeEnabled = document.body.classList.contains('dark-mode');
             localStorage.setItem('darkMode', darkModeEnabled ? 'enabled' : 'disabled');
+        }
+
+        function toggleOutput() {
+            const output = document.getElementById('output');
+            const button = document.querySelector('.collapse-expand-button');
+
+            if (isOutputCollapsed) {
+                output.classList.remove('collapsed');
+                button.textContent = 'Collapse';
+            } else {
+                output.classList.add('collapsed');
+                button.textContent = 'Expand';
+            }
+
+            isOutputCollapsed = !isOutputCollapsed;
         }
     </script>
 </body>
