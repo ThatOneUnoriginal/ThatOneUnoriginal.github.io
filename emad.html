@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON Merger (with Duplicate Removal)</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(to right, #4facfe, #00f2fe);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .container:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+            100% {
+                transform: translateY(0px);
+            }
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #444;
+            letter-spacing: 1px;
+        }
+
+        input[type="file"] {
+            margin: 15px 0;
+            padding: 10px;
+            border: 2px solid #4facfe;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button {
+            background-color: #4facfe;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #00c2fe;
+        }
+
+        #saveButton {
+            display: none;
+        }
+
+        pre {
+            text-align: left;
+            background: #f4f4f4;
+            padding: 10px;
+            border-radius: 6px;
+            overflow-x: auto;
+            max-height: 300px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>JSON Merger (with Duplicate Removal)</h1>
+        <input type="file" id="file1" accept=".json">
+        <input type="file" id="file2" accept=".json">
+        <button onclick="mergeJSON()">Merge JSON</button>
+        <button id="saveButton" onclick="saveJSON()">Save Merged JSON</button>
+        <pre id="output"></pre>
+    </div>
+
+    <script>
+        let mergedData = null;
+
+        function mergeJSON() {
+            const file1 = document.getElementById('file1').files[0];
+            const file2 = document.getElementById('file2').files[0];
+            
+            if (!file1 || !file2) {
+                alert('Please select two JSON files');
+                return;
+            }
+
+            const reader1 = new FileReader();
+            const reader2 = new FileReader();
+
+            reader1.onload = function(e1) {
+                reader2.onload = function(e2) {
+                    try {
+                        const json1 = JSON.parse(e1.target.result);
+                        const json2 = JSON.parse(e2.target.result);
+                        
+                        let combined = [...json1, ...json2];
+                        
+                        const uniqueMap = new Map();
+                        combined.forEach(item => {
+                            if (!uniqueMap.has(item.link)) {
+                                uniqueMap.set(item.link, item);
+                            }
+                        });
+
+                        mergedData = Array.from(uniqueMap.values()).map(item => ({
+                            imageData: item.imageData || "",
+                            link: item.link || "https://",
+                            tags: Array.isArray(item.tags) ? item.tags : []
+                        }));
+                        
+                        document.getElementById('output').textContent = JSON.stringify(mergedData, null, 2);
+                        document.getElementById('saveButton').style.display = 'inline-block';
+                    } catch (error) {
+                        alert('Error processing JSON: ' + error);
+                    }
+                };
+                reader2.readAsText(file2);
+            };
+            reader1.readAsText(file1);
+        }
+
+        function saveJSON() {
+            if (!mergedData) {
+                alert('No merged data to save. Please merge JSON files first.');
+                return;
+            }
+
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(mergedData));
+            const downloadAnchorNode = document.createElement('a');
+            downloadAnchorNode.setAttribute("href", dataStr);
+            downloadAnchorNode.setAttribute("download", "merged_data.json");
+            document.body.appendChild(downloadAnchorNode);
+            downloadAnchorNode.click();
+            downloadAnchorNode.remove();
+        }
+    </script>
+</body>
+</html>
