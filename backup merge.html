@@ -10,11 +10,11 @@
             background: linear-gradient(to right, #4facfe, #00f2fe);
             --background: #fff;
             margin: 0;
-            padding: 20px;
+            padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
+            height: 100vh;
             color: #333;
             transition: background-color 0.3s ease, color 0.3s ease;
         }
@@ -30,8 +30,8 @@
             padding: 20px;
             border-radius: 12px;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-            width: 90%;
             max-width: 600px;
+            width: 100%;
             text-align: center;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             animation: float 3s ease-in-out infinite;
@@ -52,9 +52,15 @@
         }
 
         @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-            100% { transform: translateY(0px); }
+            0% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+            100% {
+                transform: translateY(0px);
+            }
         }
 
         h1 {
@@ -76,8 +82,6 @@
             cursor: pointer;
             font-size: 16px;
             transition: background-color 0.3s ease, border-color 0.3s ease;
-            width: 100%;
-            box-sizing: border-box;
         }
 
         body.dark-mode input[type="file"] {
@@ -96,8 +100,6 @@
             cursor: pointer;
             transition: background-color 0.3s ease;
             margin-top: 10px;
-            width: 100%;
-            max-width: 200px;
         }
 
         button:hover {
@@ -122,8 +124,6 @@
             white-space: pre-wrap;
             word-wrap: break-word;
             transition: background-color 0.3s ease, color 0.3s ease;
-            display: block;
-            font-size: 14px;
         }
 
         body.dark-mode pre {
@@ -141,34 +141,6 @@
             cursor: pointer;
             transition: background-color 0.3s ease;
             margin-top: 10px;
-        }
-
-        .output-controls {
-            display: flex;
-            justify-content: flex-end;
-            margin-bottom: 10px;
-        }
-
-        .collapse-expand-button {
-            background-color: #4facfe;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            padding: 5px 10px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .collapse-expand-button:hover {
-            background-color: #00c2fe;
-        }
-
-        body.dark-mode .collapse-expand-button {
-            background-color: #00c2fe;
-        }
-
-        .collapsed {
-            display: none;
         }
 
         /* Popup Modal Styles */
@@ -203,45 +175,12 @@
             border-radius: 6px;
             cursor: pointer;
             font-size: 16px;
-            margin: 5px;
-            width: auto;
         }
 
         .modal button:hover {
             background-color: #00c2fe;
         }
 
-        @media (max-width: 600px) {
-            body {
-                padding: 10px;
-            }
-
-            .container {
-                padding: 15px;
-            }
-
-            h1 {
-                font-size: 20px;
-            }
-
-            input[type="file"], button {
-                font-size: 14px;
-            }
-
-            pre {
-                font-size: 12px;
-            }
-
-            .modal-content {
-                width: 90%;
-                padding: 15px;
-            }
-
-            .modal button {
-                font-size: 14px;
-                padding: 8px;
-            }
-        }
     </style>
 </head>
 <body>
@@ -253,13 +192,6 @@
         <button id="saveButton" onclick="saveJSON()">Save Merged JSON</button>
         <button id="clearButton" onclick="clearData()">Clear Data</button>
         <button class="dark-mode-toggle" onclick="toggleDarkMode()">Toggle Dark Mode</button>
-        
-        <!-- Output Controls -->
-        <div class="output-controls">
-            <button class="collapse-expand-button" onclick="toggleOutput()">Collapse</button>
-        </div>
-        
-        <!-- Output Area -->
         <pre id="output"></pre>
     </div>
 
@@ -272,31 +204,10 @@
             <button onclick="handleNSFW(false)">Remove NSFW</button>
         </div>
     </div>
-    <!-- New Modal for Invalid Links -->
-    <div id="invalidLinkModal" class="modal">
-        <div class="modal-content">
-            <h2>Warning: Invalid Links</h2>
-            <p>Some items don't have valid hyperlinks. Do you want to remove them?</p>
-            <button onclick="handleInvalidLinks(false)">Keep All</button>
-            <button onclick="handleInvalidLinks(true)">Remove Invalid Links</button>
-        </div>
-    </div>
-    <div id="favoritesModal" class="modal">
-        <div class="modal-content">
-            <h2>Favorites Detected</h2>
-            <p>Some items are marked as favorites (⭐). How would you like to handle them?</p>
-            <button onclick="handleFavorites('file1')">Keep favorites from file 1</button>
-            <button onclick="handleFavorites('file2')">Keep favorites from file 2</button>
-            <button onclick="handleFavorites('both')">Keep favorites from both files</button>
-            <button onclick="handleFavorites('remove')">Remove all favorites</button>
-        </div>
-    </div>
+
     <script>
         let mergedData = null;
-        let file1Data = null;
-        let file2Data = null;
         let nsfwData = [];
-        let isOutputCollapsed = false;
 
         function mergeJSON() {
             const file1 = document.getElementById('file1').files[0];
@@ -313,10 +224,10 @@
             reader1.onload = function(e1) {
                 reader2.onload = function(e2) {
                     try {
-                        file1Data = JSON.parse(e1.target.result);
-                        file2Data = JSON.parse(e2.target.result);
+                        const json1 = JSON.parse(e1.target.result);
+                        const json2 = JSON.parse(e2.target.result);
                         
-                        let combined = [...file1Data, ...file2Data];
+                        let combined = [...json1, ...json2];
 
                         const uniqueMap = new Map();
                         combined.forEach(item => {
@@ -328,11 +239,7 @@
                         mergedData = Array.from(uniqueMap.values()).map(item => ({
                             imageData: item.imageData || "",
                             link: item.link || "https://",
-                            tags: Array.isArray(item.tags) ? item.tags : [],
-                            platform: item.platform || "",
-                            name: item.name || "",
-                            description: item.description || "",
-                            age: item.age || ""
+                            tags: Array.isArray(item.tags) ? item.tags : []
                         }));
 
                         checkForNSFWContent(mergedData);
@@ -352,7 +259,7 @@
             if (nsfwData.length > 0) {
                 document.getElementById('nsfwModal').style.display = "block";
             } else {
-                checkForInvalidLinks(data);
+                displayMergedData(data);
             }
         }
 
@@ -360,80 +267,14 @@
             document.getElementById('nsfwModal').style.display = "none";
 
             if (allow) {
-                checkForInvalidLinks(mergedData);
+                displayMergedData(mergedData);
             } else {
                 const filteredData = mergedData.filter(item => !item.tags.includes("18+"));
-                checkForInvalidLinks(filteredData);
+                displayMergedData(filteredData);
             }
-        }
-
-        function checkForInvalidLinks(data) {
-            const invalidLinkData = data.filter(item => !item.link || item.link === "https://");
-
-            if (invalidLinkData.length > 0) {
-                document.getElementById('invalidLinkModal').style.display = "block";
-            } else {
-                checkForFavorites(data);
-            }
-        }
-
-        function handleInvalidLinks(remove) {
-            document.getElementById('invalidLinkModal').style.display = "none";
-
-            if (remove) {
-                const filteredData = mergedData.filter(item => item.link && item.link !== "https://");
-                checkForFavorites(filteredData);
-            } else {
-                checkForFavorites(mergedData);
-            }
-        }
-
-        function checkForFavorites(data) {
-            const favoritesData = data.filter(item => item.tags.includes("⭐"));
-
-            if (favoritesData.length > 0) {
-                document.getElementById('favoritesModal').style.display = "block";
-            } else {
-                displayMergedData(data);
-            }
-        }
-
-        function handleFavorites(option) {
-            document.getElementById('favoritesModal').style.display = "none";
-            let filteredData;
-
-            switch(option) {
-                case 'file1':
-                    filteredData = mergedData.map(item => {
-                        const file1Item = file1Data.find(f1 => f1.link === item.link);
-                        if (file1Item && file1Item.tags.includes("⭐")) {
-                            return { ...item, tags: item.tags.includes("⭐") ? item.tags : [...item.tags, "⭐"] };
-                        }
-                        return { ...item, tags: item.tags.filter(tag => tag !== "⭐") };
-                    });
-                    break;
-                case 'file2':
-                    filteredData = mergedData.map(item => {
-                        const file2Item = file2Data.find(f2 => f2.link === item.link);
-                        if (file2Item && file2Item.tags.includes("⭐")) {
-                            return { ...item, tags: item.tags.includes("⭐") ? item.tags : [...item.tags, "⭐"] };
-                        }
-                        return { ...item, tags: item.tags.filter(tag => tag !== "⭐") };
-                    });
-                    break;
-                case 'both':
-                    filteredData = mergedData;
-                    break;
-                case 'remove':
-                    filteredData = mergedData.map(item => ({ ...item, tags: item.tags.filter(tag => tag !== "⭐") }));
-                    break;
-            }
-
-            displayMergedData(filteredData);
         }
 
         function displayMergedData(data) {
-            mergedData = data;
             document.getElementById('output').textContent = JSON.stringify(data, null, 2);
             document.getElementById('saveButton').style.display = 'inline-block';
         }
@@ -467,19 +308,26 @@
             localStorage.setItem('darkMode', darkModeEnabled ? 'enabled' : 'disabled');
         }
 
-        function toggleOutput() {
-            const output = document.getElementById('output');
-            const button = document.querySelector('.collapse-expand-button');
-
-            if (isOutputCollapsed) {
-                output.classList.remove('collapsed');
-                button.textContent = 'Collapse';
-            } else {
-                output.classList.add('collapsed');
-                button.textContent = 'Expand';
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const savedTheme = localStorage.getItem('darkMode');
+            if (savedTheme === 'enabled') {
+                document.body.classList.add('dark-mode');
             }
+        });
 
-            isOutputCollapsed = !isOutputCollapsed;
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            const darkModeEnabled = document.body.classList.contains('dark-mode');
+            localStorage.setItem('darkMode', darkModeEnabled ? 'enabled' : 'disabled');
+        }
+
+        function showFileContent(fileNumber) {
+            const fileData = fileNumber === 1 ? file1Data : file2Data;
+            if (fileData) {
+                document.getElementById('output').textContent = JSON.stringify(fileData, null, 2);
+            } else {
+                alert(`File ${fileNumber} has not been loaded yet.`);
+            }
         }
     </script>
 </body>
