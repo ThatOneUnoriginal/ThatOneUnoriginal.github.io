@@ -5,19 +5,48 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JSON Merger (with Duplicate Removal)</title>
     <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(to right, #4facfe, #00f2fe);
-            --background: #fff;
-            margin: 0;
-            padding: 0;
+
+        .info-grid-buttons {
             display: flex;
             justify-content: center;
-            align-items: center;
-            height: 100vh;
-            color: #333;
-            transition: background-color 0.3s ease, color 0.3s ease;
+            gap: 10px;
+            margin-bottom: 15px;
         }
+
+        .info-grid-buttons button {
+            background-color: #4facfe;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .info-grid-buttons button:hover {
+            background-color: #00c2fe;
+        }
+
+        body.dark-mode .info-grid-buttons button {
+            background-color: #00c2fe;
+        }
+
+        
+
+
+.container {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    width: 100%; /* Ensure full width */
+    max-width: 600px; /* Limit the maximum width */
+    text-align: center;
+    max-height: 100vh; /* Keep it within view */
+    overflow: auto; /* Allow scrolling if content overflows */
+}
+
 
         body.dark-mode {
             background: linear-gradient(to right, #141e30, #243b55);
@@ -30,8 +59,8 @@
             padding: 20px;
             border-radius: 12px;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            width: 90%;
             max-width: 600px;
-            width: 100%;
             text-align: center;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             animation: float 3s ease-in-out infinite;
@@ -52,15 +81,9 @@
         }
 
         @keyframes float {
-            0% {
-                transform: translateY(0px);
-            }
-            50% {
-                transform: translateY(-10px);
-            }
-            100% {
-                transform: translateY(0px);
-            }
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
         }
 
         h1 {
@@ -82,6 +105,8 @@
             cursor: pointer;
             font-size: 16px;
             transition: background-color 0.3s ease, border-color 0.3s ease;
+            width: 100%;
+            box-sizing: border-box;
         }
 
         body.dark-mode input[type="file"] {
@@ -100,6 +125,8 @@
             cursor: pointer;
             transition: background-color 0.3s ease;
             margin-top: 10px;
+            width: 100%;
+            max-width: 200px;
         }
 
         button:hover {
@@ -124,6 +151,8 @@
             white-space: pre-wrap;
             word-wrap: break-word;
             transition: background-color 0.3s ease, color 0.3s ease;
+            display: block;
+            font-size: 14px;
         }
 
         body.dark-mode pre {
@@ -143,6 +172,34 @@
             margin-top: 10px;
         }
 
+        .output-controls {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 10px;
+        }
+
+        .collapse-expand-button {
+            background-color: #4facfe;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 5px 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .collapse-expand-button:hover {
+            background-color: #00c2fe;
+        }
+
+        body.dark-mode .collapse-expand-button {
+            background-color: #00c2fe;
+        }
+
+        .collapsed {
+            display: none;
+        }
+
         /* Popup Modal Styles */
         .modal {
             display: none; 
@@ -152,20 +209,29 @@
             top: 0;
             width: 100%;
             height: 100%;
-            overflow: auto; 
             background-color: rgba(0, 0, 0, 0.4); 
+            justify-content: center;
+            align-items: center;
         }
 
+        
         .modal-content {
-            background-color: var(--background);
-            margin: 15% auto; 
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
-            max-width: 500px;
-            border-radius: 12px;
-            text-align: center;
-        }
+    background-color: var(--background);
+    margin: 10% auto; /* Center the modal vertically */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+    max-height: 80vh; /* Set a max height */
+    overflow-y: auto; /* Add scroll for overflowing content */
+    border-radius: 12px;
+    text-align: center;
+}
+
+* {
+    box-sizing: border-box;
+}
+
 
         .modal button {
             background-color: #4facfe;
@@ -175,17 +241,97 @@
             border-radius: 6px;
             cursor: pointer;
             font-size: 16px;
+            margin: 5px;
+            width: auto;
         }
 
         .modal button:hover {
             background-color: #00c2fe;
         }
 
+        @media (max-width: 600px) {
+    body {
+        padding: 10px;
+        max-height: 100vh; /* Ensure it doesn’t overflow on mobile */
+        overflow: auto; /* Allow scrolling if necessary */
+    }
+
+    .container {
+        padding: 15px;
+        max-width: 100%;
+        max-height: calc(100vh - 40px); /* Account for padding */
+        overflow: auto; /* Ensure scrolling if content is large */
+    }
+
+    .modal-content {
+        max-width: 90%;
+        max-height: 90vh; /* Limit height on small screens */
+        padding: 15px;
+    }
+
+    input[type="file"], button {
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    pre {
+        font-size: 12px;
+    }
+}
+
+
+            input[type="file"], button {
+    width: 100%; /* Full width of the container */
+    max-width: 100%; /* Prevent it from overflowing */
+    font-size: 16px;
+    padding: 10px;
+    box-sizing: border-box;
+    margin: 10px 0; /* Ensure spacing */
+}
+
+pre {
+    max-height: 300px; /* Limit output height */
+    overflow-y: auto;
+    word-wrap: break-word;
+    font-size: 14px;
+}
+
+            .modal-content {
+                width: 90%;
+                padding: 15px;
+            }
+
+            .modal button {
+                font-size: 14px;
+                padding: 8px;
+            }
+body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(to right, #4facfe, #00f2fe);
+    background-size: 200% 100%; /* Extend the background size */
+    animation: gradientAnimation 10s ease infinite; /* Apply the animation */
+    --background: #fff;
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    max-height: 100vh; /* Make sure it doesn’t overflow */
+    overflow: hidden; /* Prevent scrolling if unnecessary */
+    color: #333;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
     </style>
 </head>
 <body>
     <div class="container">
         <h1>JSON Merger (with Duplicate Removal)</h1>
+        <div class="info-grid-buttons">
+            <button onclick="showInfo()">Info</button>
+            <button onclick="goToGrid()">Go to Grid</button>
+        </div>
         <input type="file" id="file1" accept=".json">
         <input type="file" id="file2" accept=".json">
         <button onclick="mergeJSON()">Merge JSON</button>
@@ -205,61 +351,100 @@
         </div>
     </div>
 
+    <div id="invalidLinkModal" class="modal">
+        <div class="modal-content">
+            <h2>Warning: Invalid Links</h2>
+            <p>Some items don't have valid hyperlinks. Do you want to remove them?</p>
+            <button onclick="handleInvalidLinks(true)">Remove Invalid Links</button>
+            <button onclick="handleInvalidLinks(false)">Keep All</button>
+        </div>
+    </div>
+    
+    <div id="infoModal" class="modal">
+        <div class="modal-content">
+            <h2>Information</h2>
+            <p><strong>What is this tool?</strong></p>
+            <p>Ever wanted to share characters from your Character Bookmarking List but keep your existing tiles intact? This tool allows you to <strong>merge two JSON backup files</strong>, combining characters from both into a single file that can be easily imported.</p>
+    
+            <p><strong>How to Combine Files?</strong></p>
+            <ol>
+                <li><strong>Obtain Two JSON Files:</strong> Make sure you have two compatible JSON files from the bookmarking tool. You can export your own backup file using the export button on the bookmarking website.</li>
+                <li><strong>Upload Files:</strong> Upload each file into the provided file input boxes. The order doesn’t matter, but ensure that each file goes into its respective box.</li>
+                <li><strong>Merge Files:</strong> After uploading, click the <strong>Merge JSON</strong> button. If successful, the combined data will appear in the output window at the bottom. Be aware of any warnings/notices before the merged data is displayed.</li>
+                <li><strong>Save the Merged File:</strong> Once the merge is complete, a <strong>Save Merged JSON</strong> button will appear, allowing you to download the final merged file to your device.</li>
+            </ol>
+    
+            <p><strong>What Are These Notices/Warnings?</strong></p>
+            <ul>
+                <li><strong>NSFW Content:</strong> If either file contains characters marked as "18+", you’ll see this warning. <br> - <strong>Proceed:</strong> Keeps NSFW characters.<br> - <strong>Remove NSFW:</strong> Removes all NSFW characters from both files.</li>
+                <li><strong>Invalid Links:</strong> If characters without hyperlinks are detected, this warning will appear.<br> - <strong>Keep All:</strong> Keeps all characters, including those without valid links.<br> - <strong>Remove Invalid Links:</strong> Removes characters without valid hyperlinks.</li>
+            </ul>
+    
+            <p><strong>Why Are Some Characters Missing?</strong></p>
+            <p>Even if you don't remove NSFW content or invalid links, <strong>duplicate tiles</strong> are automatically filtered out based on their hyperlinks. If two tiles have the same link (e.g., both point to "https://youtube.com"), only one will be kept in the final merged file.</p>
+    
+            <button onclick="closeInfoModal()">Close</button>
+        </div>
+    </div>    
     <script>
         let mergedData = null;
         let nsfwData = [];
 
         function mergeJSON() {
-            const file1 = document.getElementById('file1').files[0];
-            const file2 = document.getElementById('file2').files[0];
+    const file1 = document.getElementById('file1').files[0];
+    const file2 = document.getElementById('file2').files[0];
 
-            if (!file1 || !file2) {
-                alert('Please select two JSON files');
-                return;
-            }
+    if (!file1 || !file2) {
+        alert('Please select two JSON files');
+        return;
+    }
 
-            const reader1 = new FileReader();
-            const reader2 = new FileReader();
+    const reader1 = new FileReader();
+    const reader2 = new FileReader();
 
-            reader1.onload = function(e1) {
-                reader2.onload = function(e2) {
-                    try {
-                        const json1 = JSON.parse(e1.target.result);
-                        const json2 = JSON.parse(e2.target.result);
-                        
-                        let combined = [...json1, ...json2];
+    reader1.onload = function(e1) {
+        reader2.onload = function(e2) {
+            try {
+                const json1 = JSON.parse(e1.target.result);
+                const json2 = JSON.parse(e2.target.result);
+                
+                let combined = [...json1, ...json2];
 
-                        const uniqueMap = new Map();
-                        combined.forEach(item => {
-                            if (!uniqueMap.has(item.link)) {
-                                uniqueMap.set(item.link, item);
-                            }
-                        });
-
-                        mergedData = Array.from(uniqueMap.values()).map(item => ({
-                            imageData: item.imageData || "",
-                            link: item.link || "https://",
-                            tags: Array.isArray(item.tags) ? item.tags : []
-                        }));
-
-                        checkForNSFWContent(mergedData);
-
-                    } catch (error) {
-                        alert('Error processing JSON: ' + error);
+                const uniqueMap = new Map();
+                combined.forEach(item => {
+                    if (!uniqueMap.has(item.link)) {
+                        uniqueMap.set(item.link, item);
                     }
-                };
-                reader2.readAsText(file2);
-            };
-            reader1.readAsText(file1);
-        }
+                });
 
-        function checkForNSFWContent(data) {
+                mergedData = Array.from(uniqueMap.values()).map(item => ({
+                    imageData: item.imageData || "",
+                    link: item.link || "https://",
+                    tags: Array.isArray(item.tags) ? item.tags : [],
+                    platform: item.platform || "",
+                    name: item.name || "",
+                    description: item.description || "",
+                    age: item.age || ""
+                }));
+
+                checkForNSFWContent(mergedData);
+
+            } catch (error) {
+                alert('Error processing JSON: ' + error);
+            }
+        };
+        reader2.readAsText(file2);
+    };
+    reader1.readAsText(file1);
+}
+
+function checkForNSFWContent(data) {
             nsfwData = data.filter(item => item.tags.includes("18+"));
 
             if (nsfwData.length > 0) {
                 document.getElementById('nsfwModal').style.display = "block";
             } else {
-                displayMergedData(data);
+                checkForInvalidLinks(data);
             }
         }
 
@@ -267,14 +452,35 @@
             document.getElementById('nsfwModal').style.display = "none";
 
             if (allow) {
-                displayMergedData(mergedData);
+                checkForInvalidLinks(mergedData);
             } else {
                 const filteredData = mergedData.filter(item => !item.tags.includes("18+"));
-                displayMergedData(filteredData);
+                checkForInvalidLinks(filteredData);
             }
         }
 
+        function checkForInvalidLinks(data) {
+            const invalidLinkData = data.filter(item => !item.link || item.link === "https://");
+
+            if (invalidLinkData.length > 0) {
+                document.getElementById('invalidLinkModal').style.display = "block";
+            } else {
+                displayMergedData(data);
+            }
+        }
+
+        function handleInvalidLinks(remove) {
+            document.getElementById('invalidLinkModal').style.display = "none";
+
+            if (remove) {
+                const filteredData = mergedData.filter(item => item.link && item.link !== "https://");
+                displayMergedData(filteredData);
+            } else {
+                displayMergedData(mergedData);
+            }
+        }
         function displayMergedData(data) {
+            mergedData = data;
             document.getElementById('output').textContent = JSON.stringify(data, null, 2);
             document.getElementById('saveButton').style.display = 'inline-block';
         }
@@ -328,6 +534,18 @@
             } else {
                 alert(`File ${fileNumber} has not been loaded yet.`);
             }
+        }
+
+        function showInfo() {
+            document.getElementById('infoModal').style.display = "block";
+        }
+
+        function closeInfoModal() {
+            document.getElementById('infoModal').style.display = "none";
+        }
+
+        function goToGrid() {
+            window.location.href = "https://youtube.com";
         }
     </script>
 </body>
