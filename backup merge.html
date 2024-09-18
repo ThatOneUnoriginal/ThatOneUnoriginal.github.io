@@ -8,6 +8,7 @@
         body {
             font-family: 'Arial', sans-serif;
             background: linear-gradient(to right, #4facfe, #00f2fe);
+            --background: #fff;
             margin: 0;
             padding: 0;
             display: flex;
@@ -15,6 +16,13 @@
             align-items: center;
             height: 100vh;
             color: #333;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        body.dark-mode {
+            background: linear-gradient(to right, #141e30, #243b55);
+            color: #f0f0f0;
+            --background: #141e30;
         }
 
         .container {
@@ -29,9 +37,18 @@
             animation: float 3s ease-in-out infinite;
         }
 
+        body.dark-mode .container {
+            background: #2c3e50;
+            box-shadow: 0 8px 20px rgba(255, 255, 255, 0.1);
+        }
+
         .container:hover {
             transform: translateY(-10px);
             box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+        }
+
+        body.dark-mode .container:hover {
+            box-shadow: 0 12px 24px rgba(255, 255, 255, 0.2);
         }
 
         @keyframes float {
@@ -53,6 +70,10 @@
             letter-spacing: 1px;
         }
 
+        body.dark-mode h1 {
+            color: #f0f0f0;
+        }
+
         input[type="file"] {
             margin: 15px 0;
             padding: 10px;
@@ -60,6 +81,13 @@
             border-radius: 6px;
             cursor: pointer;
             font-size: 16px;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        body.dark-mode input[type="file"] {
+            background-color: #2c3e50;
+            color: white;
+            border-color: #00c2fe;
         }
 
         button {
@@ -78,6 +106,10 @@
             background-color: #00c2fe;
         }
 
+        body.dark-mode button {
+            background-color: #00c2fe;
+        }
+
         #saveButton {
             display: none;
         }
@@ -91,7 +123,64 @@
             max-height: 300px;
             white-space: pre-wrap;
             word-wrap: break-word;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
+
+        body.dark-mode pre {
+            background-color: #2c3e50;
+            color: white;
+        }
+
+        .dark-mode-toggle {
+            background-color: #4facfe;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 10px;
+        }
+
+        /* Popup Modal Styles */
+        .modal {
+            display: none; 
+            position: fixed; 
+            z-index: 1; 
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto; 
+            background-color: rgba(0, 0, 0, 0.4); 
+        }
+
+        .modal-content {
+            background-color: var(--background);
+            margin: 15% auto; 
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .modal button {
+            background-color: #4facfe;
+            border: none;
+            color: white;
+            padding: 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .modal button:hover {
+            background-color: #00c2fe;
+        }
+
     </style>
 </head>
 <body>
@@ -101,16 +190,29 @@
         <input type="file" id="file2" accept=".json">
         <button onclick="mergeJSON()">Merge JSON</button>
         <button id="saveButton" onclick="saveJSON()">Save Merged JSON</button>
+        <button id="clearButton" onclick="clearData()">Clear Data</button>
+        <button class="dark-mode-toggle" onclick="toggleDarkMode()">Toggle Dark Mode</button>
         <pre id="output"></pre>
+    </div>
+
+    <!-- Modal -->
+    <div id="nsfwModal" class="modal">
+        <div class="modal-content">
+            <h2>Warning: NSFW Content</h2>
+            <p>Some of the data contains "18+" content. Do you want to proceed?</p>
+            <button onclick="handleNSFW(true)">Proceed</button>
+            <button onclick="handleNSFW(false)">Remove NSFW</button>
+        </div>
     </div>
 
     <script>
         let mergedData = null;
+        let nsfwData = [];
 
         function mergeJSON() {
             const file1 = document.getElementById('file1').files[0];
             const file2 = document.getElementById('file2').files[0];
-            
+
             if (!file1 || !file2) {
                 alert('Please select two JSON files');
                 return;
@@ -126,7 +228,7 @@
                         const json2 = JSON.parse(e2.target.result);
                         
                         let combined = [...json1, ...json2];
-                        
+
                         const uniqueMap = new Map();
                         combined.forEach(item => {
                             if (!uniqueMap.has(item.link)) {
@@ -139,9 +241,9 @@
                             link: item.link || "https://",
                             tags: Array.isArray(item.tags) ? item.tags : []
                         }));
-                        
-                        document.getElementById('output').textContent = JSON.stringify(mergedData, null, 2);
-                        document.getElementById('saveButton').style.display = 'inline-block';
+
+                        checkForNSFWContent(mergedData);
+
                     } catch (error) {
                         alert('Error processing JSON: ' + error);
                     }
@@ -149,6 +251,32 @@
                 reader2.readAsText(file2);
             };
             reader1.readAsText(file1);
+        }
+
+        function checkForNSFWContent(data) {
+            nsfwData = data.filter(item => item.tags.includes("18+"));
+
+            if (nsfwData.length > 0) {
+                document.getElementById('nsfwModal').style.display = "block";
+            } else {
+                displayMergedData(data);
+            }
+        }
+
+        function handleNSFW(allow) {
+            document.getElementById('nsfwModal').style.display = "none";
+
+            if (allow) {
+                displayMergedData(mergedData);
+            } else {
+                const filteredData = mergedData.filter(item => !item.tags.includes("18+"));
+                displayMergedData(filteredData);
+            }
+        }
+
+        function displayMergedData(data) {
+            document.getElementById('output').textContent = JSON.stringify(data, null, 2);
+            document.getElementById('saveButton').style.display = 'inline-block';
         }
 
         function saveJSON() {
@@ -164,6 +292,20 @@
             document.body.appendChild(downloadAnchorNode);
             downloadAnchorNode.click();
             downloadAnchorNode.remove();
+        }
+
+        function clearData() {
+            mergedData = null;
+            document.getElementById('output').textContent = '';
+            document.getElementById('file1').value = ''; // Clear file1 input
+            document.getElementById('file2').value = ''; // Clear file2 input
+            document.getElementById('saveButton').style.display = 'none';
+        }
+
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            const darkModeEnabled = document.body.classList.contains('dark-mode');
+            localStorage.setItem('darkMode', darkModeEnabled ? 'enabled' : 'disabled');
         }
     </script>
 </body>
