@@ -250,6 +250,18 @@ body.dark-mode input[type="file"] {
       <button id="darkModeToggle">Dark Mode</button>
     </div>
     <div class="info-grid-buttons">
+      <button id="sortAlphabetically" disabled>Sort Alphabetically</button>
+      <button id="sortReverseAlphabetically" disabled>Sort Alphabetically (Reverse)</button>
+    </div>
+    <div class="info-grid-buttons">
+      <button id="sortByAge" disabled>Sort by Age (Youngest to Oldest)</button>
+      <button id="sortByAgeReverse" disabled>Sort by Age (Oldest to Youngest)</button>
+    </div>
+    <div class="info-grid-buttons">
+      <button id="sortByPlatform" disabled>Sort by Platform (A → Z)</button>
+      <button id="sortByPlatformReverse" disabled>Sort by Platform (Z → A)</button>
+    </div>
+    <div class="info-grid-buttons">
       <button onclick="goToGrid1()">Go to Merger Tool</button>
       <button onclick="goToGrid2()">Go to Grid</button>
     </div>
@@ -262,9 +274,113 @@ body.dark-mode input[type="file"] {
     const fileInput = document.getElementById('fileInput');
     const jsonContainer = document.getElementById('jsonContainer');
     const saveOrderButton = document.getElementById('saveOrder');
-
+    const sortAlphabeticallyButton = document.getElementById('sortAlphabetically');
+    const sortReverseAlphabeticallyButton = document.getElementById('sortReverseAlphabetically');
+    const sortByAgeButton = document.getElementById('sortByAge');
+    const sortByAgeReverseButton = document.getElementById('sortByAgeReverse');
+    const sortByPlatformButton = document.getElementById('sortByPlatform');
+    const sortByPlatformReverseButton = document.getElementById('sortByPlatformReverse');
     // Dark mode toggle functionality
 const darkModeToggle = document.getElementById('darkModeToggle');
+  // Enable sorting buttons after JSON is uploaded
+  fileInput.addEventListener('change', function(event) {
+    const file = event.target.files[0];
+    if (file && file.type === "application/json") {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          jsonData = JSON.parse(e.target.result);
+          if (Array.isArray(jsonData)) {
+            renderJson();
+            sortAlphabeticallyButton.disabled = false;  // Enable alphabetical sort button
+            sortReverseAlphabeticallyButton.disabled = false;  // Enable reverse alphabetical sort button
+            sortByAgeButton.disabled = false;  // Enable age sort button
+            sortByAgeReverseButton.disabled = false;  // Enable reverse age sort button
+            sortByPlatformButton.disabled = false;  // Enable platform sort button
+            sortByPlatformReverseButton.disabled = false;  // Enable reverse platform sort button
+          } else {
+            alert('Invalid JSON format. Expected an array of objects.');
+          }
+        } catch (error) {
+          alert('Invalid JSON file.');
+        }
+      };
+      reader.readAsText(file);
+    } else {
+      alert('Please upload a valid JSON file.');
+    }
+  });
+
+  // Sorting by age (Youngest to Oldest)
+  sortByAgeButton.addEventListener('click', () => {
+    jsonData.sort((a, b) => {
+      const ageA = a.age;
+      const ageB = b.age;
+
+      const parseAge = (age) => {
+        const parsed = parseInt(age, 10);
+        return isNaN(parsed) ? Infinity : parsed;  // Non-numeric ages become Infinity
+      };
+
+      return parseAge(ageA) - parseAge(ageB);  // Sort by age
+    });
+    renderJson();  // Re-render the JSON after sorting
+  });
+
+  // Sorting by age (Oldest to Youngest)
+  sortByAgeReverseButton.addEventListener('click', () => {
+    jsonData.sort((a, b) => {
+      const ageA = a.age;
+      const ageB = b.age;
+
+      const parseAge = (age) => {
+        const parsed = parseInt(age, 10);
+        return isNaN(parsed) ? Infinity : parsed;  // Non-numeric ages become Infinity
+      };
+
+      return parseAge(ageB) - parseAge(ageA);  // Reverse order
+    });
+    renderJson();  // Re-render the JSON after sorting
+  });
+
+  // Sorting by platform (A → Z)
+  sortByPlatformButton.addEventListener('click', () => {
+    jsonData.sort((a, b) => {
+      const platformA = a.platform ? a.platform.toLowerCase() : '';
+      const platformB = b.platform ? b.platform.toLowerCase() : '';
+      return platformA.localeCompare(platformB);
+    });
+    renderJson();  // Re-render the JSON after sorting
+  });
+
+  // Sorting by platform (Z → A)
+  sortByPlatformReverseButton.addEventListener('click', () => {
+    jsonData.sort((a, b) => {
+      const platformA = a.platform ? a.platform.toLowerCase() : '';
+      const platformB = b.platform ? b.platform.toLowerCase() : '';
+      return platformB.localeCompare(platformA);  // Reverse order
+    });
+    renderJson();  // Re-render the JSON after sorting
+  });
+  // Sorting alphabetically A -> Z
+  sortAlphabeticallyButton.addEventListener('click', () => {
+    jsonData.sort((a, b) => {
+      const nameA = a.name ? a.name.toLowerCase() : '';
+      const nameB = b.name ? b.name.toLowerCase() : '';
+      return nameA.localeCompare(nameB);
+    });
+    renderJson();  // Re-render the JSON after sorting
+  });
+
+  // Sorting alphabetically Z -> A
+  sortReverseAlphabeticallyButton.addEventListener('click', () => {
+    jsonData.sort((a, b) => {
+      const nameA = a.name ? a.name.toLowerCase() : '';
+      const nameB = b.name ? b.name.toLowerCase() : '';
+      return nameB.localeCompare(nameA);  // Reverse order
+    });
+    renderJson();  // Re-render the JSON after sorting
+  });
 
 if (localStorage.getItem('theme') === 'dark') {
     document.body.classList.add('dark-mode');
