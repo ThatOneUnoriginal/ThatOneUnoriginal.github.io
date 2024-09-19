@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reorder JSON Entries</title>
+  <style>
+body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(to right, #4facfe, #00f2fe);
+    background-size: 200% 100%; /* Extend the background size */
+    animation: gradientAnimation 10s ease infinite; /* Apply the animation */
+    --background: #fff;
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    max-height: 100vh; /* Make sure it doesn’t overflow */
+    overflow: hidden; /* Prevent scrolling if unnecessary */
+    color: #333;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+    .popup {
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  max-width: 90vw;
+  max-height: 90vh;
+  width: 100%;
+  height: auto;
+  box-sizing: border-box;
+  overflow: auto;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  animation: floating 3s ease-in-out infinite;
+}
+.popup:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+        }
+@keyframes floating {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+    h1 {
+      text-align: center;
+      color: #343a40;
+      font-size: 2.5em;
+      margin-bottom: 20px;
+    }
+
+    #jsonContainer {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .json-item {
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+      border-radius: 12px;
+      border: 1px solid #e0e0e0;
+      background-color: #ffffff;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+      cursor: grab;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .json-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+    }
+
+    .json-item-content {
+      display: flex;
+      gap: 20px;
+    }
+
+    .image-container {
+      flex: 0 0 180px;
+      height: 180px;
+      overflow: hidden;
+      position: relative;
+      border: 2px solid #007bff;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      background-color: #f8f9fa;
+    }
+
+    .image-preview {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+    }
+
+    .info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .info p {
+      margin: 5px 0;
+      font-size: 1em;
+      line-height: 1.4;
+    }
+
+    .info p strong {
+      color: #007bff;
+    }
+
+    .info .name {
+      font-size: 1.4em;
+      font-weight: bold;
+      color: #343a40;
+      margin-bottom: 10px;
+    }
+
+    .info .description {
+      font-size: 0.9em;
+      color: #6c757d;
+      margin-top: 10px;
+      padding: 10px;
+      border-left: 3px solid #007bff;
+    }
+
+    .info .platform,
+    .info .age {
+      font-size: 1em;
+      margin-top: 5px;
+      color: #495057;
+    }
+    input[type="file"] {
+	margin: 15px 0;
+	padding: 10px;
+	border: 2px solid #4facfe;
+	border-radius: 6px;
+	cursor: pointer;
+	font-size: 16px;
+	transition: background-color 0.3s ease, border-color 0.3s ease;
+	width: 100%;
+	box-sizing: border-box;
+}
+    button{
+      display: block;
+      margin: 20px auto;
+      padding: 12px 24px;
+      font-size: 16px;
+      cursor: pointer;
+      border: none;
+      border-radius: 4px;
+      background-color: #4facfe;
+      color: #ffffff;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #00c2fe;
+    }
+
+    .info-grid-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .info-grid-buttons button {
+           margin: 20px;
+           margin-bottom: 5px;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 20px;
+            font-size: 16px;
+            width: 100%;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        body.dark-mode {
+  background: linear-gradient(to right, #141e30, #243b55);
+  color: #f8f9fa;
+}
+.dark-mode a{
+  color: #ffff
+}
+a{
+ color: #000
+}
+.dark-mode .popup {
+  background: #2c3e50;
+  color: #f8f9fa;
+}
+
+.dark-mode .json-item {
+  background-color: #233240;
+  border-color: #283848;
+}
+
+.dark-mode .json-item-content .name {
+  color: #f8f9fa;
+}
+
+.dark-mode .info p, .dark-mode h1 {
+  color: #fff;
+}
+
+.dark-mode button {
+  background-color: #00afe5;
+  color: #ffffff;
+}
+
+.dark-mode button:hover {
+  background-color: #009bcb;
+}
+body.dark-mode input[type="file"] {
+	background-color: #2c3e50;
+	color: white;
+	border-color: #00c2fe;
+}   
+  </style>
+</head>
+<body>
+  <div class="popup">
+    <h1>Reorder JSON Entries</h1>
+
+    <!-- File input for uploading JSON file -->
+    <input type="file" id="fileInput" accept=".json">
+    <div id="jsonContainer">
+      <!-- JSON data entries will be rendered here -->
+    </div>
+    <div class="info-grid-buttons">
+      <button id="saveOrder" disabled>Save Order</button>
+      <button id="darkModeToggle">Dark Mode</button>
+    </div>
+    <div class="info-grid-buttons">
+      <button onclick="goToGrid1()">Go to Merger Tool</button>
+      <button onclick="goToGrid2()">Go to Grid</button>
+    </div>
+  </div>
+  <!-- Importing SortableJS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
+  <script>
+    let jsonData = [];
+
+    const fileInput = document.getElementById('fileInput');
+    const jsonContainer = document.getElementById('jsonContainer');
+    const saveOrderButton = document.getElementById('saveOrder');
+
+    // Dark mode toggle functionality
+const darkModeToggle = document.getElementById('darkModeToggle');
+
+if (localStorage.getItem('theme') === 'dark') {
+    document.body.classList.add('dark-mode');
+    darkModeToggle.textContent = 'Light Mode';
+  }
+
+  // Toggle dark mode and store preference in localStorage
+  darkModeToggle.addEventListener('click', () => {
+    document.body.classList.toggle('dark-mode');
+    const isDarkMode = document.body.classList.contains('dark-mode');
+    darkModeToggle.textContent = isDarkMode ? 'Light Mode' : 'Dark Mode';
+    localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+  });
+
+    // Function to render the JSON data into the container
+    function renderJson() {
+      jsonContainer.innerHTML = '';  // Clear the container
+      jsonData.forEach((item, index) => {
+        // Check if the item is a valid object
+        if (typeof item === 'object' && item !== null) {
+          const jsonItem = document.createElement('div');
+          jsonItem.classList.add('json-item');
+          jsonItem.setAttribute('data-id', index);
+
+          // Display the imageData, link, tags, platform, age, description, and name fields if available, or default to 'N/A'
+          jsonItem.innerHTML = `
+            <div class="json-item-content">
+              <div class="image-container">
+                <img class="image-preview" src="${item.imageData || 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA...'}" alt="Image Preview">
+              </div>
+              <div class="info">
+                <p class="name"><strong>${item.name || 'Unnamed'}</strong></p>
+                <p class="platform"><strong>Platform:</strong> ${item.platform || 'N/A'}</p>
+                <p class="age"><strong>Age:</strong> ${item.age || 'N/A'}</p>
+                <p class="description"><strong>Description:</strong> ${item.description || 'No description'}</p>
+                <p><strong>Link:</strong> <a href="${item.link || '#'}" target="_blank">${item.link || 'N/A'}</a></p>
+                <p><strong>Tags:</strong> ${item.tags ? item.tags.join(', ') : 'No tags'}</p>
+              </div>
+            </div>
+          `;
+          jsonContainer.appendChild(jsonItem);
+        }
+      });
+      // Enable Save Order button after JSON is rendered
+      saveOrderButton.disabled = false;
+    }
+
+    // Initialize SortableJS
+    new Sortable(jsonContainer, {
+      animation: 150,
+      onEnd: function (evt) {
+        const oldIndex = evt.oldIndex;
+        const newIndex = evt.newIndex;
+        const movedItem = jsonData.splice(oldIndex, 1)[0];  // Remove the item from old position
+        jsonData.splice(newIndex, 0, movedItem);            // Insert it at the new position
+      }
+    });
+
+    // Event handler for file upload
+    fileInput.addEventListener('change', function(event) {
+      const file = event.target.files[0];
+      if (file && file.type === "application/json") {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          try {
+            jsonData = JSON.parse(e.target.result);  // Parse the uploaded JSON
+            if (Array.isArray(jsonData)) {
+              renderJson();  // Render the tiles with the uploaded JSON data
+            } else {
+              alert('Invalid JSON format. Expected an array of objects.');
+            }
+          } catch (error) {
+            alert('Invalid JSON file.');
+          }
+        };
+        reader.readAsText(file);
+      } else {
+        alert('Please upload a valid JSON file.');
+      }
+    });
+
+    // Function to download JSON data as a file
+    function downloadJson(data, filename) {
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    // Save the reordered JSON
+    saveOrderButton.addEventListener('click', () => {
+      downloadJson(jsonData, 'reordered-data.json');
+    });
+
+    function goToGrid1() {
+            window.location.href = "https://thatoneunoriginal.github.io/backup merge.html";
+    }
+    function goToGrid2() {
+            window.location.href = "https://thatoneunoriginal.github.io/character.html";
+    }
+  </script>
+</body>
+</html>
