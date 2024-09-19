@@ -132,7 +132,9 @@
         button:hover {
             background-color: #00c2fe;
         }
-
+        body.dark-mode button:hover{
+            background-color: #00afe5;
+        }
         body.dark-mode button {
             background-color: #00c2fe;
         }
@@ -331,6 +333,7 @@ body {
         <div class="info-grid-buttons">
             <button onclick="showInfo()">Info</button>
             <button onclick="goToGrid()">Go to Grid</button>
+            <button onclick="goToGrid1()">Go to Reorder Tool</button>
         </div>
         <input type="file" id="file1" accept=".json">
         <input type="file" id="file2" accept=".json">
@@ -509,23 +512,26 @@ function checkForNSFWContent(data) {
         }
 
         function toggleDarkMode() {
-            document.body.classList.toggle('dark-mode');
-            const darkModeEnabled = document.body.classList.contains('dark-mode');
-            localStorage.setItem('darkMode', darkModeEnabled ? 'enabled' : 'disabled');
+        document.body.classList.toggle('dark-mode');
+        const darkModeEnabled = document.body.classList.contains('dark-mode');
+        localStorage.setItem('darkMode', darkModeEnabled ? 'enabled' : 'disabled');
+
+        // Update button text based on the current theme
+        const darkModeToggleButton = document.querySelector('.dark-mode-toggle');
+        darkModeToggleButton.textContent = darkModeEnabled ? 'Toggle Light Mode' : 'Toggle Dark Mode';
+    }
+
+    document.addEventListener('DOMContentLoaded', (event) => {
+        const savedTheme = localStorage.getItem('darkMode');
+        if (savedTheme === 'enabled') {
+            document.body.classList.add('dark-mode');
         }
 
-        document.addEventListener('DOMContentLoaded', (event) => {
-            const savedTheme = localStorage.getItem('darkMode');
-            if (savedTheme === 'enabled') {
-                document.body.classList.add('dark-mode');
-            }
-        });
-
-        function toggleDarkMode() {
-            document.body.classList.toggle('dark-mode');
-            const darkModeEnabled = document.body.classList.contains('dark-mode');
-            localStorage.setItem('darkMode', darkModeEnabled ? 'enabled' : 'disabled');
-        }
+        // Set the correct button text on page load
+        const darkModeToggleButton = document.querySelector('.dark-mode-toggle');
+        const isDarkMode = document.body.classList.contains('dark-mode');
+        darkModeToggleButton.textContent = isDarkMode ? 'Toggle Light Mode' : 'Toggle Dark Mode';
+    });
 
         function showFileContent(fileNumber) {
             const fileData = fileNumber === 1 ? file1Data : file2Data;
