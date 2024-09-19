@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="icon" type="image/x-icon" href="Creator Tools\Assets\BookmarkingToolIcon.ico">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Character Bookmarking Tool</title>
     <style>      
@@ -829,6 +830,23 @@ function editUrl(tileData, tileElement) {
         saveTiles();
     }
 }
+<<<<<<< Updated upstream
+=======
+function checkForSpecialTiles() {
+    const tileElements = document.querySelectorAll('.image-item:not(.add-image)');
+    tileElements.forEach((tileElement, index) => {
+        const tileData = tiles[index];
+        if (tileData.tags.includes('18+') && tileData.tags.includes('⭐')) {
+            tileElement.classList.add('special-outline');
+        } else {
+            tileElement.classList.remove('special-outline');
+        }
+    });
+}
+
+// Run the check once on page load
+document.addEventListener('DOMContentLoaded', checkForSpecialTiles);
+>>>>>>> Stashed changes
     </script>
 </body>
 </html>
