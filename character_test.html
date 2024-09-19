@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/ThatOneUnoriginal/ThatOneUnoriginal.github.io/dev-test/Character%20Tools/Assets/BookmarkingToolIcon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Character Bookmarking Tool</title>
+    <style>      
+        :root {
+            --bg-color: #f4f4f4;
+            --text-color: #333;
+            --tile-bg: #fff;
+            --tile-shadow: rgba(0,0,0,0.1);
+            --add-tile-bg: #e0e0e0;
+            --add-tile-hover: #d0d0d0;
+            --button-bg: #4c8247;
+            --button-bg-hover: #43713e;
+            --button-color: white;
+            --popup-color: #dfdfdf;
+        }
+
+        .dark-mode {
+            --bg-color: #333;
+            --text-color: #f4f4f4;
+            --tile-bg: #555;
+            --tile-shadow: rgba(0,0,0,0.3);
+            --add-tile-bg: #444;
+            --add-tile-hover: #666;
+            --button-bg: #43713e;
+            --button-bg-hover: #396135;
+            --button-color: #f4f4f4;
+            --popup-color: #2f2f2f;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        h1,p {
+            text-align: center;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .theme-toggle button, #tag-filter, #export-btn, #import-btn {
+            padding: 5px 10px;
+            cursor: pointer;
+            background-color: var(--button-bg);
+            color: var(--button-color);
+            border: none;
+            border-radius: 4px;
+            margin-right: 5px;
+        }
+
+        .theme-toggle button:hover, #tag-filter:hover, #export-btn:hover, #import-btn:hover {
+            background-color: var(--button-bg-hover)
+        }
+
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .image-item {
+            aspect-ratio: 1 / 1;
+            position: relative;
+            background-color: var(--tile-bg);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px var(--tile-shadow);
+        }
+
+        .image-container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        img {
+            min-width: 100%;
+            min-height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        img:hover {
+            transform: scale(1.05);
+        }
+
+        .add-image {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: var(--add-tile-bg);
+            cursor: pointer;
+            font-size: 48px;
+            transition: background-color 0.3s ease;
+        }
+
+        .add-image:hover {
+            background-color: var(--add-tile-hover);
+        }
+        
+        #file-input, #import-file-input, .popup.hidden{
+            display: none;
+        }
+
+        .tile-buttons {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .tile-buttons button {
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-left: 5px;
+            margin-bottom: 3px;
+        }
+
+        .tags {
+            position: absolute;
+            bottom: 5px;
+            left: 5px;
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-size: 12px;
+            margin-right: 3px;
+            margin-bottom: 3px;
+        }
+
+        .tag:hover{
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+        @media screen and (max-width: 600px) {
+            .image-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+        }
+
+        #popup-close-btn {
+            margin-top: 10px;
+            padding: 5px 10px;
+            background-color: #f44336;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #popup-close-btn:hover {
+            background-color: #e53935;
+        }
+
+        .popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: var(--popup-color);
+            border: 2px solid #000;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 800px;
+            animation: float 5s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translate(-50%, -50%);
+            }
+            50% {
+                transform: translate(-50%, -52%);
+            }
+            100% {
+                transform: translate(-50%, -50%);
+            }
+        }
+
+        #popup-image-container {
+            flex: 0 0 auto;
+            margin-right: 20px;
+        }
+
+        #popup-content {
+            position: relative;
+        }
+
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 1000;
+        }
+
+        #popup-image {
+            min-width: unset;
+            width: 250px;
+            height: 250px;
+            object-fit: cover;  
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        #popup-image{
+            transform: scale(1)
+        }
+        .popup-info {
+            flex: 1;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 15px;
+            overflow-y: auto;
+            max-height: 250px;
+        }
+
+        .popup-info h3 {
+            margin-top: 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            padding-bottom: 5px;
+        }
+
+        .popup-info p {
+            margin: 10px 0;
+        }
+
+        #popup-tags {
+            font-style: italic;
+        }
+
+        #popup-link {
+            display: inline-block;
+            margin-top: 15px;
+            background-color: var(--button-bg);
+            color: var(--button-color);
+            padding: 8px 15px;
+            border-radius: 4px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+        #popup-link:hover {
+            background-color: var(--button-bg-hover);
+        }
+
+        #popup-close {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background-color: var(--button-bg);
+            color: var(--button-color);
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        #popup-close:hover {
+            background-color: var(--button-bg-hover);
+        }
+
+        #popup-close-btn {
+            display: none; /* Hide the old close button */
+        }
+
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            backdrop-filter: blur(5px);
+        }
+
+        /* Responsive design for smaller screens */
+        @media (max-width: 600px) {
+            #popup-content {
+                flex-direction: column;
+            }
+
+            #popup-image-container {
+                margin-right: 0;
+                margin-bottom: 20px;
+            }
+
+            #popup-image {
+                width: 100%;
+                height: auto;
+            }
+
+            .popup-info {
+                max-height: none;
+            }
+        }
+
+        .nsfw-outline, .popup.nsfw-outline {
+            border: 3px solid red;
+        }
+
+        .blurred-image {
+            filter: blur(10px);
+        }
+
+        .star-outline {
+            border: 3px solid green;
+        }
+
+        .special-outline {
+            border: 3px solid purple;
+        }
+    </style>
+</head>
+<body>
+    <h1>Character Bookmarking Tool</h1>
+        <h2>Welcome to the Character Bookmarking Tool</h2>
+    <p>Ever wanted a singular place to save all your favourite, interesting characters? Does the platform you're using not have the ability to bookmark/favourite characters? This tool allows you to bookmark the character so you don't forget about it.</p>
+    <p>To bookmark a character:</p>
+    <ul>
+        <li>Go to the end of the grid and click the tile with the <span class="highlight">+</span> icon.</li>
+        <li>Once you prompt the tile curation, you'll be asked to upload a file from your system.</li>
+        <li>The file upload prompt will by default show all the files that are supported by the system (though some of the supposed "supported" file formats like .psp may not work.)</li>
+        <li>After uploading an image, you'll be prompted to include:
+            <ul>
+                <li>A hyperlink</li>
+                <li>Tags</li>
+                <li>Character name</li>
+                <li>Platform</li>
+                <li>Character age</li>
+                <li>Character description</li>
+            </ul>
+        </li>
+    </ul>
+    <p><strong>Note:</strong> Not all of these are required, but at minimum the <span class="highlight">hyperlink</span> should be added so that you're able to go to the character page when you click the tile. The other information makes remembering the details of the characters easier.</p>
+    <div class="controls">
+        <div class="theme-toggle">
+            <button id="light-mode">Light Mode</button>
+            <button id="dark-mode">Dark Mode</button>
+            <button id="export-btn">Export</button>
+            <button id="import-btn">Import</button>
+            <button id="blur-nsfw-btn">Blur NSFW</button>
+            <button id="random-character-btn">Select Random Character</button>
+        </div>    
+        <select id="tag-filter">
+            <option value="all">All Tags</option>
+        </select>
+    </div>        
+<!-- Popup Structure -->
+<div id="character-popup" class="popup hidden">
+    <div id="popup-content">
+        <img id="popup-image" src="" alt="Character Image">
+        <span id="popup-close">&times;</span>
+        <div class="popup-info">
+            <h3 id="popup-name"></h3>
+            <p id="popup-platform"></p>
+            <p id="popup-age"></p>
+            <p id="popup-description"></p>
+            <p id="popup-tags"></p>
+        </div>
+        <a id="popup-link" href="#" target="_blank">View Profile</a>
+        <button id="popup-close-btn">Close</button>
+    </div>
+</div>
+    <div class="image-grid" id="image-grid">
+        <div class="image-item add-image" id="add-image">
+            +
+        </div>
+    </div>
+    <input type="file" id="file-input" accept="image/*">
+    <input type="file" id="import-file-input" accept="application/json">
+
+    <script>
+        const imageGrid = document.getElementById('image-grid');
+        const addImageButton = document.getElementById('add-image');
+        const fileInput = document.getElementById('file-input');
+        const lightModeBtn = document.getElementById('light-mode');
+        const darkModeBtn = document.getElementById('dark-mode');
+        const tagFilter = document.getElementById('tag-filter');
+        const exportBtn = document.getElementById('export-btn');
+        const importBtn = document.getElementById('import-btn');
+        const importFileInput = document.getElementById('import-file-input');
+        const blurNSFWBtn = document.getElementById('blur-nsfw-btn');
+
+        let tiles = [];
+        let allTags = new Set();
+        let isBlurred = false; // Track blur status
+        
+        
+        // Theme management
+        function setTheme(theme) {
+            document.body.className = theme;
+            localStorage.setItem('theme', theme);
+        }
+
+        function applyStoredTheme() {
+            const storedTheme = localStorage.getItem('theme') || '';
+            setTheme(storedTheme);
+        }
+
+        lightModeBtn.addEventListener('click', () => setTheme(''));
+        darkModeBtn.addEventListener('click', () => setTheme('dark-mode'));
+
+        // Apply theme on load
+        applyStoredTheme();
+
+        // Load saved tiles
+        function loadSavedTiles() {
+            tiles = JSON.parse(localStorage.getItem('imageTiles')) || [];
+            tiles.forEach(tile => {
+                createImageTile(tile);
+                tile.tags.forEach(tag => allTags.add(tag));
+            });
+            updateTagFilter();
+        }
+
+        // Save tiles
+        function saveTiles() {
+            localStorage.setItem('imageTiles', JSON.stringify(tiles));
+        }
+
+        // Create image tile
+        function createImageTile(tileData) {
+            const newImageItem = document.createElement('div');
+            newImageItem.className = 'image-item';
+            if (tileData.tags.includes('18+') || tileData.tags.includes('NSFW') || tileData.tags.includes('Hentai') || tileData.tags.includes('Porn')) {
+                newImageItem.classList.add('nsfw-outline');
+            }
+            if (tileData.tags.includes('⭐')) {
+                newImageItem.classList.add('star-outline');
+            }
+            newImageItem.innerHTML = `
+                <a href="${tileData.link}" target="_blank" class="image-container">
+                    <img src="${tileData.imageData}" alt="User uploaded image">
+                </a>
+                <div class="tile-buttons">
+                    <button class="edit-image-btn" title="Edit Image">🖼️</button>
+                    <button class="edit-url-btn" title="Edit URL">🔗</button>
+                    <button class="edit-tags-btn" title="Edit Tags">🏷️</button>
+                    <button class="edit-info-btn" title="Edit Info">ℹ️</button>
+                    <button class="share-btn" title="Share">📤</button>
+                    <button class="delete-btn" title="Delete">×</button>
+                </div>
+                <div class="tags">
+                    ${tileData.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                </div>
+            `;
+            imageGrid.insertBefore(newImageItem, addImageButton);
+
+            // Add edit image functionality
+            newImageItem.querySelector('.edit-image-btn').addEventListener('click', (e) => {
+                e.stopPropagation();
+                editImage(tileData, newImageItem);
+            });
+
+            // Add edit tags functionality
+            newImageItem.querySelector('.edit-tags-btn').addEventListener('click', (e) => {
+                e.stopPropagation();
+                editTags(tileData, newImageItem);
+            });
+
+            // Add share functionality
+            newImageItem.querySelector('.share-btn').addEventListener('click', (e) => {
+                e.stopPropagation();
+                shareTile(tileData);
+            });
+
+            // Add delete functionality
+            newImageItem.querySelector('.delete-btn').addEventListener('click', (e) => {
+                e.stopPropagation();
+                deleteTile(tileData, newImageItem);
+            });
+
+            // Add edit URL functionality
+            newImageItem.querySelector('.edit-url-btn').addEventListener('click', (e) => {
+                e.stopPropagation();
+                editUrl(tileData, newImageItem);
+            });
+            // Add edit info functionality
+            newImageItem.querySelector('.edit-info-btn').addEventListener('click', (e) => {
+                e.stopPropagation();
+                editInfo(tileData, newImageItem);
+            });
+        }
+
+        function editInfo(tileData, tileElement) {
+            const name = prompt("Enter character name:", tileData.name || "");
+            const platform = prompt("Enter platform:", tileData.platform || "");
+            const age = prompt("Enter age:", tileData.age || "");
+            const description = prompt("Enter description:", tileData.description || "");
+
+            if (name !== null) tileData.name = name;
+            if (platform !== null) tileData.platform = platform;
+            if (age !== null) tileData.age = age;
+            if (description !== null) tileData.description = description;
+
+            saveTiles();
+            updateTagFilter();
+        }
+
+        function updateTileOutline(tileElement, tags) {
+    tileElement.classList.remove('nsfw-outline', 'star-outline', 'special-outline');
+    const hasNSFW = tags.includes('18+') || tags.includes('NSFW') || tags.includes('Hentai') || tags.include('Porn');
+    const hasStar = tags.includes('⭐');
+    
+    if (hasNSFW && hasStar) {
+        tileElement.classList.add('special-outline');
+    } else if (hasNSFW) {
+        tileElement.classList.add('nsfw-outline');
+    } else if (hasStar) {
+        tileElement.classList.add('star-outline');
+    }
+}
+        // Edit image
+    function editImage(tileData, tileElement) {
+    // Create an input element to upload a new image
+    const imageUploadInput = document.createElement('input');
+    imageUploadInput.type = 'file';
+    imageUploadInput.accept = 'image/*,,.avif,.jxl'; // Accept image files only
+
+    // Listen for the file selection
+    imageUploadInput.addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                const newImageData = e.target.result;
+                // Update the tile with the new image
+                tileData.imageData = newImageData;
+                tileElement.querySelector('img').src = newImageData;
+
+                saveTiles(); // Save changes after the image has been updated
+            };
+
+            // Read the image file as a data URL
+            reader.readAsDataURL(file);
+        }
+    });
+
+    // Trigger the file input
+    imageUploadInput.click();
+}
+        function createTileData(imageData, link, tags, name, platform, age, description) {
+            return { imageData, link, tags, name, platform, age, description };
+        }
+
+        // Edit tags
+        function editTags(tileData, tileElement) {
+            const newTags = prompt("Enter tags separated by commas:", tileData.tags.join(', '));
+            if (newTags !== null) {
+                tileData.tags = newTags.split(',').map(tag => tag.trim()).filter(tag => tag);
+                updateTileTags(tileElement, tileData.tags);
+                updateTileOutline(tileElement, tileData.tags);
+                saveTiles();
+                updateTagFilter();
+            }
+        }
+        
+        // Share tile
+        function shareTile(tileData) {
+            navigator.clipboard.writeText(tileData.link).then(() => {
+                alert("Link copied to clipboard!");
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+            });
+        }
+
+        // Delete tile
+        function deleteTile(tileData, tileElement) {
+            tiles = tiles.filter(tile => tile !== tileData);
+            imageGrid.removeChild(tileElement);
+            saveTiles();
+            updateTagFilter();
+        }
+
+        // Update tile tags
+        function updateTileTags(tileElement, tags) {
+            const tagsContainer = tileElement.querySelector('.tags');
+            tagsContainer.innerHTML = tags.map(tag => `<span class="tag">${tag}</span>`).join('');
+            updateAllTags();
+        }
+
+        // Update all tags
+        function updateAllTags() {
+            allTags.clear();
+            tiles.forEach(tile => {
+                tile.tags.forEach(tag => allTags.add(tag));
+                if (tile.platform) allTags.add(tile.platform);
+                if (tile.age) allTags.add(tile.age);
+            });
+            updateTagFilter();
+        }
+
+        // Update tag filter dropdown
+        function updateTagFilter() {
+            const currentFilter = tagFilter.value;
+            tagFilter.innerHTML = '<option value="all">All Tags</option>';
+            allTags.forEach(tag => {
+                const option = document.createElement('option');
+                option.value = tag;
+                option.textContent = tag;
+                tagFilter.appendChild(option);
+            });
+            tagFilter.value = currentFilter;
+            filterTiles();
+        }
+
+        // Filter tiles based on selected tag
+        function filterTiles() {
+            const selectedTag = tagFilter.value;
+            tiles.forEach((tile, index) => {
+                const tileElement = imageGrid.children[index];
+                if (selectedTag === 'all' || 
+                    tile.tags.includes(selectedTag) || 
+                    tile.platform === selectedTag || 
+                    tile.age === selectedTag) {
+                    tileElement.style.display = '';
+                } else {
+                    tileElement.style.display = 'none';
+                }
+            });
+        }
+
+        // Handle file selection
+        fileInput.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const imageData = e.target.result;
+                    const link = prompt("Enter a link for this image:", "https://");
+                    if (link) {
+                        const tags = prompt("Enter tags separated by commas:").split(',').map(tag => tag.trim()).filter(tag => tag);
+                        const name = prompt("Enter character name:");
+                        const platform = prompt("Enter platform:");
+                        const age = prompt("Enter age:");
+                        const description = prompt("Enter description:");
+                        const newTile = createTileData(imageData, link, tags, name, platform, age, description);
+                        tiles.push(newTile);
+                        createImageTile(newTile);
+                        saveTiles();
+                        updateTagFilter();
+                    }
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Trigger file input when add button is clicked
+        addImageButton.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        // Filter tiles when tag is selected
+        tagFilter.addEventListener('change', filterTiles);
+
+        // Export functionality
+        exportBtn.addEventListener('click', () => {
+            const dataStr = JSON.stringify(tiles);
+            const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+            const exportFileDefaultName = 'image_grid_data.json';
+
+            const linkElement = document.createElement('a');
+            linkElement.setAttribute('href', dataUri);
+            linkElement.setAttribute('download', exportFileDefaultName);
+            linkElement.click();
+        });
+
+        // Import functionality
+        importBtn.addEventListener('click', () => {
+            importFileInput.click();
+        });
+
+        importFileInput.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    try {
+                        const importedTiles = JSON.parse(e.target.result);
+                        tiles = importedTiles;
+                        imageGrid.innerHTML = '';
+                        imageGrid.appendChild(addImageButton);
+                        tiles.forEach(tile => {
+                            createImageTile(tile);
+                            tile.tags.forEach(tag => allTags.add(tag));
+                        });
+                        saveTiles();
+                        updateTagFilter();
+                    } catch (error) {
+                        console.error('Error parsing imported data:', error);
+                        alert('Error importing data. Please make sure the file is in the correct format.');
+                    }
+                };
+                reader.readAsText(file);
+            }
+        });
+// Function to toggle blur on NSFW content
+function toggleBlurNSFW() {
+    const nsfwTags = ['18+', 'NSFW', "Hentai", "Porn"]; // Tags considered NSFW
+    const imageItems = document.querySelectorAll('.image-item');
+
+    imageItems.forEach(item => {
+        const tags = Array.from(item.querySelectorAll('.tag')).map(tag => tag.textContent);
+
+        if (nsfwTags.some(tag => tags.includes(tag))) {
+            const img = item.querySelector('img');
+            if (isBlurred) {
+                img.style.filter = 'none'; // Unblur
+            } else {
+                img.style.filter = 'blur(10px)'; // Apply blur
+            }
+        }
+    });
+
+    // Toggle button text and blur state
+    isBlurred = !isBlurred;
+    blurNSFWBtn.textContent = isBlurred ? 'Unblur NSFW' : 'Blur NSFW';
+}
+
+// Add event listener to the button
+blurNSFWBtn.addEventListener('click', toggleBlurNSFW);
+        // Load saved tiles on page load
+        loadSavedTiles();
+        const randomCharacterBtn = document.getElementById('random-character-btn');
+const characterPopup = document.getElementById('character-popup');
+const popupContent = document.getElementById('popup-content');
+const popupClose = document.getElementById('popup-close');
+const popupCloseBtn = document.getElementById('popup-close-btn');
+const popupImage = document.getElementById('popup-image');
+const popupTags = document.getElementById('popup-tags');
+const popupLink = document.getElementById('popup-link');
+
+// Close popup function
+function closePopup() {
+    characterPopup.classList.add('hidden');
+    characterPopup.classList.remove('red-border');
+}
+
+// Event listeners for closing popup
+popupClose.addEventListener('click', closePopup);
+popupCloseBtn.addEventListener('click', closePopup);
+
+
+// Function to pick a random character
+function selectRandomCharacter() {
+    const characters = Array.from(document.querySelectorAll('.image-item:not(.add-image)'));
+    if (characters.length === 0) {
+        alert('No characters available.');
+        return;
+    }
+
+    const randomIndex = Math.floor(Math.random() * characters.length);
+    const selectedCharacter = characters[randomIndex];
+    const tileData = tiles[randomIndex];
+
+    popupImage.src = tileData.imageData;
+    popupLink.href = tileData.link;
+    
+    document.getElementById('popup-name').textContent = tileData.name || 'Unknown';
+    document.getElementById('popup-platform').textContent = `Platform: ${tileData.platform || 'N/A'}`;
+    document.getElementById('popup-age').textContent = `Age: ${tileData.age || 'N/A'}`;
+    document.getElementById('popup-description').textContent = tileData.description || 'No description available.';
+    document.getElementById('popup-tags').textContent = `Tags: ${tileData.tags.join(', ')}`;
+
+    updateTileOutline(characterPopup, tileData.tags);
+
+    if (isBlurred && (tileData.tags.includes('18+') || tileData.tags.includes('NSFW') || tileData.tags.includes('Hentai') || tileData.tags.include('Porn'))) {
+        popupImage.classList.add('blurred-image');
+    } else {
+        popupImage.classList.remove('blurred-image');
+    }
+
+    characterPopup.classList.remove('hidden');
+}
+
+// Event listener for the random character button
+randomCharacterBtn.addEventListener('click', selectRandomCharacter);
+function editUrl(tileData, tileElement) {
+    // Prompt the user for a new URL
+    const newUrl = prompt("Enter a new URL for this tile:", tileData.link);
+
+    // If the user provided a URL (and didn't leave it blank), update the link
+    if (newUrl !== null && newUrl.trim() !== "") {
+        tileData.link = newUrl.trim();
+        tileElement.querySelector('a').href = tileData.link;
+
+        // Save changes
+        saveTiles();
+    }
+}
+function checkForSpecialTiles() {
+    const tileElements = document.querySelectorAll('.image-item:not(.add-image)');
+    tileElements.forEach((tileElement, index) => {
+        const tileData = tiles[index];
+        if ((tileData.tags.includes('18+') || tileData.tags.includes('NSFW') || tileData.tags.includes('Hentai') || tileData.tags.includes('Porn')) && tileData.tags.includes('⭐')) {
+            tileElement.classList.add('special-outline');
+        } else {
+            tileElement.classList.remove('special-outline');
+        }
+    });
+}
+
+// Run the check once on page load
+document.addEventListener('DOMContentLoaded', checkForSpecialTiles);
+    </script>
+</body>
+</html>
