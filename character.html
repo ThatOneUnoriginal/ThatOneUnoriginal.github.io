@@ -380,6 +380,12 @@
             <option value="all">All Tags</option>
         </select>
     </div>
+    <div class="controls">
+        <div class="theme-toggle">
+            <button onclick="goToGrid()">Go to Merger Tool</button>
+            <button onclick="goToGrid1()">Go to Reorder Tool</button>
+        </div>    
+    </div>           
 <!-- Popup Structure -->
 <div id="character-popup" class="popup hidden">
     <div id="popup-content">
@@ -827,6 +833,13 @@ function editUrl(tileData, tileElement) {
 
         // Save changes
         saveTiles();
+    }
+
+    function goToGrid() {
+            window.location.href = "https://thatoneunoriginal.github.io/backup merge.html";
+    }
+    function goToGrid1() {
+            window.location.href = "https://thatoneunoriginal.github.io/reorder tool.html";
     }
 }
     </script>
