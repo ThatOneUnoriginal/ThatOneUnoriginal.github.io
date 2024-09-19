@@ -829,6 +829,20 @@ function editUrl(tileData, tileElement) {
         saveTiles();
     }
 }
+function checkForSpecialTiles() {
+    const tileElements = document.querySelectorAll('.image-item:not(.add-image)');
+    tileElements.forEach((tileElement, index) => {
+        const tileData = tiles[index];
+        if (tileData.tags.includes('18+') && tileData.tags.includes('⭐')) {
+            tileElement.classList.add('special-outline');
+        } else {
+            tileElement.classList.remove('special-outline');
+        }
+    });
+}
+
+// Run the check once on page load
+document.addEventListener('DOMContentLoaded', checkForSpecialTiles);
     </script>
 </body>
 </html>
