@@ -362,13 +362,26 @@
 </head>
 <body>
     <h1>Character Bookmarking Tool</h1>
-    <p>Found a character on an AI platform that is interesting, unique, or just find overal enjoyable to interact with? This tool allows you to easily bookmark the character so that you don't forget about it!</p>
-    <p>To bookmark a character; Firstly click the "+" button to curate a new tile. This will appear at the end of the grid. You will be prompted to upload an image from your device, then prompted to include a hyperlink that will be associated with that tile. Finally you'll be prompted to add tags to the image (this is optional but can help with further organisation.) After you've done all of this the tile should appear on the grid. If you click/tap the grid image it will redirect you to the link that is associated with that tile. So if you were to link https://twitter.com to a tile, clicking/tapping it would bring you to Twitter.</p>
-    <p>If you want to update the tags associated with a tile, click the 🏷️ button on the tile and you'll be prompted to be able to change the tags.</p>
-    <p>If you want to update the image, click the 🖼️ button on the tile, skip the hyperlink prompt (included through the same button) and provide a html link to the image.</p>
-    <p>If you want to update the hyperlink attached to the tile, click the 🖼️ button on the tile and change the hyperlink. If you don't want to change the image, just ignore the prompt to change it afterwards.</p>
-    <p><b>Note: I recommend strongly that you export the data whenever you make changes (update tiles, add tiles, remove tiles) as the data is stored locally. So if you are to switch browers, switch devices, or for whatever reason the cookies/website data is deleted, any data on the website will be deleted in the process. When you export your data you'll get prompted to save a .json file, keep this and use it to import the data through the "import" button.</b></p>
-    <div class="controls">
+            <h2>Welcome to the Character Bookmarking Tool</h2>
+    <p>Ever wanted a singular place to save all your favourite, interesting characters? Does the platform you're using not have the ability to bookmark/favourite characters? This tool allows you to bookmark the character so you don't forget about it.</p>
+    <p>To bookmark a character:</p>
+    <ul>
+        <li>Go to the end of the grid and click the tile with the <span class="highlight">+</span> icon.</li>
+        <li>Once you prompt the tile curation, you'll be asked to upload a file from your system.</li>
+        <li>The file upload prompt will by default show all the files that are supported by the system (though some of the supposed "supported" file formats like .psp may not work.)</li>
+        <li>After uploading an image, you'll be prompted to include:
+            <ul>
+                <li>A hyperlink</li>
+                <li>Tags</li>
+                <li>Character name</li>
+                <li>Platform</li>
+                <li>Character age</li>
+                <li>Character description</li>
+            </ul>
+        </li>
+    </ul>
+    <p><strong>Note:</strong> Not all of these are required, but at minimum the <span class="highlight">hyperlink</span> should be added so that you're able to go to the character page when you click the tile. The other information makes remembering the details of the characters easier.</p>
+     <div class="controls">
         <div class="theme-toggle">
             <button id="light-mode">Light Mode</button>
             <button id="dark-mode">Dark Mode</button>
@@ -550,7 +563,7 @@
     // Create an input element to upload a new image
     const imageUploadInput = document.createElement('input');
     imageUploadInput.type = 'file';
-    imageUploadInput.accept = 'image/*'; // Accept image files only
+    imageUploadInput.accept = 'image/*,.avif,.jxl'; // Accept image files only
 
     // Listen for the file selection
     imageUploadInput.addEventListener('change', function(event) {

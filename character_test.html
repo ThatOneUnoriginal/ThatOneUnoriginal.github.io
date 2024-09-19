@@ -432,7 +432,7 @@
 
         let tiles = [];
         let allTags = new Set();
-        let isBlurred = false; // Track blur status
+        let isBlurred = JSON.parse(localStorage.getItem('isBlurred')) || false; // Load blur status from localStorage
         
         
         // Theme management
@@ -548,7 +548,7 @@
 
         function updateTileOutline(tileElement, tags) {
     tileElement.classList.remove('nsfw-outline', 'star-outline', 'special-outline');
-    const hasNSFW = tags.includes('18+') || tags.includes('NSFW') || tags.includes('Hentai') || tags.include('Porn');
+    const hasNSFW = tags.includes('18+');
     const hasStar = tags.includes('⭐');
     
     if (hasNSFW && hasStar) {
@@ -564,7 +564,7 @@
     // Create an input element to upload a new image
     const imageUploadInput = document.createElement('input');
     imageUploadInput.type = 'file';
-    imageUploadInput.accept = 'image/*,,.avif,.jxl'; // Accept image files only
+    imageUploadInput.accept = 'image/*,.avif,.jxl'; // Accept image files only
 
     // Listen for the file selection
     imageUploadInput.addEventListener('change', function(event) {
@@ -745,6 +745,7 @@
             }
         });
 // Function to toggle blur on NSFW content
+// Function to toggle blur on NSFW content
 function toggleBlurNSFW() {
     const nsfwTags = ['18+', 'NSFW', "Hentai", "Porn"]; // Tags considered NSFW
     const imageItems = document.querySelectorAll('.image-item');
@@ -764,9 +765,9 @@ function toggleBlurNSFW() {
 
     // Toggle button text and blur state
     isBlurred = !isBlurred;
+    localStorage.setItem('isBlurred', JSON.stringify(isBlurred)); // Save blur state in localStorage
     blurNSFWBtn.textContent = isBlurred ? 'Unblur NSFW' : 'Blur NSFW';
 }
-
 // Add event listener to the button
 blurNSFWBtn.addEventListener('click', toggleBlurNSFW);
         // Load saved tiles on page load
@@ -814,7 +815,7 @@ function selectRandomCharacter() {
 
     updateTileOutline(characterPopup, tileData.tags);
 
-    if (isBlurred && (tileData.tags.includes('18+') || tileData.tags.includes('NSFW') || tileData.tags.includes('Hentai') || tileData.tags.include('Porn'))) {
+    if (isBlurred && (tileData.tags.includes('18+') || tileData.tags.includes('NSFW') || tileData.tags.includes('Hentai') || tileData.tags.includes('Porn'))) {
         popupImage.classList.add('blurred-image');
     } else {
         popupImage.classList.remove('blurred-image');
@@ -852,6 +853,29 @@ function checkForSpecialTiles() {
 
 // Run the check once on page load
 document.addEventListener('DOMContentLoaded', checkForSpecialTiles);
+
+// Function to apply blur status on page load
+function applyBlurNSFWStatus() {
+    const nsfwTags = ['18+', 'NSFW', "Hentai", "Porn"]; // Tags considered NSFW
+    const imageItems = document.querySelectorAll('.image-item');
+
+    imageItems.forEach(item => {
+        const tags = Array.from(item.querySelectorAll('.tag')).map(tag => tag.textContent);
+
+        if (nsfwTags.some(tag => tags.includes(tag))) {
+            const img = item.querySelector('img');
+            img.style.filter = isBlurred ? 'blur(10px)' : 'none'; // Apply or remove blur
+        }
+    });
+
+    blurNSFWBtn.textContent = isBlurred ? 'Unblur NSFW' : 'Blur NSFW'; // Set button text based on status
+}
+
+// Add event listener to the button
+blurNSFWBtn.addEventListener('click', toggleBlurNSFW);
+
+// Apply blur status when the page loads
+document.addEventListener('DOMContentLoaded', applyBlurNSFWStatus);
     </script>
 </body>
 </html>
