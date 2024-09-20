@@ -325,17 +325,31 @@ body {
     color: #333;
     transition: background-color 0.3s ease, color 0.3s ease;
 }
-
+.mobile-button{
+    display: none;
+}
+@media (max-width: 600px) {
+    .mobile-button{
+        display:flex;
+        margin: 10px 0;
+    }
+    .desktop-button{
+        display: none;
+    }
+}
     </style>
 </head>
 <body>
     <div class="container">
         <h1>JSON Merger (with Duplicate Removal)</h1>
         <div class="info-grid-buttons">
-            <button onclick="showInfo()">Info</button>
-            <button onclick="goToGrid()">Go to Grid</button>
-            <button onclick="goToGrid1()">Go to Reorder Tool</button>
+            <button class="desktop-button" onclick="showInfo()">Info</button>
+            <button class="desktop-button" onclick="goToGrid()">Go to Grid</button>
+            <button class="desktop-button" onclick="goToGrid1()">Go to Reorder Tool</button>
         </div>
+        <button class="mobile-button" onclick="showInfoMobile()">Info</button>
+        <button class="mobile-button" onclick="goToGridMobile()">Go to Grid</button>
+        <button class="mobile-button" onclick="goToGrid1Mobile()">Go to Reorder Tool</button>
         <input type="file" id="file1" accept=".json">
         <input type="file" id="file2" accept=".json">
         <button onclick="mergeJSON()">Merge JSON</button>
@@ -546,15 +560,22 @@ function checkForNSFWContent(data) {
         function showInfo() {
             document.getElementById('infoModal').style.display = "block";
         }
-
+        function showInfoMobile() {
+            document.getElementById('infoModal').style.display = "block";
+        }
         function closeInfoModal() {
             document.getElementById('infoModal').style.display = "none";
         }
-
         function goToGrid() {
             window.location.href = "https://thatoneunoriginal.github.io/character.html";
         }
         function goToGrid1() {
+            window.location.href = "https://thatoneunoriginal.github.io/reorder tool.html";
+        }
+        function goToGridMobile() {
+            window.location.href = "https://thatoneunoriginal.github.io/character.html";
+        }
+        function goToGrid1Mobile() {
             window.location.href = "https://thatoneunoriginal.github.io/reorder tool.html";
         }
     </script>

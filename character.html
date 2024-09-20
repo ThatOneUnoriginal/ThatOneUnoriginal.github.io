@@ -54,9 +54,9 @@
             margin-top: 10px;
         }
 
-        #tile-creation-popup button:hover {
-            background-color: var(--button-bg-hover);
-        }
+    #tile-creation-popup button:hover {
+        background-color: var(--button-bg-hover);
+    }
 
     .info-section {
         background-color: var(--tile-bg);
@@ -109,24 +109,28 @@
         padding: 2px 5px;
         border-radius: 3px;
     }
+
     .highlight-nsfw {
         background-color: red;
         color: var(--button-color);
         padding: 2px 5px;
         border-radius: 3px;
     }
+
     .highlight-favourite {
         background-color: green;
         color: var(--button-color);
         padding: 2px 5px;
         border-radius: 3px;
     }
+
     .highlight-special {
         background-color: purple;
         color: var(--button-color);
         padding: 2px 5px;
         border-radius: 3px;
     }
+
         :root {
             --bg-color: #f4f4f4;
             --text-color: #333;
@@ -174,7 +178,7 @@
             margin-bottom: 20px;
         }
 
-        .theme-toggle button, #tag-filter, #export-btn, #import-btn, #tile-size {
+        .theme-toggle button, #tag-filter,  #tag-filter-mobile , #export-btn, #import-btn, #tile-size {
             padding: 5px 10px;
             cursor: pointer;
             background-color: var(--button-bg);
@@ -182,9 +186,13 @@
             border: none;
             border-radius: 4px;
             margin-right: 5px;
+            margin-bottom: 10px;
         }
-
-        .theme-toggle button:hover, #tag-filter:hover, #export-btn:hover, #import-btn:hover {
+        #tag-filter-mobile{
+            width: 100%;
+            display: none;
+        }
+        .theme-toggle button:hover, #tag-filter:hover,  #tag-filter-mobile, #export-btn:hover, #import-btn:hover {
             background-color: var(--button-bg-hover)
         }
 
@@ -423,7 +431,7 @@
         }
 
         #popup-close-btn {
-            display: none; /* Hide the old close button */
+            display: none; 
         }
 
         .popup-overlay {
@@ -436,27 +444,6 @@
             background: rgba(0, 0, 0, 0.5);
             z-index: 999;
             backdrop-filter: blur(5px);
-        }
-
-        /* Responsive design for smaller screens */
-        @media (max-width: 600px) {
-            #popup-content {
-                flex-direction: column;
-            }
-
-            #popup-image-container {
-                margin-right: 0;
-                margin-bottom: 20px;
-            }
-
-            #popup-image {
-                width: 100%;
-                height: auto;
-            }
-
-            .popup-info {
-                max-height: none;
-            }
         }
 
         .nsfw-outline, .popup.nsfw-outline {
@@ -503,6 +490,7 @@
         .active:after {
             content: "\2212";
         }
+
         .collapsible-content {
             padding: 0 18px;
             max-height: 0;
@@ -531,8 +519,7 @@
             animation: float 5s ease-in-out infinite;
         }
 
-        .edit-popup input,
-        .edit-popup textarea {
+        .edit-popup input, .edit-popup textarea {
             width: 100%;
             padding: 10px;
             margin-bottom: 10px;
@@ -547,6 +534,7 @@
             border: none;
             border-radius: 4px;
             cursor: pointer;
+            width: 100%;
             margin-top: 10px;
         }
 
@@ -563,9 +551,6 @@
             padding: 20px;
         }
 
-
-
-        /* Add styles for the share URL popup */
         #share-url-popup {
             position: fixed;
             top: 50%;
@@ -607,8 +592,7 @@
             background-color: var(--button-bg-hover);
         }
 
-                /* NSFW Inclusion Popup */
-                #nsfw-inclusion-popup {
+        #nsfw-inclusion-popup {
             position: fixed;
             top: 50%;
             left: 50%;
@@ -640,6 +624,67 @@
         #nsfw-inclusion-popup button:hover {
             background-color: var(--button-bg-hover);
         }
+
+                /* Responsive design for smaller screens */
+@media (max-width: 600px) {
+    .edit-popup, #share-url-popup, #nsfw-inclusion-popup {
+        width: 90%;
+        max-width: none;
+        padding: 15px;
+    }
+
+    .edit-popup input,
+    .edit-popup textarea,
+    #share-url-popup input,
+    #nsfw-inclusion-popup button {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .edit-popup button,
+    #share-url-popup button,
+    #nsfw-inclusion-popup button {
+        width: 100%;
+        margin-top: 5px;
+    }
+
+    #popup-content {
+        flex-direction: column;
+    }
+
+    #popup-image-container {
+        margin-right: 0;
+        margin-bottom: 20px;
+    }
+
+    #popup-image {
+        width: 100%;
+        height: auto;
+    }
+
+    .popup-info {
+        max-height: none;
+    }
+    .theme-toggle button, #export-btn, #import-btn, #tile-size, #tag-filter-mobile{
+        width: 100%;
+        padding: 15px 10px;
+        margin-bottom: 15px;
+    }
+    .tile-buttons button{
+        width: 40px;
+        height: 40px;
+    }
+    #tag-filter-mobile{
+        display: block;
+    }
+    .tag{
+        padding: 4px 10px;
+    }
+    #tag-filter{
+        display: none;
+    }
+
+}
     </style>
 </head>
 <body>
@@ -701,6 +746,9 @@
             <button id="import-btn">Import</button>
             <button id="blur-nsfw-btn">Blur NSFW</button>
             <button id="random-character-btn">Select Random Character</button>
+            <select id="tag-filter-mobile">
+                <option value="all">All Tags</option>
+            </select>
         </div>    
         <div class="controls">
         <select id="tag-filter">
@@ -805,7 +853,7 @@
         const fileInput = document.getElementById('file-input');
         const lightModeBtn = document.getElementById('light-mode');
         const darkModeBtn = document.getElementById('dark-mode');
-        const tagFilter = document.getElementById('tag-filter');
+        const tagFilter = document.getElementById('tag-filter') || document.getElementById('tag-filter-mobile');
         const exportBtn = document.getElementById('export-btn');
         const importBtn = document.getElementById('import-btn');
         const importFileInput = document.getElementById('import-file-input');
