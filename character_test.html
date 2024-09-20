@@ -5,7 +5,7 @@
     <link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/ThatOneUnoriginal/ThatOneUnoriginal.github.io/dev-test/Character%20Tools/Assets/BookmarkingToolIcon.ico">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Character Bookmarking Tool</title>
-    <style>     
+    <style>      
           #character-popup {
             width: 90%;
             max-width: 600px;
@@ -346,16 +346,6 @@
             position: relative;
         }
 
-        .popup-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.4);
-            z-index: 1000;
-        }
-
         #popup-image {
             min-width: unset;
             width: 250px;
@@ -438,6 +428,7 @@
 
         .popup-overlay {
             position: fixed;
+            display: none;
             top: 0;
             left: 0;
             width: 100%;
@@ -537,6 +528,7 @@
             align-items: center;
             max-width: 400px;
             width: 100%;
+            animation: float 5s ease-in-out infinite;
         }
 
         .edit-popup input,
@@ -590,6 +582,7 @@
             align-items: center;
             max-width: 400px;
             width: 100%;
+            animation: float 5s ease-in-out infinite;
         }
 
         #share-url-popup input {
@@ -631,6 +624,7 @@
             align-items: center;
             max-width: 400px;
             width: 100%;
+            animation: float 5s ease-in-out infinite
         }
 
         #nsfw-inclusion-popup button {
@@ -650,7 +644,7 @@
 </head>
 <body>
     <h1>Character Bookmarking Tool</h1>
-        <h2>Welcome to the Character Bookmarking Tool</h2>
+            <h2>Welcome to the Character Bookmarking Tool</h2>
         <button class="collapsible">Click here for more information (recommended for first time users)</button>
         <div class="collapsible-content">
     <p>Ever wanted a singular place to save all your favourite, interesting characters? Does the platform you're using not have the ability to bookmark/favourite characters? This tool allows you to bookmark the character so you don't forget about it.</p>
@@ -699,7 +693,7 @@
 <p><strong>Should I Export?</strong></p>
 <p>Yes, it's recommended that you export your grid/list any time you make any changes to it. Everything is stored locally on the browser, so if anything happens (cookies reset, change browsers, change devices, etc...) the page will reset to be blank. If this happens, just use the Import button to bring back the characters. With the export/backup file, you'll also be able to use the Reorder Tool and Merge Tool.</p>
 </div>    
-<div class="controls">
+     <div class="controls">
         <div class="theme-toggle">
             <button id="light-mode">Light Mode</button>
             <button id="dark-mode">Dark Mode</button>
@@ -707,7 +701,7 @@
             <button id="import-btn">Import</button>
             <button id="blur-nsfw-btn">Blur NSFW</button>
             <button id="random-character-btn">Select Random Character</button>
-        </div>
+        </div>    
         <div class="controls">
         <select id="tag-filter">
             <option value="all">All Tags</option>
@@ -794,8 +788,8 @@
         <div>
             <button id="include-nsfw-btn">Yes, Include NSFW</button>
             <button id="exclude-nsfw-btn">No, Exclude NSFW</button>
-        </div>
     </div>
+</div>
     <div class="image-grid" id="image-grid">
         <div class="image-item add-image" id="add-image">
             +
@@ -803,8 +797,9 @@
     </div>
     <input type="file" id="file-input" accept="image/*">
     <input type="file" id="import-file-input" accept="application/json">
-
-    <script>        
+    <div id="popup-overlay" class="popup-overlay"></div>
+    <script>
+        const popupOverlay = document.getElementById("popup-overlay");
         const imageGrid = document.getElementById('image-grid');
         const addImageButton = document.getElementById('add-image');
         const fileInput = document.getElementById('file-input');
@@ -821,40 +816,47 @@
         let isBlurred = JSON.parse(localStorage.getItem('isBlurred')) || false; // Load blur status from localStorage
         let includeNSFW = false;
 
+          // Add a click event listener to the div
+  popupOverlay.addEventListener("click", function() {
+    // Define what happens when the div is clicked
+    document.getElementById('popup-overlay').style.display = 'none';
+    document.getElementById('edit-url-popup').style.display = 'none';
+    document.getElementById('tile-creation-popup').style.display = 'none';
+    document.getElementById('character-popup').style.display = 'none';
+    document.getElementById('edit-info-popup').style.display = 'none';
+    document.getElementById('edit-tags-popup').style.display = 'none';
+    document.getElementById('share-url-popup').style.display = 'none';
+    document.getElementById('nsfw-inclusion-popup').style.display = 'none';
 
-        function closeAllPopups() {
-            const popups = document.querySelectorAll('.popup, .edit-popup');
-            popups.forEach(popup => {
-                popup.style.display = 'none';
-            });
-            document.getElementById('nsfw-inclusion-popup').style.display = 'none';
-        }
-
+  });
         function showEditUrlPopup(tileData, tileElement) {
             const popup = document.getElementById('edit-url-popup');
             const urlInput = document.getElementById('edit-url-input');
             urlInput.value = tileData.link;
             popup.style.display = 'flex';
-
+            document.getElementById('popup-overlay').style.display = 'block';
             document.getElementById('save-url-btn').onclick = () => {
                 tileData.link = urlInput.value;
                 tileElement.querySelector('a').href = tileData.link;
                 saveTiles();
                 popup.style.display = 'none';
+                document.getElementById('popup-overlay').style.display = 'none';
             };
 
             document.getElementById('cancel-url-btn').onclick = () => {
                 popup.style.display = 'none';
+                document.getElementById('popup-overlay').style.display = 'none';
             };
         }
         function showEditInfoPopup(tileData, tileElement) {
-            closeAllPopups();
             const popup = document.getElementById('edit-info-popup');
             document.getElementById('edit-name-input').value = tileData.name || '';
             document.getElementById('edit-platform-input').value = tileData.platform || '';
             document.getElementById('edit-age-input').value = tileData.age || '';
             document.getElementById('edit-description-input').value = tileData.description || '';
             popup.style.display = 'flex';
+            document.getElementById('popup-overlay').style.display = 'block';
+
 
             document.getElementById('save-info-btn').onclick = () => {
                 tileData.name = document.getElementById('edit-name-input').value;
@@ -864,19 +866,24 @@
                 saveTiles();
                 updateTagFilter();
                 popup.style.display = 'none';
+                document.getElementById('popup-overlay').style.display = 'none';
+
             };
 
             document.getElementById('cancel-info-btn').onclick = () => {
                 popup.style.display = 'none';
+                document.getElementById('popup-overlay').style.display = 'none';
+
             };
         }
 
         // Function to show the edit tags popup
         function showEditTagsPopup(tileData, tileElement) {
-            closeAllPopups();
             const popup = document.getElementById('edit-tags-popup');
             document.getElementById('edit-tags-input').value = tileData.tags.join(', ');
             popup.style.display = 'flex';
+            document.getElementById('popup-overlay').style.display = 'block';
+
 
             document.getElementById('save-tags-btn').onclick = () => {
                 const newTags = document.getElementById('edit-tags-input').value.split(',').map(tag => tag.trim()).filter(tag => tag);
@@ -886,13 +893,15 @@
                 saveTiles();
                 updateTagFilter();
                 popup.style.display = 'none';
+                document.getElementById('popup-overlay').style.display = 'none';
             };
 
             document.getElementById('cancel-tags-btn').onclick = () => {
                 popup.style.display = 'none';
+                document.getElementById('popup-overlay').style.display = 'none';
             };
         }
-       
+        
         // Theme management
         function setTheme(theme) {
             document.body.className = theme;
@@ -1018,18 +1027,18 @@
         }
 
         function updateTileOutline(tileElement, tags) {
-    tileElement.classList.remove('nsfw-outline', 'star-outline', 'special-outline');
-    const hasNSFW = tags.includes('18+');
-    const hasStar = tags.includes('⭐');
-    
-    if (hasNSFW && hasStar) {
-        tileElement.classList.add('special-outline');
-    } else if (hasNSFW) {
-        tileElement.classList.add('nsfw-outline');
-    } else if (hasStar) {
-        tileElement.classList.add('star-outline');
-    }
-}
+            tileElement.classList.remove('nsfw-outline', 'star-outline', 'special-outline');
+            const hasNSFW = tags.includes('18+');
+            const hasStar = tags.includes('⭐');
+            
+            if (hasNSFW && hasStar) {
+                tileElement.classList.add('special-outline');
+            } else if (hasNSFW) {
+                tileElement.classList.add('nsfw-outline');
+            } else if (hasStar) {
+                tileElement.classList.add('star-outline');
+            }
+        }
         // Edit image
     function editImage(tileData, tileElement) {
     // Create an input element to upload a new image
@@ -1078,11 +1087,11 @@
         
         // Share tile
         function shareTile(tileData) {
-            closeAllPopups();
             const popup = document.getElementById('share-url-popup');
             const urlInput = document.getElementById('share-url-input');
             urlInput.value = tileData.link;
             popup.style.display = 'flex';
+            document.getElementById('popup-overlay').style.display = 'block';
 
             document.getElementById('copy-url-btn').onclick = () => {
                 urlInput.select();
@@ -1092,6 +1101,7 @@
 
             document.getElementById('close-share-url-btn').onclick = () => {
                 popup.style.display = 'none';
+                document.getElementById('popup-overlay').style.display = 'none';
             };
         }
 
@@ -1165,9 +1175,9 @@
         });
 
         function showTileCreationPopup(imageData) {
-            closeAllPopups();
             const popup = document.getElementById('tile-creation-popup');
             popup.style.display = 'flex';
+            document.getElementById('popup-overlay').style.display = 'block';
 
             const createBtn = document.getElementById('create-tile-btn');
             const cancelBtn = document.getElementById('cancel-tile-btn');
@@ -1180,23 +1190,25 @@
                 const age = document.getElementById('tile-age').value;
                 const description = document.getElementById('tile-description').value;
 
-                const newTile = createTileData(imageData, link, tags, name, platform, age, description);
-                tiles.push(newTile);
-                createImageTile(newTile);
-                saveTiles();
-                updateTagFilter();
+                        const newTile = createTileData(imageData, link, tags, name, platform, age, description);
+                        tiles.push(newTile);
+                        createImageTile(newTile);
+                        saveTiles();
+                        updateTagFilter();
 
                 popup.style.display = 'none';
+                document.getElementById('popup-overlay').style.display = 'none';
                 clearTileCreationPopupInputs();
             };
 
             cancelBtn.onclick = () => {
                 popup.style.display = 'none';
+                document.getElementById('popup-overlay').style.display = 'none';
                 clearTileCreationPopupInputs();
             };
         }
 
-        
+
         // Trigger file input when add button is clicked
         addImageButton.addEventListener('click', () => {
             fileInput.click();
@@ -1247,7 +1259,6 @@
             }
         });
 // Function to toggle blur on NSFW content
-// Function to toggle blur on NSFW content
 function toggleBlurNSFW() {
     const nsfwTags = ['18+', 'NSFW', "Hentai", "Porn"]; // Tags considered NSFW
     const imageItems = document.querySelectorAll('.image-item');
@@ -1283,20 +1294,13 @@ const popupImage = document.getElementById('popup-image');
 const popupTags = document.getElementById('popup-tags');
 const popupLink = document.getElementById('popup-link');
 
-// Close popup function
-function closePopup() {
-    characterPopup.classList.add('hidden');
-    characterPopup.classList.remove('red-border');
-}
-
 // Event listeners for closing popup
 popupClose.addEventListener('click', closePopup);
 popupCloseBtn.addEventListener('click', closePopup);
 
 
 // Function to pick a random character
-        // Function to pick a random character
-        function selectRandomCharacter() {
+function selectRandomCharacter() {
             const characters = Array.from(document.querySelectorAll('.image-item:not(.add-image)'));
             if (characters.length === 0) {
                 alert('No characters available.');
@@ -1316,7 +1320,7 @@ popupCloseBtn.addEventListener('click', closePopup);
             const randomIndex = Math.floor(Math.random() * availableCharacters.length);
             const selectedCharacter = availableCharacters[randomIndex];
             const tileData = tiles[characters.indexOf(selectedCharacter)];
-    
+
             document.getElementById('popup-image').src = tileData.imageData;
             document.getElementById('popup-name').textContent = tileData.name || 'Unknown';
             document.getElementById('popup-platform').textContent = `Platform: ${tileData.platform || 'N/A'}`;
@@ -1334,12 +1338,20 @@ popupCloseBtn.addEventListener('click', closePopup);
             }
 
             characterPopup.classList.remove('hidden');
+            document.getElementById('popup-overlay').style.display = 'block';
+        }
+        // Modify the closePopup function
+        function closePopup() {
+            document.getElementById('popup-overlay').style.display = 'none';
+            characterPopup.classList.add('hidden');
+            characterPopup.classList.remove('nsfw-outline');
+            popupImage.classList.remove('blurred-image');
         }
 
-        // Event listener for the random character button
+// Event listener for the random character button
         randomCharacterBtn.addEventListener('click', () => {
-            closeAllPopups();
             document.getElementById('nsfw-inclusion-popup').style.display = 'flex';
+            document.getElementById('popup-overlay').style.display = 'block';
         });
 
         document.getElementById('include-nsfw-btn').addEventListener('click', () => {
