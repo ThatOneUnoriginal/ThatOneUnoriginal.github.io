@@ -557,7 +557,7 @@
             width: 100%;
             margin-top: 10px;
         }
-        #submit-url-btn{
+        #submit-url-btn, #submit-url-btn1{
             padding: 10px 20px;
             background-color: var(--button-bg);
             color: var(--button-color);
@@ -827,6 +827,7 @@
             <li>Added Manual Up and Down buttons on the Reordering Website that will move the tile up or down one position</li>
             <li>Added the ability to upload images either by locally uploading an image (the previous exclusive method) or by providing a web URL.</li>
             <li>When the NSFW inclusion prompt is shown, you will be prompted to either have it remember or not remember via a checkbox. Note that on refresh the state will return to unchecked.</li>
+            <li>When creating an image and choose the URL method, it will now check if the image will succesfully render. Note that some images that work when uploading them via your local device (like .svg) may not work when uploading through url.</li>
         </ul>
        <h2>Update 1.5.1</h2>
        <ul>
@@ -892,6 +893,7 @@
           <button id="import-btn">Import</button>
           <button id="blur-nsfw-btn">Blur NSFW</button>
           <button id="random-character-btn">Select Random Character</button>
+          <button id="flush-button">Flush Remembered State</button>
           <select id="tag-filter-mobile">
              <option value="all">All Tags</option>
           </select>
@@ -995,7 +997,7 @@
             <button id="exclude-nsfw-btn">No, Exclude NSFW</button>
         </div>
         <label>
-            <input type="checkbox" id="remember-nsfw-state-checkbox"> Remember my choice
+            <input type="checkbox" id="remember-nsfw-state-checkbox"> Remember my choice</input>
         </label>
     </div>    
     <div id="image-popup" class="popup hidden">
@@ -1024,9 +1026,9 @@
     </div>
     <div id="url-popup" class="popup hidden">
         <div id="popup-content">
-           <h3>Enter Image URL</h3>
+           <h3>Enter Image URLe</h3>
            <input type="text" id="image-url-input" placeholder="Paste image URL here" />
-           <button id="submit-url-btn">Submit</button>
+           <button id="submit-url-btn1">Submit</button>
            <button id="url-popup-close-url">Close</button>
         </div>
      </div>
@@ -1040,13 +1042,13 @@
        </div>
     </div>
     <!-- Add the file input for uploading images -->
-    <input type="file" id="file-input" accept="image/*" class="hidden">
+    <input type="file" id="file-input" accept="image/*, .jxl, .avif" class="hidden">
     <div class="image-grid" id="image-grid">
        <div class="image-item add-image" id="add-image">
           +
        </div>
     </div>
-    <input type="file" id="file-input" accept="image/*">
+    <input type="file" id="file-input" accept="image/*, .jxl, .avif">
     <input type="file" id="import-file-input" accept="application/json">
     <div id="popup-overlay" class="popup-overlay"></div>
     
@@ -1063,14 +1065,13 @@ const importBtn = document.getElementById('import-btn');
 const importFileInput = document.getElementById('import-file-input');
 const blurNSFWBtn = document.getElementById('blur-nsfw-btn');
 const imageUploadChoicePopup = document.getElementById('image-upload-choice-popup');
-const deviceUploadBtn = document.getElementById('device-upload-btn');
 const urlUploadBtn = document.getElementById('url-upload-btn');
 
 let tiles = [];
 let allTags = new Set();
 let isBlurred = JSON.parse(localStorage.getItem('isBlurred')) || false; // Load blur status from localStorage
-let includeNSFW = false; // Initialize to false on every page load
-let rememberNSFWChoice = false; // New variable to track checkbox state within a session
+let rememberNSFWChoice = JSON.parse(localStorage.getItem('rememberNSFWChoice')) || false;
+let includeNSFW = JSON.parse(localStorage.getItem('includeNSFW')) || false;
 
 addImageButton.addEventListener('click', () => {
     document.getElementById('image-source-popup').style.display = 'block';
@@ -1079,7 +1080,6 @@ addImageButton.addEventListener('click', () => {
 
 // Add event listeners for the new buttons
 document.getElementById('local-image-btn').addEventListener('click', () => {
-    document.getElementById('image-source-popup').style.display = 'none';
     fileInput.click();
 });
 
@@ -1091,13 +1091,33 @@ document.getElementById('url-image-btn').addEventListener('click', () => {
 document.getElementById('submit-url-btn').addEventListener('click', () => {
     const imageUrl = document.getElementById('image-url-input').value.trim();
     if (imageUrl) {
-        document.getElementById('url-input-popup').style.display = 'none';
-        document.getElementById('popup-overlay').style.display = 'none';
-        showTileCreationPopup(imageUrl);
+        // Create a new Image object
+        const img = new Image();
+        
+        // Set up an onload handler for the image
+        img.onload = () => {
+            document.getElementById('url-input-popup').style.display = 'none';
+            document.getElementById('popup-overlay').style.display = 'none';
+            showTileCreationPopup(imageUrl);
+        };
+
+        // Set up an onerror handler to catch loading errors
+        img.onerror = () => {
+            alert('Error: The image could not be loaded. Please check the URL and try again.');
+        };
+
+        // Start loading the image
+        img.src = imageUrl;
     } else {
         alert('Please enter a valid URL');
     }
 });
+
+
+document.getElementById('create-tile-btn').addEventListener('click', () => {
+    document.getElementById('popup-overlay').style.display = 'none';
+});
+
 document.getElementById('url-popup-close-url1').addEventListener('click', () => {
     document.getElementById('url-input-popup').style.display = 'none';
     document.getElementById('popup-overlay').style.display = 'none';
@@ -1310,20 +1330,7 @@ function createImageTile(tileData) {
    });
 }
 
-function editInfo(tileData, tileElement) {
-   const name = prompt("Enter character name:", tileData.name || "");
-   const platform = prompt("Enter platform:", tileData.platform || "");
-   const age = prompt("Enter age:", tileData.age || "");
-   const description = prompt("Enter description:", tileData.description || "");
 
-   if (name !== null) tileData.name = name;
-   if (platform !== null) tileData.platform = platform;
-   if (age !== null) tileData.age = age;
-   if (description !== null) tileData.description = description;
-
-   saveTiles();
-   updateTagFilter();
-}
 
 function updateTileOutline(tileElement, tags) {
    tileElement.classList.remove('nsfw-outline', 'star-outline', 'special-outline');
@@ -1348,94 +1355,99 @@ function stripUrlParams(url) {
       return url; // Return the original URL if invalid
    }
 }
-
 // Edit image
 function editImage(tileData, tileElement) {
-   const popup = document.getElementById('image-popup');
-   const localUploadBtn = document.getElementById('local-upload-btn');
-   const urlUploadBtn = document.getElementById('url-upload-btn');
-   const popupClose = document.getElementById('popup-close');
+    console.log('TEST');
+        const popup = document.getElementById('image-popup');
+        const localUploadBtn = document.getElementById('local-upload-btn');
+        const popupClose = document.getElementById('popup-close');
+        const urlPopup = document.getElementById('url-popup');
+        const urlInput = document.getElementById('image-url-input');
+        const submitUrlBtn = document.getElementById('submit-url-btn');
+        const urlPopupClose = document.getElementById('url-popup-close');
+        const imageUploadClose = document.getElementById('urlURL-popup-close');
+        const urlURLPopupClose = document.getElementById('url-popup-close-url');
 
-   const urlPopup = document.getElementById('url-popup');
-   const urlInput = document.getElementById('image-url-input');
-   const submitUrlBtn = document.getElementById('submit-url-btn');
-   const urlPopupClose = document.getElementById('url-popup-close');
-   const imageUploadClose = document.getElementById('urlURL-popup-close');
-   const urlURLPopupClose = document.getElementById('url-popup-close-url')
+        // Show the main popup
+        popup.classList.remove('hidden');
+        document.getElementById('image-popup').style.display = 'block';
+        document.getElementById('popup-overlay').style.display = 'block';
 
-   // Show the main popup
-   popup.classList.remove('hidden');
-   document.getElementById('image-popup').style.display = 'block';
-   document.getElementById('popup-overlay').style.display = 'block';
+        // Close main popup functionality
+        popupClose.onclick = () => {
+            popup.classList.add('hidden');
+            document.getElementById('popup-overlay').style.display = 'none';
+        };
 
-   // Close main popup functionality
-   popupClose.onclick = () => {
-      popup.classList.add('hidden');
-   };
+        localUploadBtn.onclick = () => {
+            console.log('TEST2');
+            const imageUploadInput = document.createElement('input');
+            imageUploadInput.type = 'file';
+            imageUploadInput.accept = 'image/*,.avif,.jxl';
 
-   localUploadBtn.onclick = () => {
-      const imageUploadInput = document.createElement('input');
-      imageUploadInput.type = 'file';
-      imageUploadInput.accept = 'image/*,.avif,.jxl';
+            imageUploadInput.addEventListener('change', function (event) {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
 
-      imageUploadInput.addEventListener('change', function (event) {
-         const file = event.target.files[0];
-         if (file) {
-            const reader = new FileReader();
+                    reader.onload = function (e) {
+                        const newImageData = e.target.result;
+                        tileData.imageData = newImageData;
+                        tileElement.querySelector('img').src = newImageData;
 
-            reader.onload = function (e) {
-               const newImageData = e.target.result;
-               tileData.imageData = newImageData;
-               tileElement.querySelector('img').src = newImageData;
+                        saveTiles();
+                    };
 
-               saveTiles();
-            };
+                    reader.readAsDataURL(file);
+                }
+                popup.classList.add('hidden');
+                document.getElementById('popup-overlay').style.display = 'none';
+                document.getElementById('image-popup').style.display = 'none';
+            });
 
-            reader.readAsDataURL(file);
-         }
-      });
+            imageUploadInput.click();
+        };
 
-      imageUploadInput.click();
-      popup.classList.add('hidden'); // Hide the popup after selection
+        urlUploadBtn.onclick = () => {
 
-   };
+            console.log('TEST3');
+            // Hide the main popup and show the URL input popup
+            document.getElementById('image-popup').style.display = 'none';
+            document.getElementById('url-popup').style.display = 'block';
+            popup.classList.add('hidden');
+            urlPopup.classList.remove('hidden');
+        };
 
-   urlUploadBtn.onclick = () => {
-      // Hide the main popup and show the URL input popup
-      document.getElementById('image-popup').style.display = 'none';
-      document.getElementById('url-popup').style.display = 'block';
-      popup.classList.add('hidden');
-      urlPopup.classList.remove('hidden');
-   };
-   // Submit URL functionality
-   submitUrlBtn.onclick = () => {
-      let imageUrl = urlInput.value.trim();
+        // Submit URL functionality
+        document.getElementById('submit-url-btn1').onclick = () => {
+            console.log('TEST4');
+            let imageUrl = urlInput.value.trim();
 
-      if (imageUrl) {
-         imageUrl = stripUrlParams(imageUrl); // Strip query parameters from URL
-         tileData.imageData = imageUrl;
-         tileElement.querySelector('img').src = imageUrl;
+            if (imageUrl) {
+                imageUrl = stripUrlParams(imageUrl); // Strip query parameters from URL
+                tileData.imageData = imageUrl;
+                tileElement.querySelector('img').src = imageUrl;
+                console.log('TEST');
+                saveTiles();
+            }
+            document.getElementById('image-popup').style.display = 'none';
+            document.getElementById('url-popup').style.display = 'none';
+            document.getElementById('popup-overlay').style.display = 'none';
+            urlPopup.classList.add('hidden');
+        };
 
-         saveTiles();
-      }
-      document.getElementById('image-popup').style.display = 'none';
-      document.getElementById('url-popup').style.display = 'none';
-      document.getElementById('popup-overlay').style.display = 'none';
-      urlPopup.classList.add('hidden'); // Hide the URL popup after submission
-   };
+        // Close URL popup functionality
+        urlPopupClose.onclick = () => {
+            urlPopup.classList.add('hidden');
+            document.getElementById('image-popup').style.display = 'none';
+            document.getElementById('popup-overlay').style.display = 'none';
+        };
 
-   // Close URL popup functionality
-   urlPopupClose.onclick = () => {
-      urlPopup.classList.add('hidden');
-      document.getElementById('image-popup').style.display = 'none';
-      document.getElementById('popup-overlay').style.display = 'none';
-   };
-   urlURLPopupClose.onclick = () => {
-      urlURLPopupClose.classList.add('hidden');
-      document.getElementById('url-popup').style.display = 'none';
-      document.getElementById('popup-overlay').style.display = 'none';
-   }
-}
+        urlURLPopupClose.onclick = () => {
+            document.getElementById('url-popup').style.display = 'none';
+            document.getElementById('popup-overlay').style.display = 'none';
+        };
+    }
 
 document.getElementById('popup-overlay').onclick = () => {
    document.getElementById('url-popup').style.display = 'none';
@@ -1452,18 +1464,6 @@ function createTileData(imageData, link, tags, name, platform, age, description)
       age,
       description
    };
-}
-
-// Edit tags
-function editTags(tileData, tileElement) {
-   const newTags = prompt("Enter tags separated by commas:", tileData.tags.join(', '));
-   if (newTags !== null) {
-      tileData.tags = newTags.split(',').map(tag => tag.trim()).filter(tag => tag);
-      updateTileTags(tileElement, tileData.tags);
-      updateTileOutline(tileElement, tileData.tags);
-      saveTiles();
-      updateTagFilter();
-   }
 }
 
 // Share tile
@@ -1544,51 +1544,54 @@ function filterTiles() {
 
 // Handle file selection
 fileInput.addEventListener('change', (event) => {
-    const file = event.target.files[0];
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            const imageData = e.target.result;
-            showTileCreationPopup(imageData);
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const imageData = e.target.result;
+                showTileCreationPopup(imageData);
+            };
+            reader.readAsDataURL(file);
+        }
+        document.getElementById('popup-overlay').style.display = 'none';
+    });
+
+
+
+    function showTileCreationPopup(imageSource) {
+        document.getElementById('image-source-popup').style.display = 'none';
+        const popup = document.getElementById('tile-creation-popup');
+        popup.style.display = 'flex';
+        document.getElementById('popup-overlay').style.display = 'block';
+
+        const createBtn = document.getElementById('create-tile-btn');
+        const cancelBtn = document.getElementById('cancel-tile-btn');
+
+        createBtn.onclick = () => {
+            const link = document.getElementById('tile-link').value;
+            const tags = document.getElementById('tile-tags').value.split(',').map(tag => tag.trim()).filter(tag => tag);
+            const name = document.getElementById('tile-name').value;
+            const platform = document.getElementById('tile-platform').value;
+            const age = document.getElementById('tile-age').value;
+            const description = document.getElementById('tile-description').value;
+
+            const newTile = createTileData(imageSource, link, tags, name, platform, age, description);
+            tiles.push(newTile);
+            createImageTile(newTile);
+            saveTiles();
+            updateTagFilter();
+
+            popup.style.display = 'none';
+            document.getElementById('popup-overlay').style.display = 'none';
+            clearTileCreationPopupInputs();
         };
-        reader.readAsDataURL(file);
+
+        cancelBtn.onclick = () => {
+            popup.style.display = 'none';
+            document.getElementById('popup-overlay').style.display = 'none';
+            clearTileCreationPopupInputs();
+        };
     }
-});
-
-
-function showTileCreationPopup(imageSource) {
-    const popup = document.getElementById('tile-creation-popup');
-    popup.style.display = 'flex';
-    document.getElementById('popup-overlay').style.display = 'block';
-
-    const createBtn = document.getElementById('create-tile-btn');
-    const cancelBtn = document.getElementById('cancel-tile-btn');
-
-    createBtn.onclick = () => {
-        const link = document.getElementById('tile-link').value;
-        const tags = document.getElementById('tile-tags').value.split(',').map(tag => tag.trim()).filter(tag => tag);
-        const name = document.getElementById('tile-name').value;
-        const platform = document.getElementById('tile-platform').value;
-        const age = document.getElementById('tile-age').value;
-        const description = document.getElementById('tile-description').value;
-
-        const newTile = createTileData(imageSource, link, tags, name, platform, age, description);
-        tiles.push(newTile);
-        createImageTile(newTile);
-        saveTiles();
-        updateTagFilter();
-
-        popup.style.display = 'none';
-        document.getElementById('popup-overlay').style.display = 'none';
-        clearTileCreationPopupInputs();
-    };
-
-    cancelBtn.onclick = () => {
-        popup.style.display = 'none';
-        document.getElementById('popup-overlay').style.display = 'none';
-        clearTileCreationPopupInputs();
-    };
-}
 
 // Filter tiles when tag is selected
 tagFilter.addEventListener('change', filterTiles);
@@ -1663,8 +1666,6 @@ blurNSFWBtn.addEventListener('click', toggleBlurNSFW);
 loadSavedTiles();
 const randomCharacterBtn = document.getElementById('random-character-btn');
 const characterPopup = document.getElementById('character-popup');
-const imageMethodPopup = document.getElementById('image-popup');
-const popupContent = document.getElementById('popup-content');
 const popupClose = document.getElementById('popup-close');
 const popupCloseBtn = document.getElementById('popup-close-btn');
 const popupImage = document.getElementById('popup-image');
@@ -1739,24 +1740,18 @@ randomCharacterBtn.addEventListener('click', () => {
    }
 });
 
+// Update the checkbox state based on the saved choice
+document.getElementById('remember-nsfw-state-checkbox').checked = rememberNSFWChoice;
+
 document.getElementById('remember-nsfw-state-checkbox').addEventListener('change', (event) => {
    rememberNSFWChoice = event.target.checked;
+   localStorage.setItem('rememberNSFWChoice', rememberNSFWChoice); // Save to localStorage
 });
-
-// Function to reset NSFW preference on page load
-function resetNSFWPreference() {
-   const rememberCheckbox = document.getElementById('remember-nsfw-state-checkbox');
-   rememberCheckbox.checked = false;
-   rememberNSFWChoice = false;
-   includeNSFW = false;
-}
-
-// Reset NSFW preference when the page loads
-document.addEventListener('DOMContentLoaded', resetNSFWPreference);
 
 document.getElementById('include-nsfw-btn').addEventListener('click', () => {
    includeNSFW = true;
    rememberNSFWChoice = document.getElementById('remember-nsfw-state-checkbox').checked;
+   localStorage.setItem('rememberNSFWChoice', rememberNSFWChoice); // Save to localStorage
    document.getElementById('nsfw-inclusion-popup').style.display = 'none';
    selectRandomCharacter();
 });
@@ -1764,9 +1759,11 @@ document.getElementById('include-nsfw-btn').addEventListener('click', () => {
 document.getElementById('exclude-nsfw-btn').addEventListener('click', () => {
    includeNSFW = false;
    rememberNSFWChoice = document.getElementById('remember-nsfw-state-checkbox').checked;
+   localStorage.setItem('rememberNSFWChoice', rememberNSFWChoice); // Save to localStorage
    document.getElementById('nsfw-inclusion-popup').style.display = 'none';
    selectRandomCharacter();
 });
+
 
 // Event listener for the reroll button
 document.getElementById('reroll-btn').addEventListener('click', selectRandomCharacter);
@@ -1808,6 +1805,14 @@ blurNSFWBtn.addEventListener('click', toggleBlurNSFW);
 
 // Apply blur status when the page loads
 document.addEventListener('DOMContentLoaded', applyBlurNSFWStatus);
+
+document.getElementById('flush-button').addEventListener('click', () => {
+    rememberNSFWChoice = false;
+    includeNSFW = false;  // Set to false instead of true
+    document.getElementById('remember-nsfw-state-checkbox').checked = false;
+    localStorage.setItem('rememberNSFWChoice', JSON.stringify(rememberNSFWChoice));
+    localStorage.setItem('includeNSFW', JSON.stringify(includeNSFW));
+});
     </script>
 </body>
 </html>
