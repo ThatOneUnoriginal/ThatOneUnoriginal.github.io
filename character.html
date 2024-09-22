@@ -816,6 +816,10 @@
     </div>
     <button class="collapsible">Update Log</button>
     <div class="collapsible-content">
+        <h2>Update 1.7.1</h2>
+        <ul>
+            <li>Stated that the error where edit image url option was fixed in 1.7, apparently not. It should be fixed now though.</li>
+        </ul>
         <h2>Update 1.7</h2>
         <ul>
             <li>Removed old depreciated functions that were replaced by newer functions (ones that used the prompt() system instead of the newer popup designs)</li>
@@ -828,7 +832,8 @@
             <li>Fixed problem where the input information section wouldn't disappear after the user curated an image.</li>
             <li>Fixed problem where the edit Image popup wouldn't disappear when submitting URL and further fixed problem where the overlay wouldn't disappear when cancelling the prompts.</li>
             <li>Fixed problem where the edit image url option wouldn't work</li>
-        </ul>        
+        </ul>
+        
         <h2>Update 1.6</h2>
         <ul>
             <li>Fixed error where clicking outside the popup window would cause select random character popup to not appear afterwards until refresh</li>
@@ -1038,8 +1043,8 @@
     </div>
     <div id="url-popup" class="popup hidden">
         <div id="popup-content">
-           <h3>Enter Image URLe</h3>
-           <input type="text" id="image-url-input" placeholder="Paste image URL here" />
+           <h3>Enter Image URL</h3>
+           <input type="text" id="image-url-input1" placeholder="Paste image URL here" />
            <button id="submit-url-btn1">Submit</button>
            <button id="url-popup-close-url">Close</button>
         </div>
@@ -1103,28 +1108,11 @@ document.getElementById('url-image-btn').addEventListener('click', () => {
 document.getElementById('submit-url-btn').addEventListener('click', () => {
     const imageUrl = document.getElementById('image-url-input').value.trim();
     if (imageUrl) {
-        // Create a new Image object
-        const img = new Image();
-        
-        // Set up an onload handler for the image
-        img.onload = () => {
-            document.getElementById('url-input-popup').style.display = 'none';
-            document.getElementById('popup-overlay').style.display = 'none';
-            showTileCreationPopup(imageUrl);
-        };
-
-        // Set up an onerror handler to catch loading errors
-        img.onerror = () => {
-            alert('Error: The image could not be loaded. Please check the URL and try again.');
-        };
-
-        // Start loading the image
-        img.src = imageUrl;
-    } else {
-        alert('Please enter a valid URL');
+        document.getElementById('url-input-popup').style.display = 'none';
+        document.getElementById('popup-overlay').style.display = 'none';
+        showTileCreationPopup(imageUrl);
     }
 });
-
 
 document.getElementById('create-tile-btn').addEventListener('click', () => {
     document.getElementById('popup-overlay').style.display = 'none';
@@ -1375,6 +1363,7 @@ function editImage(tileData, tileElement) {
         const popupClose = document.getElementById('popup-close');
         const urlPopup = document.getElementById('url-popup');
         const urlInput = document.getElementById('image-url-input');
+        const urlInput1 = document.getElementById('image-url-input1');
         const submitUrlBtn = document.getElementById('submit-url-btn');
         const urlPopupClose = document.getElementById('url-popup-close');
         const imageUploadClose = document.getElementById('urlURL-popup-close');
@@ -1433,7 +1422,7 @@ function editImage(tileData, tileElement) {
         // Submit URL functionality
         document.getElementById('submit-url-btn1').onclick = () => {
             console.log('TEST4');
-            let imageUrl = urlInput.value.trim();
+            let imageUrl = urlInput1.value.trim();
 
             if (imageUrl) {
                 imageUrl = stripUrlParams(imageUrl); // Strip query parameters from URL

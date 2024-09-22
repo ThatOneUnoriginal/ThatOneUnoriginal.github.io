@@ -816,6 +816,24 @@
     </div>
     <button class="collapsible">Update Log</button>
     <div class="collapsible-content">
+        <h2>Update 1.7.1</h2>
+        <ul>
+            <li>Stated that the error where edit image url option was fixed in 1.7, apparently not. It should be fixed now though.</li>
+        </ul>
+        <h2>Update 1.7</h2>
+        <ul>
+            <li>Removed old depreciated functions that were replaced by newer functions (ones that used the prompt() system instead of the newer popup designs)</li>
+            <li>Removed const values that were without usage: imageMethodPopup, popupContent, and deviceUploadBtn, and a duplicate urlUploadBtn</li>
+            <li>When curating a tile, .jxl and .avif should now appear as available file formats when choosing to upload a local image (instead of having to select All Files.)</li>
+            <li>.cur and .jps and .jfif support has been added</li>
+            <li>The browser will now remember the "Remember my choice" button between refreshes instead of resetting each refresh (note this was an intentional function of the feature, not a bug.)</li>
+            <li>A new "Flush Remembered State" button has been added which will allow you to reset the remembered state, showing you the NSFW inclusion/exclusion prompt when using the select random character feature.</li>
+            <li>Fixed problem where the upload method popup would disappear as soon as the user selected the local option.</li>
+            <li>Fixed problem where the input information section wouldn't disappear after the user curated an image.</li>
+            <li>Fixed problem where the edit Image popup wouldn't disappear when submitting URL and further fixed problem where the overlay wouldn't disappear when cancelling the prompts.</li>
+            <li>Fixed problem where the edit image url option wouldn't work</li>
+        </ul>
+        
         <h2>Update 1.6</h2>
         <ul>
             <li>Fixed error where clicking outside the popup window would cause select random character popup to not appear afterwards until refresh</li>
@@ -827,7 +845,6 @@
             <li>Added Manual Up and Down buttons on the Reordering Website that will move the tile up or down one position</li>
             <li>Added the ability to upload images either by locally uploading an image (the previous exclusive method) or by providing a web URL.</li>
             <li>When the NSFW inclusion prompt is shown, you will be prompted to either have it remember or not remember via a checkbox. Note that on refresh the state will return to unchecked.</li>
-            <li>When creating an image and choose the URL method, it will now check if the image will succesfully render. Note that some images that work when uploading them via your local device (like .svg) may not work when uploading through url.</li>
         </ul>
        <h2>Update 1.5.1</h2>
        <ul>
@@ -1027,7 +1044,7 @@
     <div id="url-popup" class="popup hidden">
         <div id="popup-content">
            <h3>Enter Image URL</h3>
-           <input type="text" id="image-url-input" placeholder="Paste image URL here" />
+           <input type="text" id="image-url-input1" placeholder="Paste image URL here" />
            <button id="submit-url-btn1">Submit</button>
            <button id="url-popup-close-url">Close</button>
         </div>
@@ -1091,25 +1108,9 @@ document.getElementById('url-image-btn').addEventListener('click', () => {
 document.getElementById('submit-url-btn').addEventListener('click', () => {
     const imageUrl = document.getElementById('image-url-input').value.trim();
     if (imageUrl) {
-        // Create a new Image object
-        const img = new Image();
-        
-        // Set up an onload handler for the image
-        img.onload = () => {
         document.getElementById('url-input-popup').style.display = 'none';
         document.getElementById('popup-overlay').style.display = 'none';
         showTileCreationPopup(imageUrl);
-        };
-
-        // Set up an onerror handler to catch loading errors
-        img.onerror = () => {
-            alert('Error: The image could not be loaded. Please check the URL and try again.');
-        };
-
-        // Start loading the image
-        img.src = imageUrl;
-    } else {
-        alert('Please enter a valid URL');
     }
 });
 
@@ -1354,23 +1355,6 @@ function stripUrlParams(url) {
       return url; // Return the original URL if invalid
    }
 }
-
-document.getElementById('submit-url-btn1').onclick = () => {
-            console.log('TEST4');
-            let imageUrl = urlInput.value.trim();
-
-            if (imageUrl) {
-                imageUrl = stripUrlParams(imageUrl); // Strip query parameters from URL
-                tileData.imageData = imageUrl;
-                tileElement.querySelector('img').src = imageUrl;
-                console.log('TEST');
-                saveTiles();
-            }
-            document.getElementById('image-popup').style.display = 'none';
-            document.getElementById('url-popup').style.display = 'none';
-            document.getElementById('popup-overlay').style.display = 'none';
-            urlPopup.classList.add('hidden');
-        };
 // Edit image
 function editImage(tileData, tileElement) {
     console.log('TEST');
@@ -1379,6 +1363,7 @@ function editImage(tileData, tileElement) {
         const popupClose = document.getElementById('popup-close');
         const urlPopup = document.getElementById('url-popup');
         const urlInput = document.getElementById('image-url-input');
+        const urlInput1 = document.getElementById('image-url-input1');
         const submitUrlBtn = document.getElementById('submit-url-btn');
         const urlPopupClose = document.getElementById('url-popup-close');
         const imageUploadClose = document.getElementById('urlURL-popup-close');
@@ -1437,7 +1422,7 @@ function editImage(tileData, tileElement) {
         // Submit URL functionality
         document.getElementById('submit-url-btn1').onclick = () => {
             console.log('TEST4');
-            let imageUrl = urlInput.value.trim();
+            let imageUrl = urlInput1.value.trim();
 
             if (imageUrl) {
                 imageUrl = stripUrlParams(imageUrl); // Strip query parameters from URL
