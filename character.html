@@ -178,6 +178,13 @@
             margin-bottom: 20px;
         }
 
+        #edit-info-popup input,
+        #edit-info-popup textarea {
+            width: 100%;
+            box-sizing: border-box;
+            margin-bottom: 10px;
+        }
+        
         .theme-toggle button, #tag-filter,  #tag-filter-mobile , #export-btn, #import-btn, #tile-size {
             padding: 5px 10px;
             cursor: pointer;
@@ -373,7 +380,7 @@
             border-radius: 8px;
             padding: 15px;
             overflow-y: auto;
-            max-height: 250px;
+            max-height: 225px;
             width: 100%;
         }
 
@@ -391,7 +398,7 @@
             font-style: italic;
         }
 
-        #popup-link, #reroll-btn {
+        #popup-link, #reroll-btn{
             display: inline-block;
             margin-top: 15px;
             background-color: var(--button-bg);
@@ -403,8 +410,21 @@
             margin-bottom: 10px;
             border-color: transparent;
         }
-
-        #popup-link:hover, #reroll-btn:hover {
+        #local-upload-btn, #url-upload-btn, #url-popup-close, #url-popup-close-url, #local-image-btn, #url-image-btn, #urlURL-popup-close, #url-popup-close-url1{
+            display: inline-block;
+            cursor: pointer;
+            background-color: var(--button-bg);
+            color: var(--button-color);
+            padding: 8px 15px;
+            border-radius: 4px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+            margin-bottom: 10px;
+            border-color: transparent;
+            width: 100%
+        }
+        #popup-link:hover, #reroll-btn:hover, #local-upload-btn:hover, #url-upload-btn:hover, #url-popup-close:hover, #url-popup-close-url:hover, 
+        #local-image-btn:hover, #url-image-btn:hover, #urlURL-popup-close:hover, #url-popup-close-url1:hover {
             background-color: var(--button-bg-hover);
         }
 
@@ -518,7 +538,7 @@
             width: 100%;
             animation: float 5s ease-in-out infinite;
         }
-
+        
         .edit-popup input, .edit-popup textarea {
             width: 100%;
             padding: 10px;
@@ -537,7 +557,17 @@
             width: 100%;
             margin-top: 10px;
         }
-
+        #submit-url-btn{
+            padding: 10px 20px;
+            background-color: var(--button-bg);
+            color: var(--button-color);
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
         .edit-popup button:hover {
             background-color: var(--button-bg-hover);
         }
@@ -626,6 +656,23 @@
         }
 
                 /* Responsive design for smaller screens */
+
+                @media (max-width: 600px) {
+            #character-popup {
+                max-height: 80vh;
+                overflow-y: auto;
+            }
+
+            #popup-image {
+                max-height: 200px;
+                width: auto;
+                object-fit: contain;
+            }
+
+            .popup-info {
+                max-height: none;
+            }
+        }
 @media (max-width: 600px) {
     .edit-popup, #share-url-popup, #nsfw-inclusion-popup {
         width: 90%;
@@ -683,152 +730,262 @@
     #tag-filter{
         display: none;
     }
-
 }
+
+    #image-upload-choice-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: var(--popup-color);
+            border: 2px solid #000;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            max-width: 400px;
+            width: 100%;
+        }
+
+        #image-upload-choice-popup button {
+            margin: 10px;
+            padding: 10px 20px;
+            background-color: var(--button-bg);
+            color: var(--button-color);
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 80%;
+        }
+
+        #image-upload-choice-popup button:hover {
+            background-color: var(--button-bg-hover);
+        }
     </style>
 </head>
 <body>
     <h1>Character Bookmarking Tool</h1>
-            <h2>Welcome to the Character Bookmarking Tool</h2>
-        <button class="collapsible">Click here for more information (recommended for first time users)</button>
-        <div class="collapsible-content">
-    <p>Ever wanted a singular place to save all your favourite, interesting characters? Does the platform you're using not have the ability to bookmark/favourite characters? This tool allows you to bookmark the character so you don't forget about it.</p>
-    <p>To bookmark a character:</p>
-    <ul>
-        <li>Go to the end of the grid and click the tile with the <span class="highlight">+</span> icon.</li>
-        <li>Once you prompt the tile curation, you'll be asked to upload a file from your system.</li>
-        <li>The file upload prompt will by default show all the files that are supported by the system (though some of the supposed "supported" file formats like .psp may not work.)</li>
-        <li>After uploading an image, you'll be prompted to include:
-            <ul>
+    <h2>Welcome to the Character Bookmarking Tool</h2>
+    <button class="collapsible">Click here for more information (recommended for first time users)</button>
+    <div class="collapsible-content">
+       <p>Ever wanted a singular place to save all your favourite, interesting characters? Does the platform you're using not have the ability to bookmark/favourite characters? This tool allows you to bookmark the character so you don't forget about it.</p>
+       <p>To bookmark a character:</p>
+       <ul>
+          <li>Go to the end of the grid and click the tile with the <span class="highlight">+</span> icon.</li>
+          <li>Once you prompt the tile curation, you'll be asked to upload a file from your system.</li>
+          <li>The file upload prompt will by default show all the files that are supported by the system (though some of the supposed "supported" file formats like .psp may not work.)</li>
+          <li>
+             After uploading an image, you'll be prompted to include:
+             <ul>
                 <li>A hyperlink</li>
                 <li>Tags</li>
                 <li>Character name</li>
                 <li>Platform</li>
                 <li>Character age</li>
                 <li>Character description</li>
-            </ul>
-        </li>
-    </ul>
-    <p><strong>Note:</strong> Not all of these are required, but at minimum the <span class="highlight">hyperlink</span> should be added so that you're able to go to the character page when you click the tile. The other information makes remembering the details of the characters easier.</p>
-    <p><strong>How to edit information?</strong></p>
-<p>Once you've curated the tile, you'll be able to edit all the information that you had inputted when curating the tile:</p>
-<ul>
-    <li>Choose <span class="highlight">Edit Image</span> to change the image that is attached to the tile.</li>
-    <li>Choose <span class="highlight">Edit URL</span> to change the hyperlink that the tile will direct towards when clicked.</li>
-    <li>Choose <span class="highlight">Edit Tags</span> to change the tags associated with the tile.</li>
-    <li>Choose <span class="highlight">Edit Info</span> to change the name, platform, age, and description.</li>
-</ul>
-
-<p><strong>How to indicate characters as NSFW?</strong></p>
-<p>When prompted to change the tags for the image either when curating the tile or choosing the Edit Tags button, add one of the following tags:</p>
-<ul>
-    <li>NSFW</li>
-    <li>Hentai</li>
-    <li>18+</li>
-    <li>Porn</li>
-</ul>
-<p>They're case sensitive, so put them in as shown here. This will cause a <span class="highlight-nsfw">red outline</span> to appear around the tile and the random character popup if it's selected. You can also blur the image with the <span class="highlight">Blur NSFW</span> button.</p>
-
-<p><strong>How to indicate characters as Favourites?</strong></p>
-<p>When prompted to change the tags for the image either when curating the tile or choosing the Edit Tags button, add <span class="highlight">⭐</span> as one of the tags. This will cause a <span class="highlight-favourite">green outline</span> to appear around the tile and random character popup if it's selected.</p>
-
-<p><strong>Can I indicate a character as being NSFW and a Favourite?</strong></p>
-<p>Yes! When prompted to change the tags for the image either when curating the tile or choosing the Edit Tags button, adding one of the NSFW tag triggers and the Favourites tag trigger will cause a special <span class="highlight-special">purple outline</span> to appear on both the tile and random character popup if it's selected.</p>
-
-<p><strong>Should I Export?</strong></p>
-<p>Yes, it's recommended that you export your grid/list any time you make any changes to it. Everything is stored locally on the browser, so if anything happens (cookies reset, change browsers, change devices, etc...) the page will reset to be blank. If this happens, just use the Import button to bring back the characters. With the export/backup file, you'll also be able to use the Reorder Tool and Merge Tool.</p>
-</div>    
-     <div class="controls">
-        <div class="theme-toggle">
-            <button id="light-mode">Light Mode</button>
-            <button id="dark-mode">Dark Mode</button>
-            <button id="export-btn">Export</button>
-            <button id="import-btn">Import</button>
-            <button id="blur-nsfw-btn">Blur NSFW</button>
-            <button id="random-character-btn">Select Random Character</button>
-            <select id="tag-filter-mobile">
-                <option value="all">All Tags</option>
-            </select>
-        </div>    
-        <div class="controls">
-        <select id="tag-filter">
-            <option value="all">All Tags</option>
-        </select>
-
+             </ul>
+          </li>
+       </ul>
+       <p><strong>Note:</strong> Not all of these are required, but at minimum the <span class="highlight">hyperlink</span> should be added so that you're able to go to the character page when you click the tile. The other information makes remembering the details of the characters easier.</p>
+       <p><strong>How to edit information?</strong></p>
+       <p>Once you've curated the tile, you'll be able to edit all the information that you had inputted when curating the tile:</p>
+       <ul>
+          <li>Choose <span class="highlight">Edit Image</span> to change the image that is attached to the tile.</li>
+          <li>Choose <span class="highlight">Edit URL</span> to change the hyperlink that the tile will direct towards when clicked.</li>
+          <li>Choose <span class="highlight">Edit Tags</span> to change the tags associated with the tile.</li>
+          <li>Choose <span class="highlight">Edit Info</span> to change the name, platform, age, and description.</li>
+       </ul>
+       <p><strong>How to indicate characters as NSFW?</strong></p>
+       <p>When prompted to change the tags for the image either when curating the tile or choosing the Edit Tags button, add one of the following tags:</p>
+       <ul>
+          <li>NSFW</li>
+          <li>Hentai</li>
+          <li>18+</li>
+          <li>Porn</li>
+       </ul>
+       <p>They're case sensitive, so put them in as shown here. This will cause a <span class="highlight-nsfw">red outline</span> to appear around the tile and the random character popup if it's selected. You can also blur the image with the <span class="highlight">Blur NSFW</span> button.</p>
+       <p><strong>How to indicate characters as Favourites?</strong></p>
+       <p>When prompted to change the tags for the image either when curating the tile or choosing the Edit Tags button, add <span class="highlight">⭐</span> as one of the tags. This will cause a <span class="highlight-favourite">green outline</span> to appear around the tile and random character popup if it's selected.</p>
+       <p><strong>Can I indicate a character as being NSFW and a Favourite?</strong></p>
+       <p>Yes! When prompted to change the tags for the image either when curating the tile or choosing the Edit Tags button, adding one of the NSFW tag triggers and the Favourites tag trigger will cause a special <span class="highlight-special">purple outline</span> to appear on both the tile and random character popup if it's selected.</p>
+       <p><strong>Should I Export?</strong></p>
+       <p>Yes, it's recommended that you export your grid/list any time you make any changes to it. Everything is stored locally on the browser, so if anything happens (cookies reset, change browsers, change devices, etc...) the page will reset to be blank. If this happens, just use the Import button to bring back the characters. With the export/backup file, you'll also be able to use the Reorder Tool and Merge Tool.</p>
     </div>
-    </div>        
-<!-- Popup Structure -->
-<div id="character-popup" class="popup hidden">
-    <div id="popup-content">
-        <img id="popup-image" src="" alt="Character Image">
-        <span id="popup-close">&times;</span>
-        <div class="popup-info">
-            <h3 id="popup-name"></h3>
-            <p id="popup-platform"></p>
-            <p id="popup-age"></p>
-            <p id="popup-description"></p>
-            <p id="popup-tags"></p>
+    <button class="collapsible">Update Log</button>
+    <div class="collapsible-content">
+        <h2>Update 1.6</h2>
+        <ul>
+            <li>Fixed error where clicking outside the popup window would cause select random character popup to not appear afterwards until refresh</li>
+            <li>A new section bellow the description blurb that allows you to read all the updates</li>
+            <li>The random character popup should now be more responsive for mobile devices/small screens</li>
+            <li>The width of the popup should now stay consistent regardless of how much information is included for them (previously characters with less information would have shorter info boxes, causing some things to shift around.)</li>
+            <li>The new triggers for the NSFW system now apply to the merger website. You will now be prompted to remove NSFW characters if they have the new tags that indicate it as being NSFW.</li>
+            <li>Updated the invalid links system for the merger website to ensure that the linked website in the url section of a tile is an actual website. It does this by checking if http: or https: is included and checks if theres any periods that would imply a TLD is included (since smth like https://test/ wont lead to a website.)</li>
+            <li>Added Manual Up and Down buttons on the Reordering Website that will move the tile up or down one position</li>
+            <li>Added the ability to upload images either by locally uploading an image (the previous exclusive method) or by providing a web URL.</li>
+            <li>When the NSFW inclusion prompt is shown, you will be prompted to either have it remember or not remember via a checkbox. Note that on refresh the state will return to unchecked.</li>
+        </ul>
+       <h2>Update 1.5.1</h2>
+       <ul>
+          <li>Modifications to the Bookmarking website, Merge Tool and Reordering Tool to make the websites more responsive on mobile/smaller devices. Note that update 1.6 will bring further improvements to this.</li>
+       </ul>
+       <h2>Update 1.5</h2>
+       <ul>
+          <li>With the reordering tool, you can now sort between the following options</li>
+          <ul>
+             <li>Name Alphabetically (A -> Z) and Reverse Alphabetically (Z -> A)</li>
+             <li>Age by Oldest to Youngest and Youngest to Oldest</li>
+             <li>Platform Name Alphabetically and Reverse Alphabetically</li>
+          </ul>
+          <li>Made changes to the special outline trigger to make it appear more consistently.</li>
+          <ul>
+             <li>Note if you're importing tiles that would have the special outline applied, you need to refresh the page before the outlines apply</li>
+          </ul>
+          <li>Favourite and Special Outline now Appear on the Random Character Popout Alongside the NSFW Outline</li>
+          <li>FavIcons have been added to the three pages to make it easier to see which page is what</li>
+          <li>Added "NSFW", "Hentai", and "Porn" as tags that will trigger the NSFW Outline</li>
+          <li>.avif and .jxl are now listed as supported files</li>
+          <li>Curated a new information blurb and made it collapseable</li>
+          <li>When trying to use the Random Character feature, you'll be prompted if you want to include NSFW characters</li>
+          <li>When the Random Character Popup is Opened, instead of having to click the Random Character button over and over (which would now show the prompt each time) you can press a reroll button to show a new character</li>
+          <li>Updated the File Upload System, Edit URL System, Edit Tag System, Edit Info System and Copy URL System from the previous prompt() system to a popup system to keep the design consistent</li>
+          <li>When opening a popup, an overlay blur will now appear behind the popup. Clicking the overlay will cause the current popup to close. This should prevent the openning of multiple popups at once alongside giving users a more convient way to close the popups</li>
+       </ul>
+       <h2>Update 1.4 (dont ask what happened to update 1.3)</h2>
+       <ul>
+          <li>Blur NSFW Option Now Applies to the Random Character Feature if an 18+ character is selected</li>
+          <li>Updated Styling of the Random Character Feature</li>
+          <li>Edit URL and Edit Photo are now to SEPERATE buttons</li>
+          <li>Edit Info Button has been added that allows you to specify information relating to the character like the characters name, age, description and which platform they're available on. This information will appear when it is selected in the random character feature.</li>
+          <li>Adding ⭐ Will Indicate it as a "Favourite" and curate a special outline for it</li>
+          <li>Adding the 18+ will outline the tile and popup if its selected from the random character feature</li>
+          <li>Changed some colours for accessibility</li>
+          <li>New Merger Tool</li>
+          <ul>
+             <li>Merge Two Backups Together</li>
+             <li>Automatically removes duplicate characters (by their hyperlink/url)</li>
+             <li>Prompt to remove NSFW characters when merging files</li>
+             <li>Prompt to remove characters with "https://" as their hyperlinkl</li>
+          </ul>
+          <li>Reordering Tool</li>
+          <ul>
+             <li>Allows you to reorder tiles</li>
+          </ul>
+       </ul>
+       <h2>Update 1.2</h2>
+       <ul>
+          <li>Added a new system that will blur tiles that have 18+ as a tag.</li>
+          <li>Changed edit image function to request a local image instead of a URL</li>
+          <li>Hover colours for buttons and tags to make it more visible if you're hovering over them</li>
+          <li>Description blurb on how to use the tool</li>
+          <li>Changed the name of the tab and the header to Character Bookmarking Tool</li>
+       </ul>
+    </div>
+    <div class="controls">
+       <div class="theme-toggle">
+          <button id="light-mode">Light Mode</button>
+          <button id="dark-mode">Dark Mode</button>
+          <button id="export-btn">Export</button>
+          <button id="import-btn">Import</button>
+          <button id="blur-nsfw-btn">Blur NSFW</button>
+          <button id="random-character-btn">Select Random Character</button>
+          <select id="tag-filter-mobile">
+             <option value="all">All Tags</option>
+          </select>
+       </div>
+       <div class="controls">
+          <select id="tag-filter">
+             <option value="all">All Tags</option>
+          </select>
+       </div>
+    </div>
+    <!-- Popup Structure -->
+    <div id="character-popup" class="popup hidden">
+       <div id="popup-content">
+          <img id="popup-image" src="" alt="Character Image">
+          <span id="popup-close">&times;</span>
+          <div class="popup-info">
+             <h3 id="popup-name"></h3>
+             <p id="popup-platform"></p>
+             <p id="popup-age"></p>
+             <p id="popup-description"></p>
+             <p id="popup-tags"></p>
+          </div>
+          <a id="popup-link" href="#" target="_blank">View Profile</a>
+          <button id="reroll-btn">Reroll</button>
+          <button id="popup-close-btn">Close</button>
+       </div>
+    </div>
+    <!--Tile Creation Popup-->
+    <div id="tile-creation-popup">
+       <h3>Create New Tile</h3>
+       <input type="text" id="tile-link" placeholder="Enter a link for this image">
+       <input type="text" id="tile-tags" placeholder="Enter tags separated by commas">
+       <input type="text" id="tile-name" placeholder="Enter character name">
+       <input type="text" id="tile-platform" placeholder="Enter platform">
+       <input type="text" id="tile-age" placeholder="Enter age">
+       <textarea id="tile-description" placeholder="Enter description"></textarea>
+       <button id="create-tile-btn">Create Tile</button>
+       <button id="cancel-tile-btn">Cancel</button>
+    </div>
+    <div id="nsfw-preference-popup" style="display: none;">
+        <h3>NSFW Content Preference</h3>
+        <p>Do you want to include NSFW characters in the random selection?</p>
+        <div>
+            <button id="nsfw-include-btn">Yes, Include NSFW</button>
+            <button id="nsfw-exclude-btn">No, Exclude NSFW</button>
         </div>
-        <a id="popup-link" href="#" target="_blank">View Profile</a>
-        <button id="reroll-btn">Reroll</button>
-        <button id="popup-close-btn">Close</button>
+        <label>
+            <input type="checkbox" id="nsfw-remember-choice"> Remember my choice for this session
+        </label>
     </div>
-</div>
-<!--Tile Creation Popup-->
-<div id="tile-creation-popup">
-    <h3>Create New Tile</h3>
-    <input type="text" id="tile-link" placeholder="Enter a link for this image">
-    <input type="text" id="tile-tags" placeholder="Enter tags separated by commas">
-    <input type="text" id="tile-name" placeholder="Enter character name">
-    <input type="text" id="tile-platform" placeholder="Enter platform">
-    <input type="text" id="tile-age" placeholder="Enter age">
-    <textarea id="tile-description" placeholder="Enter description"></textarea>
-    <button id="create-tile-btn">Create Tile</button>
-    <button id="cancel-tile-btn">Cancel</button>
-</div>
-<!--Edit URL Popup-->
-<div id="edit-url-popup" class="edit-popup">
-    <h3>Edit URL</h3>
-    <input type="text" id="edit-url-input" placeholder="Enter new URL">
-    <button id="save-url-btn">Save</button>
-    <button id="cancel-url-btn">Cancel</button>
-</div>
-<!--Edit Info Popup-->
-<div id="edit-info-popup" class="edit-popup">
-    <h3>Edit Info</h3>
-    <div>
-        <span class="input-label">Character Name:</span>
-        <input type="text" id="edit-name-input" placeholder="Enter character name">
+    
+    <!--Edit URL Popup-->
+    <div id="edit-url-popup" class="edit-popup">
+       <h3>Edit URL</h3>
+       <input type="text" id="edit-url-input" placeholder="Enter new URL">
+       <button id="save-url-btn">Save</button>
+       <button id="cancel-url-btn">Cancel</button>
     </div>
-    <div>
-        <span class="input-label">Platform:</span>
-        <input type="text" id="edit-platform-input" placeholder="Enter platform">
+    <!--Edit Info Popup-->
+    <div id="edit-info-popup" class="edit-popup">
+       <h3>Edit Info</h3>
+       <div>
+          <span class="input-label">Character Name:</span>
+          <input type="text" id="edit-name-input" placeholder="Enter character name">
+       </div>
+       <div>
+          <span class="input-label">Platform:</span>
+          <input type="text" id="edit-platform-input" placeholder="Enter platform">
+       </div>
+       <div>
+          <span class="input-label">Age:</span>
+          <input type="text" id="edit-age-input" placeholder="Enter age">
+       </div>
+       <div>
+          <span class="input-label">Description:</span>
+          <textarea id="edit-description-input" placeholder="Enter description"></textarea>
+       </div>
+       <button id="save-info-btn">Save</button>
+       <button id="cancel-info-btn">Cancel</button>
     </div>
-    <div>
-        <span class="input-label">Age:</span>
-        <input type="text" id="edit-age-input" placeholder="Enter age">
+    <!--Edit Tags Popup-->
+    <div id="edit-tags-popup" class="edit-popup">
+       <h3>Edit Tags</h3>
+       <input type="text" id="edit-tags-input" placeholder="Enter tags separated by commas">
+       <button id="save-tags-btn">Save</button>
+       <button id="cancel-tags-btn">Cancel</button>
     </div>
-    <div>
-        <span class="input-label">Description:</span>
-        <textarea id="edit-description-input" placeholder="Enter description"></textarea>
+    <!--Share URL Popup-->
+    <div id="share-url-popup">
+       <h3>Share URL</h3>
+       <input type="text" id="share-url-input" readonly>
+       <button id="copy-url-btn">Copy URL</button>
+       <button id="close-share-url-btn">Close</button>
     </div>
-    <button id="save-info-btn">Save</button>
-    <button id="cancel-info-btn">Cancel</button>
-</div>
-<!--Edit Tags Popup-->
-<div id="edit-tags-popup" class="edit-popup">
-    <h3>Edit Tags</h3>
-    <input type="text" id="edit-tags-input" placeholder="Enter tags separated by commas">
-    <button id="save-tags-btn">Save</button>
-    <button id="cancel-tags-btn">Cancel</button>
-</div>
-<!--Share URL Popup-->
-<div id="share-url-popup">
-    <h3>Share URL</h3>
-    <input type="text" id="share-url-input" readonly>
-    <button id="copy-url-btn">Copy URL</button>
-    <button id="close-share-url-btn">Close</button>
-</div>
     <!-- NSFW Inclusion Popup -->
     <div id="nsfw-inclusion-popup">
         <h3>Include NSFW Characters?</h3>
@@ -836,176 +993,270 @@
         <div>
             <button id="include-nsfw-btn">Yes, Include NSFW</button>
             <button id="exclude-nsfw-btn">No, Exclude NSFW</button>
-    </div>
-</div>
-    <div class="image-grid" id="image-grid">
-        <div class="image-item add-image" id="add-image">
-            +
         </div>
+        <label>
+            <input type="checkbox" id="remember-nsfw-state-checkbox"> Remember my choice
+        </label>
+    </div>    
+    <div id="image-popup" class="popup hidden">
+       <div id="popup-content">
+          <h3>Select Image Source</h3>
+          <button id="local-upload-btn">Upload from Device</button>
+          <button id="url-upload-btn">Provide Image URL</button>
+          <button id="url-popup-close">Close</button>
+       </div>
+    </div>
+    <div id="image-source-popup" class="popup hidden">
+        <div id="popup-content">
+        <h2>Select Image Source</h2>
+        <button id="local-image-btn">Upload from Device</button>
+        <button id="url-image-btn">Provide URL</button>
+        <button id="urlURL-popup-close">Close</button>
+        </div>
+    </div>
+    
+    <!-- Add this HTML for the URL input popup -->
+    <div id="url-input-popup" class="popup hidden">
+        <h2>Enter Image URL</h2>
+        <input type="text" id="image-url-input" placeholder="Enter image URL">
+        <button id="submit-url-btn">Submit</button>
+        <button id="url-popup-close-url1">Close</button>
+    </div>
+    <div id="url-popup" class="popup hidden">
+        <div id="popup-content">
+           <h3>Enter Image URL</h3>
+           <input type="text" id="image-url-input" placeholder="Paste image URL here" />
+           <button id="submit-url-btn">Submit</button>
+           <button id="url-popup-close-url">Close</button>
+        </div>
+     </div>
+    <!-- Image Selection Prompt -->
+    <div id="image-method-popup" class="popup hidden">
+       <div class="popup-content">
+          <h2>Select Image Source</h2>
+          <button id="local-image-btn">Upload Local Image</button>
+          <button id="url-image-btn">Use Image URL</button>
+          <button id="cancel-image-selection">Cancel</button>
+       </div>
+    </div>
+    <!-- Add the file input for uploading images -->
+    <input type="file" id="file-input" accept="image/*" class="hidden">
+    <div class="image-grid" id="image-grid">
+       <div class="image-item add-image" id="add-image">
+          +
+       </div>
     </div>
     <input type="file" id="file-input" accept="image/*">
     <input type="file" id="import-file-input" accept="application/json">
     <div id="popup-overlay" class="popup-overlay"></div>
+    
     <script>
-        const popupOverlay = document.getElementById("popup-overlay");
-        const imageGrid = document.getElementById('image-grid');
-        const addImageButton = document.getElementById('add-image');
-        const fileInput = document.getElementById('file-input');
-        const lightModeBtn = document.getElementById('light-mode');
-        const darkModeBtn = document.getElementById('dark-mode');
-        const tagFilter = document.getElementById('tag-filter') || document.getElementById('tag-filter-mobile');
-        const exportBtn = document.getElementById('export-btn');
-        const importBtn = document.getElementById('import-btn');
-        const importFileInput = document.getElementById('import-file-input');
-        const blurNSFWBtn = document.getElementById('blur-nsfw-btn');
+const popupOverlay = document.getElementById("popup-overlay");
+const imageGrid = document.getElementById('image-grid');
+const addImageButton = document.getElementById('add-image');
+const fileInput = document.getElementById('file-input');
+const lightModeBtn = document.getElementById('light-mode');
+const darkModeBtn = document.getElementById('dark-mode');
+const tagFilter = document.getElementById('tag-filter') || document.getElementById('tag-filter-mobile');
+const exportBtn = document.getElementById('export-btn');
+const importBtn = document.getElementById('import-btn');
+const importFileInput = document.getElementById('import-file-input');
+const blurNSFWBtn = document.getElementById('blur-nsfw-btn');
+const imageUploadChoicePopup = document.getElementById('image-upload-choice-popup');
+const deviceUploadBtn = document.getElementById('device-upload-btn');
+const urlUploadBtn = document.getElementById('url-upload-btn');
 
-        let tiles = [];
-        let allTags = new Set();
-        let isBlurred = JSON.parse(localStorage.getItem('isBlurred')) || false; // Load blur status from localStorage
-        let includeNSFW = false;
+let tiles = [];
+let allTags = new Set();
+let isBlurred = JSON.parse(localStorage.getItem('isBlurred')) || false; // Load blur status from localStorage
+let includeNSFW = false; // Initialize to false on every page load
+let rememberNSFWChoice = false; // New variable to track checkbox state within a session
 
-          // Add a click event listener to the div
-  popupOverlay.addEventListener("click", function() {
-    // Define what happens when the div is clicked
+addImageButton.addEventListener('click', () => {
+    document.getElementById('image-source-popup').style.display = 'block';
+    document.getElementById('popup-overlay').style.display = 'block';
+});
+
+// Add event listeners for the new buttons
+document.getElementById('local-image-btn').addEventListener('click', () => {
+    document.getElementById('image-source-popup').style.display = 'none';
+    fileInput.click();
+});
+
+document.getElementById('url-image-btn').addEventListener('click', () => {
+    document.getElementById('image-source-popup').style.display = 'none';
+    document.getElementById('url-input-popup').style.display = 'block';
+});
+
+document.getElementById('submit-url-btn').addEventListener('click', () => {
+    const imageUrl = document.getElementById('image-url-input').value.trim();
+    if (imageUrl) {
+        document.getElementById('url-input-popup').style.display = 'none';
+        document.getElementById('popup-overlay').style.display = 'none';
+        showTileCreationPopup(imageUrl);
+    } else {
+        alert('Please enter a valid URL');
+    }
+});
+document.getElementById('url-popup-close-url1').addEventListener('click', () => {
+    document.getElementById('url-input-popup').style.display = 'none';
     document.getElementById('popup-overlay').style.display = 'none';
-    document.getElementById('edit-url-popup').style.display = 'none';
-    document.getElementById('tile-creation-popup').style.display = 'none';
-    document.getElementById('character-popup').style.display = 'none';
-    document.getElementById('edit-info-popup').style.display = 'none';
-    document.getElementById('edit-tags-popup').style.display = 'none';
-    document.getElementById('share-url-popup').style.display = 'none';
-    document.getElementById('nsfw-inclusion-popup').style.display = 'none';
+});
 
-  });
-        function showEditUrlPopup(tileData, tileElement) {
-            const popup = document.getElementById('edit-url-popup');
-            const urlInput = document.getElementById('edit-url-input');
-            urlInput.value = tileData.link;
-            popup.style.display = 'flex';
-            document.getElementById('popup-overlay').style.display = 'block';
-            document.getElementById('save-url-btn').onclick = () => {
-                tileData.link = urlInput.value;
-                tileElement.querySelector('a').href = tileData.link;
-                saveTiles();
-                popup.style.display = 'none';
-                document.getElementById('popup-overlay').style.display = 'none';
-            };
+document.getElementById('urlURL-popup-close').addEventListener('click', () => {
+    document.getElementById('image-source-popup').style.display = 'none';
+    document.getElementById('popup-overlay').style.display = 'none';
+});
+document.getElementById('popup-overlay').addEventListener('click', () => {
+    document.getElementById('image-source-popup').style.display = 'none';
+    document.getElementById('url-input-popup').style.display = 'none';
+    document.getElementById('popup-overlay').style.display = 'none';
+});
+// Add a click event listener to the div
+popupOverlay.addEventListener("click", function () {
+   // Define what happens when the div is clicked
+   document.getElementById('popup-overlay').style.display = 'none';
+   document.getElementById('edit-url-popup').style.display = 'none';
+   document.getElementById('tile-creation-popup').style.display = 'none';
+   document.getElementById('character-popup').style.display = 'none';
+   document.getElementById('edit-info-popup').style.display = 'none';
+   document.getElementById('edit-tags-popup').style.display = 'none';
+   document.getElementById('share-url-popup').style.display = 'none';
+   document.getElementById('nsfw-inclusion-popup').style.display = 'none';
 
-            document.getElementById('cancel-url-btn').onclick = () => {
-                popup.style.display = 'none';
-                document.getElementById('popup-overlay').style.display = 'none';
-            };
-        }
-        function showEditInfoPopup(tileData, tileElement) {
-            const popup = document.getElementById('edit-info-popup');
-            document.getElementById('edit-name-input').value = tileData.name || '';
-            document.getElementById('edit-platform-input').value = tileData.platform || '';
-            document.getElementById('edit-age-input').value = tileData.age || '';
-            document.getElementById('edit-description-input').value = tileData.description || '';
-            popup.style.display = 'flex';
-            document.getElementById('popup-overlay').style.display = 'block';
+});
 
+function showEditUrlPopup(tileData, tileElement) {
+   const popup = document.getElementById('edit-url-popup');
+   const urlInput = document.getElementById('edit-url-input');
+   urlInput.value = tileData.link;
+   popup.style.display = 'flex';
+   document.getElementById('popup-overlay').style.display = 'block';
+   document.getElementById('save-url-btn').onclick = () => {
+      tileData.link = urlInput.value;
+      tileElement.querySelector('a').href = tileData.link;
+      saveTiles();
+      popup.style.display = 'none';
+      document.getElementById('popup-overlay').style.display = 'none';
+   };
 
-            document.getElementById('save-info-btn').onclick = () => {
-                tileData.name = document.getElementById('edit-name-input').value;
-                tileData.platform = document.getElementById('edit-platform-input').value;
-                tileData.age = document.getElementById('edit-age-input').value;
-                tileData.description = document.getElementById('edit-description-input').value;
-                saveTiles();
-                updateTagFilter();
-                popup.style.display = 'none';
-                document.getElementById('popup-overlay').style.display = 'none';
+   document.getElementById('cancel-url-btn').onclick = () => {
+      popup.style.display = 'none';
+      document.getElementById('popup-overlay').style.display = 'none';
+   };
+}
 
-            };
-
-            document.getElementById('cancel-info-btn').onclick = () => {
-                popup.style.display = 'none';
-                document.getElementById('popup-overlay').style.display = 'none';
-
-            };
-        }
-
-        // Function to show the edit tags popup
-        function showEditTagsPopup(tileData, tileElement) {
-            const popup = document.getElementById('edit-tags-popup');
-            document.getElementById('edit-tags-input').value = tileData.tags.join(', ');
-            popup.style.display = 'flex';
-            document.getElementById('popup-overlay').style.display = 'block';
+function showEditInfoPopup(tileData, tileElement) {
+   const popup = document.getElementById('edit-info-popup');
+   document.getElementById('edit-name-input').value = tileData.name || '';
+   document.getElementById('edit-platform-input').value = tileData.platform || '';
+   document.getElementById('edit-age-input').value = tileData.age || '';
+   document.getElementById('edit-description-input').value = tileData.description || '';
+   popup.style.display = 'flex';
+   document.getElementById('popup-overlay').style.display = 'block';
 
 
-            document.getElementById('save-tags-btn').onclick = () => {
-                const newTags = document.getElementById('edit-tags-input').value.split(',').map(tag => tag.trim()).filter(tag => tag);
-                tileData.tags = newTags;
-                updateTileTags(tileElement, tileData.tags);
-                updateTileOutline(tileElement, tileData.tags);
-                saveTiles();
-                updateTagFilter();
-                popup.style.display = 'none';
-                document.getElementById('popup-overlay').style.display = 'none';
-            };
+   document.getElementById('save-info-btn').onclick = () => {
+      tileData.name = document.getElementById('edit-name-input').value;
+      tileData.platform = document.getElementById('edit-platform-input').value;
+      tileData.age = document.getElementById('edit-age-input').value;
+      tileData.description = document.getElementById('edit-description-input').value;
+      saveTiles();
+      updateTagFilter();
+      popup.style.display = 'none';
+      document.getElementById('popup-overlay').style.display = 'none';
 
-            document.getElementById('cancel-tags-btn').onclick = () => {
-                popup.style.display = 'none';
-                document.getElementById('popup-overlay').style.display = 'none';
-            };
-        }
-        
-        // Theme management
-        function setTheme(theme) {
-            document.body.className = theme;
-            localStorage.setItem('theme', theme);
-        }
-        var coll = document.getElementsByClassName("collapsible");
-        var i;
+   };
 
-        for (i = 0; i < coll.length; i++) {
-            coll[i].addEventListener("click", function() {
-                this.classList.toggle("active");
-                var content = this.nextElementSibling;
-                if (content.style.maxHeight){
-                    content.style.maxHeight = null;
-                } else {
-                    content.style.maxHeight = content.scrollHeight + "px";
-                } 
-            });
-        }
-        function applyStoredTheme() {
-            const storedTheme = localStorage.getItem('theme') || '';
-            setTheme(storedTheme);
-        }
+   document.getElementById('cancel-info-btn').onclick = () => {
+      popup.style.display = 'none';
+      document.getElementById('popup-overlay').style.display = 'none';
 
-        lightModeBtn.addEventListener('click', () => setTheme(''));
-        darkModeBtn.addEventListener('click', () => setTheme('dark-mode'));
+   };
+}
 
-        // Apply theme on load
-        applyStoredTheme();
+// Function to show the edit tags popup
+function showEditTagsPopup(tileData, tileElement) {
+   const popup = document.getElementById('edit-tags-popup');
+   document.getElementById('edit-tags-input').value = tileData.tags.join(', ');
+   popup.style.display = 'flex';
+   document.getElementById('popup-overlay').style.display = 'block';
 
-        // Load saved tiles
-        function loadSavedTiles() {
-            tiles = JSON.parse(localStorage.getItem('imageTiles')) || [];
-            tiles.forEach(tile => {
-                createImageTile(tile);
-                tile.tags.forEach(tag => allTags.add(tag));
-            });
-            updateTagFilter();
-        }
 
-        // Save tiles
-        function saveTiles() {
-            localStorage.setItem('imageTiles', JSON.stringify(tiles));
-        }
+   document.getElementById('save-tags-btn').onclick = () => {
+      const newTags = document.getElementById('edit-tags-input').value.split(',').map(tag => tag.trim()).filter(tag => tag);
+      tileData.tags = newTags;
+      updateTileTags(tileElement, tileData.tags);
+      updateTileOutline(tileElement, tileData.tags);
+      saveTiles();
+      updateTagFilter();
+      popup.style.display = 'none';
+      document.getElementById('popup-overlay').style.display = 'none';
+   };
 
-        // Create image tile
-        function createImageTile(tileData) {
-            const newImageItem = document.createElement('div');
-            newImageItem.className = 'image-item';
-            if (tileData.tags.includes('18+') || tileData.tags.includes('NSFW') || tileData.tags.includes('Hentai') || tileData.tags.includes('Porn')) {
-                newImageItem.classList.add('nsfw-outline');
-            }
-            if (tileData.tags.includes('⭐')) {
-                newImageItem.classList.add('star-outline');
-            }
-            newImageItem.innerHTML = `
+   document.getElementById('cancel-tags-btn').onclick = () => {
+      popup.style.display = 'none';
+      document.getElementById('popup-overlay').style.display = 'none';
+   };
+}
+
+// Theme management
+function setTheme(theme) {
+   document.body.className = theme;
+   localStorage.setItem('theme', theme);
+}
+var coll = document.getElementsByClassName("collapsible");
+var i;
+
+for (i = 0; i < coll.length; i++) {
+   coll[i].addEventListener("click", function () {
+      this.classList.toggle("active");
+      var content = this.nextElementSibling;
+      if (content.style.maxHeight) {
+         content.style.maxHeight = null;
+      } else {
+         content.style.maxHeight = content.scrollHeight + "px";
+      }
+   });
+}
+
+function applyStoredTheme() {
+   const storedTheme = localStorage.getItem('theme') || '';
+   setTheme(storedTheme);
+}
+
+lightModeBtn.addEventListener('click', () => setTheme(''));
+darkModeBtn.addEventListener('click', () => setTheme('dark-mode'));
+
+// Apply theme on load
+applyStoredTheme();
+
+// Load saved tiles
+function loadSavedTiles() {
+   tiles = JSON.parse(localStorage.getItem('imageTiles')) || [];
+   tiles.forEach(tile => {
+      createImageTile(tile);
+      tile.tags.forEach(tag => allTags.add(tag));
+   });
+   updateTagFilter();
+}
+
+// Save tiles
+function saveTiles() {
+   localStorage.setItem('imageTiles', JSON.stringify(tiles));
+}
+
+// Create image tile
+function createImageTile(tileData) {
+   const newImageItem = document.createElement('div');
+   newImageItem.className = 'image-item';
+   if (tileData.tags.includes('18+') || tileData.tags.includes('NSFW') || tileData.tags.includes('Hentai') || tileData.tags.includes('Porn')) {
+      newImageItem.classList.add('nsfw-outline');
+   }
+   if (tileData.tags.includes('⭐')) {
+      newImageItem.classList.add('star-outline');
+   }
+   newImageItem.innerHTML = `
                 <a href="${tileData.link}" target="_blank" class="image-container">
                     <img src="${tileData.imageData}" alt="User uploaded image">
                 </a>
@@ -1021,320 +1272,398 @@
                     ${tileData.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
                 </div>
             `;
-            imageGrid.insertBefore(newImageItem, addImageButton);
+   imageGrid.insertBefore(newImageItem, addImageButton);
 
-            // Add edit image functionality
-            newImageItem.querySelector('.edit-image-btn').addEventListener('click', (e) => {
-                e.stopPropagation();
-                editImage(tileData, newImageItem);
-            });
+   // Add edit image functionality
+   newImageItem.querySelector('.edit-image-btn').addEventListener('click', (e) => {
+      e.stopPropagation();
+      editImage(tileData, newImageItem);
+   });
 
-            // Add edit tags functionality
-            newImageItem.querySelector('.edit-tags-btn').addEventListener('click', (e) => {
-                e.stopPropagation();
-                showEditTagsPopup(tileData, newImageItem);
-            });
+   // Add edit tags functionality
+   newImageItem.querySelector('.edit-tags-btn').addEventListener('click', (e) => {
+      e.stopPropagation();
+      showEditTagsPopup(tileData, newImageItem);
+   });
 
-            // Add share functionality
-            newImageItem.querySelector('.share-btn').addEventListener('click', (e) => {
-                e.stopPropagation();
-                shareTile(tileData);
-            });
+   // Add share functionality
+   newImageItem.querySelector('.share-btn').addEventListener('click', (e) => {
+      e.stopPropagation();
+      shareTile(tileData);
+   });
 
-            // Add delete functionality
-            newImageItem.querySelector('.delete-btn').addEventListener('click', (e) => {
-                e.stopPropagation();
-                deleteTile(tileData, newImageItem);
-            });
+   // Add delete functionality
+   newImageItem.querySelector('.delete-btn').addEventListener('click', (e) => {
+      e.stopPropagation();
+      deleteTile(tileData, newImageItem);
+   });
 
-            // Add edit URL functionality
-            newImageItem.querySelector('.edit-url-btn').addEventListener('click', (e) => {
-                e.stopPropagation();
-                showEditUrlPopup(tileData, newImageItem);
-            });
-            // Add edit info functionality
-            newImageItem.querySelector('.edit-info-btn').addEventListener('click', (e) => {
-                e.stopPropagation();
-                showEditInfoPopup(tileData, newImageItem);
-            });
-        }
+   // Add edit URL functionality
+   newImageItem.querySelector('.edit-url-btn').addEventListener('click', (e) => {
+      e.stopPropagation();
+      showEditUrlPopup(tileData, newImageItem);
+   });
+   // Add edit info functionality
+   newImageItem.querySelector('.edit-info-btn').addEventListener('click', (e) => {
+      e.stopPropagation();
+      showEditInfoPopup(tileData, newImageItem);
+   });
+}
 
-        function editInfo(tileData, tileElement) {
-            const name = prompt("Enter character name:", tileData.name || "");
-            const platform = prompt("Enter platform:", tileData.platform || "");
-            const age = prompt("Enter age:", tileData.age || "");
-            const description = prompt("Enter description:", tileData.description || "");
+function editInfo(tileData, tileElement) {
+   const name = prompt("Enter character name:", tileData.name || "");
+   const platform = prompt("Enter platform:", tileData.platform || "");
+   const age = prompt("Enter age:", tileData.age || "");
+   const description = prompt("Enter description:", tileData.description || "");
 
-            if (name !== null) tileData.name = name;
-            if (platform !== null) tileData.platform = platform;
-            if (age !== null) tileData.age = age;
-            if (description !== null) tileData.description = description;
+   if (name !== null) tileData.name = name;
+   if (platform !== null) tileData.platform = platform;
+   if (age !== null) tileData.age = age;
+   if (description !== null) tileData.description = description;
 
-            saveTiles();
-            updateTagFilter();
-        }
+   saveTiles();
+   updateTagFilter();
+}
 
-        function updateTileOutline(tileElement, tags) {
-            tileElement.classList.remove('nsfw-outline', 'star-outline', 'special-outline');
-            const hasNSFW = tags.includes('18+');
-            const hasStar = tags.includes('⭐');
-            
-            if (hasNSFW && hasStar) {
-                tileElement.classList.add('special-outline');
-            } else if (hasNSFW) {
-                tileElement.classList.add('nsfw-outline');
-            } else if (hasStar) {
-                tileElement.classList.add('star-outline');
-            }
-        }
-        // Edit image
-    function editImage(tileData, tileElement) {
-    // Create an input element to upload a new image
-    const imageUploadInput = document.createElement('input');
-    imageUploadInput.type = 'file';
-    imageUploadInput.accept = 'image/*,.avif,.jxl'; // Accept image files only
+function updateTileOutline(tileElement, tags) {
+   tileElement.classList.remove('nsfw-outline', 'star-outline', 'special-outline');
+   const hasNSFW = tags.includes('18+');
+   const hasStar = tags.includes('⭐');
 
-    // Listen for the file selection
-    imageUploadInput.addEventListener('change', function(event) {
-        const file = event.target.files[0];
-        if (file) {
+   if (hasNSFW && hasStar) {
+      tileElement.classList.add('special-outline');
+   } else if (hasNSFW) {
+      tileElement.classList.add('nsfw-outline');
+   } else if (hasStar) {
+      tileElement.classList.add('star-outline');
+   }
+}
+
+function stripUrlParams(url) {
+   try {
+      const urlObj = new URL(url); // Create a URL object
+      return urlObj.origin + urlObj.pathname; // Return the base URL without query parameters
+   } catch (error) {
+      console.error('Invalid URL:', error);
+      return url; // Return the original URL if invalid
+   }
+}
+
+// Edit image
+function editImage(tileData, tileElement) {
+   const popup = document.getElementById('image-popup');
+   const localUploadBtn = document.getElementById('local-upload-btn');
+   const urlUploadBtn = document.getElementById('url-upload-btn');
+   const popupClose = document.getElementById('popup-close');
+
+   const urlPopup = document.getElementById('url-popup');
+   const urlInput = document.getElementById('image-url-input');
+   const submitUrlBtn = document.getElementById('submit-url-btn');
+   const urlPopupClose = document.getElementById('url-popup-close');
+   const imageUploadClose = document.getElementById('urlURL-popup-close');
+   const urlURLPopupClose = document.getElementById('url-popup-close-url')
+
+   // Show the main popup
+   popup.classList.remove('hidden');
+   document.getElementById('image-popup').style.display = 'block';
+   document.getElementById('popup-overlay').style.display = 'block';
+
+   // Close main popup functionality
+   popupClose.onclick = () => {
+      popup.classList.add('hidden');
+   };
+
+   localUploadBtn.onclick = () => {
+      const imageUploadInput = document.createElement('input');
+      imageUploadInput.type = 'file';
+      imageUploadInput.accept = 'image/*,.avif,.jxl';
+
+      imageUploadInput.addEventListener('change', function (event) {
+         const file = event.target.files[0];
+         if (file) {
             const reader = new FileReader();
 
-            reader.onload = function(e) {
-                const newImageData = e.target.result;
-                // Update the tile with the new image
-                tileData.imageData = newImageData;
-                tileElement.querySelector('img').src = newImageData;
+            reader.onload = function (e) {
+               const newImageData = e.target.result;
+               tileData.imageData = newImageData;
+               tileElement.querySelector('img').src = newImageData;
 
-                saveTiles(); // Save changes after the image has been updated
+               saveTiles();
             };
 
-            // Read the image file as a data URL
             reader.readAsDataURL(file);
-        }
-    });
+         }
+      });
 
-    // Trigger the file input
-    imageUploadInput.click();
+      imageUploadInput.click();
+      popup.classList.add('hidden'); // Hide the popup after selection
+
+   };
+
+   urlUploadBtn.onclick = () => {
+      // Hide the main popup and show the URL input popup
+      document.getElementById('image-popup').style.display = 'none';
+      document.getElementById('url-popup').style.display = 'block';
+      popup.classList.add('hidden');
+      urlPopup.classList.remove('hidden');
+   };
+   // Submit URL functionality
+   submitUrlBtn.onclick = () => {
+      let imageUrl = urlInput.value.trim();
+
+      if (imageUrl) {
+         imageUrl = stripUrlParams(imageUrl); // Strip query parameters from URL
+         tileData.imageData = imageUrl;
+         tileElement.querySelector('img').src = imageUrl;
+
+         saveTiles();
+      }
+      document.getElementById('image-popup').style.display = 'none';
+      document.getElementById('url-popup').style.display = 'none';
+      document.getElementById('popup-overlay').style.display = 'none';
+      urlPopup.classList.add('hidden'); // Hide the URL popup after submission
+   };
+
+   // Close URL popup functionality
+   urlPopupClose.onclick = () => {
+      urlPopup.classList.add('hidden');
+      document.getElementById('image-popup').style.display = 'none';
+      document.getElementById('popup-overlay').style.display = 'none';
+   };
+   urlURLPopupClose.onclick = () => {
+      urlURLPopupClose.classList.add('hidden');
+      document.getElementById('url-popup').style.display = 'none';
+      document.getElementById('popup-overlay').style.display = 'none';
+   }
 }
-        function createTileData(imageData, link, tags, name, platform, age, description) {
-            return { imageData, link, tags, name, platform, age, description };
-        }
 
-        // Edit tags
-        function editTags(tileData, tileElement) {
-            const newTags = prompt("Enter tags separated by commas:", tileData.tags.join(', '));
-            if (newTags !== null) {
-                tileData.tags = newTags.split(',').map(tag => tag.trim()).filter(tag => tag);
-                updateTileTags(tileElement, tileData.tags);
-                updateTileOutline(tileElement, tileData.tags);
-                saveTiles();
-                updateTagFilter();
-            }
-        }
-        
-        // Share tile
-        function shareTile(tileData) {
-            const popup = document.getElementById('share-url-popup');
-            const urlInput = document.getElementById('share-url-input');
-            urlInput.value = tileData.link;
-            popup.style.display = 'flex';
-            document.getElementById('popup-overlay').style.display = 'block';
+document.getElementById('popup-overlay').onclick = () => {
+   document.getElementById('url-popup').style.display = 'none';
+   document.getElementById('image-popup').style.display = 'none';
+};
 
-            document.getElementById('copy-url-btn').onclick = () => {
-                urlInput.select();
-                document.execCommand('copy');
-                alert('URL copied to clipboard!');
-            };
+function createTileData(imageData, link, tags, name, platform, age, description) {
+   return {
+      imageData,
+      link,
+      tags,
+      name,
+      platform,
+      age,
+      description
+   };
+}
 
-            document.getElementById('close-share-url-btn').onclick = () => {
-                popup.style.display = 'none';
-                document.getElementById('popup-overlay').style.display = 'none';
-            };
-        }
+// Edit tags
+function editTags(tileData, tileElement) {
+   const newTags = prompt("Enter tags separated by commas:", tileData.tags.join(', '));
+   if (newTags !== null) {
+      tileData.tags = newTags.split(',').map(tag => tag.trim()).filter(tag => tag);
+      updateTileTags(tileElement, tileData.tags);
+      updateTileOutline(tileElement, tileData.tags);
+      saveTiles();
+      updateTagFilter();
+   }
+}
 
-        // Delete tile
-        function deleteTile(tileData, tileElement) {
-            tiles = tiles.filter(tile => tile !== tileData);
-            imageGrid.removeChild(tileElement);
+// Share tile
+function shareTile(tileData) {
+   const popup = document.getElementById('share-url-popup');
+   const urlInput = document.getElementById('share-url-input');
+   urlInput.value = tileData.link;
+   popup.style.display = 'flex';
+   document.getElementById('popup-overlay').style.display = 'block';
+
+   document.getElementById('copy-url-btn').onclick = () => {
+      urlInput.select();
+      document.execCommand('copy');
+      alert('URL copied to clipboard!');
+   };
+
+   document.getElementById('close-share-url-btn').onclick = () => {
+      popup.style.display = 'none';
+      document.getElementById('popup-overlay').style.display = 'none';
+   };
+}
+
+// Delete tile
+function deleteTile(tileData, tileElement) {
+   tiles = tiles.filter(tile => tile !== tileData);
+   imageGrid.removeChild(tileElement);
+   saveTiles();
+   updateTagFilter();
+}
+
+// Update tile tags
+function updateTileTags(tileElement, tags) {
+   const tagsContainer = tileElement.querySelector('.tags');
+   tagsContainer.innerHTML = tags.map(tag => `<span class="tag">${tag}</span>`).join('');
+   updateAllTags();
+}
+
+// Update all tags
+function updateAllTags() {
+   allTags.clear();
+   tiles.forEach(tile => {
+      tile.tags.forEach(tag => allTags.add(tag));
+      if (tile.platform) allTags.add(tile.platform);
+      if (tile.age) allTags.add(tile.age);
+   });
+   updateTagFilter();
+}
+
+// Update tag filter dropdown
+function updateTagFilter() {
+   const currentFilter = tagFilter.value;
+   tagFilter.innerHTML = '<option value="all">All Tags</option>';
+   allTags.forEach(tag => {
+      const option = document.createElement('option');
+      option.value = tag;
+      option.textContent = tag;
+      tagFilter.appendChild(option);
+   });
+   tagFilter.value = currentFilter;
+   filterTiles();
+}
+
+// Filter tiles based on selected tag
+function filterTiles() {
+   const selectedTag = tagFilter.value;
+   tiles.forEach((tile, index) => {
+      const tileElement = imageGrid.children[index];
+      if (selectedTag === 'all' ||
+         tile.tags.includes(selectedTag) ||
+         tile.platform === selectedTag ||
+         tile.age === selectedTag) {
+         tileElement.style.display = '';
+      } else {
+         tileElement.style.display = 'none';
+      }
+   });
+}
+
+// Handle file selection
+fileInput.addEventListener('change', (event) => {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const imageData = e.target.result;
+            showTileCreationPopup(imageData);
+        };
+        reader.readAsDataURL(file);
+    }
+});
+
+
+function showTileCreationPopup(imageSource) {
+    const popup = document.getElementById('tile-creation-popup');
+    popup.style.display = 'flex';
+    document.getElementById('popup-overlay').style.display = 'block';
+
+    const createBtn = document.getElementById('create-tile-btn');
+    const cancelBtn = document.getElementById('cancel-tile-btn');
+
+    createBtn.onclick = () => {
+        const link = document.getElementById('tile-link').value;
+        const tags = document.getElementById('tile-tags').value.split(',').map(tag => tag.trim()).filter(tag => tag);
+        const name = document.getElementById('tile-name').value;
+        const platform = document.getElementById('tile-platform').value;
+        const age = document.getElementById('tile-age').value;
+        const description = document.getElementById('tile-description').value;
+
+        const newTile = createTileData(imageSource, link, tags, name, platform, age, description);
+        tiles.push(newTile);
+        createImageTile(newTile);
+        saveTiles();
+        updateTagFilter();
+
+        popup.style.display = 'none';
+        document.getElementById('popup-overlay').style.display = 'none';
+        clearTileCreationPopupInputs();
+    };
+
+    cancelBtn.onclick = () => {
+        popup.style.display = 'none';
+        document.getElementById('popup-overlay').style.display = 'none';
+        clearTileCreationPopupInputs();
+    };
+}
+
+// Filter tiles when tag is selected
+tagFilter.addEventListener('change', filterTiles);
+
+// Export functionality
+exportBtn.addEventListener('click', () => {
+   const dataStr = JSON.stringify(tiles);
+   const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
+   const exportFileDefaultName = 'image_grid_data.json';
+
+   const linkElement = document.createElement('a');
+   linkElement.setAttribute('href', dataUri);
+   linkElement.setAttribute('download', exportFileDefaultName);
+   linkElement.click();
+});
+
+// Import functionality
+importBtn.addEventListener('click', () => {
+   importFileInput.click();
+});
+
+importFileInput.addEventListener('change', (event) => {
+   const file = event.target.files[0];
+   if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+         try {
+            const importedTiles = JSON.parse(e.target.result);
+            tiles = importedTiles;
+            imageGrid.innerHTML = '';
+            imageGrid.appendChild(addImageButton);
+            tiles.forEach(tile => {
+               createImageTile(tile);
+               tile.tags.forEach(tag => allTags.add(tag));
+            });
             saveTiles();
             updateTagFilter();
-        }
-
-        // Update tile tags
-        function updateTileTags(tileElement, tags) {
-            const tagsContainer = tileElement.querySelector('.tags');
-            tagsContainer.innerHTML = tags.map(tag => `<span class="tag">${tag}</span>`).join('');
-            updateAllTags();
-        }
-
-        // Update all tags
-        function updateAllTags() {
-            allTags.clear();
-            tiles.forEach(tile => {
-                tile.tags.forEach(tag => allTags.add(tag));
-                if (tile.platform) allTags.add(tile.platform);
-                if (tile.age) allTags.add(tile.age);
-            });
-            updateTagFilter();
-        }
-
-        // Update tag filter dropdown
-        function updateTagFilter() {
-            const currentFilter = tagFilter.value;
-            tagFilter.innerHTML = '<option value="all">All Tags</option>';
-            allTags.forEach(tag => {
-                const option = document.createElement('option');
-                option.value = tag;
-                option.textContent = tag;
-                tagFilter.appendChild(option);
-            });
-            tagFilter.value = currentFilter;
-            filterTiles();
-        }
-
-        // Filter tiles based on selected tag
-        function filterTiles() {
-            const selectedTag = tagFilter.value;
-            tiles.forEach((tile, index) => {
-                const tileElement = imageGrid.children[index];
-                if (selectedTag === 'all' || 
-                    tile.tags.includes(selectedTag) || 
-                    tile.platform === selectedTag || 
-                    tile.age === selectedTag) {
-                    tileElement.style.display = '';
-                } else {
-                    tileElement.style.display = 'none';
-                }
-            });
-        }
-
-        // Handle file selection
-        fileInput.addEventListener('change', (event) => {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    const imageData = e.target.result;
-                    showTileCreationPopup(imageData);
-                };
-                reader.readAsDataURL(file);
-            }
-        });
-
-        function showTileCreationPopup(imageData) {
-            const popup = document.getElementById('tile-creation-popup');
-            popup.style.display = 'flex';
-            document.getElementById('popup-overlay').style.display = 'block';
-
-            const createBtn = document.getElementById('create-tile-btn');
-            const cancelBtn = document.getElementById('cancel-tile-btn');
-
-            createBtn.onclick = () => {
-                const link = document.getElementById('tile-link').value;
-                const tags = document.getElementById('tile-tags').value.split(',').map(tag => tag.trim()).filter(tag => tag);
-                const name = document.getElementById('tile-name').value;
-                const platform = document.getElementById('tile-platform').value;
-                const age = document.getElementById('tile-age').value;
-                const description = document.getElementById('tile-description').value;
-
-                        const newTile = createTileData(imageData, link, tags, name, platform, age, description);
-                        tiles.push(newTile);
-                        createImageTile(newTile);
-                        saveTiles();
-                        updateTagFilter();
-
-                popup.style.display = 'none';
-                document.getElementById('popup-overlay').style.display = 'none';
-                clearTileCreationPopupInputs();
-            };
-
-            cancelBtn.onclick = () => {
-                popup.style.display = 'none';
-                document.getElementById('popup-overlay').style.display = 'none';
-                clearTileCreationPopupInputs();
-            };
-        }
-
-
-        // Trigger file input when add button is clicked
-        addImageButton.addEventListener('click', () => {
-            fileInput.click();
-        });
-
-        // Filter tiles when tag is selected
-        tagFilter.addEventListener('change', filterTiles);
-
-        // Export functionality
-        exportBtn.addEventListener('click', () => {
-            const dataStr = JSON.stringify(tiles);
-            const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
-            const exportFileDefaultName = 'image_grid_data.json';
-
-            const linkElement = document.createElement('a');
-            linkElement.setAttribute('href', dataUri);
-            linkElement.setAttribute('download', exportFileDefaultName);
-            linkElement.click();
-        });
-
-        // Import functionality
-        importBtn.addEventListener('click', () => {
-            importFileInput.click();
-        });
-
-        importFileInput.addEventListener('change', (event) => {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    try {
-                        const importedTiles = JSON.parse(e.target.result);
-                        tiles = importedTiles;
-                        imageGrid.innerHTML = '';
-                        imageGrid.appendChild(addImageButton);
-                        tiles.forEach(tile => {
-                            createImageTile(tile);
-                            tile.tags.forEach(tag => allTags.add(tag));
-                        });
-                        saveTiles();
-                        updateTagFilter();
-                    } catch (error) {
-                        console.error('Error parsing imported data:', error);
-                        alert('Error importing data. Please make sure the file is in the correct format.');
-                    }
-                };
-                reader.readAsText(file);
-            }
-        });
+         } catch (error) {
+            console.error('Error parsing imported data:', error);
+            alert('Error importing data. Please make sure the file is in the correct format.');
+         }
+      };
+      reader.readAsText(file);
+   }
+});
 // Function to toggle blur on NSFW content
 function toggleBlurNSFW() {
-    const nsfwTags = ['18+', 'NSFW', "Hentai", "Porn"]; // Tags considered NSFW
-    const imageItems = document.querySelectorAll('.image-item');
+   const nsfwTags = ['18+', 'NSFW', "Hentai", "Porn"]; // Tags considered NSFW
+   const imageItems = document.querySelectorAll('.image-item');
 
-    imageItems.forEach(item => {
-        const tags = Array.from(item.querySelectorAll('.tag')).map(tag => tag.textContent);
+   imageItems.forEach(item => {
+      const tags = Array.from(item.querySelectorAll('.tag')).map(tag => tag.textContent);
 
-        if (nsfwTags.some(tag => tags.includes(tag))) {
-            const img = item.querySelector('img');
-            if (isBlurred) {
-                img.style.filter = 'none'; // Unblur
-            } else {
-                img.style.filter = 'blur(10px)'; // Apply blur
-            }
-        }
-    });
+      if (nsfwTags.some(tag => tags.includes(tag))) {
+         const img = item.querySelector('img');
+         if (isBlurred) {
+            img.style.filter = 'none'; // Unblur
+         } else {
+            img.style.filter = 'blur(10px)'; // Apply blur
+         }
+      }
+   });
 
-    // Toggle button text and blur state
-    isBlurred = !isBlurred;
-    localStorage.setItem('isBlurred', JSON.stringify(isBlurred)); // Save blur state in localStorage
-    blurNSFWBtn.textContent = isBlurred ? 'Unblur NSFW' : 'Blur NSFW';
+   // Toggle button text and blur state
+   isBlurred = !isBlurred;
+   localStorage.setItem('isBlurred', JSON.stringify(isBlurred)); // Save blur state in localStorage
+   blurNSFWBtn.textContent = isBlurred ? 'Unblur NSFW' : 'Blur NSFW';
 }
 // Add event listener to the button
 blurNSFWBtn.addEventListener('click', toggleBlurNSFW);
-        // Load saved tiles on page load
-        loadSavedTiles();
-        const randomCharacterBtn = document.getElementById('random-character-btn');
+// Load saved tiles on page load
+loadSavedTiles();
+const randomCharacterBtn = document.getElementById('random-character-btn');
 const characterPopup = document.getElementById('character-popup');
+const imageMethodPopup = document.getElementById('image-popup');
 const popupContent = document.getElementById('popup-content');
 const popupClose = document.getElementById('popup-close');
 const popupCloseBtn = document.getElementById('popup-close-btn');
@@ -1346,86 +1675,112 @@ const popupLink = document.getElementById('popup-link');
 popupClose.addEventListener('click', closePopup);
 popupCloseBtn.addEventListener('click', closePopup);
 
-
 // Function to pick a random character
 function selectRandomCharacter() {
-            const characters = Array.from(document.querySelectorAll('.image-item:not(.add-image)'));
-            if (characters.length === 0) {
-                alert('No characters available.');
-                return;
-            }
 
-            let availableCharacters = includeNSFW ? characters : characters.filter(char => {
-                const tags = Array.from(char.querySelectorAll('.tag')).map(tag => tag.textContent);
-                return !tags.some(tag => ['18+', 'NSFW', 'Porn', 'Hentai'].includes(tag));
-            });
+   const characters = Array.from(document.querySelectorAll('.image-item:not(.add-image)'));
+   if (characters.length === 0) {
+      alert('No characters available.');
+      return;
+   }
+   let availableCharacters = includeNSFW ? characters : characters.filter(char => {
+      const tags = Array.from(char.querySelectorAll('.tag')).map(tag => tag.textContent);
+      return !tags.some(tag => ['18+', 'NSFW', 'Porn', 'Hentai'].includes(tag));
+   });
 
-            if (availableCharacters.length === 0) {
-                alert('No characters available with current NSFW settings.');
-                return;
-            }
+   if (availableCharacters.length === 0) {
+      alert('No characters available with current NSFW settings.');
+      return;
+   }
 
-            const randomIndex = Math.floor(Math.random() * availableCharacters.length);
-            const selectedCharacter = availableCharacters[randomIndex];
-            const tileData = tiles[characters.indexOf(selectedCharacter)];
+   const randomIndex = Math.floor(Math.random() * availableCharacters.length);
+   const selectedCharacter = availableCharacters[randomIndex];
+   const tileData = tiles[characters.indexOf(selectedCharacter)];
 
-            document.getElementById('popup-image').src = tileData.imageData;
-            document.getElementById('popup-name').textContent = tileData.name || 'Unknown';
-            document.getElementById('popup-platform').textContent = `Platform: ${tileData.platform || 'N/A'}`;
-            document.getElementById('popup-age').textContent = `Age: ${tileData.age || 'N/A'}`;
-            document.getElementById('popup-description').textContent = tileData.description || 'No description available.';
-            document.getElementById('popup-tags').textContent = `Tags: ${tileData.tags.join(', ')}`;
-            document.getElementById('popup-link').href = tileData.link;
+   document.getElementById('popup-image').src = tileData.imageData;
+   document.getElementById('popup-name').textContent = tileData.name || 'Unknown';
+   document.getElementById('popup-platform').textContent = `Platform: ${tileData.platform || 'N/A'}`;
+   document.getElementById('popup-age').textContent = `Age: ${tileData.age || 'N/A'}`;
+   document.getElementById('popup-description').textContent = tileData.description || 'No description available.';
+   document.getElementById('popup-tags').textContent = `Tags: ${tileData.tags.join(', ')}`;
+   document.getElementById('popup-link').href = tileData.link;
 
-            updateTileOutline(characterPopup, tileData.tags);
+   updateTileOutline(characterPopup, tileData.tags);
 
-            if (isBlurred && (tileData.tags.includes('18+') || tileData.tags.includes('NSFW') || tileData.tags.includes('Hentai') || tileData.tags.includes('Porn'))) {
-                popupImage.classList.add('blurred-image');
-            } else {
-                popupImage.classList.remove('blurred-image');
-            }
+   if (isBlurred && (tileData.tags.includes('18+') || tileData.tags.includes('NSFW') || tileData.tags.includes('Hentai') || tileData.tags.includes('Porn'))) {
+      popupImage.classList.add('blurred-image');
+   } else {
+      popupImage.classList.remove('blurred-image');
+   }
 
-            characterPopup.classList.remove('hidden');
-            document.getElementById('popup-overlay').style.display = 'block';
-        }
-        // Modify the closePopup function
-        function closePopup() {
-            document.getElementById('popup-overlay').style.display = 'none';
-            characterPopup.classList.add('hidden');
-            characterPopup.classList.remove('nsfw-outline');
-            popupImage.classList.remove('blurred-image');
-        }
+   characterPopup.classList.remove('hidden');
+   document.getElementById('character-popup').style.display = 'block';
+   document.getElementById('popup-overlay').style.display = 'block';
+
+}
+// Modify the closePopup function
+function closePopup() {
+   document.getElementById('popup-overlay').style.display = 'none';
+   document.getElementById('character-popup').style.display = 'none';
+   document.getElementById('nsfw-inclusion-popup').style.display = 'none';
+   characterPopup.classList.add('hidden');
+   characterPopup.classList.remove('nsfw-outline');
+   popupImage.classList.remove('blurred-image');
+}
+
 
 // Event listener for the random character button
-        randomCharacterBtn.addEventListener('click', () => {
-            document.getElementById('nsfw-inclusion-popup').style.display = 'flex';
-            document.getElementById('popup-overlay').style.display = 'block';
-        });
+randomCharacterBtn.addEventListener('click', () => {
+   if (rememberNSFWChoice) {
+      selectRandomCharacter();
+   } else {
+      document.getElementById('nsfw-inclusion-popup').style.display = 'flex';
+      document.getElementById('popup-overlay').style.display = 'block';
+   }
+});
 
-        document.getElementById('include-nsfw-btn').addEventListener('click', () => {
-            includeNSFW = true;
-            document.getElementById('nsfw-inclusion-popup').style.display = 'none';
-            selectRandomCharacter();
-        });
+document.getElementById('remember-nsfw-state-checkbox').addEventListener('change', (event) => {
+   rememberNSFWChoice = event.target.checked;
+});
 
-        document.getElementById('exclude-nsfw-btn').addEventListener('click', () => {
-            includeNSFW = false;
-            document.getElementById('nsfw-inclusion-popup').style.display = 'none';
-            selectRandomCharacter();
-        });
+// Function to reset NSFW preference on page load
+function resetNSFWPreference() {
+   const rememberCheckbox = document.getElementById('remember-nsfw-state-checkbox');
+   rememberCheckbox.checked = false;
+   rememberNSFWChoice = false;
+   includeNSFW = false;
+}
 
-        // Event listener for the reroll button
-        document.getElementById('reroll-btn').addEventListener('click', selectRandomCharacter);
+// Reset NSFW preference when the page loads
+document.addEventListener('DOMContentLoaded', resetNSFWPreference);
+
+document.getElementById('include-nsfw-btn').addEventListener('click', () => {
+   includeNSFW = true;
+   rememberNSFWChoice = document.getElementById('remember-nsfw-state-checkbox').checked;
+   document.getElementById('nsfw-inclusion-popup').style.display = 'none';
+   selectRandomCharacter();
+});
+
+document.getElementById('exclude-nsfw-btn').addEventListener('click', () => {
+   includeNSFW = false;
+   rememberNSFWChoice = document.getElementById('remember-nsfw-state-checkbox').checked;
+   document.getElementById('nsfw-inclusion-popup').style.display = 'none';
+   selectRandomCharacter();
+});
+
+// Event listener for the reroll button
+document.getElementById('reroll-btn').addEventListener('click', selectRandomCharacter);
+
 function checkForSpecialTiles() {
-    const tileElements = document.querySelectorAll('.image-item:not(.add-image)');
-    tileElements.forEach((tileElement, index) => {
-        const tileData = tiles[index];
-        if ((tileData.tags.includes('18+') || tileData.tags.includes('NSFW') || tileData.tags.includes('Hentai') || tileData.tags.includes('Porn')) && tileData.tags.includes('⭐')) {
-            tileElement.classList.add('special-outline');
-        } else {
-            tileElement.classList.remove('special-outline');
-        }
-    });
+   const tileElements = document.querySelectorAll('.image-item:not(.add-image)');
+   tileElements.forEach((tileElement, index) => {
+      const tileData = tiles[index];
+      if ((tileData.tags.includes('18+') || tileData.tags.includes('NSFW') || tileData.tags.includes('Hentai') || tileData.tags.includes('Porn')) && tileData.tags.includes('⭐')) {
+         tileElement.classList.add('special-outline');
+      } else {
+         tileElement.classList.remove('special-outline');
+      }
+   });
 }
 
 // Run the check once on page load
@@ -1433,19 +1788,19 @@ document.addEventListener('DOMContentLoaded', checkForSpecialTiles);
 
 // Function to apply blur status on page load
 function applyBlurNSFWStatus() {
-    const nsfwTags = ['18+', 'NSFW', "Hentai", "Porn"]; // Tags considered NSFW
-    const imageItems = document.querySelectorAll('.image-item');
+   const nsfwTags = ['18+', 'NSFW', "Hentai", "Porn"]; // Tags considered NSFW
+   const imageItems = document.querySelectorAll('.image-item');
 
-    imageItems.forEach(item => {
-        const tags = Array.from(item.querySelectorAll('.tag')).map(tag => tag.textContent);
+   imageItems.forEach(item => {
+      const tags = Array.from(item.querySelectorAll('.tag')).map(tag => tag.textContent);
 
-        if (nsfwTags.some(tag => tags.includes(tag))) {
-            const img = item.querySelector('img');
-            img.style.filter = isBlurred ? 'blur(10px)' : 'none'; // Apply or remove blur
-        }
-    });
+      if (nsfwTags.some(tag => tags.includes(tag))) {
+         const img = item.querySelector('img');
+         img.style.filter = isBlurred ? 'blur(10px)' : 'none'; // Apply or remove blur
+      }
+   });
 
-    blurNSFWBtn.textContent = isBlurred ? 'Unblur NSFW' : 'Blur NSFW'; // Set button text based on status
+   blurNSFWBtn.textContent = isBlurred ? 'Unblur NSFW' : 'Blur NSFW'; // Set button text based on status
 }
 
 // Add event listener to the button
@@ -1453,8 +1808,6 @@ blurNSFWBtn.addEventListener('click', toggleBlurNSFW);
 
 // Apply blur status when the page loads
 document.addEventListener('DOMContentLoaded', applyBlurNSFWStatus);
-
-
     </script>
 </body>
 </html>

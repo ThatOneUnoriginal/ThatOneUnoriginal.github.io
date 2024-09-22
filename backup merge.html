@@ -455,48 +455,59 @@ body {
     };
     reader1.readAsText(file1);
 }
-
+const nsfwTags = ["18+", "NSFW", "Porn", "Hentai"];
 function checkForNSFWContent(data) {
-            nsfwData = data.filter(item => item.tags.includes("18+"));
+    // Filter items that contain any of the NSFW tags
+    nsfwData = data.filter(item => item.tags.some(tag => nsfwTags.includes(tag)));
 
-            if (nsfwData.length > 0) {
-                document.getElementById('nsfwModal').style.display = "block";
-            } else {
-                checkForInvalidLinks(data);
-            }
-        }
+    if (nsfwData.length > 0) {
+        document.getElementById('nsfwModal').style.display = "block";
+    } else {
+        checkForInvalidLinks(data);
+    }
+}
 
-        function handleNSFW(allow) {
-            document.getElementById('nsfwModal').style.display = "none";
+function handleNSFW(allow) {
+    document.getElementById('nsfwModal').style.display = "none";
 
-            if (allow) {
-                checkForInvalidLinks(mergedData);
-            } else {
-                const filteredData = mergedData.filter(item => !item.tags.includes("18+"));
-                checkForInvalidLinks(filteredData);
-            }
-        }
+    if (allow) {
+        checkForInvalidLinks(mergedData);
+    } else {
+        // Filter items that do NOT contain any of the NSFW tags
+        const filteredData = mergedData.filter(item => !item.tags.some(tag => nsfwTags.includes(tag)));
+        checkForInvalidLinks(filteredData);
+    }
+}
+function isValidURL(url) {
+    try {
+        const validURL = new URL(url); // Create URL object
+        const domainParts = validURL.hostname.split('.');
+        return validURL.protocol === "http:" || validURL.protocol === "https:" && domainParts.length > 1;
+    } catch (e) {
+        return false;
+    }
+}
+function checkForInvalidLinks(data) {
+    const invalidLinkData = data.filter(item => !isValidURL(item.link) || item.link === "https://");
 
-        function checkForInvalidLinks(data) {
-            const invalidLinkData = data.filter(item => !item.link || item.link === "https://");
+    if (invalidLinkData.length > 0) {
+        document.getElementById('invalidLinkModal').style.display = "block";
+    } else {
+        displayMergedData(data);
+    }
+}
 
-            if (invalidLinkData.length > 0) {
-                document.getElementById('invalidLinkModal').style.display = "block";
-            } else {
-                displayMergedData(data);
-            }
-        }
 
-        function handleInvalidLinks(remove) {
-            document.getElementById('invalidLinkModal').style.display = "none";
+function handleInvalidLinks(remove) {
+    document.getElementById('invalidLinkModal').style.display = "none";
 
-            if (remove) {
-                const filteredData = mergedData.filter(item => item.link && item.link !== "https://");
-                displayMergedData(filteredData);
-            } else {
-                displayMergedData(mergedData);
-            }
-        }
+    if (remove) {
+        const filteredData = mergedData.filter(item => isValidURL(item.link) && item.link !== "https://");
+        displayMergedData(filteredData);
+    } else {
+        displayMergedData(mergedData);
+    }
+}
         function displayMergedData(data) {
             mergedData = data;
             document.getElementById('output').textContent = JSON.stringify(data, null, 2);
