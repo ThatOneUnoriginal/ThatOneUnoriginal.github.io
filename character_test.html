@@ -4,768 +4,889 @@
     <meta charset="UTF-8">
     <link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/ThatOneUnoriginal/ThatOneUnoriginal.github.io/dev-test/Character%20Tools/Assets/BookmarkingToolIcon.ico">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="pinterest" content="nopin" />
     <title>Character Bookmarking Tool</title>
-    <style>      
-          #character-popup {
-            width: 90%;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        #popup-content {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-  #tile-creation-popup {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: var(--popup-color);
-            border: 2px solid #000;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            z-index: 1000;
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            max-width: 400px;
-            width: 100%;
-        }
-
-        #tile-creation-popup input,
-        #tile-creation-popup textarea {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-
-        #tile-creation-popup button {
-            padding: 10px 20px;
-            background-color: var(--button-bg);
-            color: var(--button-color);
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-
-    #tile-creation-popup button:hover {
-        background-color: var(--button-bg-hover);
-    }
-
-    .info-section {
-        background-color: var(--tile-bg);
-        border-radius: 15px;
-        padding: 20px;
-        margin: 20px 0;
-        box-shadow: 0 4px 6px var(--tile-shadow);
-        font-family: 'Arial', sans-serif;
-        line-height: 1.6;
-        max-width: 800px;
-        margin-left: auto;
-        margin-right: auto;
-    }
-
-    .info-section h2 {
-        color: var(--button-bg);
-        font-size: 1.8em;
-        margin-bottom: 15px;
-        text-align: center;
-        text-transform: uppercase;
-        letter-spacing: 2px;
-    }
-
-    .info-section p {
-        margin-bottom: 15px;
-        text-align: justify;
-    }
-
-    .info-section ul {
-        list-style-type: none;
-        padding-left: 20px;
-    }
-
-    .info-section li {
-        position: relative;
-        padding-left: 25px;
-        margin-bottom: 10px;
-    }
-
-    .info-section li::before {
-        content: '✦';
-        position: absolute;
-        left: 0;
-        color: var(--button-bg);
-    }
-
-    .highlight {
-        background-color: var(--button-bg);
-        color: var(--button-color);
-        padding: 2px 5px;
-        border-radius: 3px;
-    }
-
-    .highlight-nsfw {
-        background-color: red;
-        color: var(--button-color);
-        padding: 2px 5px;
-        border-radius: 3px;
-    }
-
-    .highlight-favourite {
-        background-color: green;
-        color: var(--button-color);
-        padding: 2px 5px;
-        border-radius: 3px;
-    }
-
-    .highlight-special {
-        background-color: purple;
-        color: var(--button-color);
-        padding: 2px 5px;
-        border-radius: 3px;
-    }
-
-        :root {
-            --nsfw-outline: #FF4C4C;
-            --star-outline: #33881e;
-            --special-outline: #4B0082;
-            --bg-color: #f4f4f4;
-            --text-color: #333;
-            --tile-bg: #fff;
-            --tile-shadow: rgba(0,0,0,0.1);
-            --add-tile-bg: #e0e0e0;
-            --add-tile-hover: #d0d0d0;
-            --button-bg: #4c8247;
-            --button-bg-hover: #43713e;
-            --button-color: white;
-            --popup-color: #dfdfdf;
-        }
-
-        .dark-mode {
-            --nsfw-outline: #FF4C4C;
-            --star-outline: #70ff4c;
-            --special-outline: #9C4CFF;
-            --bg-color: #333;
-            --text-color: #f4f4f4;
-            --tile-bg: #555;
-            --tile-shadow: rgba(0,0,0,0.3);
-            --add-tile-bg: #444;
-            --add-tile-hover: #666;
-            --button-bg: #43713e;
-            --button-bg-hover: #396135;
-            --button-color: #f4f4f4;
-            --popup-color: #2f2f2f;
-        }
-
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            margin: 0;
-            padding: 20px;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            transition: background-color 0.3s, color 0.3s;
-        }
-
-        h1,p {
-            text-align: left;
-        }
-
-        .controls {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        #edit-info-popup input,
-        #edit-info-popup textarea {
-            width: 100%;
-            box-sizing: border-box;
-            margin-bottom: 10px;
-        }
-        
-        .theme-toggle button, #tag-filter,  #tag-filter-mobile , #export-btn, #import-btn, #tile-size, #colorSelector {
-            padding: 5px 10px;
-            cursor: pointer;
-            background-color: var(--button-bg);
-            color: var(--button-color);
-            border: none;
-            border-radius: 4px;
-            margin-right: 5px;
-            margin-bottom: 10px;
-        }
-        #tag-filter-mobile{
-            width: 100%;
-            display: none;
-        }
-        .theme-toggle button:hover, #tag-filter:hover,  #tag-filter-mobile, #export-btn:hover, #import-btn:hover {
-            background-color: var(--button-bg-hover)
-        }
-
-        .image-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 20px;
-            padding: 20px;
-        }
-
-        .image-item {
-            aspect-ratio: 1 / 1;
-            position: relative;
-            background-color: var(--tile-bg);
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 2px 4px var(--tile-shadow);
-        }
-
-        .image-container {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-        }
-
-        img {
-            min-width: 100%;
-            min-height: 100%;
-            object-fit: cover;
-            transition: transform 0.3s ease;
-        }
-
-        img:hover {
-            transform: scale(1.05);
-        }
-
-        .add-image {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: var(--add-tile-bg);
-            cursor: pointer;
-            font-size: 48px;
-            transition: background-color 0.3s ease;
-        }
-
-        .add-image:hover {
-            background-color: var(--add-tile-hover);
-        }
-        
-        #file-input, #import-file-input, .popup.hidden{
-            display: none;
-        }
-        .hidden{
-            display: none;
-        }
-        .tile-buttons {
-            position: absolute;
-            top: 5px;
-            right: 5px;
-            display: flex;
-            flex-wrap: wrap;
-        }
-
-        .tile-buttons button {
-            background-color: rgba(0, 0, 0, 0.5);
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 25px;
-            height: 25px;
-            font-size: 16px;
-            cursor: pointer;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-left: 5px;
-            margin-bottom: 3px;
-        }
-
-        .tags {
-            position: absolute;
-            bottom: 5px;
-            left: 5px;
-            display: flex;
-            flex-wrap: wrap;
-        }
-
-        .tag {
-            background-color: rgba(0, 0, 0, 0.5);
-            color: white;
-            padding: 2px 5px;
-            border-radius: 3px;
-            font-size: 12px;
-            margin-right: 3px;
-            margin-bottom: 3px;
-        }
-
-        .tag:hover{
-            background-color: rgba(0, 0, 0, 0.7);
-        }
-        @media screen and (max-width: 600px) {
-            .image-grid {
-                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            }
-        }
-
-        #popup-close-btn {
-            margin-top: 10px;
-            padding: 5px 10px;
-            background-color: #f44336;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        #popup-close-btn:hover {
-            background-color: #e53935;
-        }
-
-        .popup {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: var(--popup-color);
-            border: 2px solid #000;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            z-index: 1000;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            max-width: 800px;
-            animation: float 5s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0% {
-                transform: translate(-50%, -50%);
-            }
-            50% {
-                transform: translate(-50%, -52%);
-            }
-            100% {
-                transform: translate(-50%, -50%);
-            }
-        }
-
-        #popup-image-container {
-            flex: 0 0 auto;
-            margin-right: 20px;
-        }
-
-        #popup-content {
-            position: relative;
-        }
-
-        #popup-image {
-            min-width: unset;
-            width: 250px;
-            height: 250px;
-            object-fit: cover;  
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            margin-bottom: 10px;
-        }
-        
-        #popup-image{
-            transform: scale(1)
-        }
-        .popup-info {
-            flex: 1;
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-            padding: 15px;
-            overflow-y: auto;
-            max-height: 225px;
-            width: 100%;
-        }
-
-        .popup-info h3 {
-            margin-top: 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-            padding-bottom: 5px;
-        }
-
-        .popup-info p {
-            margin: 10px 0;
-        }
-
-        #popup-tags {
-            font-style: italic;
-        }
-
-        #popup-link, #reroll-btn{
-            display: inline-block;
-            margin-top: 15px;
-            background-color: var(--button-bg);
-            color: var(--button-color);
-            padding: 8px 15px;
-            border-radius: 4px;
-            text-decoration: none;
-            transition: background-color 0.3s;
-            margin-bottom: 10px;
-            border-color: transparent;
-        }
-        #local-upload-btn, #url-upload-btn, #url-popup-close, #url-popup-close-url, #local-image-btn, #url-image-btn, #urlURL-popup-close, #url-popup-close-url1{
-            display: inline-block;
-            cursor: pointer;
-            background-color: var(--button-bg);
-            color: var(--button-color);
-            padding: 8px 15px;
-            border-radius: 4px;
-            text-decoration: none;
-            transition: background-color 0.3s;
-            margin-bottom: 10px;
-            border-color: transparent;
-            width: 100%
-        }
-        #popup-link:hover, #reroll-btn:hover, #local-upload-btn:hover, #url-upload-btn:hover, #url-popup-close:hover, #url-popup-close-url:hover, 
-        #local-image-btn:hover, #url-image-btn:hover, #urlURL-popup-close:hover, #url-popup-close-url1:hover {
-            background-color: var(--button-bg-hover);
-        }
-
-        #popup-close {
-            position: absolute;
-            top: -10px;
-            right: -10px;
-            background-color: var(--button-bg);
-            color: var(--button-color);
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            font-size: 18px;
-            font-weight: bold;
-            transition: background-color 0.3s;
-        }
-
-        #popup-close:hover {
-            background-color: var(--button-bg-hover);
-        }
-
-        #popup-close-btn {
-            display: none; 
-        }
-
-        .popup-overlay {
-            position: fixed;
-            display: none;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 999;
-            backdrop-filter: blur(5px);
-        }
-
-        .nsfw-outline, .popup.nsfw-outline {
-            border: 5px solid var(--nsfw-outline);
-        }
-
-        .blurred-image {
-            filter: blur(10px);
-        }
-
-        .star-outline {
-            border: 5px solid var(--star-outline);
-        }
-
-        .special-outline {
-            border: 5px solid var(--special-outline);
-        }
-
-        .collapsible {
-            background-color: var(--button-bg);
-            color: var(--button-color);
-            cursor: pointer;
-            padding: 18px;
-            width: 100%;
-            border: none;
-            text-align: left;
-            outline: none;
-            font-size: 15px;
-            margin-bottom: 10px;
-        }
-
-        .active, .collapsible:hover {
-            background-color: var(--button-bg-hover);
-        }
-
-        .collapsible:after {
-            content: '\002B';
-            color: var(--button-color);
-            font-weight: bold;
-            float: right;
-            margin-left: 5px;
-        }
-
-        .active:after {
-            content: "\2212";
-        }
-
-        .collapsible-content {
-            padding: 0 18px;
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.2s ease-out, padding 0.2s ease-out;
-            background-color: var(--tile-bg);
-            margin-bottom: 10px;
-        }
-
-        .edit-popup, #image-popup, #image-source-popup, #url-input-popup, #url-popup {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: var(--popup-color);
-            border: 2px solid #000;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            z-index: 1000;
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            max-width: 400px;
-            width: 100%;
-            animation: float 5s ease-in-out infinite;
-        }
-        
-        .edit-popup input, .edit-popup textarea {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-
-        .edit-popup button {
-            padding: 10px 20px;
-            background-color: var(--button-bg);
-            color: var(--button-color);
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            width: 100%;
-            margin-top: 10px;
-        }
-        #submit-url-btn, #submit-url-btn1{
-            padding: 10px 20px;
-            background-color: var(--button-bg);
-            color: var(--button-color);
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            width: 100%;
-            margin-top: 10px;
-            margin-bottom: 10px;
-        }
-        .edit-popup button:hover {
-            background-color: var(--button-bg-hover);
-        }
-
-        .image-grid {
-            --tile-size: 200px;
-            --grid-gap: 20px;
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(var(--tile-size), 1fr));
-            gap: var(--grid-gap);
-            padding: 20px;
-        }
-
-        #share-url-popup {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: var(--popup-color);
-            border: 2px solid #000;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            z-index: 1000;
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            max-width: 400px;
-            width: 100%;
-            animation: float 5s ease-in-out infinite;
-        }
-
-        #share-url-popup input {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-
-        #share-url-popup button {
-            padding: 10px 20px;
-            width: 100%;
-            background-color: var(--button-bg);
-            color: var(--button-color);
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-
-        #share-url-popup button:hover {
-            background-color: var(--button-bg-hover);
-        }
-
-        #nsfw-inclusion-popup {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: var(--popup-color);
-            border: 2px solid #000;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            z-index: 1000;
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            max-width: 400px;
-            width: 100%;
-            animation: float 5s ease-in-out infinite
-        }
-
-        #nsfw-inclusion-popup button {
-            width: 100%;
-            margin: 10px;
-            padding: 10px 20px;
-            background-color: var(--button-bg);
-            color: var(--button-color);
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        #nsfw-inclusion-popup button:hover {
-            background-color: var(--button-bg-hover);
-        }
-
-                /* Responsive design for smaller screens */
-
-                @media (max-width: 600px) {
-            #character-popup {
-                max-height: 80vh;
-                overflow-y: auto;
-            }
-
-            #popup-image {
-                max-height: 200px;
-                width: auto;
-                object-fit: contain;
-            }
-
-            .popup-info {
-                max-height: none;
-            }
-        }
-@media (max-width: 600px) {
-    .edit-popup, #share-url-popup, #nsfw-inclusion-popup, #image-popup, #image-source-popup, #url-input-popup, #url-popup {
-        width: 80%;
-        max-width: none;
-        padding: 15px;
-    }
-
-    .edit-popup input,.edit-popup textarea, #nsfw-inclusion-popup button, local-upload-btn, .edit-popup button, #share-url-popup button, #nsfw-inclusion-popup button,
-    .theme-toggle button, #export-btn, #import-btn, #tile-size, #tag-filter-mobile, #local-upload-btn, #url-upload-btn, #url-popup-close {
-        width: 100%;
-        margin-bottom: 15px;
-        padding: 15px;
-    }
-    #share-url-popup input{
-        width: 80%;
-        margin-bottom: 15px;
-        padding: 15px;
-    }
-    #popup-content {
-        flex-direction: column;
-    }
-
-    #popup-image-container {
-        margin-right: 0;
-        margin-bottom: 20px;
-    }
-
-    #popup-image {
-        width: 100%;
-        height: auto;
-    }
-
-    .popup-info {
-        max-height: none;
-    }
-
-    .tile-buttons button{
-        width: 40px;
-        height: 40px;
-    }
-    #tag-filter-mobile{
-        display: block;
-    }
-    .tag{
-        padding: 4px 10px;
-    }
-    #tag-filter{
-        display: none;
-    }
+    <style>
+    
+.theme-toggle button, #tag-filter, #tag-filter-mobile, #export-btn, #import-btn, #tile-size, #colorSelector, #popup-link, #reroll-btn, #local-upload-btn, #url-upload-btn,
+#url-popup-close, #url-popup-close-url, #local-image-btn, #url-image-btn, #urlURL-popup-close, #url-popup-close-url1, #popup-close, .collapsible, .edit-popup button,
+#submit-url-btn, #submit-url-btn1, #share-url-popup button, #nsfw-inclusion-popup button, #image-upload-choice-popup button, #tile-creation-popup button, #settings-popup button, 
+#tileSize, #undo-delete-popup button {
+	background-color: var(--button-bg-1);
 }
 
-    #image-upload-choice-popup {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: var(--popup-color);
-            border: 2px solid #000;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            z-index: 1000;
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            max-width: 400px;
-            width: 100%;
-        }
+#character-popup {
+	width: 90%;
+	max-width: 600px;
+	margin: 0 auto;
+}
 
-        #image-upload-choice-popup button {
-            margin: 10px;
-            padding: 10px 20px;
-            background-color: var(--button-bg);
-            color: var(--button-color);
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            width: 80%;
-        }
+#popup-content {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	width: 100%
+}
 
-        #image-upload-choice-popup button:hover {
-            background-color: var(--button-bg-hover);
-        }
+#tile-creation-popup {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	background-color: var(--popup-color);
+	border: 2px solid #000;
+	padding: 20px;
+	border-radius: 15px;
+	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+	z-index: 1000;
+	display: none;
+	flex-direction: column;
+	align-items: center;
+	max-width: 400px;
+	width: 100%;
+}
+
+#tile-creation-popup input, #tile-creation-popup textarea {
+	width: 100%;
+	padding: 10px;
+	margin-bottom: 10px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+}
+
+#tile-creation-popup button {
+	padding: 10px 20px;
+	color: var(--button-color);
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	margin-top: 10px;
+}
+
+.info-section {
+	background-color: var(--tile-bg);
+	border-radius: 15px;
+	padding: 20px;
+	margin: 20px 0;
+	box-shadow: 0 4px 6px var(--tile-shadow);
+	font-family: 'Arial', sans-serif;
+	line-height: 1.6;
+	max-width: 800px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.info-section h2 {
+	color: var(--button-bg);
+	font-size: 1.8em;
+	margin-bottom: 15px;
+	text-align: center;
+	text-transform: uppercase;
+	letter-spacing: 2px;
+}
+
+.info-section p {
+	margin-bottom: 15px;
+	text-align: justify;
+}
+
+.info-section ul {
+	list-style-type: none;
+	padding-left: 20px;
+}
+
+.info-section li {
+	position: relative;
+	padding-left: 25px;
+	margin-bottom: 10px;
+}
+
+.info-section li::before {
+	content: '✦';
+	position: absolute;
+	left: 0;
+	color: var(--button-bg);
+}
+
+.highlight {
+	background-color: var(--button-bg-1);
+	color: var(--button-color);
+	padding: 2px 5px;
+	border-radius: 3px;
+}
+
+.highlight-nsfw {
+	background-color: var(--nsfw-color-1);
+	color: var(--button-color);
+	padding: 2px 5px;
+	border-radius: 3px;
+}
+
+.highlight-favourite {
+	background-color: green;
+	color: var(--button-color);
+	padding: 2px 5px;
+	border-radius: 3px;
+}
+
+.highlight-special {
+	background-color: purple;
+	color: var(--button-color);
+	padding: 2px 5px;
+	border-radius: 3px;
+}
+
+:root {
+	--button-bg-1: #3e6e3e;
+	--button-bg-2: #4c6b3b;
+	--button-bg-3: #5c8a3b;
+	--button-bg-4: #3e6e96;
+
+	--button-bg-hover-1: #2c5a2c;
+	--button-bg-hover-2: #3b5a32;
+	--button-bg-hover-3: #4a6a32;
+	--button-bg-hover-4: #2c5a74;
+
+	--nsfw-color-1: #FF1A1A;
+	--nsfw-color-2: #FF6A6A;
+	--nsfw-color-3: #FF7F7F;
+	--nsfw-color-4: #FF6A6A;
+
+	--special-outline-color-1: #3B0056;
+	--special-outline-color-2: #A88DFF;
+	--special-outline-color-3: #9C51C4;
+	--special-outline-color-4: #7B5DAF;
+
+	--star-outline-color-1: #2E5B2E;
+	--star-outline-color-2: #7B6B3A;
+	--star-outline-color-3: #B7C20E;
+	--star-outline-color-4: #4E4B31;
+
+	--bg-color: #f4f4f4;
+	--text-color: #333;
+	--tile-bg: #fff;
+	--tile-shadow: rgba(0, 0, 0, 0.1);
+	--add-tile-bg: #e0e0e0;
+	--add-tile-hover: #d0d0d0;
+	--button-color: white;
+	--popup-color: #dfdfdf;
+}
+
+.dark-mode {
+
+	--button-bg-1: #4f8b4f;
+	--button-bg-2: #5f8b4f;
+	--button-bg-3: #6f9b4f;
+	--button-bg-4: #4f8b96;
+
+	--button-bg-hover-1: #3e6b3e;
+	--button-bg-hover-2: #4d6b3e;
+	--button-bg-hover-3: #5c7b3e;
+	--button-bg-hover-4: #3e6b8a;
+
+	--nsfw-color-1: #FF7F7F;
+	--nsfw-color-2: #FF8A8A;
+	--nsfw-color-3: #FF8A8A;
+	--nsfw-color-4: #FF8A8A;
+
+	--special-outline-color-1: #D78FFF;
+	--special-outline-color-2: #D6A5FF;
+	--special-outline-color-3: #A66CBB;
+	--special-outline-color-4: #B57EDB;
+
+	--star-outline-color-1: #A8FF4C;
+	--star-outline-color-2: #B7B73A;
+	--star-outline-color-3: #D2D700;
+	--star-outline-color-4: #7A7B35;
+	--bg-color: #333;
+	--text-color: #f4f4f4;
+	--tile-bg: #555;
+	--tile-shadow: rgba(0, 0, 0, 0.3);
+	--add-tile-bg: #444;
+	--add-tile-hover: #666;
+	--button-color: #f4f4f4;
+	--popup-color: #2f2f2f;
+}
+
+.amoled-mode {
+
+	--button-bg-1: #2e5e2e;
+	--button-bg-2: #3e5e2e;
+	--button-bg-3: #4e6e2e;
+	--button-bg-4: #2e5e6a;
+
+	--button-bg-hover-1: #3e6b3e;
+	--button-bg-hover-2: #4d6b3e;
+	--button-bg-hover-3: #5c7b3e;
+	--button-bg-hover-4: #3e6b8a;
+
+	--nsfw-color-1: #C05050;
+	--nsfw-color-2: #C06A6A;
+	--nsfw-color-3: #D06A6A;
+	--nsfw-color-4: #C0507A;
+
+	--special-outline-color-1: #A052B1;
+	--special-outline-color-2: #A06EB1;
+	--special-outline-color-3: #B06EB1;
+	--special-outline-color-4: #A052C6;
+
+	--star-outline-color-1: #7D9A3C;
+	--star-outline-color-2: #8B9A3C;
+	--star-outline-color-3: #9B9A3C;
+	--star-outline-color-4: #7D9A6A;
+
+	--bg-color: #000;
+	--text-color: #e0e0e0;
+	--tile-bg: #111;
+	--tile-shadow: rgba(255, 255, 255, 0.1);
+	--add-tile-bg: #222;
+	--add-tile-hover: #333;
+	--button-color: #e0e0e0;
+	--popup-color: #111;
+}
+
+body {
+	font-family: Arial, sans-serif;
+	line-height: 1.6;
+	margin: 0;
+	padding: 20px;
+	background-color: var(--bg-color);
+	color: var(--text-color);
+	transition: background-color 0.3s, color 0.3s;
+}
+
+h1,
+p {
+	text-align: left;
+}
+
+.controls {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 20px;
+}
+
+#edit-info-popup input, #edit-info-popup textarea {
+	width: 100%;
+	box-sizing: border-box;
+	margin-bottom: 10px;
+}
+
+.theme-toggle button, #tag-filter, #tag-filter-mobile, #export-btn, #import-btn, #tile-size {
+	padding: 5px 10px;
+	cursor: pointer;
+	color: var(--button-color);
+	border: none;
+	border-radius: 4px;
+	margin-right: 5px;
+	margin-bottom: 10px;
+}
+
+#tag-filter-mobile {
+	width: 100%;
+	display: none;
+}
+
+
+.image-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+	gap: 20px;
+	padding: 20px;
+}
+
+.image-item {
+	aspect-ratio: 1 / 1;
+	position: relative;
+	background-color: var(--tile-bg);
+	border-radius: 8px;
+	overflow: hidden;
+	box-shadow: 0 2px 4px var(--tile-shadow);
+}
+
+.image-container {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	overflow: hidden;
+}
+
+img {
+	min-width: 100%;
+	min-height: 100%;
+	object-fit: cover;
+	transition: transform 0.3s ease;
+}
+
+img:hover {
+	transform: scale(1.05);
+}
+
+.add-image {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: var(--add-tile-bg);
+	cursor: pointer;
+	font-size: 48px;
+	transition: background-color 0.3s ease;
+}
+
+.add-image:hover {
+	background-color: var(--add-tile-hover);
+}
+
+#file-input, #import-file-input, .popup.hidden {
+	display: none;
+}
+
+.hidden {
+	display: none;
+}
+
+.tile-buttons {
+	position: absolute;
+	top: 5px;
+	right: 5px;
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.tile-buttons button {
+	background-color: rgba(0, 0, 0, 0.5);
+	color: white;
+	border: none;
+	border-radius: 50%;
+	width: 30px;
+	height: 30px;
+	font-size: 15px;
+	cursor: pointer;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin-left: 5px;
+	margin-bottom: 5px;
+}
+
+.tags {
+	position: absolute;
+	bottom: 5px;
+	left: 5px;
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.tag {
+	background-color: rgba(0, 0, 0, 0.5);
+	color: white;
+	padding: 2px 5px;
+	border-radius: 3px;
+	font-size: 12px;
+	margin-right: 3px;
+	margin-bottom: 3px;
+}
+
+.tag:hover {
+	background-color: rgba(0, 0, 0, 0.7);
+}
+
+@media screen and (max-width: 600px) {
+	.image-grid {
+		grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+	}
+}
+
+#popup-close-btn {
+	margin-top: 10px;
+	padding: 5px 10px;
+	background-color: #f44336;
+	color: white;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+}
+
+#popup-close-btn:hover {
+	background-color: var(--nsfw-color-1);
+}
+
+.popup {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	background-color: var(--popup-color);
+	border: 2px solid #000;
+	padding: 20px;
+	border-radius: 15px;
+	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+	z-index: 1000;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	max-width: 800px;
+	animation: float 5s ease-in-out infinite;
+}
+
+@keyframes float {
+	0% {
+		transform: translate(-50%, -50%);
+	}
+
+	50% {
+		transform: translate(-50%, -52%);
+	}
+
+	100% {
+		transform: translate(-50%, -50%);
+	}
+}
+
+#popup-image-container {
+	flex: 0 0 auto;
+	margin-right: 20px;
+}
+
+#popup-content {
+	position: relative;
+}
+
+#popup-image {
+	min-width: unset;
+	width: 250px;
+	height: 250px;
+	object-fit: cover;
+	border-radius: 8px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+	margin-bottom: 10px;
+}
+
+#popup-image {
+	transform: scale(1)
+}
+
+.popup-info {
+	flex: 1;
+	background-color: rgba(255, 255, 255, 0.1);
+	border-radius: 8px;
+	padding: 15px;
+	overflow-y: auto;
+	max-height: 225px;
+	width: 100%;
+}
+
+.popup-info h3 {
+	margin-top: 0;
+	border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+	padding-bottom: 5px;
+}
+
+.popup-info p {
+	margin: 10px 0;
+}
+
+#popup-tags {
+	font-style: italic;
+}
+
+#popup-link, #reroll-btn {
+	display: inline-block;
+	margin-top: 15px;
+	color: var(--button-color);
+	padding: 8px 15px;
+	border-radius: 4px;
+	text-decoration: none;
+	transition: background-color 0.3s;
+	margin-bottom: 10px;
+	border-color: transparent;
+}
+
+#local-upload-btn, #url-upload-btn, #url-popup-close, #url-popup-close-url, #local-image-btn, #url-image-btn, #urlURL-popup-close, #url-popup-close-url1 {
+	display: inline-block;
+	cursor: pointer;
+	color: var(--button-color);
+	padding: 8px 15px;
+	border-radius: 4px;
+	text-decoration: none;
+	transition: background-color 0.3s;
+	margin-bottom: 10px;
+	border-color: transparent;
+	width: 100%
+}
+
+#popup-close {
+	position: absolute;
+	top: -10px;
+	right: -10px;
+	color: var(--button-color);
+	width: 30px;
+	height: 30px;
+	border-radius: 50%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	cursor: pointer;
+	font-size: 18px;
+	font-weight: bold;
+	transition: background-color 0.3s;
+}
+
+
+#popup-close-btn {
+	display: none;
+}
+
+.popup-overlay {
+	position: fixed;
+	display: none;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.5);
+	z-index: 999;
+	backdrop-filter: blur(5px);
+}
+
+.nsfw-outline, .popup.nsfw-outline {
+	border: 5px solid var(--nsfw-color-1);
+	/* Default color */
+}
+
+.blurred-image {
+	filter: blur(10px);
+}
+
+.star-outline {
+	border: 5px solid var(--star-outline-color-1);
+}
+
+.special-outline {
+	border: 5px solid var(--special-outline-color-1);
+}
+
+.collapsible {
+	color: var(--button-color);
+	cursor: pointer;
+	padding: 18px;
+	width: 100%;
+	border: none;
+	text-align: left;
+	outline: none;
+	font-size: 15px;
+	margin-bottom: 10px;
+}
+
+.collapsible:after {
+	content: '\002B';
+	color: var(--button-color);
+	font-weight: bold;
+	float: right;
+	margin-left: 5px;
+}
+
+.active:after {
+	content: "\2212";
+}
+
+.collapsible-content {
+	padding: 0 18px;
+	max-height: 0;
+	overflow: hidden;
+	transition: max-height 0.2s ease-out, padding 0.2s ease-out;
+	background-color: var(--tile-bg);
+	margin-bottom: 10px;
+}
+
+.edit-popup, #image-popup, #image-source-popup, #url-input-popup, #url-popup {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	background-color: var(--popup-color);
+	border: 2px solid #000;
+	padding: 20px;
+	border-radius: 15px;
+	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+	z-index: 1000;
+	display: none;
+	flex-direction: column;
+	align-items: center;
+	max-width: 400px;
+	width: 100%;
+	animation: float 5s ease-in-out infinite;
+}
+
+.edit-popup input, .edit-popup textarea {
+	width: 100%;
+	padding: 10px;
+	margin-bottom: 10px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+}
+
+.edit-popup button {
+	padding: 10px 20px;
+	color: var(--button-color);
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	width: 100%;
+	margin-top: 10px;
+}
+
+#submit-url-btn, #submit-url-btn1 {
+	padding: 10px 20px;
+	color: var(--button-color);
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	width: 100%;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+.image-grid {
+	--tile-size: 200px;
+	--grid-gap: 20px;
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(var(--tile-size), 1fr));
+	gap: var(--grid-gap);
+	padding: 20px;
+}
+
+#share-url-popup {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	background-color: var(--popup-color);
+	border: 2px solid #000;
+	padding: 20px;
+	border-radius: 15px;
+	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+	z-index: 1000;
+	display: none;
+	flex-direction: column;
+	align-items: center;
+	max-width: 400px;
+	width: 100%;
+	animation: float 5s ease-in-out infinite;
+}
+
+#share-url-popup input {
+	width: 100%;
+	padding: 10px;
+	margin-bottom: 10px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+}
+
+#share-url-popup button {
+	padding: 10px 20px;
+	width: 100%;
+	color: var(--button-color);
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	margin-top: 10px;
+}
+
+#nsfw-inclusion-popup, #settings-popup {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	background-color: var(--popup-color);
+	border: 2px solid #000;
+	padding: 20px;
+	border-radius: 15px;
+	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+	z-index: 1000;
+	display: none;
+	flex-direction: column;
+	align-items: center;
+	max-width: 400px;
+	width: 100%;
+	animation: float 5s ease-in-out infinite
+}
+
+#nsfw-inclusion-popup button, #settings-popup button, #colorSelector, #tileSize {
+	width: 100%;
+	margin-top: 10px;
+	padding: 10px 20px;
+	color: var(--button-color);
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+}
+
+#image-upload-choice-popup {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	background-color: var(--popup-color);
+	border: 2px solid #000;
+	padding: 20px;
+	border-radius: 15px;
+	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+	z-index: 1000;
+	display: none;
+	flex-direction: column;
+	align-items: center;
+	max-width: 400px;
+	width: 100%;
+}
+
+#image-upload-choice-popup button {
+	margin: 10px;
+	padding: 10px 20px;
+	color: var(--button-color);
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	width: 80%;
+}
+
+.theme-toggle button:hover, #tag-filter:hover, #tag-filter-mobile, #export-btn:hover, #import-btn:hover, #image-upload-choice-popup button:hover, #nsfw-inclusion-popup button:hover,
+#share-url-popup button:hover, .edit-popup button:hover, .active, .collapsible:hover, #popup-close:hover, #settings-popup button:hover, #undo-delete-popup button:hover {
+	background-color: var(--button-bg-hover-1)
+}
+
+#undo-delete-popup {
+	position: fixed;
+	bottom: 20px;
+	left: 20px;
+	background-color: var(--popup-color);
+	color: var(--text-color);
+	padding: 15px;
+	border-radius: 5px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+	z-index: 1000;
+	opacity: 0;
+	transform: translateY(20px);
+	transition: opacity 0.3s, transform 0.3s;
+}
+
+#undo-delete-popup.show {
+	opacity: 1;
+	transform: translateY(0);
+}
+
+#undo-delete-popup p {
+	margin: 0;
+	margin-right: 15px;
+}
+
+#undo-delete-popup button {
+	color: white;
+	border: none;
+	padding: 5px 10px;
+	border-radius: 3px;
+	cursor: pointer;
+	transition: background-color 0.3s;
+}
+
+#dismiss-undo {
+	background-color: transparent !important;
+	color: #aaa;
+	padding: 0 !important;
+	margin-left: 10px;
+}
+
+#dismiss-undo:hover {
+	color: #fff;
+}
+
+@media (max-width: 650px) {
+	#undo-delete-popup {
+		bottom: 0;
+		left: 0;
+		width: 100%;
+		margin-left: 0;
+		transform: none;
+		padding: 20px;
+		box-sizing: border-box;
+	}
+}
+
+@media (max-width: 600px) {
+	#character-popup {
+		max-height: 80vh;
+		overflow-y: auto;
+	}
+
+	#popup-image {
+		max-height: 200px;
+		width: auto;
+		object-fit: contain;
+	}
+
+	.popup-info {
+		max-height: none;
+	}
+
+	.edit-popup, #share-url-popup, #nsfw-inclusion-popup, #image-popup, #image-source-popup, #url-input-popup, #url-popup, #settings-popup {
+		width: 80%;
+		max-width: none;
+		padding: 15px;
+	}
+
+	.edit-popup input, .edit-popup textarea, #nsfw-inclusion-popup button, #local-upload-btn, .edit-popup button, #share-url-popup button, #nsfw-inclusion-popup button, .theme-toggle button, 
+    #export-btn, #import-btn, #tile-size, #tag-filter-mobile, #local-upload-btn, #url-upload-btn, #url-popup-close, #colorSelector, #settings-popup button, #tileSize {
+		width: 100%;
+		margin-bottom: 15px;
+		padding: 15px;
+	}
+
+	#share-url-popup input {
+		width: 80%;
+		margin-bottom: 15px;
+		padding: 15px;
+	}
+
+	#popup-content {
+		flex-direction: column;
+	}
+
+	#popup-image-container {
+		margin-right: 0;
+		margin-bottom: 20px;
+	}
+
+	#popup-image {
+		width: 100%;
+		height: auto;
+	}
+
+	.popup-info {
+		max-height: none;
+	}
+
+	.tile-buttons button {
+		width: 40px;
+		height: 40px;
+	}
+
+	#tag-filter-mobile {
+		display: block;
+	}
+
+	.tag {
+		padding: 4px 10px;
+	}
+
+	#tag-filter {
+		display: none;
+	}
+}
     </style>
 </head>
 <body>
@@ -807,6 +928,7 @@
           <li>Hentai</li>
           <li>18+</li>
           <li>Porn</li>
+          <li>Yaoi</li>
        </ul>
        <p>They're case sensitive, so put them in as shown here. This will cause a <span class="highlight-nsfw">red outline</span> to appear around the tile and the random character popup if it's selected. You can also blur the image with the <span class="highlight">Blur NSFW</span> button.</p>
        <p><strong>How to indicate characters as Favourites?</strong></p>
@@ -818,6 +940,28 @@
     </div>
     <button class="collapsible">Update Log</button>
     <div class="collapsible-content">
+        <h2>Updpate 1.8</h2>
+        <ul>
+            <li>For the favourite tags, all will now appear under the ⭐ tag in the tag filtering dropdown.</li>
+            <li>If there are no characters tagged as NSFW, the NSFW Inclusion prompt will not appear, allowing quicker access to the feature.</li>
+            <li>If there are no characters that have NOT been tagged as NSFW, the NSFW Inclusion prompt will not appear, and <code>includeNSFW</code> will switch to true.</li>
+            <li>Added an undo feature to remember the most recent deleted character, providing an opportunity to restore it.</li>
+            <li>For Pinterest Extension users, the extension will no longer show up on the website, resolving issues with buttons covering site elements.</li>
+            <li>Light Theme, Dark Mode, and AMOLED Mode buttons are now unified into a single button in the settings screen.</li>
+            <li>You can now set the add-image tile to the beginning of the grid, while new tiles will still appear at the end.</li>
+            <li>Fixed a bug where <code>.highlight</code> would not have a background color.</li>
+        </ul>        
+        <h2>Update 1.7.3</h2>
+        <ul>
+            <li>Added a new drop-down that will change the website's colors to make it more accessible for people with Deuteranopia, Protanopia, and Tritanopia.</li>
+            <li>Added an AMOLED mode, which is a darker version of Dark Mode.</li>
+            <li>Blur NSFW, Light Mode, Dark Mode, AMOLED Mode, and Color Blindness options are now combined into a new "Theme Settings" popup.</li>
+            <li>The website will now remember if you had toggled to hide or show the tile buttons.</li>
+            <li>The following emojis will now trigger the favorite character outline: ✨, 🌠, 🌟, 💫, 🤩, ❇️, ✴️, ✳️.</li>
+            <li>Yaoi is now a trigger for the NSFW outline.</li>
+            <li>Fixed issue where the overlay would continue to appear if you were to select exclude NSFW when there are no characters that don't have the NSFW tags.</li>
+            <li>Updated the no non-NSFW character popup to include information about resetting the remembered state.</li>
+          </ul>                 
         <h2>Update 1.7.2</h2>
         <ul>
             <li>Tag Filter dropdown now works on mobile</li>
@@ -923,19 +1067,13 @@
     </div>
     <div class="controls">
        <div class="theme-toggle">
-          <button id="light-mode">Light Mode</button>
-          <button id="dark-mode">Dark Mode</button>
+
           <button id="export-btn">Export</button>
           <button id="import-btn">Import</button>
           <button id="toggleButton">Hide Tile Buttons</button>
-          <button id="blur-nsfw-btn">Blur NSFW</button>
+          <button id="settings-btn">Theme Settings</button>
           <button id="random-character-btn">Select Random Character</button>
-          <button id="flush-button">Reset Remembered State</button>
-          <select id="colorSelector">
-            <option value="original">Original</option>
-            <option value="colour1">Colour 1</option>
-            <option value="colour2">Colour 2</option>
-        </select>
+          <button id="flush-button">Reset Remembered State</button>     
           <select id="tag-filter-mobile">
              <option value="all">All Tags</option>
           </select>
@@ -1029,7 +1167,29 @@
             <input type="checkbox" id="remember-nsfw-state-checkbox"> Remember my choice</input>
         </label>
         </div>
+    </div>  
+    <!-- Settings Popup -->
+    <div id="settings-popup">
+        <div id="popup-content">
+        <h3>Theme Settings</h3>
+            <button id="blur-nsfw-btn">Blur NSFW</button>
+            <button id="theme-toggle-btn">Light Mode</button>
+            <button id="toggle-position-btn">Move Add Image to Beginning</button>
+            <select id="colorSelector">
+                <option value="original">Original</option>
+                <option value="colour1">Deuteranopia</option>
+                <option value="colour2">Protanopia</option>
+                <option value="colour3">Tritanopia</option> 
+            </select>   
+            <select id="tileSize">
+                <option value="small">Small Tiles</option>
+                <option value="medium" selected>Medium Tiles</option>
+                <option value="large">Large Tiles</option>
+            </select>
+            <button id="settings-close">Close</button>
+        </div>
     </div>    
+
     <div id="image-popup" class="popup hidden">
        <div id="popup-content">
           <h3>Select Image Source</h3>
@@ -1071,6 +1231,13 @@
           <button id="cancel-image-selection">Cancel</button>
        </div>
     </div>
+    <div id="undo-delete-popup">
+  <p>Tile deleted. <span id="undo-timer">30</span>s</p>
+  <div>
+    <button id="undo-delete-btn">Undo</button>
+    <button id="dismiss-undo">✕</button>
+  </div>
+</div>
     <!-- Add the file input for uploading images -->
     <input type="file" id="file-input" accept="image/*,.avif,.jxl,.cur,.jps,.jfif" class="hidden">
     <div class="image-grid" id="image-grid">
@@ -1087,8 +1254,6 @@ const popupOverlay = document.getElementById("popup-overlay");
 const imageGrid = document.getElementById('image-grid');
 const addImageButton = document.getElementById('add-image');
 const fileInput = document.getElementById('file-input');
-const lightModeBtn = document.getElementById('light-mode');
-const darkModeBtn = document.getElementById('dark-mode');
 const tagFilter = document.getElementById('tag-filter') ;
 const tagFilterMobile = document.getElementById('tag-filter-mobile');
 const exportBtn = document.getElementById('export-btn');
@@ -1097,15 +1262,226 @@ const importFileInput = document.getElementById('import-file-input');
 const blurNSFWBtn = document.getElementById('blur-nsfw-btn');
 const imageUploadChoicePopup = document.getElementById('image-upload-choice-popup');
 const urlUploadBtn = document.getElementById('url-upload-btn');
+const addImageTile = document.getElementById('add-image');
+const togglePositionBtn = document.getElementById('toggle-position-btn');
+const undoPopup = document.getElementById('undo-delete-popup');
+const undoButton = document.getElementById('undo-delete-btn');
+const dismissButton = document.getElementById('dismiss-undo');
+const timerSpan = document.getElementById('undo-timer');
+const tileSizeSelector = document.getElementById('tileSize');
 
 let tiles = [];
 let allTags = new Set();
 let isBlurred = JSON.parse(localStorage.getItem('isBlurred')) || false; // Load blur status from localStorage
 let rememberNSFWChoice = JSON.parse(localStorage.getItem('rememberNSFWChoice')) || false;
 let includeNSFW = JSON.parse(localStorage.getItem('includeNSFW')) || false;
+let deletedTile = null;
+let undoTimer = null;
+
+let isAtEnd =  true;  // Initially, the add-image tile is at the end
+
+// Function to toggle the position of the add-image tile
+function toggleAddImagePosition() {
+    if (isAtEnd) {
+        // Move to the beginning (before the first non-add-image tile, if any)
+        imageGrid.insertBefore(addImageTile, imageGrid.firstElementChild);
+        togglePositionBtn.textContent = 'Move Add Image to End';
+        localStorage.setItem('addImagePosition', 'beginning');
+    } else {
+        // Move to the end
+        imageGrid.appendChild(addImageTile);
+        togglePositionBtn.textContent = 'Move Add Image to Beginning';
+        localStorage.setItem('addImagePosition', 'end');
+    }
+    isAtEnd = !isAtEnd;  // Toggle the state
+}
+
+// Function to apply the saved position on page load
+function applySavedPosition() {
+    const savedPosition = localStorage.getItem('addImagePosition');
+    if (savedPosition === 'beginning') {
+        // Move to the beginning (before the first tile in the grid)
+        imageGrid.insertBefore(addImageTile, imageGrid.firstElementChild);
+        togglePositionBtn.textContent = 'Move Add Image to End';
+        isAtEnd = false;
+    } else {
+        // Move to the end by default
+        imageGrid.appendChild(addImageTile);
+        togglePositionBtn.textContent = 'Move Add Image to Beginning';
+        isAtEnd = true;
+    }
+}
+
+// Apply the saved position when the DOM is fully loaded
+document.addEventListener('DOMContentLoaded', applySavedPosition);
+
+// Add event listener to the button
+togglePositionBtn.addEventListener('click', toggleAddImagePosition);
+
+
+// Function to set the tile size
+function setTileSize(size) {
+    let sizeValue;
+    switch (size) {
+        case 'small':
+            sizeValue = '150px';
+            break;
+        case 'medium':
+            sizeValue = '200px';
+            break;
+        case 'large':
+            sizeValue = '250px';
+            break;
+        default:
+            sizeValue = '200px'; // default to medium if nothing is found
+    }
+    imageGrid.style.setProperty('--tile-size', sizeValue);
+}
+
+// Load the saved tile size from local storage on page load
+window.addEventListener('DOMContentLoaded', function() {
+    const savedSize = localStorage.getItem('tileSize') || 'medium'; // Default to 'medium' if no value is found
+    tileSizeSelector.value = savedSize; // Set the dropdown to the saved value
+    setTileSize(savedSize); // Apply the saved size to the grid
+});
+
+// Save the tile size to local storage when the user changes it
+tileSizeSelector.addEventListener('change', function() {
+    const selectedSize = this.value;
+    localStorage.setItem('tileSize', selectedSize); // Save the selected size
+    setTileSize(selectedSize); // Apply the new size to the grid
+});
+
+function showUndoPopup() {
+  undoPopup.classList.add('show');
+  let secondsLeft = 30;
+  timerSpan.textContent = secondsLeft;
+
+  undoTimer = setInterval(() => {
+    secondsLeft--;
+    timerSpan.textContent = secondsLeft;
+
+    if (secondsLeft <= 0) {
+      hideUndoPopup();
+    }
+  }, 1000);
+}
+
+function hideUndoPopup() {
+  clearInterval(undoTimer);
+  undoPopup.classList.remove('show');
+  deletedTile = null;
+}
+
+// Save the selected color option in localStorage
+document.getElementById('colorSelector').addEventListener('change', function() {
+    const selectedColorOption = this.value; 
+    localStorage.setItem('selectedColorOption', selectedColorOption); // Save to local storage
+
+    const nsfwTiles = document.querySelectorAll('.nsfw-outline, .highlight-nsfw, #popup-close-btn:hover');
+    const specialTiles = document.querySelectorAll('.special-outline');
+    const starTiles = document.querySelectorAll('.star-outline, .highlight-favourite');
+
+    // Select all specified buttons
+    const buttons = document.querySelectorAll(
+        '.theme-toggle button, #tag-filter, #tag-filter-mobile, #export-btn, #import-btn, #tile-size, #colorSelector, #popup-link, #reroll-btn, ' +
+        '#local-upload-btn, #url-upload-btn, #url-popup-close, #url-popup-close-url, #local-image-btn, #url-image-btn, #urlURL-popup-close, ' +
+        '#url-popup-close-url1, #popup-close, .collapsible, .edit-popup button, #submit-url-btn, #submit-url-btn1, #share-url-popup button, ' +
+        '#nsfw-inclusion-popup button, #image-upload-choice-popup button, #settings-popup button, #tileSize, #undo-delete-popup button, .highlight'
+    );
+
+    // Define colors based on the selected option
+    const nsfwColors = [
+        'var(--nsfw-color-1)', 
+        'var(--nsfw-color-2)', 
+        'var(--nsfw-color-3)', 
+        'var(--nsfw-color-4)'  
+    ];
+
+    const specialColors = [
+        'var(--special-outline-color-1)', 
+        'var(--special-outline-color-2)', 
+        'var(--special-outline-color-3)', 
+        'var(--special-outline-color-4)'  
+    ];
+
+    const starColors = [
+        'var(--star-outline-color-1)', 
+        'var(--star-outline-color-2)', 
+        'var(--star-outline-color-3)', 
+        'var(--star-outline-color-4)'  
+    ];
+
+    const buttonColors = [
+        'var(--button-bg-1)', 
+        'var(--button-bg-2)', 
+        'var(--button-bg-3)', 
+        'var(--button-bg-4)'  
+    ];
+
+    const buttonHoverColors = [
+        'var(--button-bg-hover-1)', 
+        'var(--button-bg-hover-2)', 
+        'var(--button-bg-hover-3)', 
+        'var(--button-bg-hover-4)'  
+    ];
+
+    const selectedIndex = this.value === 'original' ? 0 : 
+                          (this.value === 'colour1' ? 1 : 
+                          (this.value === 'colour2' ? 2 : 3));
+
+    // Get selected colors
+    const selectedNsfwColor = nsfwColors[selectedIndex];
+    const selectedSpecialColor = specialColors[selectedIndex];
+    const selectedStarColor = starColors[selectedIndex];
+    const selectedButtonColor = buttonColors[selectedIndex];
+    const selectedButtonHoverColor = buttonHoverColors[selectedIndex];
+
+    // Apply colors
+    specialTiles.forEach(tile => tile.style.borderColor = selectedSpecialColor);
+    nsfwTiles.forEach(tile => {
+        if (!tile.classList.contains('special-outline')) {
+            tile.style.borderColor = selectedNsfwColor;
+        }
+    });
+    starTiles.forEach(tile => {
+        if (!tile.classList.contains('special-outline')) {
+            tile.style.borderColor = selectedStarColor;
+        }
+    });
+
+    // Apply button background color
+    buttons.forEach(button => {
+        button.style.backgroundColor = selectedButtonColor;
+
+        // Set up hover effect through CSS for specified selectors
+        button.addEventListener('mouseenter', () => {
+            button.style.backgroundColor = selectedButtonHoverColor;
+        });
+        button.addEventListener('mouseleave', () => {
+            button.style.backgroundColor = selectedButtonColor;
+        });
+    });
+});
+
+// Load the selected color option on page load
+function loadSelectedColorOption() {
+    const savedOption = localStorage.getItem('selectedColorOption');
+    if (savedOption) {
+        const colorSelector = document.getElementById('colorSelector');
+        colorSelector.value = savedOption; // Set the dropdown to the saved value
+        // Trigger change event to apply the colors
+        const event = new Event('change');
+        colorSelector.dispatchEvent(event);
+    }
+}
+
+// Call this function when the page loads
+window.onload = loadSelectedColorOption;
+document.addEventListener('DOMContentLoaded', loadSelectedColorOption);
 
 document.getElementById('toggleButton').addEventListener('click', function() {
-    // Get all elements with class 'edit-image-btn'
+    // Get all elements with class 'edit-image-btn', 'edit-url-btn', etc.
     const editButtons = document.querySelectorAll('.edit-image-btn');
     const editURL = document.querySelectorAll('.edit-url-btn');
     const editTags = document.querySelectorAll('.edit-tags-btn');
@@ -1115,7 +1491,7 @@ document.getElementById('toggleButton').addEventListener('click', function() {
     // Toggle the display property for each button
     const toggleDisplay = (buttons) => {
         buttons.forEach(button => {
-            button.style.display = button.style.display === 'none' ? 'block' : 'none';
+            button.style.display = button.style.display === 'none' ? 'flex' : 'none';
         });
     };
 
@@ -1125,23 +1501,70 @@ document.getElementById('toggleButton').addEventListener('click', function() {
     toggleDisplay(editInfo);
     toggleDisplay(editDelete);
 
+    // Check the current state of the button and save it to localStorage
+    const isHidden = editButtons[0].style.display === 'none';
+    localStorage.setItem('buttonsHidden', isHidden);
+
     // Change the text of the toggle button
-    this.textContent = this.textContent === 'Hide Tile Buttons' 
-        ? 'Show Tile Buttons' 
-        : 'Hide Tile Buttons';
+    this.textContent = isHidden ? 'Show Tile Buttons' : 'Hide Tile Buttons';
+});
+
+// On page load, apply the saved toggle state from localStorage
+document.addEventListener('DOMContentLoaded', function() {
+    const editButtons = document.querySelectorAll('.edit-image-btn');
+    const editURL = document.querySelectorAll('.edit-url-btn');
+    const editTags = document.querySelectorAll('.edit-tags-btn');
+    const editInfo = document.querySelectorAll('.edit-info-btn');
+    const editDelete = document.querySelectorAll('.delete-btn');
+    const toggleButton = document.getElementById('toggleButton');
+
+    // Get the saved state from localStorage
+    const isHidden = localStorage.getItem('buttonsHidden') === 'true';
+
+    // Function to apply the display state
+    const setDisplay = (buttons, display) => {
+        buttons.forEach(button => {
+            button.style.display = display;
+        });
+    };
+
+    // Apply the saved state to the buttons
+    setDisplay(editButtons, isHidden ? 'none' : 'flex');
+    setDisplay(editURL, isHidden ? 'none' : 'flex');
+    setDisplay(editTags, isHidden ? 'none' : 'flex');
+    setDisplay(editInfo, isHidden ? 'none' : 'flex');
+    setDisplay(editDelete, isHidden ? 'none' : 'flex');
+
+    // Set the toggle button text based on the state
+    toggleButton.textContent = isHidden ? 'Show Tile Buttons' : 'Hide Tile Buttons';
 });
 
 
+
 tagFilterMobile.addEventListener('change', filterTilesMobile);
+const starTags = ['⭐', '🌟', '✨', '🌠', '💫', '🤩', '❇️', '✴️', '✳️'];
+
 function updateTagFilterMobile() {
     const currentFilter = tagFilterMobile.value;
     tagFilterMobile.innerHTML = '<option value="all">All Tags</option>';
+
     allTags.forEach(tag => {
-        const option = document.createElement('option');
-        option.value = tag;
-        option.textContent = tag;
-        tagFilterMobile.appendChild(option);
+        // Add only the ⭐ option if any star-related tags exist
+        if (starTags.includes(tag)) {
+            if (!Array.from(tagFilterMobile.options).some(option => option.value === '⭐')) {
+                const option = document.createElement('option');
+                option.value = '⭐';
+                option.textContent = '⭐';
+                tagFilterMobile.appendChild(option);
+            }
+        } else {
+            const option = document.createElement('option');
+            option.value = tag;
+            option.textContent = tag;
+            tagFilterMobile.appendChild(option);
+        }
     });
+    
     tagFilterMobile.value = currentFilter;
     filterTilesMobile();
 }
@@ -1150,10 +1573,17 @@ function filterTilesMobile() {
     const selectedTag = tagFilterMobile.value;
     tiles.forEach((tile, index) => {
         const tileElement = imageGrid.children[index];
-        if (selectedTag === 'all' ||
+
+        // Check if the tile matches the selected tag or its equivalent
+        const isMatchingTag = selectedTag === 'all' ||
             tile.tags.includes(selectedTag) ||
             tile.platform === selectedTag ||
-            tile.age === selectedTag) {
+            tile.age === selectedTag;
+
+        // Treat ⭐ as matching all star-related tags
+        const isStarEquivalent = (selectedTag === '⭐' && tile.tags.some(tag => starTags.includes(tag)));
+
+        if (isMatchingTag || isStarEquivalent) {
             tileElement.style.display = '';
         } else {
             tileElement.style.display = 'none';
@@ -1198,15 +1628,16 @@ document.getElementById('urlURL-popup-close').addEventListener('click', () => {
     document.getElementById('image-source-popup').style.display = 'none';
     document.getElementById('popup-overlay').style.display = 'none';
 });
-document.getElementById('popup-overlay').addEventListener('click', () => {
-    document.getElementById('image-source-popup').style.display = 'none';
-    document.getElementById('url-input-popup').style.display = 'none';
+document.getElementById('settings-close').addEventListener('click', () => {
     document.getElementById('popup-overlay').style.display = 'none';
+    document.getElementById('settings-popup').style.display = 'none';
 });
-// Add a click event listener to the div
-popupOverlay.addEventListener("click", function () {
-   // Define what happens when the div is clicked
+document.getElementById('popup-overlay').addEventListener('click', () => {
+   document.getElementById('image-source-popup').style.display = 'none';
+   document.getElementById('url-input-popup').style.display = 'none';
    document.getElementById('popup-overlay').style.display = 'none';
+   document.getElementById('popup-overlay').style.display = 'none';
+   document.getElementById('settings-popup').style.display = 'none';
    document.getElementById('edit-url-popup').style.display = 'none';
    document.getElementById('tile-creation-popup').style.display = 'none';
    document.getElementById('character-popup').style.display = 'none';
@@ -1214,7 +1645,6 @@ popupOverlay.addEventListener("click", function () {
    document.getElementById('edit-tags-popup').style.display = 'none';
    document.getElementById('share-url-popup').style.display = 'none';
    document.getElementById('nsfw-inclusion-popup').style.display = 'none';
-
 });
 
 function showEditUrlPopup(tileData, tileElement) {
@@ -1316,8 +1746,45 @@ function applyStoredTheme() {
    setTheme(storedTheme);
 }
 
-lightModeBtn.addEventListener('click', () => setTheme(''));
-darkModeBtn.addEventListener('click', () => setTheme('dark-mode'));
+const themeToggleBtn = document.getElementById('theme-toggle-btn');
+
+const themes = ['', 'dark-mode', 'amoled-mode'];
+let currentThemeIndex = 0;  // Index to track the current theme
+
+// Function to apply the theme
+function setTheme(theme) {
+    // Apply the theme to the body or wherever it’s needed
+    document.body.className = theme;
+
+    // Save the theme in local storage
+    localStorage.setItem('theme', theme);
+
+    // Update the button text based on the theme
+    if (theme === '') {
+        themeToggleBtn.textContent = 'Light Mode';
+    } else if (theme === 'dark-mode') {
+        themeToggleBtn.textContent = 'Dark Mode';
+    } else if (theme === 'amoled-mode') {
+        themeToggleBtn.textContent = 'Amoled Mode';
+    }
+}
+
+// Function to cycle through the themes
+function toggleTheme() {
+    // Move to the next theme
+    currentThemeIndex = (currentThemeIndex + 1) % themes.length;
+    setTheme(themes[currentThemeIndex]);
+}
+
+// Function to apply the stored theme on page load
+function applyStoredTheme() {
+    const storedTheme = localStorage.getItem('theme') || '';
+    currentThemeIndex = themes.indexOf(storedTheme);
+    setTheme(storedTheme);
+}
+
+// Add event listener to the button
+themeToggleBtn.addEventListener('click', toggleTheme);
 
 // Apply theme on load
 applyStoredTheme();
@@ -1337,19 +1804,25 @@ function saveTiles() {
    localStorage.setItem('imageTiles', JSON.stringify(tiles));
 }
 
-// Create image tile
 function createImageTile(tileData) {
    const newImageItem = document.createElement('div');
    newImageItem.className = 'image-item';
-   if (tileData.tags.includes('18+') || tileData.tags.includes('NSFW') || tileData.tags.includes('Hentai') || tileData.tags.includes('Porn')) {
+
+   const hasNSFW = tileData.tags.includes('18+') || tileData.tags.includes('NSFW') || tileData.tags.includes('Hentai') || tileData.tags.includes('Porn') || tileData.tags.includes('Yaoi');
+   const hasStar = tileData.tags.includes('⭐') || tileData.tags.includes('✨') || tileData.tags.includes('🌠') || tileData.tags.includes('🌟') ||
+                   tileData.tags.includes('💫') || tileData.tags.includes('🤩') || tileData.tags.includes('❇️') || tileData.tags.includes('✴️') ||
+                   tileData.tags.includes('✳️') || tileData.tags.includes('🔥') || tileData.tags.includes('💎');
+
+   if (hasNSFW) {
       newImageItem.classList.add('nsfw-outline');
    }
-   if (tileData.tags.includes('⭐')) {
+   if (hasStar) {
       newImageItem.classList.add('star-outline');
    }
-   if ((tileData.tags.includes('18+') || tileData.tags.includes('NSFW') || tileData.tags.includes('Hentai') || tileData.tags.includes('Porn')) && tileData.tags.includes('⭐')) {
+   if (hasNSFW && hasStar) {
       newImageItem.classList.add('special-outline');
    }
+
    newImageItem.innerHTML = `
                 <a href="${tileData.link}" target="_blank" class="image-container">
                     <img src="${tileData.imageData}" alt="User uploaded image">
@@ -1366,7 +1839,17 @@ function createImageTile(tileData) {
                     ${tileData.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
                 </div>
             `;
-   imageGrid.insertBefore(newImageItem, addImageButton);
+
+   // Find the last tile that's not the add-image button
+   const tiles = Array.from(imageGrid.children);
+   const lastTile = tiles.filter(tile => !tile.classList.contains('add-image')).pop();
+
+   // Insert the new tile after the last existing tile, or at the beginning if there are no tiles
+   if (lastTile) {
+      imageGrid.insertBefore(newImageItem, lastTile.nextSibling);
+   } else {
+      imageGrid.insertBefore(newImageItem, imageGrid.firstChild);
+   }
 
    // Add edit image functionality
    newImageItem.querySelector('.edit-image-btn').addEventListener('click', (e) => {
@@ -1408,8 +1891,11 @@ function createImageTile(tileData) {
 
 function updateTileOutline(tileElement, tags) {
    tileElement.classList.remove('nsfw-outline', 'star-outline', 'special-outline');
-   const hasNSFW = tags.includes('18+') || tags.includes('NSFW') || tags.includes('Porn') || tags.includes('Hentai');
-   const hasStar = tags.includes('⭐');
+   
+   const hasNSFW = tags.includes('18+') || tags.includes('NSFW') || tags.includes('Porn') || tags.includes('Hentai') || tags.includes('Yaoi');
+   const hasStar = tags.includes('⭐') || tags.includes('✨') || tags.includes('🌠') || tags.includes('🌟') ||
+                   tags.includes('💫') || tags.includes('🤩') || tags.includes('❇️') || tags.includes('✴️') ||
+                   tags.includes('✳️') || tags.includes('🔥') || tags.includes('💎');
 
    if (hasNSFW && hasStar) {
       tileElement.classList.add('special-outline');
@@ -1419,6 +1905,7 @@ function updateTileOutline(tileElement, tags) {
       tileElement.classList.add('star-outline');
    }
 }
+
 
 function stripUrlParams(url) {
    try {
@@ -1563,11 +2050,50 @@ function shareTile(tileData) {
 
 // Delete tile
 function deleteTile(tileData, tileElement) {
-   tiles = tiles.filter(tile => tile !== tileData);
-   imageGrid.removeChild(tileElement);
-   saveTiles();
-   updateTagFilter();
+  // Find the index of the tile in the tiles array
+  const tileIndex = tiles.indexOf(tileData);
+
+  // Check if the add-image tile is at the beginning
+  const addImagePosition = localStorage.getItem('addImagePosition');
+  const adjustedIndex = (addImagePosition === 'beginning' && tileIndex >= 1) ? tileIndex + 1 : tileIndex;
+
+  // Store the deleted tile data, element, and its adjusted index
+  deletedTile = { data: tileData, element: tileElement, index: adjustedIndex };
+
+  // Remove the tile from the grid and update the tiles array
+  tiles.splice(tileIndex, 1);
+  imageGrid.removeChild(tileElement);
+  saveTiles();
+  updateTagFilter();
+
+  // Show the undo popup
+  showUndoPopup();
 }
+
+function undoDelete() {
+  if (deletedTile) {
+    // Adjust the index when adding the tile back
+    const addImagePosition = localStorage.getItem('addImagePosition');
+    const adjustedIndex = (addImagePosition === 'beginning') ? deletedTile.index + 1 : deletedTile.index;
+
+    // Add the tile back to the tiles array at its original index
+    tiles.splice(adjustedIndex, 0, deletedTile.data);
+
+    // Find the correct position to insert the tile in the grid
+    const nextSibling = imageGrid.children[adjustedIndex] || null;
+    imageGrid.insertBefore(deletedTile.element, nextSibling);
+
+    saveTiles();
+    updateTagFilter();
+
+    // Hide the undo popup
+    hideUndoPopup();
+  }
+}
+
+undoButton.addEventListener('click', undoDelete);
+dismissButton.addEventListener('click', hideUndoPopup);
+
 
 // Update tile tags
 function updateTileTags(tileElement, tags) {
@@ -1587,16 +2113,27 @@ function updateAllTags() {
    updateTagFilter();
 }
 
-// Update tag filter dropdown
 function updateTagFilter() {
     const currentFilter = tagFilter.value;
     tagFilter.innerHTML = '<option value="all">All Tags</option>';
+    
     allTags.forEach(tag => {
-        const option = document.createElement('option');
-        option.value = tag;
-        option.textContent = tag;
-        tagFilter.appendChild(option);
+        // Add only the ⭐ option if any star-related tags exist
+        if (starTags.includes(tag)) {
+            if (!Array.from(tagFilter.options).some(option => option.value === '⭐')) {
+                const option = document.createElement('option');
+                option.value = '⭐';
+                option.textContent = '⭐';
+                tagFilter.appendChild(option);
+            }
+        } else {
+            const option = document.createElement('option');
+            option.value = tag;
+            option.textContent = tag;
+            tagFilter.appendChild(option);
+        }
     });
+    
     tagFilter.value = currentFilter;
     filterTiles();
 
@@ -1604,15 +2141,22 @@ function updateTagFilter() {
     updateTagFilterMobile();
 }
 
-// Filter tiles based on selected tag
+// Filter tiles based on selected tag for desktop
 function filterTiles() {
    const selectedTag = tagFilter.value;
    tiles.forEach((tile, index) => {
       const tileElement = imageGrid.children[index];
-      if (selectedTag === 'all' ||
+      
+      // Check if the tile matches the selected tag or its equivalent
+      const isMatchingTag = selectedTag === 'all' ||
          tile.tags.includes(selectedTag) ||
          tile.platform === selectedTag ||
-         tile.age === selectedTag) {
+         tile.age === selectedTag;
+
+      // Treat ⭐ as matching all star-related tags
+      const isStarEquivalent = (selectedTag === '⭐' && tile.tags.some(tag => starTags.includes(tag)));
+
+      if (isMatchingTag || isStarEquivalent) {
          tileElement.style.display = '';
       } else {
          tileElement.style.display = 'none';
@@ -1717,7 +2261,7 @@ importFileInput.addEventListener('change', (event) => {
 });
 // Function to toggle blur on NSFW content
 function toggleBlurNSFW() {
-   const nsfwTags = ['18+', 'NSFW', "Hentai", "Porn"]; // Tags considered NSFW
+   const nsfwTags = ['18+', 'NSFW', "Hentai", "Porn", "Yaoi"]; // Tags considered NSFW
    const imageItems = document.querySelectorAll('.image-item');
 
    imageItems.forEach(item => {
@@ -1743,12 +2287,18 @@ blurNSFWBtn.addEventListener('click', toggleBlurNSFW);
 // Load saved tiles on page load
 loadSavedTiles();
 const randomCharacterBtn = document.getElementById('random-character-btn');
+const settingsBtn = document.getElementById('settings-btn')
 const characterPopup = document.getElementById('character-popup');
 const popupClose = document.getElementById('popup-close');
 const popupCloseBtn = document.getElementById('popup-close-btn');
 const popupImage = document.getElementById('popup-image');
 const popupTags = document.getElementById('popup-tags');
 const popupLink = document.getElementById('popup-link');
+
+settingsBtn.addEventListener('click', () => {
+      document.getElementById('settings-popup').style.display = 'flex';
+      document.getElementById('popup-overlay').style.display = 'block';
+});
 
 // Event listeners for closing popup
 popupClose.addEventListener('click', closePopup);
@@ -1764,12 +2314,14 @@ function selectRandomCharacter() {
    }
    let availableCharacters = includeNSFW ? characters : characters.filter(char => {
       const tags = Array.from(char.querySelectorAll('.tag')).map(tag => tag.textContent);
-      return !tags.some(tag => ['18+', 'NSFW', 'Porn', 'Hentai'].includes(tag));
+      return !tags.some(tag => ['18+', 'NSFW', 'Porn', 'Hentai', 'Yaoi'].includes(tag));
    });
 
    if (availableCharacters.length === 0) {
-      alert('No characters available with current NSFW settings.');
+      document.getElementById('popup-overlay').style.display = 'none';
+      alert('No characters available with current NSFW settings. If you checked the box for it to remembner which option you chose, click the "Reset Remembered State" to get the prompt back up');
       return;
+
    }
 
    const randomIndex = Math.floor(Math.random() * availableCharacters.length);
@@ -1786,7 +2338,7 @@ function selectRandomCharacter() {
 
    updateTileOutline(characterPopup, tileData.tags);
 
-   if (isBlurred && (tileData.tags.includes('18+') || tileData.tags.includes('NSFW') || tileData.tags.includes('Hentai') || tileData.tags.includes('Porn'))) {
+   if (isBlurred && (tileData.tags.includes('18+') || tileData.tags.includes('NSFW') || tileData.tags.includes('Hentai') || tileData.tags.includes('Porn') || tileData.tags.includes('Yaoi'))) {
       popupImage.classList.add('blurred-image');
    } else {
       popupImage.classList.remove('blurred-image');
@@ -1807,16 +2359,32 @@ function closePopup() {
    popupImage.classList.remove('blurred-image');
 }
 
-
 // Event listener for the random character button
 randomCharacterBtn.addEventListener('click', () => {
-   if (rememberNSFWChoice) {
-      selectRandomCharacter();
-   } else {
-      document.getElementById('nsfw-inclusion-popup').style.display = 'flex';
-      document.getElementById('popup-overlay').style.display = 'block';
-   }
+    // Check if any character has the NSFW tag
+    const hasNSFWCharacter = tiles.some(tile => tile.tags.includes('NSFW') || tile.tags.includes('18+') || tile.tags.includes('Porn') || tile.tags.includes('Hentai') || tile.tags.includes('Yaoi'));
+    
+    // Check if all tiles have the NSFW tag
+    const allTilesNSFW = tiles.every(tile => tile.tags.includes('NSFW') || tile.tags.includes('18+') || tile.tags.includes('Porn') || tile.tags.includes('Hentai') || tile.tags.includes('Yaoi'));
+
+    if (!hasNSFWCharacter) {
+        // If no NSFW characters exist, select a random character
+        selectRandomCharacter();
+    } else if (allTilesNSFW) {
+        // If all tiles are NSFW, select a random character
+        includeNSFW = true;
+        selectRandomCharacter();
+    } else if (rememberNSFWChoice) {
+        // If the NSFW choice is remembered, select a random character
+        selectRandomCharacter();
+    } else {
+        // Show NSFW inclusion popup if NSFW characters exist and choice is not remembered
+        document.getElementById('nsfw-inclusion-popup').style.display = 'flex';
+        document.getElementById('popup-overlay').style.display = 'block';
+    }
 });
+
+
 
 // Update the checkbox state based on the saved choice
 document.getElementById('remember-nsfw-state-checkbox').checked = rememberNSFWChoice;
@@ -1850,7 +2418,12 @@ function checkForSpecialTiles() {
    const tileElements = document.querySelectorAll('.image-item:not(.add-image)');
    tileElements.forEach((tileElement, index) => {
       const tileData = tiles[index];
-      if ((tileData.tags.includes('18+') || tileData.tags.includes('NSFW') || tileData.tags.includes('Hentai') || tileData.tags.includes('Porn')) && tileData.tags.includes('⭐')) {
+      if (
+         (tileData.tags.includes('18+') || tileData.tags.includes('NSFW') || tileData.tags.includes('Hentai') || tileData.tags.includes('Porn')|| tileData.tags.includes('Yaoi')) &&
+         (tileData.tags.includes('⭐') || tileData.tags.includes('✨') || tileData.tags.includes('🌠') || tileData.tags.includes('🌟') ||
+          tileData.tags.includes('💫') || tileData.tags.includes('🤩') || tileData.tags.includes('❇️') || tileData.tags.includes('✴️') ||
+          tileData.tags.includes('✳️') || tileData.tags.includes('🔥') || tileData.tags.includes('💎'))
+      ) {
          tileElement.classList.add('special-outline');
       } else {
          tileElement.classList.remove('special-outline');
@@ -1858,12 +2431,14 @@ function checkForSpecialTiles() {
    });
 }
 
+
+
 // Run the check once on page load
 document.addEventListener('DOMContentLoaded', checkForSpecialTiles);
 
 // Function to apply blur status on page load
 function applyBlurNSFWStatus() {
-   const nsfwTags = ['18+', 'NSFW', "Hentai", "Porn"]; // Tags considered NSFW
+   const nsfwTags = ['18+', 'NSFW', "Hentai", "Porn", "Yaoi"]; // Tags considered NSFW
    const imageItems = document.querySelectorAll('.image-item');
 
    imageItems.forEach(item => {
