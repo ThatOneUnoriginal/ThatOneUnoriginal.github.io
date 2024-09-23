@@ -817,6 +817,58 @@
 	#nsfw-inclusion-popup button:hover, #share-url-popup button:hover, .edit-popup button:hover, .active, .collapsible:hover, #popup-close:hover, #settings-popup button:hover {
             background-color: var(--button-bg-hover-1)
         }
+        #undo-delete-popup {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    background-color: #333;
+    color: #fff;
+    padding: 15px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.3s, transform 0.3s;
+  }
+
+  #undo-delete-popup.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  #undo-delete-popup p {
+    margin: 0;
+    margin-right: 15px;
+  }
+
+  #undo-delete-popup button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+
+  #undo-delete-popup button:hover {
+    background-color: #45a049;
+  }
+
+  #dismiss-undo {
+    background-color: transparent !important;
+    color: #aaa;
+    padding: 0 !important;
+    margin-left: 10px;
+  }
+
+  #dismiss-undo:hover {
+    color: #fff;
+  }
     </style>
 </head>
 <body>
@@ -1146,6 +1198,13 @@
           <button id="cancel-image-selection">Cancel</button>
        </div>
     </div>
+    <div id="undo-delete-popup">
+  <p>Tile deleted. <span id="undo-timer">30</span>s</p>
+  <div>
+    <button id="undo-delete-btn">Undo</button>
+    <button id="dismiss-undo">✕</button>
+  </div>
+</div>
     <!-- Add the file input for uploading images -->
     <input type="file" id="file-input" accept="image/*,.avif,.jxl,.cur,.jps,.jfif" class="hidden">
     <div class="image-grid" id="image-grid">
@@ -1179,7 +1238,33 @@ let allTags = new Set();
 let isBlurred = JSON.parse(localStorage.getItem('isBlurred')) || false; // Load blur status from localStorage
 let rememberNSFWChoice = JSON.parse(localStorage.getItem('rememberNSFWChoice')) || false;
 let includeNSFW = JSON.parse(localStorage.getItem('includeNSFW')) || false;
+let deletedTile = null;
+let undoTimer = null;
+const undoPopup = document.getElementById('undo-delete-popup');
+const undoButton = document.getElementById('undo-delete-btn');
+const dismissButton = document.getElementById('dismiss-undo');
+const timerSpan = document.getElementById('undo-timer');
 
+function showUndoPopup() {
+  undoPopup.classList.add('show');
+  let secondsLeft = 30;
+  timerSpan.textContent = secondsLeft;
+
+  undoTimer = setInterval(() => {
+    secondsLeft--;
+    timerSpan.textContent = secondsLeft;
+
+    if (secondsLeft <= 0) {
+      hideUndoPopup();
+    }
+  }, 1000);
+}
+
+function hideUndoPopup() {
+  clearInterval(undoTimer);
+  undoPopup.classList.remove('show');
+  deletedTile = null;
+}
 
 // Save the selected color option in localStorage
 document.getElementById('colorSelector').addEventListener('change', function() {
@@ -1813,11 +1898,41 @@ function shareTile(tileData) {
 
 // Delete tile
 function deleteTile(tileData, tileElement) {
-   tiles = tiles.filter(tile => tile !== tileData);
-   imageGrid.removeChild(tileElement);
-   saveTiles();
-   updateTagFilter();
+  // Find the index of the tile in the tiles array
+  const tileIndex = tiles.indexOf(tileData);
+
+  // Store the deleted tile data, element, and its index
+  deletedTile = { data: tileData, element: tileElement, index: tileIndex };
+
+  // Remove the tile from the grid and update the tiles array
+  tiles.splice(tileIndex, 1);
+  imageGrid.removeChild(tileElement);
+  saveTiles();
+  updateTagFilter();
+
+  // Show the undo popup
+  showUndoPopup();
 }
+
+function undoDelete() {
+  if (deletedTile) {
+    // Add the tile back to the tiles array at its original index
+    tiles.splice(deletedTile.index, 0, deletedTile.data);
+
+    // Find the correct position to insert the tile in the grid
+    const nextSibling = imageGrid.children[deletedTile.index];
+    imageGrid.insertBefore(deletedTile.element, nextSibling);
+
+    saveTiles();
+    updateTagFilter();
+
+    // Hide the undo popup
+    hideUndoPopup();
+  }
+}
+undoButton.addEventListener('click', undoDelete);
+dismissButton.addEventListener('click', hideUndoPopup);
+
 
 // Update tile tags
 function updateTileTags(tileElement, tags) {
