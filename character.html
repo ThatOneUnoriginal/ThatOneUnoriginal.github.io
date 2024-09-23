@@ -2084,14 +2084,23 @@ function closePopup() {
    popupImage.classList.remove('blurred-image');
 }
 
-
 // Event listener for the random character button
 randomCharacterBtn.addEventListener('click', () => {
     // Check if any character has the NSFW tag
-    const hasNSFWCharacter = tiles.some(tile => tile.tags.includes('NSFW') || tile.tags.includes('18+') || tile.tags.includes('Porn') || tile.tags.includes('Hentai') || tile.tags.includes('Yaoi')); 
+    const hasNSFWCharacter = tiles.some(tile => tile.tags.includes('NSFW') || tile.tags.includes('18+') || tile.tags.includes('Porn') || tile.tags.includes('Hentai') || tile.tags.includes('Yaoi'));
+    
+    // Check if all tiles have the NSFW tag
+    const allTilesNSFW = tiles.every(tile => tile.tags.includes('NSFW') || tile.tags.includes('18+') || tile.tags.includes('Porn') || tile.tags.includes('Hentai') || tile.tags.includes('Yaoi'));
 
-    if (!hasNSFWCharacter || rememberNSFWChoice) {
-        // If no NSFW characters exist or the choice is remembered, select a random character
+    if (!hasNSFWCharacter) {
+        // If no NSFW characters exist, select a random character
+        selectRandomCharacter();
+    } else if (allTilesNSFW) {
+        // If all tiles are NSFW, select a random character
+        includeNSFW = true;
+        selectRandomCharacter();
+    } else if (rememberNSFWChoice) {
+        // If the NSFW choice is remembered, select a random character
         selectRandomCharacter();
     } else {
         // Show NSFW inclusion popup if NSFW characters exist and choice is not remembered
@@ -2099,6 +2108,8 @@ randomCharacterBtn.addEventListener('click', () => {
         document.getElementById('popup-overlay').style.display = 'block';
     }
 });
+
+
 
 // Update the checkbox state based on the saved choice
 document.getElementById('remember-nsfw-state-checkbox').checked = rememberNSFWChoice;
