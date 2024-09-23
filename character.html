@@ -8,10 +8,10 @@
     <title>Character Bookmarking Tool</title>
     <style>
     
-.theme-toggle button, #tag-filter, #tag-filter-mobile, #export-btn, #import-btn, #tile-size, #colorSelector, #popup-link, #reroll-btn, #local-upload-btn, #url-upload-btn,
+.theme-toggle button, #tag-filter, #tag-filter-mobile, #export-btn, #import-btn, #tile-size, #colorSelector, #popup-button, #reroll-btn, #local-upload-btn, #url-upload-btn,
 #url-popup-close, #url-popup-close-url, #local-image-btn, #url-image-btn, #urlURL-popup-close, #url-popup-close-url1, #popup-close, .collapsible, .edit-popup button,
 #submit-url-btn, #submit-url-btn1, #share-url-popup button, #nsfw-inclusion-popup button, #image-upload-choice-popup button, #tile-creation-popup button, #settings-popup button, 
-#tileSize, #undo-delete-popup button {
+#tileSize, #undo-delete-popup button, #popup-close-btn {
 	background-color: var(--button-bg-1);
 }
 
@@ -22,6 +22,7 @@
 }
 
 #popup-content {
+    overflow-y: auto;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -402,16 +403,13 @@ img:hover {
 #popup-close-btn {
 	margin-top: 10px;
 	padding: 5px 10px;
-	background-color: #f44336;
 	color: white;
 	border: none;
 	border-radius: 5px;
 	cursor: pointer;
+    transition: background-color 0.3s;
 }
 
-#popup-close-btn:hover {
-	background-color: var(--nsfw-color-1);
-}
 
 .popup {
 	position: fixed;
@@ -492,7 +490,7 @@ img:hover {
 	font-style: italic;
 }
 
-#popup-link, #reroll-btn {
+#popup-button, #reroll-btn, #popup-close-btn {
 	display: inline-block;
 	margin-top: 15px;
 	color: var(--button-color);
@@ -502,6 +500,7 @@ img:hover {
 	transition: background-color 0.3s;
 	margin-bottom: 10px;
 	border-color: transparent;
+    width: 100%
 }
 
 #local-upload-btn, #url-upload-btn, #url-popup-close, #url-popup-close-url, #local-image-btn, #url-image-btn, #urlURL-popup-close, #url-popup-close-url1 {
@@ -517,7 +516,7 @@ img:hover {
 	width: 100%
 }
 
-#popup-close {
+#popup-close{
 	position: absolute;
 	top: -10px;
 	right: -10px;
@@ -753,7 +752,7 @@ img:hover {
 }
 
 .theme-toggle button:hover, #tag-filter:hover, #tag-filter-mobile, #export-btn:hover, #import-btn:hover, #image-upload-choice-popup button:hover, #nsfw-inclusion-popup button:hover,
-#share-url-popup button:hover, .edit-popup button:hover, .active, .collapsible:hover, #popup-close:hover, #settings-popup button:hover, #undo-delete-popup button:hover {
+#share-url-popup button:hover, .edit-popup button:hover, .active, .collapsible:hover, #popup-close-btn:hover ,#popup-close:hover, #settings-popup button:hover, #undo-delete-popup button:hover {
 	background-color: var(--button-bg-hover-1)
 }
 
@@ -817,11 +816,28 @@ img:hover {
 	}
 }
 
+@media (max-height: 670px) {
+    #settings-popup{
+        height: 600px
+    }
+}
+@media (max-height: 570px) {
+    #settings-popup{
+        height: 500px
+    }
+}
 @media (max-width: 600px) {
 	#character-popup {
 		max-height: 80vh;
 		overflow-y: auto;
 	}
+
+    #popup-close-btn{
+        display: block
+    }
+    #popup-close{
+        display: none
+    }
 
 	#popup-image {
 		max-height: 200px;
@@ -885,7 +901,7 @@ img:hover {
 
 	#tag-filter {
 		display: none;
-	}
+    }
 }
     </style>
 </head>
@@ -1067,13 +1083,14 @@ img:hover {
     </div>
     <div class="controls">
        <div class="theme-toggle">
-
           <button id="export-btn">Export</button>
           <button id="import-btn">Import</button>
           <button id="toggleButton">Hide Tile Buttons</button>
           <button id="settings-btn">Theme Settings</button>
           <button id="random-character-btn">Select Random Character</button>
           <button id="flush-button">Reset Remembered State</button>     
+          <button id="openReorderToolButton">Open Reorder Tool</button>
+          <button id="openBackupMergeButton">Open Backup Merge</button>
           <select id="tag-filter-mobile">
              <option value="all">All Tags</option>
           </select>
@@ -1096,7 +1113,7 @@ img:hover {
              <p id="popup-description"></p>
              <p id="popup-tags"></p>
           </div>
-          <a id="popup-link" href="#" target="_blank">View Profile</a>
+          <button id="popup-button" type="button">View Profile</button>
           <button id="reroll-btn">Reroll</button>
           <button id="popup-close-btn">Close</button>
        </div>
@@ -1169,7 +1186,7 @@ img:hover {
         </div>
     </div>  
     <!-- Settings Popup -->
-    <div id="settings-popup">
+    <div id="settings-popup" style="overflow-y: auto;">
         <div id="popup-content">
         <h3>Theme Settings</h3>
             <button id="blur-nsfw-btn">Blur NSFW</button>
@@ -1283,6 +1300,13 @@ let undoTimer = null;
 
 let isAtEnd =  true;  // Initially, the add-image tile is at the end
 
+document.getElementById('openReorderToolButton').addEventListener('click', function() {
+        window.open('https://thatoneunoriginal.github.io/reorder%20tool.html', '_blank');
+    });
+
+    document.getElementById('openBackupMergeButton').addEventListener('click', function() {
+        window.open('https://thatoneunoriginal.github.io/backup%20merge.html', '_blank');
+    });
 
 document.getElementById('exportButton').addEventListener('click', () => {
     // Retrieve values from local storage
@@ -1446,16 +1470,16 @@ document.getElementById('colorSelector').addEventListener('change', function() {
     const selectedColorOption = this.value; 
     localStorage.setItem('selectedColorOption', selectedColorOption); // Save to local storage
 
-    const nsfwTiles = document.querySelectorAll('.nsfw-outline, .highlight-nsfw, #popup-close-btn:hover');
+    const nsfwTiles = document.querySelectorAll('.nsfw-outline, .highlight-nsfw');
     const specialTiles = document.querySelectorAll('.special-outline');
     const starTiles = document.querySelectorAll('.star-outline, .highlight-favourite');
 
     // Select all specified buttons
     const buttons = document.querySelectorAll(
-        '.theme-toggle button, #tag-filter, #tag-filter-mobile, #export-btn, #import-btn, #tile-size, #colorSelector, #popup-link, #reroll-btn, ' +
+        '.theme-toggle button, #tag-filter, #tag-filter-mobile, #export-btn, #import-btn, #tile-size, #colorSelector, #popup-button, #reroll-btn, ' +
         '#local-upload-btn, #url-upload-btn, #url-popup-close, #url-popup-close-url, #local-image-btn, #url-image-btn, #urlURL-popup-close, ' +
         '#url-popup-close-url1, #popup-close, .collapsible, .edit-popup button, #submit-url-btn, #submit-url-btn1, #share-url-popup button, ' +
-        '#nsfw-inclusion-popup button, #image-upload-choice-popup button, #settings-popup button, #tileSize, #undo-delete-popup button, .highlight'
+        '#nsfw-inclusion-popup button, #image-upload-choice-popup button, #settings-popup button, #tileSize, #undo-delete-popup button, .highlight, #popup-close-btn'
     );
 
     // Define colors based on the selected option
@@ -2361,7 +2385,6 @@ const popupClose = document.getElementById('popup-close');
 const popupCloseBtn = document.getElementById('popup-close-btn');
 const popupImage = document.getElementById('popup-image');
 const popupTags = document.getElementById('popup-tags');
-const popupLink = document.getElementById('popup-link');
 
 settingsBtn.addEventListener('click', () => {
       document.getElementById('settings-popup').style.display = 'flex';
@@ -2402,7 +2425,11 @@ function selectRandomCharacter() {
    document.getElementById('popup-age').textContent = `Age: ${tileData.age || 'N/A'}`;
    document.getElementById('popup-description').textContent = tileData.description || 'No description available.';
    document.getElementById('popup-tags').textContent = `Tags: ${tileData.tags.join(', ')}`;
-   document.getElementById('popup-link').href = tileData.link;
+   document.getElementById('popup-button').addEventListener('click', function() {
+    const tileData = tiles[characters.indexOf(selectedCharacter)];
+    window.open(tileData.link, '_blank'); // Open link in new tab
+    });
+
 
    updateTileOutline(characterPopup, tileData.tags);
 
