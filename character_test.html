@@ -134,7 +134,7 @@
         :root {
             --nsfw-outline: #FF4C4C;
             --star-outline: #33881e;
-            --special-outline: #4B0082 ;
+            --special-outline: #4B0082;
             --bg-color: #f4f4f4;
             --text-color: #333;
             --tile-bg: #fff;
@@ -191,7 +191,7 @@
             margin-bottom: 10px;
         }
         
-        .theme-toggle button, #tag-filter,  #tag-filter-mobile , #export-btn, #import-btn, #tile-size {
+        .theme-toggle button, #tag-filter,  #tag-filter-mobile , #export-btn, #import-btn, #tile-size, #colorSelector {
             padding: 5px 10px;
             cursor: pointer;
             background-color: var(--button-bg);
@@ -931,6 +931,11 @@
           <button id="blur-nsfw-btn">Blur NSFW</button>
           <button id="random-character-btn">Select Random Character</button>
           <button id="flush-button">Reset Remembered State</button>
+          <select id="colorSelector">
+            <option value="original">Original</option>
+            <option value="colour1">Colour 1</option>
+            <option value="colour2">Colour 2</option>
+        </select>
           <select id="tag-filter-mobile">
              <option value="all">All Tags</option>
           </select>

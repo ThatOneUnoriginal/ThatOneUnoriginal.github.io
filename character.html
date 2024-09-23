@@ -5,7 +5,15 @@
     <link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/ThatOneUnoriginal/ThatOneUnoriginal.github.io/dev-test/Character%20Tools/Assets/BookmarkingToolIcon.ico">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Character Bookmarking Tool</title>
-    <style>      
+    <style>
+    
+    .theme-toggle button, #tag-filter,  #tag-filter-mobile , #export-btn, #import-btn, #tile-size, #colorSelector, #popup-link, #reroll-btn,
+	#local-upload-btn, #url-upload-btn, #url-popup-close, #url-popup-close-url, #local-image-btn, #url-image-btn, #urlURL-popup-close, #url-popup-close-url1,
+	#popup-close, .collapsible, .edit-popup button, #submit-url-btn, #submit-url-btn1, #share-url-popup button, #nsfw-inclusion-popup button,
+	#image-upload-choice-popup button, #tile-creation-popup button, #settings-popup button{
+	    background-color: var(--button-bg-1);
+	}
+
           #character-popup {
             width: 90%;
             max-width: 600px;
@@ -16,6 +24,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            width: 100%
         }
   #tile-creation-popup {
             position: fixed;
@@ -46,17 +55,12 @@
 
         #tile-creation-popup button {
             padding: 10px 20px;
-            background-color: var(--button-bg);
             color: var(--button-color);
             border: none;
             border-radius: 4px;
             cursor: pointer;
             margin-top: 10px;
         }
-
-    #tile-creation-popup button:hover {
-        background-color: var(--button-bg-hover);
-    }
 
     .info-section {
         background-color: var(--tile-bg);
@@ -111,7 +115,7 @@
     }
 
     .highlight-nsfw {
-        background-color: red;
+        background-color: var(--nsfw-color-1);
         color: var(--button-color);
         padding: 2px 5px;
         border-radius: 3px;
@@ -132,35 +136,111 @@
     }
 
         :root {
-            --nsfw-outline: #FF4C4C;
-            --star-outline: #33881e;
-            --special-outline: #4B0082 ;
+            --button-bg-1: #3e6e3e;
+            --button-bg-2: #4c6b3b;
+            --button-bg-3: #5c8a3b;
+            --button-bg-4: #3e6e96;
+
+            --button-bg-hover-1: #2c5a2c;
+            --button-bg-hover-2: #3b5a32;
+            --button-bg-hover-3: #4a6a32;
+            --button-bg-hover-4: #2c5a74;
+
+            --nsfw-color-1: #FF1A1A;
+            --nsfw-color-2: #FF6A6A;
+            --nsfw-color-3: #FF7F7F;
+            --nsfw-color-4: #FF6A6A;
+
+            --special-outline-color-1: #3B0056; 
+            --special-outline-color-2: #A88DFF; 
+            --special-outline-color-3: #9C51C4; 
+            --special-outline-color-4: #7B5DAF;
+
+            --star-outline-color-1: #2E5B2E; 
+            --star-outline-color-2: #7B6B3A; 
+            --star-outline-color-3: #B7C20E; 
+            --star-outline-color-4: #4E4B31; 
+
             --bg-color: #f4f4f4;
             --text-color: #333;
             --tile-bg: #fff;
             --tile-shadow: rgba(0,0,0,0.1);
             --add-tile-bg: #e0e0e0;
             --add-tile-hover: #d0d0d0;
-            --button-bg: #4c8247;
-            --button-bg-hover: #43713e;
             --button-color: white;
             --popup-color: #dfdfdf;
         }
 
         .dark-mode {
-            --nsfw-outline: #FF4C4C;
-            --star-outline: #70ff4c;
-            --special-outline: #9C4CFF;
+
+            --button-bg-1: #4f8b4f;
+            --button-bg-2: #5f8b4f;
+            --button-bg-3: #6f9b4f;
+            --button-bg-4: #4f8b96;
+
+            --button-bg-hover-1: #3e6b3e;
+            --button-bg-hover-2: #4d6b3e;
+            --button-bg-hover-3: #5c7b3e;
+            --button-bg-hover-4: #3e6b8a;
+
+            --nsfw-color-1: #FF7F7F;
+            --nsfw-color-2: #FF8A8A;
+            --nsfw-color-3: #FF8A8A;
+            --nsfw-color-4: #FF8A8A;
+
+            --special-outline-color-1: #D78FFF; 
+            --special-outline-color-2: #D6A5FF; 
+            --special-outline-color-3: #A66CBB; 
+            --special-outline-color-4: #B57EDB;
+
+            --star-outline-color-1: #A8FF4C; 
+            --star-outline-color-2: #B7B73A; 
+            --star-outline-color-3: #D2D700; 
+            --star-outline-color-4: #7A7B35; 
             --bg-color: #333;
             --text-color: #f4f4f4;
             --tile-bg: #555;
             --tile-shadow: rgba(0,0,0,0.3);
             --add-tile-bg: #444;
             --add-tile-hover: #666;
-            --button-bg: #43713e;
-            --button-bg-hover: #396135;
             --button-color: #f4f4f4;
             --popup-color: #2f2f2f;
+        }
+        .amoled-mode {
+
+            --button-bg-1: #2e5e2e;
+            --button-bg-2: #3e5e2e;
+            --button-bg-3: #4e6e2e;
+            --button-bg-4: #2e5e6a;
+
+            --button-bg-hover-1: #3e6b3e;
+            --button-bg-hover-2: #4d6b3e;
+            --button-bg-hover-3: #5c7b3e;
+            --button-bg-hover-4: #3e6b8a;
+
+            --nsfw-color-1: #C05050;
+            --nsfw-color-2: #C06A6A;
+            --nsfw-color-3: #D06A6A;
+            --nsfw-color-4: #C0507A;
+
+            --special-outline-color-1: #A052B1; 
+            --special-outline-color-2: #A06EB1; 
+            --special-outline-color-3: #B06EB1; 
+            --special-outline-color-4: #A052C6;
+
+            --star-outline-color-1: #7D9A3C; 
+            --star-outline-color-2: #8B9A3C; 
+            --star-outline-color-3: #9B9A3C; 
+            --star-outline-color-4: #7D9A6A; 
+
+            --bg-color: #000; /* Pure black background */
+            --text-color: #e0e0e0; /* Light grey text for contrast */
+            --tile-bg: #111; /* Dark grey tile background */
+            --tile-shadow: rgba(255, 255, 255, 0.1); /* Subtle light shadow for depth */
+            --add-tile-bg: #222; /* Slightly lighter tile for the add button */
+            --add-tile-hover: #333; /* Hover effect for the add button */
+            --button-color: #e0e0e0; /* Button text color */
+            --popup-color: #111; /* Dark background for popups */
         }
 
         body {
@@ -194,20 +274,18 @@
         .theme-toggle button, #tag-filter,  #tag-filter-mobile , #export-btn, #import-btn, #tile-size {
             padding: 5px 10px;
             cursor: pointer;
-            background-color: var(--button-bg);
             color: var(--button-color);
             border: none;
             border-radius: 4px;
             margin-right: 5px;
             margin-bottom: 10px;
         }
+
         #tag-filter-mobile{
             width: 100%;
             display: none;
         }
-        .theme-toggle button:hover, #tag-filter:hover,  #tag-filter-mobile, #export-btn:hover, #import-btn:hover {
-            background-color: var(--button-bg-hover)
-        }
+
 
         .image-grid {
             display: grid;
@@ -278,15 +356,15 @@
             color: white;
             border: none;
             border-radius: 50%;
-            width: 25px;
-            height: 25px;
-            font-size: 16px;
+            width: 30px;
+            height: 30px;
+            font-size: 15px;
             cursor: pointer;
             display: flex;
             justify-content: center;
             align-items: center;
             margin-left: 5px;
-            margin-bottom: 3px;
+            margin-bottom: 5px;
         }
 
         .tags {
@@ -409,7 +487,6 @@
         #popup-link, #reroll-btn{
             display: inline-block;
             margin-top: 15px;
-            background-color: var(--button-bg);
             color: var(--button-color);
             padding: 8px 15px;
             border-radius: 4px;
@@ -418,10 +495,10 @@
             margin-bottom: 10px;
             border-color: transparent;
         }
+
         #local-upload-btn, #url-upload-btn, #url-popup-close, #url-popup-close-url, #local-image-btn, #url-image-btn, #urlURL-popup-close, #url-popup-close-url1{
             display: inline-block;
             cursor: pointer;
-            background-color: var(--button-bg);
             color: var(--button-color);
             padding: 8px 15px;
             border-radius: 4px;
@@ -431,16 +508,11 @@
             border-color: transparent;
             width: 100%
         }
-        #popup-link:hover, #reroll-btn:hover, #local-upload-btn:hover, #url-upload-btn:hover, #url-popup-close:hover, #url-popup-close-url:hover, 
-        #local-image-btn:hover, #url-image-btn:hover, #urlURL-popup-close:hover, #url-popup-close-url1:hover {
-            background-color: var(--button-bg-hover);
-        }
 
         #popup-close {
             position: absolute;
             top: -10px;
             right: -10px;
-            background-color: var(--button-bg);
             color: var(--button-color);
             width: 30px;
             height: 30px;
@@ -454,9 +526,7 @@
             transition: background-color 0.3s;
         }
 
-        #popup-close:hover {
-            background-color: var(--button-bg-hover);
-        }
+
 
         #popup-close-btn {
             display: none; 
@@ -475,7 +545,7 @@
         }
 
         .nsfw-outline, .popup.nsfw-outline {
-            border: 5px solid var(--nsfw-outline);
+            border: 5px solid var(--nsfw-color-1); /* Default color */
         }
 
         .blurred-image {
@@ -483,15 +553,14 @@
         }
 
         .star-outline {
-            border: 5px solid var(--star-outline);
+            border: 5px solid var(--star-outline-color-1);
         }
 
         .special-outline {
-            border: 5px solid var(--special-outline);
+            border: 5px solid var(--special-outline-color-1);
         }
 
         .collapsible {
-            background-color: var(--button-bg);
             color: var(--button-color);
             cursor: pointer;
             padding: 18px;
@@ -501,10 +570,6 @@
             outline: none;
             font-size: 15px;
             margin-bottom: 10px;
-        }
-
-        .active, .collapsible:hover {
-            background-color: var(--button-bg-hover);
         }
 
         .collapsible:after {
@@ -557,7 +622,6 @@
 
         .edit-popup button {
             padding: 10px 20px;
-            background-color: var(--button-bg);
             color: var(--button-color);
             border: none;
             border-radius: 4px;
@@ -565,9 +629,9 @@
             width: 100%;
             margin-top: 10px;
         }
+
         #submit-url-btn, #submit-url-btn1{
             padding: 10px 20px;
-            background-color: var(--button-bg);
             color: var(--button-color);
             border: none;
             border-radius: 4px;
@@ -575,9 +639,6 @@
             width: 100%;
             margin-top: 10px;
             margin-bottom: 10px;
-        }
-        .edit-popup button:hover {
-            background-color: var(--button-bg-hover);
         }
 
         .image-grid {
@@ -619,7 +680,6 @@
         #share-url-popup button {
             padding: 10px 20px;
             width: 100%;
-            background-color: var(--button-bg);
             color: var(--button-color);
             border: none;
             border-radius: 4px;
@@ -627,11 +687,7 @@
             margin-top: 10px;
         }
 
-        #share-url-popup button:hover {
-            background-color: var(--button-bg-hover);
-        }
-
-        #nsfw-inclusion-popup {
+        #nsfw-inclusion-popup, #settings-popup {
             position: fixed;
             top: 50%;
             left: 50%;
@@ -650,19 +706,14 @@
             animation: float 5s ease-in-out infinite
         }
 
-        #nsfw-inclusion-popup button {
+        #nsfw-inclusion-popup button, #settings-popup button, #colorSelector {
             width: 100%;
-            margin: 10px;
+            margin-top: 10px;
             padding: 10px 20px;
-            background-color: var(--button-bg);
             color: var(--button-color);
             border: none;
             border-radius: 4px;
             cursor: pointer;
-        }
-
-        #nsfw-inclusion-popup button:hover {
-            background-color: var(--button-bg-hover);
         }
 
                 /* Responsive design for smaller screens */
@@ -684,14 +735,14 @@
             }
         }
 @media (max-width: 600px) {
-    .edit-popup, #share-url-popup, #nsfw-inclusion-popup, #image-popup, #image-source-popup, #url-input-popup, #url-popup {
+    .edit-popup, #share-url-popup, #nsfw-inclusion-popup, #image-popup, #image-source-popup, #url-input-popup, #url-popup, #settings-popup{
         width: 80%;
         max-width: none;
         padding: 15px;
     }
 
     .edit-popup input,.edit-popup textarea, #nsfw-inclusion-popup button, local-upload-btn, .edit-popup button, #share-url-popup button, #nsfw-inclusion-popup button,
-    .theme-toggle button, #export-btn, #import-btn, #tile-size, #tag-filter-mobile, #local-upload-btn, #url-upload-btn, #url-popup-close {
+    .theme-toggle button, #export-btn, #import-btn, #tile-size, #tag-filter-mobile, #local-upload-btn, #url-upload-btn, #url-popup-close, #colorSelector, #settings-popup button {
         width: 100%;
         margin-bottom: 15px;
         padding: 15px;
@@ -755,7 +806,6 @@
         #image-upload-choice-popup button {
             margin: 10px;
             padding: 10px 20px;
-            background-color: var(--button-bg);
             color: var(--button-color);
             border: none;
             border-radius: 4px;
@@ -763,8 +813,9 @@
             width: 80%;
         }
 
-        #image-upload-choice-popup button:hover {
-            background-color: var(--button-bg-hover);
+        .theme-toggle button:hover, #tag-filter:hover,  #tag-filter-mobile, #export-btn:hover, #import-btn:hover, #image-upload-choice-popup button:hover,
+	#nsfw-inclusion-popup button:hover, #share-url-popup button:hover, .edit-popup button:hover, .active, .collapsible:hover, #popup-close:hover, #settings-popup button:hover {
+            background-color: var(--button-bg-hover-1)
         }
     </style>
 </head>
@@ -807,6 +858,7 @@
           <li>Hentai</li>
           <li>18+</li>
           <li>Porn</li>
+          <li>Yaoi</li>
        </ul>
        <p>They're case sensitive, so put them in as shown here. This will cause a <span class="highlight-nsfw">red outline</span> to appear around the tile and the random character popup if it's selected. You can also blur the image with the <span class="highlight">Blur NSFW</span> button.</p>
        <p><strong>How to indicate characters as Favourites?</strong></p>
@@ -818,6 +870,17 @@
     </div>
     <button class="collapsible">Update Log</button>
     <div class="collapsible-content">
+        <h2>Update 1.7.3</h2>
+        <ul>
+            <li>Added a new drop-down that will change the website's colors to make it more accessible for people with Deuteranopia, Protanopia, and Tritanopia.</li>
+            <li>Added an AMOLED mode, which is a darker version of Dark Mode.</li>
+            <li>Blur NSFW, Light Mode, Dark Mode, AMOLED Mode, and Color Blindness options are now combined into a new "Theme Settings" popup.</li>
+            <li>The website will now remember if you had toggled to hide or show the tile buttons.</li>
+            <li>The following emojis will now trigger the favorite character outline: ✨, 🌠, 🌟, 💫, 🤩, ❇️, ✴️, ✳️.</li>
+            <li>Yaoi is now a trigger for the NSFW outline.</li>
+            <li>Fixed issue where the overlay would continue to appear if you were to select exclude NSFW when there are no characters that don't have the NSFW tags.</li>
+            <li>Updated the no non-NSFW character popup to include information about resetting the remembered state.</li>
+          </ul>                 
         <h2>Update 1.7.2</h2>
         <ul>
             <li>Tag Filter dropdown now works on mobile</li>
@@ -923,14 +986,14 @@
     </div>
     <div class="controls">
        <div class="theme-toggle">
-          <button id="light-mode">Light Mode</button>
-          <button id="dark-mode">Dark Mode</button>
+
           <button id="export-btn">Export</button>
           <button id="import-btn">Import</button>
           <button id="toggleButton">Hide Tile Buttons</button>
-          <button id="blur-nsfw-btn">Blur NSFW</button>
+
+          <button id="settings-btn">Theme Settings</button>
           <button id="random-character-btn">Select Random Character</button>
-          <button id="flush-button">Reset Remembered State</button>
+          <button id="flush-button">Reset Remembered State</button>     
           <select id="tag-filter-mobile">
              <option value="all">All Tags</option>
           </select>
@@ -1024,7 +1087,25 @@
             <input type="checkbox" id="remember-nsfw-state-checkbox"> Remember my choice</input>
         </label>
         </div>
+    </div>  
+    <!-- Settings Popup -->
+    <div id="settings-popup">
+        <div id="popup-content">
+        <h3>Theme Settings</h3>
+        <button id="blur-nsfw-btn">Blur NSFW</button>
+            <button id="light-mode">Light Mode</button>
+            <button id="dark-mode">Dark Mode</button>
+            <button id="amoled-mode">Amoled Mode</button>
+            <select id="colorSelector">
+                <option value="original">Original</option>
+                <option value="colour1">Deuteranopia</option>
+                <option value="colour2">Protanopia</option>
+                <option value="colour3">Tritanopia</option> 
+            </select>   
+            <button id="settings-close">Close</button>
+        </div>
     </div>    
+
     <div id="image-popup" class="popup hidden">
        <div id="popup-content">
           <h3>Select Image Source</h3>
@@ -1084,6 +1165,7 @@ const addImageButton = document.getElementById('add-image');
 const fileInput = document.getElementById('file-input');
 const lightModeBtn = document.getElementById('light-mode');
 const darkModeBtn = document.getElementById('dark-mode');
+const amoledModeBtn = document.getElementById('amoled-mode');
 const tagFilter = document.getElementById('tag-filter') ;
 const tagFilterMobile = document.getElementById('tag-filter-mobile');
 const exportBtn = document.getElementById('export-btn');
@@ -1099,8 +1181,116 @@ let isBlurred = JSON.parse(localStorage.getItem('isBlurred')) || false; // Load 
 let rememberNSFWChoice = JSON.parse(localStorage.getItem('rememberNSFWChoice')) || false;
 let includeNSFW = JSON.parse(localStorage.getItem('includeNSFW')) || false;
 
+
+// Save the selected color option in localStorage
+document.getElementById('colorSelector').addEventListener('change', function() {
+    const selectedColorOption = this.value; 
+    localStorage.setItem('selectedColorOption', selectedColorOption); // Save to local storage
+
+    const nsfwTiles = document.querySelectorAll('.nsfw-outline, .highlight-nsfw');
+    const specialTiles = document.querySelectorAll('.special-outline');
+    const starTiles = document.querySelectorAll('.star-outline, .highlight-favourite');
+
+    // Select all specified buttons
+    const buttons = document.querySelectorAll(
+        '.theme-toggle button, #tag-filter, #tag-filter-mobile, #export-btn, #import-btn, #tile-size, #colorSelector, #popup-link, #reroll-btn, ' +
+        '#local-upload-btn, #url-upload-btn, #url-popup-close, #url-popup-close-url, #local-image-btn, #url-image-btn, #urlURL-popup-close, ' +
+        '#url-popup-close-url1, #popup-close, .collapsible, .edit-popup button, #submit-url-btn, #submit-url-btn1, #share-url-popup button, ' +
+        '#nsfw-inclusion-popup button, #image-upload-choice-popup button, #settings-popup button'
+    );
+
+    // Define colors based on the selected option
+    const nsfwColors = [
+        'var(--nsfw-color-1)', 
+        'var(--nsfw-color-2)', 
+        'var(--nsfw-color-3)', 
+        'var(--nsfw-color-4)'  
+    ];
+
+    const specialColors = [
+        'var(--special-outline-color-1)', 
+        'var(--special-outline-color-2)', 
+        'var(--special-outline-color-3)', 
+        'var(--special-outline-color-4)'  
+    ];
+
+    const starColors = [
+        'var(--star-outline-color-1)', 
+        'var(--star-outline-color-2)', 
+        'var(--star-outline-color-3)', 
+        'var(--star-outline-color-4)'  
+    ];
+
+    const buttonColors = [
+        'var(--button-bg-1)', 
+        'var(--button-bg-2)', 
+        'var(--button-bg-3)', 
+        'var(--button-bg-4)'  
+    ];
+
+    const buttonHoverColors = [
+        'var(--button-bg-hover-1)', 
+        'var(--button-bg-hover-2)', 
+        'var(--button-bg-hover-3)', 
+        'var(--button-bg-hover-4)'  
+    ];
+
+    const selectedIndex = this.value === 'original' ? 0 : 
+                          (this.value === 'colour1' ? 1 : 
+                          (this.value === 'colour2' ? 2 : 3));
+
+    // Get selected colors
+    const selectedNsfwColor = nsfwColors[selectedIndex];
+    const selectedSpecialColor = specialColors[selectedIndex];
+    const selectedStarColor = starColors[selectedIndex];
+    const selectedButtonColor = buttonColors[selectedIndex];
+    const selectedButtonHoverColor = buttonHoverColors[selectedIndex];
+
+    // Apply colors
+    specialTiles.forEach(tile => tile.style.borderColor = selectedSpecialColor);
+    nsfwTiles.forEach(tile => {
+        if (!tile.classList.contains('special-outline')) {
+            tile.style.borderColor = selectedNsfwColor;
+        }
+    });
+    starTiles.forEach(tile => {
+        if (!tile.classList.contains('special-outline')) {
+            tile.style.borderColor = selectedStarColor;
+        }
+    });
+
+    // Apply button background color
+    buttons.forEach(button => {
+        button.style.backgroundColor = selectedButtonColor;
+
+        // Set up hover effect through CSS for specified selectors
+        button.addEventListener('mouseenter', () => {
+            button.style.backgroundColor = selectedButtonHoverColor;
+        });
+        button.addEventListener('mouseleave', () => {
+            button.style.backgroundColor = selectedButtonColor;
+        });
+    });
+});
+
+// Load the selected color option on page load
+function loadSelectedColorOption() {
+    const savedOption = localStorage.getItem('selectedColorOption');
+    if (savedOption) {
+        const colorSelector = document.getElementById('colorSelector');
+        colorSelector.value = savedOption; // Set the dropdown to the saved value
+        // Trigger change event to apply the colors
+        const event = new Event('change');
+        colorSelector.dispatchEvent(event);
+    }
+}
+
+// Call this function when the page loads
+window.onload = loadSelectedColorOption;
+document.addEventListener('DOMContentLoaded', loadSelectedColorOption);
+
 document.getElementById('toggleButton').addEventListener('click', function() {
-    // Get all elements with class 'edit-image-btn'
+    // Get all elements with class 'edit-image-btn', 'edit-url-btn', etc.
     const editButtons = document.querySelectorAll('.edit-image-btn');
     const editURL = document.querySelectorAll('.edit-url-btn');
     const editTags = document.querySelectorAll('.edit-tags-btn');
@@ -1110,7 +1300,7 @@ document.getElementById('toggleButton').addEventListener('click', function() {
     // Toggle the display property for each button
     const toggleDisplay = (buttons) => {
         buttons.forEach(button => {
-            button.style.display = button.style.display === 'none' ? 'block' : 'none';
+            button.style.display = button.style.display === 'none' ? 'flex' : 'none';
         });
     };
 
@@ -1120,11 +1310,44 @@ document.getElementById('toggleButton').addEventListener('click', function() {
     toggleDisplay(editInfo);
     toggleDisplay(editDelete);
 
+    // Check the current state of the button and save it to localStorage
+    const isHidden = editButtons[0].style.display === 'none';
+    localStorage.setItem('buttonsHidden', isHidden);
+
     // Change the text of the toggle button
-    this.textContent = this.textContent === 'Hide Tile Buttons' 
-        ? 'Show Tile Buttons' 
-        : 'Hide Tile Buttons';
+    this.textContent = isHidden ? 'Show Tile Buttons' : 'Hide Tile Buttons';
 });
+
+// On page load, apply the saved toggle state from localStorage
+document.addEventListener('DOMContentLoaded', function() {
+    const editButtons = document.querySelectorAll('.edit-image-btn');
+    const editURL = document.querySelectorAll('.edit-url-btn');
+    const editTags = document.querySelectorAll('.edit-tags-btn');
+    const editInfo = document.querySelectorAll('.edit-info-btn');
+    const editDelete = document.querySelectorAll('.delete-btn');
+    const toggleButton = document.getElementById('toggleButton');
+
+    // Get the saved state from localStorage
+    const isHidden = localStorage.getItem('buttonsHidden') === 'true';
+
+    // Function to apply the display state
+    const setDisplay = (buttons, display) => {
+        buttons.forEach(button => {
+            button.style.display = display;
+        });
+    };
+
+    // Apply the saved state to the buttons
+    setDisplay(editButtons, isHidden ? 'none' : 'flex');
+    setDisplay(editURL, isHidden ? 'none' : 'flex');
+    setDisplay(editTags, isHidden ? 'none' : 'flex');
+    setDisplay(editInfo, isHidden ? 'none' : 'flex');
+    setDisplay(editDelete, isHidden ? 'none' : 'flex');
+
+    // Set the toggle button text based on the state
+    toggleButton.textContent = isHidden ? 'Show Tile Buttons' : 'Hide Tile Buttons';
+});
+
 
 
 tagFilterMobile.addEventListener('change', filterTilesMobile);
@@ -1193,15 +1416,16 @@ document.getElementById('urlURL-popup-close').addEventListener('click', () => {
     document.getElementById('image-source-popup').style.display = 'none';
     document.getElementById('popup-overlay').style.display = 'none';
 });
-document.getElementById('popup-overlay').addEventListener('click', () => {
-    document.getElementById('image-source-popup').style.display = 'none';
-    document.getElementById('url-input-popup').style.display = 'none';
+document.getElementById('settings-close').addEventListener('click', () => {
     document.getElementById('popup-overlay').style.display = 'none';
+    document.getElementById('settings-popup').style.display = 'none';
 });
-// Add a click event listener to the div
-popupOverlay.addEventListener("click", function () {
-   // Define what happens when the div is clicked
+document.getElementById('popup-overlay').addEventListener('click', () => {
+   document.getElementById('image-source-popup').style.display = 'none';
+   document.getElementById('url-input-popup').style.display = 'none';
    document.getElementById('popup-overlay').style.display = 'none';
+   document.getElementById('popup-overlay').style.display = 'none';
+   document.getElementById('settings-popup').style.display = 'none';
    document.getElementById('edit-url-popup').style.display = 'none';
    document.getElementById('tile-creation-popup').style.display = 'none';
    document.getElementById('character-popup').style.display = 'none';
@@ -1209,7 +1433,6 @@ popupOverlay.addEventListener("click", function () {
    document.getElementById('edit-tags-popup').style.display = 'none';
    document.getElementById('share-url-popup').style.display = 'none';
    document.getElementById('nsfw-inclusion-popup').style.display = 'none';
-
 });
 
 function showEditUrlPopup(tileData, tileElement) {
@@ -1313,6 +1536,7 @@ function applyStoredTheme() {
 
 lightModeBtn.addEventListener('click', () => setTheme(''));
 darkModeBtn.addEventListener('click', () => setTheme('dark-mode'));
+amoledModeBtn.addEventListener('click', () => setTheme('amoled-mode'));
 
 // Apply theme on load
 applyStoredTheme();
@@ -1332,19 +1556,25 @@ function saveTiles() {
    localStorage.setItem('imageTiles', JSON.stringify(tiles));
 }
 
-// Create image tile
 function createImageTile(tileData) {
    const newImageItem = document.createElement('div');
    newImageItem.className = 'image-item';
-   if (tileData.tags.includes('18+') || tileData.tags.includes('NSFW') || tileData.tags.includes('Hentai') || tileData.tags.includes('Porn')) {
+
+   const hasNSFW = tileData.tags.includes('18+') || tileData.tags.includes('NSFW') || tileData.tags.includes('Hentai') || tileData.tags.includes('Porn') || tileData.tags.includes('Yaoi');
+   const hasStar = tileData.tags.includes('⭐') || tileData.tags.includes('✨') || tileData.tags.includes('🌠') || tileData.tags.includes('🌟') ||
+                   tileData.tags.includes('💫') || tileData.tags.includes('🤩') || tileData.tags.includes('❇️') || tileData.tags.includes('✴️') ||
+                   tileData.tags.includes('✳️') || tileData.tags.includes('🔥') || tileData.tags.includes('💎');
+
+   if (hasNSFW) {
       newImageItem.classList.add('nsfw-outline');
    }
-   if (tileData.tags.includes('⭐')) {
+   if (hasStar) {
       newImageItem.classList.add('star-outline');
    }
-   if ((tileData.tags.includes('18+') || tileData.tags.includes('NSFW') || tileData.tags.includes('Hentai') || tileData.tags.includes('Porn')) && tileData.tags.includes('⭐')) {
+   if (hasNSFW && hasStar) {
       newImageItem.classList.add('special-outline');
    }
+
    newImageItem.innerHTML = `
                 <a href="${tileData.link}" target="_blank" class="image-container">
                     <img src="${tileData.imageData}" alt="User uploaded image">
@@ -1361,6 +1591,7 @@ function createImageTile(tileData) {
                     ${tileData.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
                 </div>
             `;
+
    imageGrid.insertBefore(newImageItem, addImageButton);
 
    // Add edit image functionality
@@ -1403,8 +1634,11 @@ function createImageTile(tileData) {
 
 function updateTileOutline(tileElement, tags) {
    tileElement.classList.remove('nsfw-outline', 'star-outline', 'special-outline');
-   const hasNSFW = tags.includes('18+') || tags.includes('NSFW') || tags.includes('Porn') || tags.includes('Hentai');
-   const hasStar = tags.includes('⭐');
+   
+   const hasNSFW = tags.includes('18+') || tags.includes('NSFW') || tags.includes('Porn') || tags.includes('Hentai') || tags.includes('Yaoi');
+   const hasStar = tags.includes('⭐') || tags.includes('✨') || tags.includes('🌠') || tags.includes('🌟') ||
+                   tags.includes('💫') || tags.includes('🤩') || tags.includes('❇️') || tags.includes('✴️') ||
+                   tags.includes('✳️') || tags.includes('🔥') || tags.includes('💎');
 
    if (hasNSFW && hasStar) {
       tileElement.classList.add('special-outline');
@@ -1414,6 +1648,7 @@ function updateTileOutline(tileElement, tags) {
       tileElement.classList.add('star-outline');
    }
 }
+
 
 function stripUrlParams(url) {
    try {
@@ -1712,7 +1947,7 @@ importFileInput.addEventListener('change', (event) => {
 });
 // Function to toggle blur on NSFW content
 function toggleBlurNSFW() {
-   const nsfwTags = ['18+', 'NSFW', "Hentai", "Porn"]; // Tags considered NSFW
+   const nsfwTags = ['18+', 'NSFW', "Hentai", "Porn", "Yaoi"]; // Tags considered NSFW
    const imageItems = document.querySelectorAll('.image-item');
 
    imageItems.forEach(item => {
@@ -1738,12 +1973,18 @@ blurNSFWBtn.addEventListener('click', toggleBlurNSFW);
 // Load saved tiles on page load
 loadSavedTiles();
 const randomCharacterBtn = document.getElementById('random-character-btn');
+const settingsBtn = document.getElementById('settings-btn')
 const characterPopup = document.getElementById('character-popup');
 const popupClose = document.getElementById('popup-close');
 const popupCloseBtn = document.getElementById('popup-close-btn');
 const popupImage = document.getElementById('popup-image');
 const popupTags = document.getElementById('popup-tags');
 const popupLink = document.getElementById('popup-link');
+
+settingsBtn.addEventListener('click', () => {
+      document.getElementById('settings-popup').style.display = 'flex';
+      document.getElementById('popup-overlay').style.display = 'block';
+});
 
 // Event listeners for closing popup
 popupClose.addEventListener('click', closePopup);
@@ -1759,12 +2000,14 @@ function selectRandomCharacter() {
    }
    let availableCharacters = includeNSFW ? characters : characters.filter(char => {
       const tags = Array.from(char.querySelectorAll('.tag')).map(tag => tag.textContent);
-      return !tags.some(tag => ['18+', 'NSFW', 'Porn', 'Hentai'].includes(tag));
+      return !tags.some(tag => ['18+', 'NSFW', 'Porn', 'Hentai', 'Yaoi'].includes(tag));
    });
 
    if (availableCharacters.length === 0) {
-      alert('No characters available with current NSFW settings.');
+      document.getElementById('popup-overlay').style.display = 'none';
+      alert('No characters available with current NSFW settings. If you checked the box for it to remembner which option you chose, click the "Reset Remembered State" to get the prompt back up');
       return;
+
    }
 
    const randomIndex = Math.floor(Math.random() * availableCharacters.length);
@@ -1781,7 +2024,7 @@ function selectRandomCharacter() {
 
    updateTileOutline(characterPopup, tileData.tags);
 
-   if (isBlurred && (tileData.tags.includes('18+') || tileData.tags.includes('NSFW') || tileData.tags.includes('Hentai') || tileData.tags.includes('Porn'))) {
+   if (isBlurred && (tileData.tags.includes('18+') || tileData.tags.includes('NSFW') || tileData.tags.includes('Hentai') || tileData.tags.includes('Porn') || tileData.tags.includes('Yaoi'))) {
       popupImage.classList.add('blurred-image');
    } else {
       popupImage.classList.remove('blurred-image');
@@ -1845,7 +2088,12 @@ function checkForSpecialTiles() {
    const tileElements = document.querySelectorAll('.image-item:not(.add-image)');
    tileElements.forEach((tileElement, index) => {
       const tileData = tiles[index];
-      if ((tileData.tags.includes('18+') || tileData.tags.includes('NSFW') || tileData.tags.includes('Hentai') || tileData.tags.includes('Porn')) && tileData.tags.includes('⭐')) {
+      if (
+         (tileData.tags.includes('18+') || tileData.tags.includes('NSFW') || tileData.tags.includes('Hentai') || tileData.tags.includes('Porn')|| tileData.tags.includes('Yaoi')) &&
+         (tileData.tags.includes('⭐') || tileData.tags.includes('✨') || tileData.tags.includes('🌠') || tileData.tags.includes('🌟') ||
+          tileData.tags.includes('💫') || tileData.tags.includes('🤩') || tileData.tags.includes('❇️') || tileData.tags.includes('✴️') ||
+          tileData.tags.includes('✳️') || tileData.tags.includes('🔥') || tileData.tags.includes('💎'))
+      ) {
          tileElement.classList.add('special-outline');
       } else {
          tileElement.classList.remove('special-outline');
@@ -1853,12 +2101,14 @@ function checkForSpecialTiles() {
    });
 }
 
+
+
 // Run the check once on page load
 document.addEventListener('DOMContentLoaded', checkForSpecialTiles);
 
 // Function to apply blur status on page load
 function applyBlurNSFWStatus() {
-   const nsfwTags = ['18+', 'NSFW', "Hentai", "Porn"]; // Tags considered NSFW
+   const nsfwTags = ['18+', 'NSFW', "Hentai", "Porn", "Yaoi"]; // Tags considered NSFW
    const imageItems = document.querySelectorAll('.image-item');
 
    imageItems.forEach(item => {
