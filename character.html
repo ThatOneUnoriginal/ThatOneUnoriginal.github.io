@@ -1186,6 +1186,9 @@ img:hover {
                 <option value="medium" selected>Medium Tiles</option>
                 <option value="large">Large Tiles</option>
             </select>
+            <button id="exportButton">Export Theme Settings</button>
+            <input type="file" id="importFile" accept=".json" style="display: none;" />
+            <button id="importButton">Import Theme Settings</button>
             <button id="settings-close">Close</button>
         </div>
     </div>    
@@ -1279,6 +1282,71 @@ let deletedTile = null;
 let undoTimer = null;
 
 let isAtEnd =  true;  // Initially, the add-image tile is at the end
+
+
+document.getElementById('exportButton').addEventListener('click', () => {
+    // Retrieve values from local storage
+    const settings = {
+        isBlurred: localStorage.getItem('isBlurred'),
+        theme: localStorage.getItem('theme'),
+        addImagePosition: localStorage.getItem('addImagePosition'),
+        selectedColorOption: localStorage.getItem('selectedColorOption'),
+        tileSize: localStorage.getItem('tileSize')
+    };
+
+    // Convert settings to a JSON string
+    const settingsJSON = JSON.stringify(settings, null, 2);
+
+    // Create a Blob object to facilitate download
+    const blob = new Blob([settingsJSON], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+
+    // Create a temporary link element for downloading
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'settings.json'; // Filename for the downloaded file
+    document.body.appendChild(a);
+    a.click(); // Trigger the download
+    document.body.removeChild(a); // Clean up
+
+    // Release the blob URL
+    URL.revokeObjectURL(url);
+});
+
+document.getElementById('importButton').addEventListener('click', () => {
+    const fileInput = document.getElementById('importFile');
+    fileInput.click(); // Programmatically click the file input
+
+    // Add an event listener for when a file is selected
+    fileInput.addEventListener('change', () => {
+        const file = fileInput.files[0];
+
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                try {
+                    const settings = JSON.parse(event.target.result);
+                    
+                    // Apply settings to local storage
+                    localStorage.setItem('isBlurred', settings.isBlurred);
+                    localStorage.setItem('theme', settings.theme);
+                    localStorage.setItem('addImagePosition', settings.addImagePosition);
+                    localStorage.setItem('selectedColorOption', settings.selectedColorOption);
+                    localStorage.setItem('tileSize', settings.tileSize);
+                    
+                    alert('Settings imported successfully! Refresh the page to have the changes apply');
+                } catch (error) {
+                    alert('Failed to import settings: ' + error.message);
+                }
+            };
+
+            reader.readAsText(file);
+        } else {
+            alert('No file selected.');
+        }
+    }, { once: true }); // Ensure the listener is only added once
+});
+
 
 // Function to toggle the position of the add-image tile
 function toggleAddImagePosition() {
