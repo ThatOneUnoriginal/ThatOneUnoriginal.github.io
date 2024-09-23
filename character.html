@@ -1158,6 +1158,7 @@
         <h3>Theme Settings</h3>
             <button id="blur-nsfw-btn">Blur NSFW</button>
             <button id="theme-toggle-btn">Light Mode</button>
+            <button id="toggle-position-btn">Move Add Image to Beginning</button>
             <select id="colorSelector">
                 <option value="original">Original</option>
                 <option value="colour1">Deuteranopia</option>
@@ -1245,6 +1246,13 @@ const importFileInput = document.getElementById('import-file-input');
 const blurNSFWBtn = document.getElementById('blur-nsfw-btn');
 const imageUploadChoicePopup = document.getElementById('image-upload-choice-popup');
 const urlUploadBtn = document.getElementById('url-upload-btn');
+const addImageTile = document.getElementById('add-image');
+const togglePositionBtn = document.getElementById('toggle-position-btn');
+const undoPopup = document.getElementById('undo-delete-popup');
+const undoButton = document.getElementById('undo-delete-btn');
+const dismissButton = document.getElementById('dismiss-undo');
+const timerSpan = document.getElementById('undo-timer');
+const tileSizeSelector = document.getElementById('tileSize');
 
 let tiles = [];
 let allTags = new Set();
@@ -1253,11 +1261,47 @@ let rememberNSFWChoice = JSON.parse(localStorage.getItem('rememberNSFWChoice')) 
 let includeNSFW = JSON.parse(localStorage.getItem('includeNSFW')) || false;
 let deletedTile = null;
 let undoTimer = null;
-const undoPopup = document.getElementById('undo-delete-popup');
-const undoButton = document.getElementById('undo-delete-btn');
-const dismissButton = document.getElementById('dismiss-undo');
-const timerSpan = document.getElementById('undo-timer');
-const tileSizeSelector = document.getElementById('tileSize');
+
+let isAtEnd =  true;  // Initially, the add-image tile is at the end
+
+// Function to toggle the position of the add-image tile
+function toggleAddImagePosition() {
+    if (isAtEnd) {
+        // Move to the beginning (before the first non-add-image tile, if any)
+        imageGrid.insertBefore(addImageTile, imageGrid.firstElementChild);
+        togglePositionBtn.textContent = 'Move Add Image to End';
+        localStorage.setItem('addImagePosition', 'beginning');
+    } else {
+        // Move to the end
+        imageGrid.appendChild(addImageTile);
+        togglePositionBtn.textContent = 'Move Add Image to Beginning';
+        localStorage.setItem('addImagePosition', 'end');
+    }
+    isAtEnd = !isAtEnd;  // Toggle the state
+}
+
+// Function to apply the saved position on page load
+function applySavedPosition() {
+    const savedPosition = localStorage.getItem('addImagePosition');
+    if (savedPosition === 'beginning') {
+        // Move to the beginning (before the first tile in the grid)
+        imageGrid.insertBefore(addImageTile, imageGrid.firstElementChild);
+        togglePositionBtn.textContent = 'Move Add Image to End';
+        isAtEnd = false;
+    } else {
+        // Move to the end by default
+        imageGrid.appendChild(addImageTile);
+        togglePositionBtn.textContent = 'Move Add Image to Beginning';
+        isAtEnd = true;
+    }
+}
+
+// Apply the saved position when the DOM is fully loaded
+document.addEventListener('DOMContentLoaded', applySavedPosition);
+
+// Add event listener to the button
+togglePositionBtn.addEventListener('click', toggleAddImagePosition);
+
 
 // Function to set the tile size
 function setTileSize(size) {
