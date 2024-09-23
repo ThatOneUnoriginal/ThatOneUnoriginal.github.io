@@ -2087,12 +2087,17 @@ function closePopup() {
 
 // Event listener for the random character button
 randomCharacterBtn.addEventListener('click', () => {
-   if (rememberNSFWChoice) {
-      selectRandomCharacter();
-   } else {
-      document.getElementById('nsfw-inclusion-popup').style.display = 'flex';
-      document.getElementById('popup-overlay').style.display = 'block';
-   }
+    // Check if any character has the NSFW tag
+    const hasNSFWCharacter = tiles.some(tile => tile.tags.includes('NSFW') || tile.tags.includes('18+') || tile.tags.includes('Porn') || tile.tags.includes('Hentai') || tile.tags.includes('Yaoi')); 
+
+    if (!hasNSFWCharacter || rememberNSFWChoice) {
+        // If no NSFW characters exist or the choice is remembered, select a random character
+        selectRandomCharacter();
+    } else {
+        // Show NSFW inclusion popup if NSFW characters exist and choice is not remembered
+        document.getElementById('nsfw-inclusion-popup').style.display = 'flex';
+        document.getElementById('popup-overlay').style.display = 'block';
+    }
 });
 
 // Update the checkbox state based on the saved choice
