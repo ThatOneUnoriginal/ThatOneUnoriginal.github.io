@@ -11,7 +11,7 @@
     .theme-toggle button, #tag-filter,  #tag-filter-mobile , #export-btn, #import-btn, #tile-size, #colorSelector, #popup-link, #reroll-btn,
 	#local-upload-btn, #url-upload-btn, #url-popup-close, #url-popup-close-url, #local-image-btn, #url-image-btn, #urlURL-popup-close, #url-popup-close-url1,
 	#popup-close, .collapsible, .edit-popup button, #submit-url-btn, #submit-url-btn1, #share-url-popup button, #nsfw-inclusion-popup button,
-	#image-upload-choice-popup button, #tile-creation-popup button, #settings-popup button{
+	#image-upload-choice-popup button, #tile-creation-popup button, #settings-popup button, #tileSize{
 	    background-color: var(--button-bg-1);
 	}
 
@@ -707,7 +707,7 @@
             animation: float 5s ease-in-out infinite
         }
 
-        #nsfw-inclusion-popup button, #settings-popup button, #colorSelector {
+        #nsfw-inclusion-popup button, #settings-popup button, #colorSelector, #tileSize {
             width: 100%;
             margin-top: 10px;
             padding: 10px 20px;
@@ -717,76 +717,7 @@
             cursor: pointer;
         }
 
-                /* Responsive design for smaller screens */
-
-                @media (max-width: 600px) {
-            #character-popup {
-                max-height: 80vh;
-                overflow-y: auto;
-            }
-
-            #popup-image {
-                max-height: 200px;
-                width: auto;
-                object-fit: contain;
-            }
-
-            .popup-info {
-                max-height: none;
-            }
-        }
-@media (max-width: 600px) {
-    .edit-popup, #share-url-popup, #nsfw-inclusion-popup, #image-popup, #image-source-popup, #url-input-popup, #url-popup, #settings-popup{
-        width: 80%;
-        max-width: none;
-        padding: 15px;
-    }
-
-    .edit-popup input,.edit-popup textarea, #nsfw-inclusion-popup button, local-upload-btn, .edit-popup button, #share-url-popup button, #nsfw-inclusion-popup button,
-    .theme-toggle button, #export-btn, #import-btn, #tile-size, #tag-filter-mobile, #local-upload-btn, #url-upload-btn, #url-popup-close, #colorSelector, #settings-popup button {
-        width: 100%;
-        margin-bottom: 15px;
-        padding: 15px;
-    }
-    #share-url-popup input{
-        width: 80%;
-        margin-bottom: 15px;
-        padding: 15px;
-    }
-    #popup-content {
-        flex-direction: column;
-    }
-
-    #popup-image-container {
-        margin-right: 0;
-        margin-bottom: 20px;
-    }
-
-    #popup-image {
-        width: 100%;
-        height: auto;
-    }
-
-    .popup-info {
-        max-height: none;
-    }
-
-    .tile-buttons button{
-        width: 40px;
-        height: 40px;
-    }
-    #tag-filter-mobile{
-        display: block;
-    }
-    .tag{
-        padding: 4px 10px;
-    }
-    #tag-filter{
-        display: none;
-    }
-}
-
-    #image-upload-choice-popup {
+        #image-upload-choice-popup {
             position: fixed;
             top: 50%;
             left: 50%;
@@ -814,7 +745,7 @@
             width: 80%;
         }
 
-        .theme-toggle button:hover, #tag-filter:hover,  #tag-filter-mobile, #export-btn:hover, #import-btn:hover, #image-upload-choice-popup button:hover,
+    .theme-toggle button:hover, #tag-filter:hover,  #tag-filter-mobile, #export-btn:hover, #import-btn:hover, #image-upload-choice-popup button:hover,
 	#nsfw-inclusion-popup button:hover, #share-url-popup button:hover, .edit-popup button:hover, .active, .collapsible:hover, #popup-close:hover, #settings-popup button:hover {
             background-color: var(--button-bg-hover-1)
         }
@@ -870,6 +801,87 @@
   #dismiss-undo:hover {
     color: #fff;
   }
+        @media (max-width: 650px) {
+            #undo-delete-popup {
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                margin-left: 0;
+                transform: none;
+                padding: 20px;
+                box-sizing: border-box;
+            }
+        }
+
+        @media (max-width: 600px) {
+            #character-popup {
+                max-height: 80vh;
+                overflow-y: auto;
+            }
+
+            #popup-image {
+                max-height: 200px;
+                width: auto;
+                object-fit: contain;
+            }
+
+            .popup-info {
+                max-height: none;
+            }
+            .edit-popup, #share-url-popup, #nsfw-inclusion-popup, #image-popup, #image-source-popup, #url-input-popup, #url-popup, #settings-popup{
+                width: 80%;
+                max-width: none;
+                padding: 15px;
+            }
+
+            .edit-popup input,.edit-popup textarea, #nsfw-inclusion-popup button, local-upload-btn, .edit-popup button, #share-url-popup button, #nsfw-inclusion-popup button,
+            .theme-toggle button, #export-btn, #import-btn, #tile-size, #tag-filter-mobile, #local-upload-btn, #url-upload-btn, #url-popup-close, #colorSelector, #settings-popup button, #tileSize {
+                width: 100%;
+                margin-bottom: 15px;
+                padding: 15px;
+            }
+
+            #share-url-popup input{
+            width: 80%;
+            margin-bottom: 15px;
+            padding: 15px;
+            }
+
+            #popup-content {
+                flex-direction: column;
+            }
+
+            #popup-image-container {
+                margin-right: 0;
+                margin-bottom: 20px;
+            }
+
+            #popup-image {
+                width: 100%;
+                height: auto;
+            }
+
+            .popup-info {
+                max-height: none;
+            }
+
+            .tile-buttons button{
+                width: 40px;
+                height: 40px;
+            }
+
+            #tag-filter-mobile{
+                display: block;
+            }
+
+            .tag{
+                padding: 4px 10px;
+            }
+
+            #tag-filter{
+                display: none;
+            }
+}
     </style>
 </head>
 <body>
@@ -1144,16 +1156,19 @@
     <div id="settings-popup">
         <div id="popup-content">
         <h3>Theme Settings</h3>
-        <button id="blur-nsfw-btn">Blur NSFW</button>
-            <button id="light-mode">Light Mode</button>
-            <button id="dark-mode">Dark Mode</button>
-            <button id="amoled-mode">Amoled Mode</button>
+            <button id="blur-nsfw-btn">Blur NSFW</button>
+            <button id="theme-toggle-btn">Light Mode</button>
             <select id="colorSelector">
                 <option value="original">Original</option>
                 <option value="colour1">Deuteranopia</option>
                 <option value="colour2">Protanopia</option>
                 <option value="colour3">Tritanopia</option> 
             </select>   
+            <select id="tileSize">
+                <option value="small">Small Tiles</option>
+                <option value="medium" selected>Medium Tiles</option>
+                <option value="large">Large Tiles</option>
+            </select>
             <button id="settings-close">Close</button>
         </div>
     </div>    
@@ -1222,9 +1237,6 @@ const popupOverlay = document.getElementById("popup-overlay");
 const imageGrid = document.getElementById('image-grid');
 const addImageButton = document.getElementById('add-image');
 const fileInput = document.getElementById('file-input');
-const lightModeBtn = document.getElementById('light-mode');
-const darkModeBtn = document.getElementById('dark-mode');
-const amoledModeBtn = document.getElementById('amoled-mode');
 const tagFilter = document.getElementById('tag-filter') ;
 const tagFilterMobile = document.getElementById('tag-filter-mobile');
 const exportBtn = document.getElementById('export-btn');
@@ -1245,6 +1257,40 @@ const undoPopup = document.getElementById('undo-delete-popup');
 const undoButton = document.getElementById('undo-delete-btn');
 const dismissButton = document.getElementById('dismiss-undo');
 const timerSpan = document.getElementById('undo-timer');
+const tileSizeSelector = document.getElementById('tileSize');
+
+// Function to set the tile size
+function setTileSize(size) {
+    let sizeValue;
+    switch (size) {
+        case 'small':
+            sizeValue = '150px';
+            break;
+        case 'medium':
+            sizeValue = '200px';
+            break;
+        case 'large':
+            sizeValue = '250px';
+            break;
+        default:
+            sizeValue = '200px'; // default to medium if nothing is found
+    }
+    imageGrid.style.setProperty('--tile-size', sizeValue);
+}
+
+// Load the saved tile size from local storage on page load
+window.addEventListener('DOMContentLoaded', function() {
+    const savedSize = localStorage.getItem('tileSize') || 'medium'; // Default to 'medium' if no value is found
+    tileSizeSelector.value = savedSize; // Set the dropdown to the saved value
+    setTileSize(savedSize); // Apply the saved size to the grid
+});
+
+// Save the tile size to local storage when the user changes it
+tileSizeSelector.addEventListener('change', function() {
+    const selectedSize = this.value;
+    localStorage.setItem('tileSize', selectedSize); // Save the selected size
+    setTileSize(selectedSize); // Apply the new size to the grid
+});
 
 function showUndoPopup() {
   undoPopup.classList.add('show');
@@ -1281,7 +1327,7 @@ document.getElementById('colorSelector').addEventListener('change', function() {
         '.theme-toggle button, #tag-filter, #tag-filter-mobile, #export-btn, #import-btn, #tile-size, #colorSelector, #popup-link, #reroll-btn, ' +
         '#local-upload-btn, #url-upload-btn, #url-popup-close, #url-popup-close-url, #local-image-btn, #url-image-btn, #urlURL-popup-close, ' +
         '#url-popup-close-url1, #popup-close, .collapsible, .edit-popup button, #submit-url-btn, #submit-url-btn1, #share-url-popup button, ' +
-        '#nsfw-inclusion-popup button, #image-upload-choice-popup button, #settings-popup button'
+        '#nsfw-inclusion-popup button, #image-upload-choice-popup button, #settings-popup button, #tileSize, #undo-delete-popup button'
     );
 
     // Define colors based on the selected option
@@ -1640,9 +1686,45 @@ function applyStoredTheme() {
    setTheme(storedTheme);
 }
 
-lightModeBtn.addEventListener('click', () => setTheme(''));
-darkModeBtn.addEventListener('click', () => setTheme('dark-mode'));
-amoledModeBtn.addEventListener('click', () => setTheme('amoled-mode'));
+const themeToggleBtn = document.getElementById('theme-toggle-btn');
+
+const themes = ['', 'dark-mode', 'amoled-mode'];
+let currentThemeIndex = 0;  // Index to track the current theme
+
+// Function to apply the theme
+function setTheme(theme) {
+    // Apply the theme to the body or wherever it’s needed
+    document.body.className = theme;
+
+    // Save the theme in local storage
+    localStorage.setItem('theme', theme);
+
+    // Update the button text based on the theme
+    if (theme === '') {
+        themeToggleBtn.textContent = 'Light Mode';
+    } else if (theme === 'dark-mode') {
+        themeToggleBtn.textContent = 'Dark Mode';
+    } else if (theme === 'amoled-mode') {
+        themeToggleBtn.textContent = 'Amoled Mode';
+    }
+}
+
+// Function to cycle through the themes
+function toggleTheme() {
+    // Move to the next theme
+    currentThemeIndex = (currentThemeIndex + 1) % themes.length;
+    setTheme(themes[currentThemeIndex]);
+}
+
+// Function to apply the stored theme on page load
+function applyStoredTheme() {
+    const storedTheme = localStorage.getItem('theme') || '';
+    currentThemeIndex = themes.indexOf(storedTheme);
+    setTheme(storedTheme);
+}
+
+// Add event listener to the button
+themeToggleBtn.addEventListener('click', toggleTheme);
 
 // Apply theme on load
 applyStoredTheme();
@@ -1698,7 +1780,16 @@ function createImageTile(tileData) {
                 </div>
             `;
 
-   imageGrid.insertBefore(newImageItem, addImageButton);
+   // Find the last tile that's not the add-image button
+   const tiles = Array.from(imageGrid.children);
+   const lastTile = tiles.filter(tile => !tile.classList.contains('add-image')).pop();
+
+   // Insert the new tile after the last existing tile, or at the beginning if there are no tiles
+   if (lastTile) {
+      imageGrid.insertBefore(newImageItem, lastTile.nextSibling);
+   } else {
+      imageGrid.insertBefore(newImageItem, imageGrid.firstChild);
+   }
 
    // Add edit image functionality
    newImageItem.querySelector('.edit-image-btn').addEventListener('click', (e) => {
