@@ -1351,15 +1351,29 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 tagFilterMobile.addEventListener('change', filterTilesMobile);
+const starTags = ['⭐', '🌟', '✨', '🌠', '💫', '🤩', '❇️', '✴️', '✳️'];
+
 function updateTagFilterMobile() {
     const currentFilter = tagFilterMobile.value;
     tagFilterMobile.innerHTML = '<option value="all">All Tags</option>';
+
     allTags.forEach(tag => {
-        const option = document.createElement('option');
-        option.value = tag;
-        option.textContent = tag;
-        tagFilterMobile.appendChild(option);
+        // Add only the ⭐ option if any star-related tags exist
+        if (starTags.includes(tag)) {
+            if (!Array.from(tagFilterMobile.options).some(option => option.value === '⭐')) {
+                const option = document.createElement('option');
+                option.value = '⭐';
+                option.textContent = '⭐';
+                tagFilterMobile.appendChild(option);
+            }
+        } else {
+            const option = document.createElement('option');
+            option.value = tag;
+            option.textContent = tag;
+            tagFilterMobile.appendChild(option);
+        }
     });
+    
     tagFilterMobile.value = currentFilter;
     filterTilesMobile();
 }
@@ -1368,10 +1382,17 @@ function filterTilesMobile() {
     const selectedTag = tagFilterMobile.value;
     tiles.forEach((tile, index) => {
         const tileElement = imageGrid.children[index];
-        if (selectedTag === 'all' ||
+
+        // Check if the tile matches the selected tag or its equivalent
+        const isMatchingTag = selectedTag === 'all' ||
             tile.tags.includes(selectedTag) ||
             tile.platform === selectedTag ||
-            tile.age === selectedTag) {
+            tile.age === selectedTag;
+
+        // Treat ⭐ as matching all star-related tags
+        const isStarEquivalent = (selectedTag === '⭐' && tile.tags.some(tag => starTags.includes(tag)));
+
+        if (isMatchingTag || isStarEquivalent) {
             tileElement.style.display = '';
         } else {
             tileElement.style.display = 'none';
@@ -1817,16 +1838,27 @@ function updateAllTags() {
    updateTagFilter();
 }
 
-// Update tag filter dropdown
 function updateTagFilter() {
     const currentFilter = tagFilter.value;
     tagFilter.innerHTML = '<option value="all">All Tags</option>';
+    
     allTags.forEach(tag => {
-        const option = document.createElement('option');
-        option.value = tag;
-        option.textContent = tag;
-        tagFilter.appendChild(option);
+        // Add only the ⭐ option if any star-related tags exist
+        if (starTags.includes(tag)) {
+            if (!Array.from(tagFilter.options).some(option => option.value === '⭐')) {
+                const option = document.createElement('option');
+                option.value = '⭐';
+                option.textContent = '⭐';
+                tagFilter.appendChild(option);
+            }
+        } else {
+            const option = document.createElement('option');
+            option.value = tag;
+            option.textContent = tag;
+            tagFilter.appendChild(option);
+        }
     });
+    
     tagFilter.value = currentFilter;
     filterTiles();
 
@@ -1834,15 +1866,22 @@ function updateTagFilter() {
     updateTagFilterMobile();
 }
 
-// Filter tiles based on selected tag
+// Filter tiles based on selected tag for desktop
 function filterTiles() {
    const selectedTag = tagFilter.value;
    tiles.forEach((tile, index) => {
       const tileElement = imageGrid.children[index];
-      if (selectedTag === 'all' ||
+      
+      // Check if the tile matches the selected tag or its equivalent
+      const isMatchingTag = selectedTag === 'all' ||
          tile.tags.includes(selectedTag) ||
          tile.platform === selectedTag ||
-         tile.age === selectedTag) {
+         tile.age === selectedTag;
+
+      // Treat ⭐ as matching all star-related tags
+      const isStarEquivalent = (selectedTag === '⭐' && tile.tags.some(tag => starTags.includes(tag)));
+
+      if (isMatchingTag || isStarEquivalent) {
          tileElement.style.display = '';
       } else {
          tileElement.style.display = 'none';
