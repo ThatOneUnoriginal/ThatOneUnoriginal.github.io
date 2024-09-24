@@ -949,10 +949,24 @@ img:hover {
           <li>18+</li>
           <li>Porn</li>
           <li>Yaoi</li>
+          <li>🔞</li>
        </ul>
-       <p>They're case sensitive, so put them in as shown here. This will cause a <span class="highlight-nsfw">red outline</span> to appear around the tile and the random character popup if it's selected. You can also blur the image with the <span class="highlight">Blur NSFW</span> button.</p>
+       <p>They're case sensitive, so put them in as shown here. This will cause a <span class="highlight-nsfw">red outline</span> to appear around the tile and the random character popup if it's selected. You can also blur the image with the <span class="highlight">Blur NSFW</span> button in the <span class="highlight">Theme Settings</span> menu.</p>
+       <p>Like the favourite system (bellow) the <span class="highlight">NSFW</span> tag will show all the aobve NSFW tags, though each individual one will appear in the tag filtering dropdown.</p>
        <p><strong>How to indicate characters as Favourites?</strong></p>
-       <p>When prompted to change the tags for the image either when curating the tile or choosing the Edit Tags button, add <span class="highlight">⭐</span> as one of the tags. This will cause a <span class="highlight-favourite">green outline</span> to appear around the tile and random character popup if it's selected.</p>
+       <p>When prompted to change the tags for the image either when curating the tile or choosing the Edit Tags button, add one of the following tags. This will cause a <span class="highlight-favourite">green outline</span> to appear around the tile and random character popup if it's selected.</p>
+       <ul>
+        <li>⭐</li>
+        <li>🌠</li>
+        <li>🤩</li>
+        <li>🌟</li>
+        <li>✨</li>
+        <li>💫</li>
+        <li>❇️</li>
+        <li>✴️</li>
+        <li>✳️</li>
+       </ul>
+       <p>Note that regardless of which ones you use (either one exlusively or a combination) when using the tag filtering dropdown they will be combined to a singular <span class="highlight-favourite">⭐</class> section.</p>
        <p><strong>Can I indicate a character as being NSFW and a Favourite?</strong></p>
        <p>Yes! When prompted to change the tags for the image either when curating the tile or choosing the Edit Tags button, adding one of the NSFW tag triggers and the Favourites tag trigger will cause a special <span class="highlight-special">purple outline</span> to appear on both the tile and random character popup if it's selected.</p>
        <p><strong>Should I Export?</strong></p>
@@ -1299,6 +1313,8 @@ const undoButton = document.getElementById('undo-delete-btn');
 const dismissButton = document.getElementById('dismiss-undo');
 const timerSpan = document.getElementById('undo-timer');
 const tileSizeSelector = document.getElementById('tileSize');
+const starTags = ['⭐', '🌟', '✨', '🌠', '💫', '🤩', '❇️', '✴️', '✳️'];
+const nsfwTags = ['18+', 'NSFW', "Hentai", "Porn", "Yaoi", "🔞"]; 
 
 let tiles = [];
 let allTags = new Set();
@@ -1641,22 +1657,28 @@ document.addEventListener('DOMContentLoaded', function() {
     toggleButton.textContent = isHidden ? 'Show Tile Buttons' : 'Hide Tile Buttons';
 });
 
-
-
 tagFilterMobile.addEventListener('change', filterTilesMobile);
-const starTags = ['⭐', '🌟', '✨', '🌠', '💫', '🤩', '❇️', '✴️', '✳️'];
 
 function updateTagFilterMobile() {
     const currentFilter = tagFilterMobile.value;
     tagFilterMobile.innerHTML = '<option value="all">All Tags</option>';
 
     allTags.forEach(tag => {
-        // Add only the ⭐ option if any star-related tags exist
+        // Add star-related tags as "⭐" if any exist
         if (starTags.includes(tag)) {
             if (!Array.from(tagFilterMobile.options).some(option => option.value === '⭐')) {
                 const option = document.createElement('option');
                 option.value = '⭐';
                 option.textContent = '⭐';
+                tagFilterMobile.appendChild(option);
+            }
+        } 
+        // Add NSFW and 18+ tags separately
+        else if (nsfwTags.includes(tag)) {
+            if (!Array.from(tagFilterMobile.options).some(option => option.value === tag)) {
+                const option = document.createElement('option');
+                option.value = tag;
+                option.textContent = tag;
                 tagFilterMobile.appendChild(option);
             }
         } else {
@@ -1666,7 +1688,7 @@ function updateTagFilterMobile() {
             tagFilterMobile.appendChild(option);
         }
     });
-    
+
     tagFilterMobile.value = currentFilter;
     filterTilesMobile();
 }
@@ -1685,7 +1707,10 @@ function filterTilesMobile() {
         // Treat ⭐ as matching all star-related tags
         const isStarEquivalent = (selectedTag === '⭐' && tile.tags.some(tag => starTags.includes(tag)));
 
-        if (isMatchingTag || isStarEquivalent) {
+        // Treat 18+ as matching both "NSFW" and "18+"
+        const isNSFWEquivalent = (selectedTag === 'NSFW' && tile.tags.some(tag => nsfwTags.includes(tag)));
+
+        if (isMatchingTag || isStarEquivalent || isNSFWEquivalent) {
             tileElement.style.display = '';
         } else {
             tileElement.style.display = 'none';
@@ -1926,7 +1951,7 @@ function createImageTile(tileData) {
    const newImageItem = document.createElement('div');
    newImageItem.className = 'image-item';
 
-   const hasNSFW = tileData.tags.includes('18+') || tileData.tags.includes('NSFW') || tileData.tags.includes('Hentai') || tileData.tags.includes('Porn') || tileData.tags.includes('Yaoi');
+   const hasNSFW = tileData.tags.includes('18+') || tileData.tags.includes('NSFW') || tileData.tags.includes('Hentai') || tileData.tags.includes('Porn') || tileData.tags.includes('Yaoi') || tileData.tags.includes('🔞');
    const hasStar = tileData.tags.includes('⭐') || tileData.tags.includes('✨') || tileData.tags.includes('🌠') || tileData.tags.includes('🌟') ||
                    tileData.tags.includes('💫') || tileData.tags.includes('🤩') || tileData.tags.includes('❇️') || tileData.tags.includes('✴️') ||
                    tileData.tags.includes('✳️') || tileData.tags.includes('🔥') || tileData.tags.includes('💎');
@@ -2010,7 +2035,7 @@ function createImageTile(tileData) {
 function updateTileOutline(tileElement, tags) {
    tileElement.classList.remove('nsfw-outline', 'star-outline', 'special-outline');
    
-   const hasNSFW = tags.includes('18+') || tags.includes('NSFW') || tags.includes('Porn') || tags.includes('Hentai') || tags.includes('Yaoi');
+   const hasNSFW = tags.includes('18+') || tags.includes('NSFW') || tags.includes('Porn') || tags.includes('Hentai') || tags.includes('Yaoi') || tags.includes('🔞');
    const hasStar = tags.includes('⭐') || tags.includes('✨') || tags.includes('🌠') || tags.includes('🌟') ||
                    tags.includes('💫') || tags.includes('🤩') || tags.includes('❇️') || tags.includes('✴️') ||
                    tags.includes('✳️') || tags.includes('🔥') || tags.includes('💎');
@@ -2244,6 +2269,15 @@ function updateTagFilter() {
                 option.textContent = '⭐';
                 tagFilter.appendChild(option);
             }
+        } 
+        // Add NSFW and 18+ tags separately
+        else if (nsfwTags.includes(tag)) {
+            if (!Array.from(tagFilter.options).some(option => option.value === tag)) {
+                const option = document.createElement('option');
+                option.value = tag;
+                option.textContent = tag;
+                tagFilter.appendChild(option);
+            }
         } else {
             const option = document.createElement('option');
             option.value = tag;
@@ -2259,27 +2293,31 @@ function updateTagFilter() {
     updateTagFilterMobile();
 }
 
+
 // Filter tiles based on selected tag for desktop
 function filterTiles() {
-   const selectedTag = tagFilter.value;
-   tiles.forEach((tile, index) => {
-      const tileElement = imageGrid.children[index];
-      
-      // Check if the tile matches the selected tag or its equivalent
-      const isMatchingTag = selectedTag === 'all' ||
-         tile.tags.includes(selectedTag) ||
-         tile.platform === selectedTag ||
-         tile.age === selectedTag;
+    const selectedTag = tagFilter.value;
+    tiles.forEach((tile, index) => {
+        const tileElement = imageGrid.children[index];
+        
+        // Check if the tile matches the selected tag or its equivalent
+        const isMatchingTag = selectedTag === 'all' ||
+            tile.tags.includes(selectedTag) ||
+            tile.platform === selectedTag ||
+            tile.age === selectedTag;
 
-      // Treat ⭐ as matching all star-related tags
-      const isStarEquivalent = (selectedTag === '⭐' && tile.tags.some(tag => starTags.includes(tag)));
+        // Treat ⭐ as matching all star-related tags
+        const isStarEquivalent = (selectedTag === '⭐' && tile.tags.some(tag => starTags.includes(tag)));
 
-      if (isMatchingTag || isStarEquivalent) {
-         tileElement.style.display = '';
-      } else {
-         tileElement.style.display = 'none';
-      }
-   });
+        // Treat 18+ as matching both "NSFW" and "18+"
+        const isNSFWEquivalent = (selectedTag === 'NSFW' && tile.tags.some(tag => nsfwTags.includes(tag)));
+
+        if (isMatchingTag || isStarEquivalent || isNSFWEquivalent) {
+            tileElement.style.display = '';
+        } else {
+            tileElement.style.display = 'none';
+        }
+    });
 }
 
 // Handle file selection
@@ -2387,7 +2425,7 @@ importFileInput.addEventListener('change', (event) => {
 });
 // Function to toggle blur on NSFW content
 function toggleBlurNSFW() {
-   const nsfwTags = ['18+', 'NSFW', "Hentai", "Porn", "Yaoi"]; // Tags considered NSFW
+   const nsfwTags = ['18+', 'NSFW', "Hentai", "Porn", "Yaoi", "🔞"]; // Tags considered NSFW
    const imageItems = document.querySelectorAll('.image-item');
 
    imageItems.forEach(item => {
@@ -2439,7 +2477,7 @@ function selectRandomCharacter() {
    }
    let availableCharacters = includeNSFW ? characters : characters.filter(char => {
       const tags = Array.from(char.querySelectorAll('.tag')).map(tag => tag.textContent);
-      return !tags.some(tag => ['18+', 'NSFW', 'Porn', 'Hentai', 'Yaoi'].includes(tag));
+      return !tags.some(tag => ['18+', 'NSFW', 'Porn', 'Hentai', 'Yaoi', '🔞'].includes(tag));
    });
 
    if (availableCharacters.length === 0) {
@@ -2467,7 +2505,7 @@ function selectRandomCharacter() {
 
    updateTileOutline(characterPopup, tileData.tags);
 
-   if (isBlurred && (tileData.tags.includes('18+') || tileData.tags.includes('NSFW') || tileData.tags.includes('Hentai') || tileData.tags.includes('Porn') || tileData.tags.includes('Yaoi'))) {
+   if (isBlurred && (tileData.tags.includes('18+') || tileData.tags.includes('NSFW') || tileData.tags.includes('Hentai') || tileData.tags.includes('Porn') || tileData.tags.includes('Yaoi') || tileData.tags.includes('🔞'))) {
       popupImage.classList.add('blurred-image');
    } else {
       popupImage.classList.remove('blurred-image');
@@ -2491,10 +2529,10 @@ function closePopup() {
 // Event listener for the random character button
 randomCharacterBtn.addEventListener('click', () => {
     // Check if any character has the NSFW tag
-    const hasNSFWCharacter = tiles.some(tile => tile.tags.includes('NSFW') || tile.tags.includes('18+') || tile.tags.includes('Porn') || tile.tags.includes('Hentai') || tile.tags.includes('Yaoi'));
+    const hasNSFWCharacter = tiles.some(tile => tile.tags.includes('NSFW') || tile.tags.includes('18+') || tile.tags.includes('Porn') || tile.tags.includes('Hentai') || tile.tags.includes('Yaoi') || tile.tags.includes('🔞'));
     
     // Check if all tiles have the NSFW tag
-    const allTilesNSFW = tiles.every(tile => tile.tags.includes('NSFW') || tile.tags.includes('18+') || tile.tags.includes('Porn') || tile.tags.includes('Hentai') || tile.tags.includes('Yaoi'));
+    const allTilesNSFW = tiles.every(tile => tile.tags.includes('NSFW') || tile.tags.includes('18+') || tile.tags.includes('Porn') || tile.tags.includes('Hentai') || tile.tags.includes('Yaoi') || tile.tags.includes('🔞'));
 
     if (!hasNSFWCharacter) {
         // If no NSFW characters exist, select a random character
@@ -2548,7 +2586,7 @@ function checkForSpecialTiles() {
    tileElements.forEach((tileElement, index) => {
       const tileData = tiles[index];
       if (
-         (tileData.tags.includes('18+') || tileData.tags.includes('NSFW') || tileData.tags.includes('Hentai') || tileData.tags.includes('Porn')|| tileData.tags.includes('Yaoi')) &&
+         (tileData.tags.includes('18+') || tileData.tags.includes('NSFW') || tileData.tags.includes('Hentai') || tileData.tags.includes('Porn')|| tileData.tags.includes('Yaoi') || tileData.tags.includes('🔞')) &&
          (tileData.tags.includes('⭐') || tileData.tags.includes('✨') || tileData.tags.includes('🌠') || tileData.tags.includes('🌟') ||
           tileData.tags.includes('💫') || tileData.tags.includes('🤩') || tileData.tags.includes('❇️') || tileData.tags.includes('✴️') ||
           tileData.tags.includes('✳️') || tileData.tags.includes('🔥') || tileData.tags.includes('💎'))
@@ -2567,7 +2605,7 @@ document.addEventListener('DOMContentLoaded', checkForSpecialTiles);
 
 // Function to apply blur status on page load
 function applyBlurNSFWStatus() {
-   const nsfwTags = ['18+', 'NSFW', "Hentai", "Porn", "Yaoi"]; // Tags considered NSFW
+   const nsfwTags = ['18+', 'NSFW', "Hentai", "Porn", "Yaoi", "🔞"]; // Tags considered NSFW
    const imageItems = document.querySelectorAll('.image-item');
 
    imageItems.forEach(item => {
