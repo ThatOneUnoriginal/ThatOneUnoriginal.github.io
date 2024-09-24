@@ -62,6 +62,7 @@
 	border-radius: 4px;
 	cursor: pointer;
 	margin-top: 10px;
+    width: 100%
 }
 
 .info-section {
@@ -619,7 +620,7 @@ img:hover {
 	animation: float 5s ease-in-out infinite;
 }
 
-.edit-popup input, .edit-popup textarea {
+.edit-popup input, .edit-popup textarea, #image-url-input1, #image-url-input{
 	width: 100%;
 	padding: 10px;
 	margin-bottom: 10px;
@@ -849,18 +850,21 @@ img:hover {
 		max-height: none;
 	}
 
-	.edit-popup, #share-url-popup, #nsfw-inclusion-popup, #image-popup, #image-source-popup, #url-input-popup, #url-popup, #settings-popup {
+	.edit-popup, #share-url-popup, #nsfw-inclusion-popup, #image-popup, #image-source-popup, #url-input-popup, #url-popup, #settings-popup, #tile-creation-popup {
 		width: 80%;
 		max-width: none;
 		padding: 15px;
 	}
 
-	.edit-popup input, .edit-popup textarea, #nsfw-inclusion-popup button, #local-upload-btn, .edit-popup button, #share-url-popup button, #nsfw-inclusion-popup button, .theme-toggle button, 
+	.edit-popup textarea, #nsfw-inclusion-popup button, #local-upload-btn, .edit-popup button, #share-url-popup button, #nsfw-inclusion-popup button, .theme-toggle button, 
     #export-btn, #import-btn, #tile-size, #tag-filter-mobile, #local-upload-btn, #url-upload-btn, #url-popup-close, #colorSelector, #settings-popup button, #tileSize {
 		width: 100%;
 		margin-bottom: 15px;
 		padding: 15px;
 	}
+    .edit-popup input, #image-url-input1, #image-url-input, #tile-link, #tile-tags, #tile-name, #tile-platform, #tile-age, #tile-description{
+        width: 93% !important;
+    }
 
 	#share-url-popup input {
 		width: 80%;
@@ -1120,6 +1124,7 @@ img:hover {
     </div>
     <!--Tile Creation Popup-->
     <div id="tile-creation-popup">
+       <div id="popup-content">
        <h3>Create New Tile</h3>
        <input type="text" id="tile-link" placeholder="Enter a link for this image">
        <input type="text" id="tile-tags" placeholder="Enter tags separated by commas">
@@ -1130,34 +1135,39 @@ img:hover {
        <button id="create-tile-btn">Create Tile</button>
        <button id="cancel-tile-btn">Cancel</button>
     </div>
+    </div>
     <!--Edit URL Popup-->
     <div id="edit-url-popup" class="edit-popup">
+    <div id="popup-content">
        <h3>Edit URL</h3>
        <input type="text" id="edit-url-input" placeholder="Enter new URL">
        <button id="save-url-btn">Save</button>
        <button id="cancel-url-btn">Cancel</button>
     </div>
+    </div>
     <!--Edit Info Popup-->
     <div id="edit-info-popup" class="edit-popup">
+        <div id="popup-content">
        <h3>Edit Info</h3>
-       <div>
+       <div style="width:100%">
           <span class="input-label">Character Name:</span>
           <input type="text" id="edit-name-input" placeholder="Enter character name">
        </div>
-       <div>
+       <div style="width:100%">
           <span class="input-label">Platform:</span>
           <input type="text" id="edit-platform-input" placeholder="Enter platform">
        </div>
-       <div>
+       <div style="width:100%">
           <span class="input-label">Age:</span>
           <input type="text" id="edit-age-input" placeholder="Enter age">
        </div>
-       <div>
+       <div style="width:100%">
           <span class="input-label">Description:</span>
           <textarea id="edit-description-input" placeholder="Enter description"></textarea>
        </div>
        <button id="save-info-btn">Save</button>
        <button id="cancel-info-btn">Cancel</button>
+    </div>
     </div>
     <!--Edit Tags Popup-->
     <div id="edit-tags-popup" class="edit-popup">
@@ -1759,6 +1769,22 @@ function showEditUrlPopup(tileData, tileElement) {
    };
 }
 
+function filterTilesByPlatform() {
+   const selectedPlatform = document.getElementById('platform-filter').value;
+   const tiles = document.querySelectorAll('.tile'); // Assuming .tile is the class for each tile
+
+   tiles.forEach(tile => {
+      const platform = tile.getAttribute('data-platform'); // Assuming platform info is stored in a data attribute
+
+      if (selectedPlatform === 'all' || platform === selectedPlatform) {
+         tile.style.display = 'block'; // Show the tile
+      } else {
+         tile.style.display = 'none'; // Hide the tile
+      }
+   });
+}
+
+
 function showEditInfoPopup(tileData, tileElement) {
    const popup = document.getElementById('edit-info-popup');
    document.getElementById('edit-name-input').value = tileData.name || '';
@@ -2270,6 +2296,14 @@ fileInput.addEventListener('change', (event) => {
         document.getElementById('popup-overlay').style.display = 'none';
     });
 
+function clearTileCreationPopupInputs() {
+    document.getElementById('tile-link').value = '';
+    document.getElementById('tile-tags').value = '';
+    document.getElementById('tile-name').value = '';
+    document.getElementById('tile-platform').value = '';
+    document.getElementById('tile-age').value = '';
+    document.getElementById('tile-description').value = '';
+}
 
 
     function showTileCreationPopup(imageSource) {
