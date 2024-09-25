@@ -1846,9 +1846,22 @@ function showEditTagsPopup(tileData, tileElement) {
    popup.style.display = 'flex';
    document.getElementById('popup-overlay').style.display = 'block';
 
-
    document.getElementById('save-tags-btn').onclick = () => {
-      const newTags = document.getElementById('edit-tags-input').value.split(',').map(tag => tag.trim()).filter(tag => tag);
+      const newTags = document.getElementById('edit-tags-input').value.split(',')
+         .map(tag => tag.trim()) // Trim whitespace from each tag
+         .filter(tag => tag) // Remove empty tags
+         .filter((tag, index, self) => self.indexOf(tag) === index); // Remove duplicates
+
+      // Check if "bathtub" or "toilet" is included
+      const offendingTags = newTags.filter(tag => tag === "loli" || tag === "lolicon" || tag === "lolita" || tag === "shota");
+      if (offendingTags.length > 0) {
+         const confirmInclude = confirm(`This tile includes the ${offendingTags.join(', ')} tag(s). Are you sure you want to include them?`);
+         if (!confirmInclude) {
+            // If user doesn't confirm, do not save the new tags
+            return;
+         }
+      }
+
       tileData.tags = newTags;
       updateTileTags(tileElement, tileData.tags);
       updateTileOutline(tileElement, tileData.tags);
@@ -1863,6 +1876,8 @@ function showEditTagsPopup(tileData, tileElement) {
       document.getElementById('popup-overlay').style.display = 'none';
    };
 }
+
+
 
 // Theme management
 function setTheme(theme) {
@@ -2344,40 +2359,43 @@ function clearTileCreationPopupInputs() {
 }
 
 
-    function showTileCreationPopup(imageSource) {
-        document.getElementById('image-source-popup').style.display = 'none';
-        const popup = document.getElementById('tile-creation-popup');
-        popup.style.display = 'flex';
-        document.getElementById('popup-overlay').style.display = 'block';
+function showTileCreationPopup(imageSource) {
+    document.getElementById('image-source-popup').style.display = 'none';
+    const popup = document.getElementById('tile-creation-popup');
+    popup.style.display = 'flex';
+    document.getElementById('popup-overlay').style.display = 'block';
 
-        const createBtn = document.getElementById('create-tile-btn');
-        const cancelBtn = document.getElementById('cancel-tile-btn');
+    const createBtn = document.getElementById('create-tile-btn');
+    const cancelBtn = document.getElementById('cancel-tile-btn');
 
-        createBtn.onclick = () => {
-            const link = document.getElementById('tile-link').value;
-            const tags = document.getElementById('tile-tags').value.split(',').map(tag => tag.trim()).filter(tag => tag);
-            const name = document.getElementById('tile-name').value;
-            const platform = document.getElementById('tile-platform').value;
-            const age = document.getElementById('tile-age').value;
-            const description = document.getElementById('tile-description').value;
+    createBtn.onclick = () => {
+        const link = document.getElementById('tile-link').value;
+        const tags = document.getElementById('tile-tags').value.split(',')
+            .map(tag => tag.trim()) // Trim whitespace from each tag
+            .filter(tag => tag) // Remove empty tags
+            .filter((tag, index, self) => self.indexOf(tag) === index); // Remove duplicates
+        const name = document.getElementById('tile-name').value;
+        const platform = document.getElementById('tile-platform').value;
+        const age = document.getElementById('tile-age').value;
+        const description = document.getElementById('tile-description').value;
 
-            const newTile = createTileData(imageSource, link, tags, name, platform, age, description);
-            tiles.push(newTile);
-            createImageTile(newTile);
-            saveTiles();
-            updateTagFilter();
+        const newTile = createTileData(imageSource, link, tags, name, platform, age, description);
+        tiles.push(newTile);
+        createImageTile(newTile);
+        saveTiles();
+        updateTagFilter();
 
-            popup.style.display = 'none';
-            document.getElementById('popup-overlay').style.display = 'none';
-            clearTileCreationPopupInputs();
-        };
+        popup.style.display = 'none';
+        document.getElementById('popup-overlay').style.display = 'none';
+        clearTileCreationPopupInputs();
+    };
 
-        cancelBtn.onclick = () => {
-            popup.style.display = 'none';
-            document.getElementById('popup-overlay').style.display = 'none';
-            clearTileCreationPopupInputs();
-        };
-    }
+    cancelBtn.onclick = () => {
+        popup.style.display = 'none';
+        document.getElementById('popup-overlay').style.display = 'none';
+        clearTileCreationPopupInputs();
+    };
+}
 
 // Filter tiles when tag is selected
 tagFilter.addEventListener('change', filterTiles);
