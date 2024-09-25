@@ -2392,7 +2392,8 @@ function showTileCreationPopup(imageSource) {
     };
 
     cancelBtn.onclick = () => {
-        // Keep the popup overlay visible
+        popup.style.display = 'none';
+        document.getElementById('popup-overlay').style.display = 'none';
         clearTileCreationPopupInputs(); // Optional: Clear the inputs
     };
 }
