@@ -1852,15 +1852,6 @@ function showEditTagsPopup(tileData, tileElement) {
          .filter(tag => tag) // Remove empty tags
          .filter((tag, index, self) => self.indexOf(tag) === index); // Remove duplicates
 
-      // Check if "bathtub" or "toilet" is included
-      const offendingTags = newTags.filter(tag => tag === "loli" || tag === "lolicon" || tag === "lolita" || tag === "shota");
-      if (offendingTags.length > 0) {
-         const confirmInclude = confirm(`This tile includes the ${offendingTags.join(', ')} tag(s). Are you sure you want to include them?`);
-         if (!confirmInclude) {
-            // If user doesn't confirm, do not save the new tags
-            return;
-         }
-      }
 
       tileData.tags = newTags;
       updateTileTags(tileElement, tileData.tags);
@@ -2379,6 +2370,16 @@ function showTileCreationPopup(imageSource) {
         const age = document.getElementById('tile-age').value;
         const description = document.getElementById('tile-description').value;
 
+        // Check for duplicate links
+        const hasDuplicateLink = tiles.some(tile => tile.link === link);
+        if (hasDuplicateLink) {
+            const userResponse = confirm('A tile with this link already exists. Do you want to create a new tile with this duplicate link?');
+            if (!userResponse) {
+                document.getElementById('popup-overlay').style.display = 'block';
+                return; // Don't create the tile if the user cancels
+            }
+        }
+
         const newTile = createTileData(imageSource, link, tags, name, platform, age, description);
         tiles.push(newTile);
         createImageTile(newTile);
@@ -2391,11 +2392,12 @@ function showTileCreationPopup(imageSource) {
     };
 
     cancelBtn.onclick = () => {
-        popup.style.display = 'none';
-        document.getElementById('popup-overlay').style.display = 'none';
-        clearTileCreationPopupInputs();
+        // Keep the popup overlay visible
+        clearTileCreationPopupInputs(); // Optional: Clear the inputs
     };
 }
+
+
 
 // Filter tiles when tag is selected
 tagFilter.addEventListener('change', filterTiles);
