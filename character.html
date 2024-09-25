@@ -1215,6 +1215,7 @@ img:hover {
         <h3>Theme Settings</h3>
             <button id="blur-nsfw-btn">Blur NSFW</button>
             <button id="theme-toggle-btn">Light Mode</button>
+            <button id="hide-tags-button">Hide Tags</button>
             <button id="toggle-position-btn">Move Add Image to Beginning</button>
             <select id="colorSelector">
                 <option value="original">Original</option>
@@ -1315,6 +1316,41 @@ const timerSpan = document.getElementById('undo-timer');
 const tileSizeSelector = document.getElementById('tileSize');
 const starTags = ['⭐', '🌟', '✨', '🌠', '💫', '🤩', '❇️', '✴️', '✳️'];
 const nsfwTags = ['18+', 'NSFW', "Hentai", "Porn", "Yaoi", "🔞"]; 
+const hideTagsButton = document.getElementById("hide-tags-button");
+const tags = document.querySelectorAll(".tag");
+
+let tagsVisible = true;
+
+// Load the visibility state from local storage on page load
+window.addEventListener('load', function() {
+    const storedVisibility = localStorage.getItem('tagsVisible');
+    if (storedVisibility !== null) {
+        tagsVisible = storedVisibility === 'true'; // Convert string to boolean
+    }
+    updateTagVisibility(tagsVisible);
+});
+
+hideTagsButton.addEventListener('click', function() {
+    tagsVisible = !tagsVisible; // Toggle visibility
+    updateTagVisibility(tagsVisible);
+    
+    // Save the visibility state in local storage
+    localStorage.setItem('tagsVisible', tagsVisible);
+});
+
+function updateTagVisibility(visible) {
+    const tags = document.querySelectorAll('.tag');
+    tags.forEach(tag => {
+        tag.style.display = visible ? 'block' : 'none'; // Show or hide the tag
+    });
+
+    // Change the button text based on the tags' state
+    hideTagsButton.textContent = visible ? 'Hide Tags' : 'Show Tags';
+}
+
+// Initialize tag visibility based on the stored state
+updateTagVisibility(tagsVisible);
+
 
 let tiles = [];
 let allTags = new Set();
@@ -1325,6 +1361,8 @@ let deletedTile = null;
 let undoTimer = null;
 
 let isAtEnd =  true;  // Initially, the add-image tile is at the end
+
+
 
 document.getElementById('openReorderToolButton').addEventListener('click', function() {
         window.open('https://thatoneunoriginal.github.io/reorder%20tool.html', '_blank');
@@ -2618,8 +2656,6 @@ function checkForSpecialTiles() {
       }
    });
 }
-
-
 
 // Run the check once on page load
 document.addEventListener('DOMContentLoaded', checkForSpecialTiles);
