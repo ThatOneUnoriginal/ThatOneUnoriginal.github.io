@@ -11,7 +11,8 @@
 .theme-toggle button, #tag-filter, #tag-filter-mobile, #export-btn, #import-btn, #tile-size, #colorSelector, #popup-button, #reroll-btn, #local-upload-btn, #url-upload-btn,
 #url-popup-close, #url-popup-close-url, #local-image-btn, #url-image-btn, #urlURL-popup-close, #url-popup-close-url1, #popup-close, .collapsible, .edit-popup button,
 #submit-url-btn, #submit-url-btn1, #share-url-popup button, #nsfw-inclusion-popup button, #image-upload-choice-popup button, #tile-creation-popup button, #settings-popup button, 
-#tileSize, #undo-delete-popup button, #popup-close-btn, #new-confirm-image-btn, #confirm-image-btn, #new-cancel-image-btn, #cancel-image-btn {
+#tileSize, #undo-delete-popup button, #popup-close-btn, #new-confirm-image-btn, #confirm-image-btn, #new-cancel-image-btn, #cancel-image-btn, #image-confirmation-popup button,
+#new-image-confirmation-popup button {
 	background-color: var(--button-bg-1);
 }
 
@@ -517,7 +518,7 @@ img:hover {
 	width: 100%
 }
 #image-confirmation-popup, #new-image-confirmation-popup{
-    z-index: 1002;
+    z-index: 1002 !important;
 }
 #popup-close{
 	position: absolute;
@@ -550,6 +551,18 @@ img:hover {
 	height: 100%;
 	background: rgba(0, 0, 0, 0.5);
 	z-index: 999;
+	backdrop-filter: blur(5px);
+}
+
+.popup-overlay1 {
+	position: fixed;
+	display: none;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.5);
+	z-index: 1001;
 	backdrop-filter: blur(5px);
 }
 
@@ -756,7 +769,7 @@ img:hover {
 
 .theme-toggle button:hover, #tag-filter:hover, #tag-filter-mobile, #export-btn:hover, #import-btn:hover, #image-upload-choice-popup button:hover, #nsfw-inclusion-popup button:hover,
 #share-url-popup button:hover, .edit-popup button:hover, .active, .collapsible:hover, #popup-close-btn:hover ,#popup-close:hover, #settings-popup button:hover, #undo-delete-popup button:hover, #new-confirm-image-btn:hover, #confirm-image-btn:hover,
-#new-cancel-image-btn:hover, #cancel-image-btn:hover{
+#new-cancel-image-btn:hover, #cancel-image-btn:hover, #image-confirmation-popup button:hover, #new-image-confirmation-popup button:hover{
 	background-color: var(--button-bg-hover-1)
 }
 
@@ -977,6 +990,20 @@ img:hover {
     </div>
     <button class="collapsible">Update Log</button>
     <div class="collapsible-content">
+        <h2>Update 1.9</h2>
+        <ul>
+            <li>The ability to export and import the theme settings</li>
+            <li>Updated the theme popup window to be better responsive on mobile devices</li>
+            <li>Added two new buttons that will allow easier access to the re-ordering tool and merging tool</li>
+            <li>Changed some things up to make UI more uniform</li>
+            <li>Updated the information section to include new information about how to favourite characters</li>
+            <li>🔞 now is an available tag for triggering the NSFW system.</li>
+            <li>Similar to the favourites system, all the NSFW tags can be filtered with the NSFW option, though each one will still appear as their own separate tag in the dropdown.</li>
+            <li>Duplicate tags on a tile will now be removed (so if you include "test" twice on a tag, it will remove one of them for example).</li>
+            <li>When creating or editing links for a tile, if a duplicate link is found (already found in one of the tiles), it will prompt the user if they want to create a tile with a duplicate link.</li>
+            <li>Like the ability to hide away the edit tile functions, you can hide the tags (they will still appear in the dropdown system).</li>
+            <li>When uploading an image through a URL, you will now be prompted to preview the image before uploading it. This should help with ensuring that the image will successfully appear before it's added.</li>
+        </ul>        
         <h2>Updpate 1.8</h2>
         <ul>
             <li>For the favourite tags, all will now appear under the ⭐ tag in the tag filtering dropdown.</li>
@@ -1139,6 +1166,15 @@ img:hover {
           <button id="popup-close-btn">Close</button>
        </div>
     </div>
+    <div id="cropping-popup" class="popup hidden">
+        <div class="popup-content">
+            <img id="full-image" src="" alt="Full Image">
+            <div id="crop-area" class="crop-area"></div>
+            <button id="confirm-crop-btn">Confirm Crop</button>
+            <button id="cancel-crop-btn">Cancel</button>
+        </div>
+    </div>
+    
     <!--Tile Creation Popup-->
     <div id="tile-creation-popup">
        <div id="popup-content">
@@ -1274,10 +1310,12 @@ img:hover {
     
     <!-- Add this HTML for the URL input popup -->
     <div id="url-input-popup" class="popup hidden">
+        <div id="popup-content">
         <h2>Enter Image URL</h2>
         <input type="text" id="image-url-input" placeholder="Enter image URL">
         <button id="submit-url-btn">Submit</button>
         <button id="url-popup-close-url1">Close</button>
+    </div>
     </div>
     <div id="url-popup" class="popup hidden">
         <div id="popup-content">
@@ -1303,6 +1341,16 @@ img:hover {
     <button id="dismiss-undo">✕</button>
   </div>
 </div>
+
+<div id="crop-image-popup" class="popup hidden">
+    <div class="popup-content">
+        <img id="full-image" src="" alt="Full Image" style="max-width: 100%; position: relative;">
+        <div id="crop-area" style="position: absolute; border: 2px dashed #fff; background-color: rgba(255, 255, 255, 0.5);"></div>
+        <button id="confirm-crop-btn">Confirm Crop</button>
+        <button id="cancel-crop-btn">Cancel</button>
+    </div>
+</div>
+
     <!-- Add the file input for uploading images -->
     <input type="file" id="file-input" accept="image/*,.avif,.jxl,.cur,.jps,.jfif" class="hidden">
     <div class="image-grid" id="image-grid">
@@ -1313,7 +1361,7 @@ img:hover {
     <input type="file" id="file-input" accept="image/*,.avif,.jxl,.cur,.jps,.jfif">
     <input type="file" id="import-file-input" accept="application/json">
     <div id="popup-overlay" class="popup-overlay"></div>
-    
+    <div id="popup-overlay1" class="popup-overlay1"></div>
     <script>
 const popupOverlay = document.getElementById("popup-overlay");
 const imageGrid = document.getElementById('image-grid');
@@ -1563,7 +1611,8 @@ document.getElementById('colorSelector').addEventListener('change', function() {
         '.theme-toggle button, #tag-filter, #tag-filter-mobile, #export-btn, #import-btn, #tile-size, #colorSelector, #popup-button, #reroll-btn, ' +
         '#local-upload-btn, #url-upload-btn, #url-popup-close, #url-popup-close-url, #local-image-btn, #url-image-btn, #urlURL-popup-close, ' +
         '#url-popup-close-url1, #popup-close, .collapsible, .edit-popup button, #submit-url-btn, #submit-url-btn1, #share-url-popup button, ' +
-        '#nsfw-inclusion-popup button, #image-upload-choice-popup button, #settings-popup button, #tileSize, #undo-delete-popup button, .highlight, #popup-close-btn'
+        '#nsfw-inclusion-popup button, #image-upload-choice-popup button, #settings-popup button, #tileSize, #undo-delete-popup button, .highlight, #popup-close-btn, ' +
+        '#image-confirmation-popup button,#new-image-confirmation-popup button'
     );
 
     // Define colors based on the selected option
@@ -1799,22 +1848,26 @@ document.getElementById('submit-url-btn').addEventListener('click', () => {
 
         // Show the confirmation popup
         document.getElementById('new-image-confirmation-popup').style.display = 'block';
-
+        document.getElementById('popup-overlay1').style.display = 'block';
         // Confirm button click event
         document.getElementById('new-confirm-image-btn').onclick = () => {
             // Trigger the tile creation popup with the confirmed image URL
+            document.getElementById('url-input-popup').style.display = 'none';
+            document.getElementById('popup-overlay').style.display = 'none';
+            document.getElementById('popup-overlay1').style.display = 'none';
+            document.getElementById('new-image-confirmation-popup').style.display = 'none';
             showTileCreationPopup(imageUrl);
             closePopups(); // Close all popups
         };
 
         // Cancel button click event
         document.getElementById('new-cancel-image-btn').onclick = () => {
+            document.getElementById('new-image-confirmation-popup').style.display = 'none';
+            document.getElementById('popup-overlay1').style.display = 'none';
             closePopups(); // Just close the popups without taking any action
         };
 
         // Close the URL input popup
-        document.getElementById('url-input-popup').style.display = 'none';
-        document.getElementById('popup-overlay').style.display = 'none';
     }
 });
 
@@ -1839,7 +1892,6 @@ document.getElementById('popup-overlay').addEventListener('click', () => {
    document.getElementById('image-source-popup').style.display = 'none';
    document.getElementById('url-input-popup').style.display = 'none';
    document.getElementById('popup-overlay').style.display = 'none';
-   document.getElementById('popup-overlay').style.display = 'none';
    document.getElementById('settings-popup').style.display = 'none';
    document.getElementById('edit-url-popup').style.display = 'none';
    document.getElementById('tile-creation-popup').style.display = 'none';
@@ -1848,6 +1900,12 @@ document.getElementById('popup-overlay').addEventListener('click', () => {
    document.getElementById('edit-tags-popup').style.display = 'none';
    document.getElementById('share-url-popup').style.display = 'none';
    document.getElementById('nsfw-inclusion-popup').style.display = 'none';
+});
+
+document.getElementById('popup-overlay1').addEventListener('click', () => {
+    document.getElementById('popup-overlay1').style.display = 'none';
+    document.getElementById('new-image-confirmation-popup').style.display = 'none';
+    document.getElementById('image-confirmation-popup').style.display= 'none';
 });
 
 function showEditUrlPopup(tileData, tileElement) {
@@ -2208,7 +2266,7 @@ function editImage(tileData, tileElement) {
         // Submit URL functionality
         document.getElementById('submit-url-btn1').onclick = () => {
     let imageUrl = urlInput1.value.trim();
-
+    document.getElementById('popup-overlay1').style.display = 'block';
     if (imageUrl) {
         imageUrl = stripUrlParams(imageUrl); // Strip query parameters from URL
         document.getElementById('preview-image').src = imageUrl; // Set preview image
@@ -2218,6 +2276,10 @@ function editImage(tileData, tileElement) {
 
         // Confirm button click event
         document.getElementById('confirm-image-btn').onclick = () => {
+            document.getElementById('image-confirmation-popup').style.display = 'none';
+            document.getElementById('popup-overlay').style.display = 'none';
+            document.getElementById('popup-overlay1').style.display = 'none';
+            document.getElementById('url-popup').style.display = 'none';
             tileData.imageData = imageUrl; // Commit the changes
             tileElement.querySelector('img').src = imageUrl; // Update the tile image
             saveTiles(); // Save the changes
@@ -2226,7 +2288,8 @@ function editImage(tileData, tileElement) {
 
         // Cancel button click event
         document.getElementById('cancel-image-btn').onclick = () => {
-            closePopups(); // Just close the popups without saving changes
+            document.getElementById('image-confirmation-popup').style.display = 'none';
+            document.getElementById('popup-overlay1').style.display = 'none';
         };
     }
 };
