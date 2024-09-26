@@ -20,6 +20,9 @@
 	width: 90%;
 	max-width: 600px;
 	margin: 0 auto;
+	height: 80%;
+	overflow: scroll;
+}
 }
 
 #popup-content {
@@ -307,7 +310,9 @@ p {
 	overflow: hidden;
 	box-shadow: 0 2px 4px var(--tile-shadow);
 }
-
+#popup-image{
+    aspect-ratio: 1/1;
+}
 .image-container {
 	width: 100%;
 	height: 100%;
@@ -455,7 +460,8 @@ img:hover {
 }
 
 #popup-image, #preview-image, #new-preview-image {
-	min-width: unset;
+	min-width: 250px;
+    min-height: 250px;
 	width: 250px;
 	height: 250px;
 	object-fit: cover;
@@ -475,7 +481,6 @@ img:hover {
 	padding: 15px;
 	overflow-y: auto;
 	max-height: 225px;
-	width: 100%;
 }
 
 .popup-info h3 {
@@ -522,8 +527,8 @@ img:hover {
 }
 #popup-close{
 	position: absolute;
-	top: -10px;
-	right: -10px;
+	top: 10px;
+	right: 15px;
 	color: var(--button-color);
 	width: 30px;
 	height: 30px;
@@ -833,20 +838,16 @@ img:hover {
 	}
 }
 
-@media (max-height: 670px) {
+@media (max-height: 700px) {
     #settings-popup{
-        height: 600px
-    }
-}
-@media (max-height: 570px) {
-    #settings-popup{
-        height: 500px
+        height: 80%;
     }
 }
 @media (max-width: 600px) {
 	#character-popup {
 		max-height: 80vh;
 		overflow-y: auto;
+        width: 80%;
 	}
 
     #popup-close-btn{
@@ -968,7 +969,7 @@ img:hover {
           <li>🔞</li>
        </ul>
        <p>They're case sensitive, so put them in as shown here. This will cause a <span class="highlight-nsfw">red outline</span> to appear around the tile and the random character popup if it's selected. You can also blur the image with the <span class="highlight">Blur NSFW</span> button in the <span class="highlight">Theme Settings</span> menu.</p>
-       <p>Like the favourite system (bellow) the <span class="highlight">NSFW</span> tag will show all the aobve NSFW tags, though each individual one will appear in the tag filtering dropdown.</p>
+       <p>Like the favourite system (bellow) the <span class="highlight">NSFW</span> tag will show all the above NSFW tags, though each individual one will appear in the tag filtering dropdown.</p>
        <p><strong>How to indicate characters as Favourites?</strong></p>
        <p>When prompted to change the tags for the image either when curating the tile or choosing the Edit Tags button, add one of the following tags. This will cause a <span class="highlight-favourite">green outline</span> to appear around the tile and random character popup if it's selected.</p>
        <ul>
@@ -982,7 +983,7 @@ img:hover {
         <li>✴️</li>
         <li>✳️</li>
        </ul>
-       <p>Note that regardless of which ones you use (either one exlusively or a combination) when using the tag filtering dropdown they will be combined to a singular <span class="highlight-favourite">⭐</class> section.</p>
+       <p>Note that regardless of which ones you use (either one exclusively or a combination) when using the tag filtering dropdown they will be combined to a singular <span class="highlight-favourite">⭐</class> section.</p>
        <p><strong>Can I indicate a character as being NSFW and a Favourite?</strong></p>
        <p>Yes! When prompted to change the tags for the image either when curating the tile or choosing the Edit Tags button, adding one of the NSFW tag triggers and the Favourites tag trigger will cause a special <span class="highlight-special">purple outline</span> to appear on both the tile and random character popup if it's selected.</p>
        <p><strong>Should I Export?</strong></p>
@@ -1113,7 +1114,7 @@ img:hover {
              <li>Merge Two Backups Together</li>
              <li>Automatically removes duplicate characters (by their hyperlink/url)</li>
              <li>Prompt to remove NSFW characters when merging files</li>
-             <li>Prompt to remove characters with "https://" as their hyperlinkl</li>
+             <li>Prompt to remove characters with "https://" as their hyperlink</li>
           </ul>
           <li>Reordering Tool</li>
           <ul>
@@ -1151,7 +1152,6 @@ img:hover {
     </div>
     <!-- Popup Structure -->
     <div id="character-popup" class="popup hidden">
-       <div id="popup-content">
           <img id="popup-image" src="" alt="Character Image">
           <span id="popup-close">&times;</span>
           <div class="popup-info">
@@ -1164,20 +1164,10 @@ img:hover {
           <button id="popup-button" type="button">View Profile</button>
           <button id="reroll-btn">Reroll</button>
           <button id="popup-close-btn">Close</button>
-       </div>
-    </div>
-    <div id="cropping-popup" class="popup hidden">
-        <div class="popup-content">
-            <img id="full-image" src="" alt="Full Image">
-            <div id="crop-area" class="crop-area"></div>
-            <button id="confirm-crop-btn">Confirm Crop</button>
-            <button id="cancel-crop-btn">Cancel</button>
-        </div>
     </div>
     
     <!--Tile Creation Popup-->
     <div id="tile-creation-popup">
-       <div id="popup-content">
        <h3>Create New Tile</h3>
        <input type="text" id="tile-link" placeholder="Enter a link for this image">
        <input type="text" id="tile-tags" placeholder="Enter tags separated by commas">
@@ -1188,19 +1178,15 @@ img:hover {
        <button id="create-tile-btn">Create Tile</button>
        <button id="cancel-tile-btn">Cancel</button>
     </div>
-    </div>
     <!--Edit URL Popup-->
     <div id="edit-url-popup" class="edit-popup">
-    <div id="popup-content">
        <h3>Edit URL</h3>
        <input type="text" id="edit-url-input" placeholder="Enter new URL">
        <button id="save-url-btn">Save</button>
        <button id="cancel-url-btn">Cancel</button>
     </div>
-    </div>
     <!--Edit Info Popup-->
     <div id="edit-info-popup" class="edit-popup">
-        <div id="popup-content">
        <h3>Edit Info</h3>
        <div style="width:100%">
           <span class="input-label">Character Name:</span>
@@ -1221,7 +1207,6 @@ img:hover {
        <button id="save-info-btn">Save</button>
        <button id="cancel-info-btn">Cancel</button>
     </div>
-    </div>
     <!--Edit Tags Popup-->
     <div id="edit-tags-popup" class="edit-popup">
        <h3>Edit Tags</h3>
@@ -1238,7 +1223,6 @@ img:hover {
     </div>
     <!-- NSFW Inclusion Popup -->
     <div id="nsfw-inclusion-popup">
-        <div id="popup-content">
         <h3>Include NSFW Characters?</h3>
         <p>Do you want to include NSFW characters in the random selection?</p>
             <button id="include-nsfw-btn">Yes, Include NSFW</button>
@@ -1246,11 +1230,9 @@ img:hover {
         <label>
             <input type="checkbox" id="remember-nsfw-state-checkbox"> Remember my choice</input>
         </label>
-        </div>
     </div>  
     <!-- Settings Popup -->
     <div id="settings-popup" style="overflow-y: auto;">
-        <div id="popup-content">
         <h3>Theme Settings</h3>
             <button id="blur-nsfw-btn">Blur NSFW</button>
             <button id="theme-toggle-btn">Light Mode</button>
@@ -1271,68 +1253,53 @@ img:hover {
             <input type="file" id="importFile" accept=".json" style="display: none;" />
             <button id="importButton">Import Theme Settings</button>
             <button id="settings-close">Close</button>
-        </div>
     </div>    
 
     <div id="image-popup" class="popup hidden">
-       <div id="popup-content">
           <h3>Select Image Source</h3>
           <button id="local-upload-btn">Upload from Device</button>
           <button id="url-upload-btn">Provide Image URL</button>
           <button id="url-popup-close">Close</button>
-       </div>
     </div>
     <div id="image-source-popup" class="popup hidden">
-        <div id="popup-content">
         <h2>Select Image Source</h2>
         <button id="local-image-btn">Upload from Device</button>
         <button id="url-image-btn">Provide URL</button>
         <button id="urlURL-popup-close">Close</button>
-        </div>
     </div>
     <div id="image-confirmation-popup" class="popup hidden">
-        <div class="popup-content">
             <img id="preview-image" src="" alt="Image Preview">
             <p>Does this image look correct?</p>
             <button id="confirm-image-btn">Yes</button>
             <button id="cancel-image-btn">No</button>
-        </div>
     </div>    
 
     <div id="new-image-confirmation-popup" class="popup hidden">
-        <div class="popup-content">
             <img id="new-preview-image" src="" alt="Image Preview">
             <p>Does this image look correct?</p>
             <button id="new-confirm-image-btn">Yes</button>
             <button id="new-cancel-image-btn">No</button>
-        </div>
     </div>
     
     <!-- Add this HTML for the URL input popup -->
     <div id="url-input-popup" class="popup hidden">
-        <div id="popup-content">
         <h2>Enter Image URL</h2>
         <input type="text" id="image-url-input" placeholder="Enter image URL">
         <button id="submit-url-btn">Submit</button>
         <button id="url-popup-close-url1">Close</button>
     </div>
-    </div>
     <div id="url-popup" class="popup hidden">
-        <div id="popup-content">
            <h3>Enter Image URL</h3>
            <input type="text" id="image-url-input1" placeholder="Paste image URL here" />
            <button id="submit-url-btn1">Submit</button>
            <button id="url-popup-close-url">Close</button>
-        </div>
      </div>
     <!-- Image Selection Prompt -->
     <div id="image-method-popup" class="popup hidden">
-       <div class="popup-content">
           <h2>Select Image Source</h2>
           <button id="local-image-btn">Upload Local Image</button>
           <button id="url-image-btn">Use Image URL</button>
           <button id="cancel-image-selection">Cancel</button>
-       </div>
     </div>
     <div id="undo-delete-popup">
   <p>Tile deleted. <span id="undo-timer">30</span>s</p>
@@ -1343,12 +1310,10 @@ img:hover {
 </div>
 
 <div id="crop-image-popup" class="popup hidden">
-    <div class="popup-content">
         <img id="full-image" src="" alt="Full Image" style="max-width: 100%; position: relative;">
         <div id="crop-area" style="position: absolute; border: 2px dashed #fff; background-color: rgba(255, 255, 255, 0.5);"></div>
         <button id="confirm-crop-btn">Confirm Crop</button>
         <button id="cancel-crop-btn">Cancel</button>
-    </div>
 </div>
 
     <!-- Add the file input for uploading images -->
@@ -1363,7 +1328,6 @@ img:hover {
     <div id="popup-overlay" class="popup-overlay"></div>
     <div id="popup-overlay1" class="popup-overlay1"></div>
     <script>
-const popupOverlay = document.getElementById("popup-overlay");
 const imageGrid = document.getElementById('image-grid');
 const addImageButton = document.getElementById('add-image');
 const fileInput = document.getElementById('file-input');
@@ -1447,7 +1411,8 @@ document.getElementById('exportButton').addEventListener('click', () => {
         theme: localStorage.getItem('theme'),
         addImagePosition: localStorage.getItem('addImagePosition'),
         selectedColorOption: localStorage.getItem('selectedColorOption'),
-        tileSize: localStorage.getItem('tileSize')
+        tileSize: localStorage.getItem('tileSize'),
+        tagsVisible: localStorage.getItem('tagsVisible')
     };
 
     // Convert settings to a JSON string
@@ -1489,6 +1454,7 @@ document.getElementById('importButton').addEventListener('click', () => {
                     localStorage.setItem('addImagePosition', settings.addImagePosition);
                     localStorage.setItem('selectedColorOption', settings.selectedColorOption);
                     localStorage.setItem('tileSize', settings.tileSize);
+                    localStorage.setItem('tagsVisible', settings.tagsVisible);
                     
                     alert('Settings imported successfully! Refresh the page to have the changes apply');
                 } catch (error) {
@@ -1536,9 +1502,6 @@ function applySavedPosition() {
     }
 }
 
-// Apply the saved position when the DOM is fully loaded
-document.addEventListener('DOMContentLoaded', applySavedPosition);
-
 // Add event listener to the button
 togglePositionBtn.addEventListener('click', toggleAddImagePosition);
 
@@ -1562,12 +1525,7 @@ function setTileSize(size) {
     imageGrid.style.setProperty('--tile-size', sizeValue);
 }
 
-// Load the saved tile size from local storage on page load
-window.addEventListener('DOMContentLoaded', function() {
-    const savedSize = localStorage.getItem('tileSize') || 'medium'; // Default to 'medium' if no value is found
-    tileSizeSelector.value = savedSize; // Set the dropdown to the saved value
-    setTileSize(savedSize); // Apply the saved size to the grid
-});
+
 
 // Save the tile size to local storage when the user changes it
 tileSizeSelector.addEventListener('change', function() {
@@ -1701,9 +1659,7 @@ function loadSelectedColorOption() {
     }
 }
 
-// Call this function when the page loads
-window.onload = loadSelectedColorOption;
-document.addEventListener('DOMContentLoaded', loadSelectedColorOption);
+
 
 document.getElementById('toggleButton').addEventListener('click', function() {
     // Get all elements with class 'edit-image-btn', 'edit-url-btn', etc.
@@ -1734,35 +1690,7 @@ document.getElementById('toggleButton').addEventListener('click', function() {
     this.textContent = isHidden ? 'Show Tile Buttons' : 'Hide Tile Buttons';
 });
 
-// On page load, apply the saved toggle state from localStorage
-document.addEventListener('DOMContentLoaded', function() {
-    const editButtons = document.querySelectorAll('.edit-image-btn');
-    const editURL = document.querySelectorAll('.edit-url-btn');
-    const editTags = document.querySelectorAll('.edit-tags-btn');
-    const editInfo = document.querySelectorAll('.edit-info-btn');
-    const editDelete = document.querySelectorAll('.delete-btn');
-    const toggleButton = document.getElementById('toggleButton');
 
-    // Get the saved state from localStorage
-    const isHidden = localStorage.getItem('buttonsHidden') === 'true';
-
-    // Function to apply the display state
-    const setDisplay = (buttons, display) => {
-        buttons.forEach(button => {
-            button.style.display = display;
-        });
-    };
-
-    // Apply the saved state to the buttons
-    setDisplay(editButtons, isHidden ? 'none' : 'flex');
-    setDisplay(editURL, isHidden ? 'none' : 'flex');
-    setDisplay(editTags, isHidden ? 'none' : 'flex');
-    setDisplay(editInfo, isHidden ? 'none' : 'flex');
-    setDisplay(editDelete, isHidden ? 'none' : 'flex');
-
-    // Set the toggle button text based on the state
-    toggleButton.textContent = isHidden ? 'Show Tile Buttons' : 'Hide Tile Buttons';
-});
 
 tagFilterMobile.addEventListener('change', filterTilesMobile);
 
@@ -2266,8 +2194,8 @@ function editImage(tileData, tileElement) {
         // Submit URL functionality
         document.getElementById('submit-url-btn1').onclick = () => {
     let imageUrl = urlInput1.value.trim();
-    document.getElementById('popup-overlay1').style.display = 'block';
     if (imageUrl) {
+        document.getElementById('popup-overlay1').style.display = 'block';
         imageUrl = stripUrlParams(imageUrl); // Strip query parameters from URL
         document.getElementById('preview-image').src = imageUrl; // Set preview image
 
@@ -2766,8 +2694,7 @@ function checkForSpecialTiles() {
    });
 }
 
-// Run the check once on page load
-document.addEventListener('DOMContentLoaded', checkForSpecialTiles);
+
 
 // Function to apply blur status on page load
 function applyBlurNSFWStatus() {
@@ -2789,8 +2716,6 @@ function applyBlurNSFWStatus() {
 // Add event listener to the button
 blurNSFWBtn.addEventListener('click', toggleBlurNSFW);
 
-// Apply blur status when the page loads
-document.addEventListener('DOMContentLoaded', applyBlurNSFWStatus);
 
 document.getElementById('flush-button').addEventListener('click', () => {
     rememberNSFWChoice = false;
@@ -2799,6 +2724,58 @@ document.getElementById('flush-button').addEventListener('click', () => {
     localStorage.setItem('rememberNSFWChoice', JSON.stringify(rememberNSFWChoice));
     localStorage.setItem('includeNSFW', JSON.stringify(includeNSFW));
 });
+
+
+
+// Apply the saved position when the DOM is fully loaded
+document.addEventListener('DOMContentLoaded', applySavedPosition);
+
+// Load the saved tile size from local storage on page load
+window.addEventListener('DOMContentLoaded', function() {
+    const savedSize = localStorage.getItem('tileSize') || 'medium'; // Default to 'medium' if no value is found
+    tileSizeSelector.value = savedSize; // Set the dropdown to the saved value
+    setTileSize(savedSize); // Apply the saved size to the grid
+});
+
+// Call this function when the page loads
+window.onload = loadSelectedColorOption;
+document.addEventListener('DOMContentLoaded', loadSelectedColorOption);
+
+// On page load, apply the saved toggle state from localStorage
+document.addEventListener('DOMContentLoaded', function() {
+    const editButtons = document.querySelectorAll('.edit-image-btn');
+    const editURL = document.querySelectorAll('.edit-url-btn');
+    const editTags = document.querySelectorAll('.edit-tags-btn');
+    const editInfo = document.querySelectorAll('.edit-info-btn');
+    const editDelete = document.querySelectorAll('.delete-btn');
+    const toggleButton = document.getElementById('toggleButton');
+
+    // Get the saved state from localStorage
+    const isHidden = localStorage.getItem('buttonsHidden') === 'true';
+
+    // Function to apply the display state
+    const setDisplay = (buttons, display) => {
+        buttons.forEach(button => {
+            button.style.display = display;
+        });
+    };
+
+    // Apply the saved state to the buttons
+    setDisplay(editButtons, isHidden ? 'none' : 'flex');
+    setDisplay(editURL, isHidden ? 'none' : 'flex');
+    setDisplay(editTags, isHidden ? 'none' : 'flex');
+    setDisplay(editInfo, isHidden ? 'none' : 'flex');
+    setDisplay(editDelete, isHidden ? 'none' : 'flex');
+
+    // Set the toggle button text based on the state
+    toggleButton.textContent = isHidden ? 'Show Tile Buttons' : 'Hide Tile Buttons';
+});
+
+// Apply blur status when the page loads
+document.addEventListener('DOMContentLoaded', applyBlurNSFWStatus);
+
+// Run the check once on page load
+document.addEventListener('DOMContentLoaded', checkForSpecialTiles);
     </script>
 </body>
 </html>
