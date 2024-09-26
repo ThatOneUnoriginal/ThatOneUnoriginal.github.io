@@ -453,7 +453,7 @@ img:hover {
 	position: relative;
 }
 
-#popup-image {
+#popup-image, #preview-image {
 	min-width: unset;
 	width: 250px;
 	height: 250px;
@@ -463,7 +463,7 @@ img:hover {
 	margin-bottom: 10px;
 }
 
-#popup-image {
+#popup-image, #preview-image:hover {
 	transform: scale(1)
 }
 
@@ -516,7 +516,9 @@ img:hover {
 	border-color: transparent;
 	width: 100%
 }
-
+#image-confirmation-popup{
+    z-index: 1002;
+}
 #popup-close{
 	position: absolute;
 	top: -10px;
@@ -1251,7 +1253,14 @@ img:hover {
         <button id="urlURL-popup-close">Close</button>
         </div>
     </div>
-    
+    <div id="image-confirmation-popup" class="popup hidden">
+        <div class="popup-content">
+            <img id="preview-image" src="" alt="Image Preview">
+            <p>Does this image look correct?</p>
+            <button id="confirm-image-btn">Yes</button>
+            <button id="cancel-image-btn">No</button>
+        </div>
+    </div>    
     <!-- Add this HTML for the URL input popup -->
     <div id="url-input-popup" class="popup hidden">
         <h2>Enter Image URL</h2>
@@ -1774,11 +1783,29 @@ document.getElementById('url-image-btn').addEventListener('click', () => {
 document.getElementById('submit-url-btn').addEventListener('click', () => {
     const imageUrl = document.getElementById('image-url-input').value.trim();
     if (imageUrl) {
+        // Hide the initial input popup
         document.getElementById('url-input-popup').style.display = 'none';
         document.getElementById('popup-overlay').style.display = 'none';
-        showTileCreationPopup(imageUrl);
+
+        // Set the preview image source and show the confirmation popup
+        document.getElementById('preview-image').src = imageUrl; // Set the preview image
+        document.getElementById('image-confirmation-popup').style.display = 'block'; // Show the popup
+
+        // Confirm button click event
+        document.getElementById('confirm-image-btn').onclick = () => {
+            // Commit the changes here, e.g., creating the tile
+            // Example: createTile(imageUrl); // You would replace this with your actual tile creation logic
+            saveTiles(); // Save the changes if necessary
+            closePopups(); // Close all popups
+        };
+
+        // Cancel button click event
+        document.getElementById('cancel-image-btn').onclick = () => {
+            closePopups(); // Just close the popups without any action
+        };
     }
 });
+
 
 document.getElementById('create-tile-btn').addEventListener('click', () => {
     document.getElementById('popup-overlay').style.display = 'none';
@@ -2169,21 +2196,29 @@ function editImage(tileData, tileElement) {
 
         // Submit URL functionality
         document.getElementById('submit-url-btn1').onclick = () => {
-            console.log('TEST4');
-            let imageUrl = urlInput1.value.trim();
+    let imageUrl = urlInput1.value.trim();
 
-            if (imageUrl) {
-                imageUrl = stripUrlParams(imageUrl); // Strip query parameters from URL
-                tileData.imageData = imageUrl;
-                tileElement.querySelector('img').src = imageUrl;
-                console.log('TEST');
-                saveTiles();
-            }
-            document.getElementById('image-popup').style.display = 'none';
-            document.getElementById('url-popup').style.display = 'none';
-            document.getElementById('popup-overlay').style.display = 'none';
-            urlPopup.classList.add('hidden');
+    if (imageUrl) {
+        imageUrl = stripUrlParams(imageUrl); // Strip query parameters from URL
+        document.getElementById('preview-image').src = imageUrl; // Set preview image
+
+        // Show confirmation popup
+        document.getElementById('image-confirmation-popup').style.display = 'block';
+
+        // Confirm button click event
+        document.getElementById('confirm-image-btn').onclick = () => {
+            tileData.imageData = imageUrl; // Commit the changes
+            tileElement.querySelector('img').src = imageUrl; // Update the tile image
+            saveTiles(); // Save the changes
+            closePopups(); // Close all popups
         };
+
+        // Cancel button click event
+        document.getElementById('cancel-image-btn').onclick = () => {
+            closePopups(); // Just close the popups without saving changes
+        };
+    }
+};
 
         // Close URL popup functionality
         urlPopupClose.onclick = () => {
