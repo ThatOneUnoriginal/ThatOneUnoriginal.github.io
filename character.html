@@ -12,7 +12,7 @@
 #url-popup-close, #url-popup-close-url, #local-image-btn, #url-image-btn, #urlURL-popup-close, #url-popup-close-url1, #popup-close, .collapsible, .edit-popup button,
 #submit-url-btn, #submit-url-btn1, #share-url-popup button, #nsfw-inclusion-popup button, #image-upload-choice-popup button, #tile-creation-popup button, #settings-popup button, 
 #tileSize, #undo-delete-popup button, #popup-close-btn, #new-confirm-image-btn, #confirm-image-btn, #new-cancel-image-btn, #cancel-image-btn, #image-confirmation-popup button,
-#new-image-confirmation-popup button, .link-button, #close-links-popup{
+#new-image-confirmation-popup button, .link-button, #close-links-popup, #accessibility-popup button{
 	background-color: var(--button-bg-1);
 }
 
@@ -24,6 +24,10 @@
 	overflow: scroll;
 }
 
+#edit-description-input, #tile-description {
+    resize: vertical; /* Allow vertical resizing only */
+    overflow: auto; /* Enable scrolling if content overflows */
+}
 
 #popup-content {
     overflow-y: auto;
@@ -131,10 +135,10 @@
 	--add-tile-hover: #d0d0d0;
 	--button-color: white;
 	--popup-color: #dfdfdf;
+    --tile-edit: rgba(0, 0, 0, 0.5);
 }
 
 .dark-mode {
-
 	--button-bg-1: #4f8b4f;
 	--button-bg-2: #5f8b4f;
 	--button-bg-3: #6f9b4f;
@@ -167,6 +171,82 @@
 	--add-tile-hover: #666;
 	--button-color: #f4f4f4;
 	--popup-color: #2f2f2f;
+    --tile-edit: rgba(0, 0, 0, 0.5);
+}
+
+.high-contrast-light-mode {
+	--button-bg-1: #3C6E3D; /* Dark green */
+	--button-bg-2: #4C8A3B; /* Medium green */
+	--button-bg-3: #5CAC3A; /* Bright green */
+	--button-bg-4: #3E8FBB; /* Dark blue */
+
+	--button-bg-hover-1: #2A4C2A; /* Darker green */
+	--button-bg-hover-2: #3A6B30; /* Darker medium green */
+	--button-bg-hover-3: #4A9E31; /* Darker bright green */
+	--button-bg-hover-4: #2A6D92; /* Darker blue */
+
+	--nsfw-color-1: #D00000; /* Bright red */
+	--nsfw-color-2: #FF4C4C; /* Light red */
+	--nsfw-color-3: #FF7F7F; /* Pale red */
+	--nsfw-color-4: #FF4C4C; /* Light red */
+
+	--special-outline-color-1: #5D005C; /* Dark purple */
+	--special-outline-color-2: #BF8DFF; /* Light purple */
+	--special-outline-color-3: #A752C4; /* Medium purple */
+	--special-outline-color-4: #A760AF; /* Medium dark purple */
+
+	--star-outline-color-1: #3B7A3B; /* Bright dark green */
+	--star-outline-color-2: #B1A635; /* Bright brown */
+	--star-outline-color-3: #D0D20E; /* Bright yellow */
+	--star-outline-color-4: #7B6E31; /* Bright dark gray */
+
+	--bg-color: #FFFFFF; /* White */
+	--text-color: #222222; /* Very dark gray */
+	--tile-bg: #F9F9F9; /* Light gray */
+	--tile-shadow: rgba(0, 0, 0, 0.15); /* Slightly darker shadow */
+	--add-tile-bg: #D7D7D7; /* Light gray */
+	--add-tile-hover: #C7C7C7; /* Slightly darker gray */
+	--button-color: #FFFFFF; /* White for buttons */
+	--popup-color: #EFEFEF; /* Light gray */
+	--tile-edit: rgb(0, 0, 0); /* Darker edit overlay */
+}
+
+
+.high-contrast-dark-mode {
+	--button-bg-1: #007f00; /* Darker, more distinct green */
+	--button-bg-2: #008000;
+	--button-bg-3: #009000;
+	--button-bg-4: #005f7f; /* More distinct blue-green */
+
+	--button-bg-hover-1: #005f00; /* Even darker hover colors for distinction */
+	--button-bg-hover-2: #006000;
+	--button-bg-hover-3: #007000;
+	--button-bg-hover-4: #004d6f;
+
+	--nsfw-color-1: #FF0000; /* Bright red for high visibility */
+	--nsfw-color-2: #FF3333;
+	--nsfw-color-3: #FF3333;
+	--nsfw-color-4: #FF3333;
+
+	--special-outline-color-1: #BF00FF; /* Brighter purple */
+	--special-outline-color-2: #CF33FF;
+	--special-outline-color-3: #A000BF;
+	--special-outline-color-4: #C400E0;
+
+	--star-outline-color-1: #FFFF00; /* Bright yellow for visibility */
+	--star-outline-color-2: #FFFF66;
+	--star-outline-color-3: #FFFF33;
+	--star-outline-color-4: #E0E000;
+
+	--bg-color: #000; /* Black background for maximum contrast */
+	--text-color: #FFFFFF; /* White text for high contrast */
+	--tile-bg: #222; /* Darker tiles for contrast against background */
+	--tile-shadow: rgba(255, 255, 255, 0.5); /* Light shadow for distinction */
+	--add-tile-bg: #111;
+	--add-tile-hover: #333;
+	--button-color: #FFFFFF; /* White text on buttons for contrast */
+	--popup-color: #000; /* Black popup background for consistency */
+    --tile-edit: rgb(0, 0, 0);
 }
 
 .amoled-mode {
@@ -204,6 +284,7 @@
 	--add-tile-hover: #333;
 	--button-color: #e0e0e0;
 	--popup-color: #111;
+    --tile-edit: rgba(0, 0, 0, 0.5);
 }
 
 body {
@@ -319,7 +400,7 @@ img:hover {
 }
 
 .tile-buttons button {
-	background-color: rgba(0, 0, 0, 0.5);
+	background-color: var(--tile-edit);
 	color: white;
 	border: none;
 	border-radius: 50%;
@@ -343,7 +424,7 @@ img:hover {
 }
 
 .tag {
-	background-color: rgba(0, 0, 0, 0.5);
+	background-color: var(--tile-edit);
 	color: white;
 	padding: 2px 5px;
 	border-radius: 3px;
@@ -692,7 +773,7 @@ img:hover {
 	margin-top: 10px;
 }
 
-#nsfw-inclusion-popup, #settings-popup, .links-popup {
+#nsfw-inclusion-popup, #settings-popup, .links-popup, #accessibility-popup {
 	position: fixed;
 	top: 50%;
 	left: 50%;
@@ -711,7 +792,7 @@ img:hover {
 	animation: float 5s ease-in-out infinite
 }
 
-#nsfw-inclusion-popup button, #settings-popup button, #colorSelector, #tileSize {
+#nsfw-inclusion-popup button, #settings-popup button, #colorSelector, #tileSize, #accessibility-popup button {
 	width: 100%;
 	margin-top: 10px;
 	padding: 10px 20px;
@@ -751,7 +832,7 @@ img:hover {
 
 .theme-toggle button:hover, #tag-filter:hover, #tag-filter-mobile, #export-btn:hover, #import-btn:hover, #image-upload-choice-popup button:hover, #nsfw-inclusion-popup button:hover,
 #share-url-popup button:hover, .edit-popup button:hover, .active, .collapsible:hover, #popup-close-btn:hover ,#popup-close:hover, #settings-popup button:hover, #undo-delete-popup button:hover, #new-confirm-image-btn:hover, #confirm-image-btn:hover,
-#new-cancel-image-btn:hover, #cancel-image-btn:hover, #image-confirmation-popup button:hover, #new-image-confirmation-popup button:hover, .link-button:hover, #close-links-popup:hover{
+#new-cancel-image-btn:hover, #cancel-image-btn:hover, #image-confirmation-popup button:hover, #new-image-confirmation-popup button:hover, .link-button:hover, #close-links-popup:hover, #accessibility-popup button:hover{
 	background-color: var(--button-bg-hover-1)
 }
 
@@ -816,7 +897,7 @@ img:hover {
 }
 
 @media (max-height: 700px) {
-    #settings-popup{
+    #settings-popup, #accessibility-popup{
         height: 80%;
     }
 }
@@ -844,14 +925,14 @@ img:hover {
 		max-height: none;
 	}
 
-	.edit-popup, #share-url-popup, #nsfw-inclusion-popup, #image-popup, #image-source-popup, #url-input-popup, #url-popup, #settings-popup, #tile-creation-popup {
+	.edit-popup, #share-url-popup, #nsfw-inclusion-popup, #image-popup, #image-source-popup, #url-input-popup, #url-popup, #settings-popup, #tile-creation-popup, #accessibility-popup {
 		width: 80%;
 		max-width: none;
 		padding: 15px;
 	}
 
 	.edit-popup textarea, #nsfw-inclusion-popup button, #local-upload-btn, .edit-popup button, #share-url-popup button, #nsfw-inclusion-popup button, .theme-toggle button, 
-    #export-btn, #import-btn, #tile-size, #tag-filter-mobile, #local-upload-btn, #url-upload-btn, #url-popup-close, #colorSelector, #settings-popup button, #tileSize {
+    #export-btn, #import-btn, #tile-size, #tag-filter-mobile, #local-upload-btn, #url-upload-btn, #url-popup-close, #colorSelector, #settings-popup button, #tileSize, #accessibility-popup button {
 		width: 100%;
 		margin-bottom: 15px;
 		padding: 15px;
@@ -1142,8 +1223,8 @@ img:hover {
        <div class="theme-toggle">
           <button id="export-btn">Export</button>
           <button id="import-btn">Import</button>
-          <button id="toggleButton">Hide Tile Buttons</button>
           <button id="settings-btn">Theme Settings</button>
+          <button id="acccessibility-btn">Accessibility Settings</button>
           <button id="random-character-btn">Select Random Character</button>
           <button id="flush-button">Reset Remembered State</button>     
           <button id="openReorderToolButton">Open Reorder Tool</button>
@@ -1201,26 +1282,31 @@ img:hover {
      </div>     
     <!--Edit Info Popup-->
     <div id="edit-info-popup" class="edit-popup">
-       <h3>Edit Info</h3>
-       <div style="width:100%">
-          <span class="input-label">Character Name:</span>
-          <input type="text" id="edit-name-input" placeholder="Enter character name">
-       </div>
-       <div style="width:100%">
-          <span class="input-label">Platform:</span>
-          <input type="text" id="edit-platform-input" placeholder="Enter platform">
-       </div>
-       <div style="width:100%">
-          <span class="input-label">Age:</span>
-          <input type="text" id="edit-age-input" placeholder="Enter age">
-       </div>
-       <div style="width:100%">
-          <span class="input-label">Description:</span>
-          <textarea id="edit-description-input" placeholder="Enter description"></textarea>
-       </div>
-       <button id="save-info-btn">Save</button>
-       <button id="cancel-info-btn">Cancel</button>
-    </div>
+        <h3>Edit Info</h3>
+        <div style="width:100%">
+           <span class="input-label">Character Name:</span>
+           <input type="text" id="edit-name-input" placeholder="Enter character name">
+        </div>
+        <div style="width:100%">
+           <span class="input-label">Platform:</span>
+           <input type="text" id="edit-platform-input" placeholder="Enter platform">
+        </div>
+        <div style="width:100%">
+           <span class="input-label">Age:</span>
+           <input type="text" id="edit-age-input" placeholder="Enter age">
+        </div>
+        <div style="width:100%">
+           <span class="input-label">Description:</span>
+           <textarea id="edit-description-input" placeholder="Enter description"></textarea>
+        </div>
+        <div style="width:100%">
+           <span class="input-label">Alt Text:</span>
+           <input type="text" id="edit-alt-input" placeholder="Enter alt text">
+        </div>
+        <button id="save-info-btn">Save</button>
+        <button id="cancel-info-btn">Cancel</button>
+     </div>
+     
     <!--Edit Tags Popup-->
     <div id="edit-tags-popup" class="edit-popup">
        <h3>Edit Tags</h3>
@@ -1250,25 +1336,38 @@ img:hover {
         <h3>Theme Settings</h3>
             <button id="blur-nsfw-btn">Blur NSFW</button>
             <button id="theme-toggle-btn">Light Mode</button>
-            <button id="hide-tags-button">Hide Tags</button>
+            <div class="button-container">
+                <button id="hide-tags-button">Hide Tags</button>
+                <button id="toggleButton">Hide Tile Buttons</button>
+            </div>
             <button id="toggle-position-btn">Move Add Image to Beginning</button>
-            <select id="colorSelector">
-                <option value="original">Original</option>
-                <option value="colour1">Deuteranopia</option>
-                <option value="colour2">Protanopia</option>
-                <option value="colour3">Tritanopia</option> 
-            </select>   
             <select id="tileSize">
                 <option value="small">Small Tiles</option>
                 <option value="medium" selected>Medium Tiles</option>
                 <option value="large">Large Tiles</option>
             </select>
+            <div class="button-container">
             <button id="exportButton">Export Theme Settings</button>
             <input type="file" id="importFile" accept=".json" style="display: none;" />
             <button id="importButton">Import Theme Settings</button>
+            </div>
             <button id="settings-close">Close</button>
     </div>    
-
+    <div id="accessibility-popup" style="overflow-y: auto;">
+        <h3>Accessibility Settings</h3>
+        <select id="theme-dropdown-accessibility">
+            <option value="disabled">High Contrast Theme Disable</option>
+            <option value="high-contrast-dark">High Contrast Dark</option>
+            <option value="high-contrast-light">High Contrast Light</option>
+        </select>        
+        <select id="colorSelector">
+            <option value="original">Original</option>
+            <option value="colour1">Deuteranopia</option>
+            <option value="colour2">Protanopia</option>
+            <option value="colour3">Tritanopia</option> 
+        </select>   
+        <button id="settings-close">Close</button>       
+    </div>
     <div id="image-popup" class="popup hidden">
           <h3>Select Image Source</h3>
           <button id="local-upload-btn">Upload from Device</button>
@@ -1957,26 +2056,33 @@ function showEditInfoPopup(tileData, tileElement) {
    document.getElementById('edit-platform-input').value = tileData.platform || '';
    document.getElementById('edit-age-input').value = tileData.age || '';
    document.getElementById('edit-description-input').value = tileData.description || '';
+   document.getElementById('edit-alt-input').value = tileData.alt || ''; // Set the alt text
+
    popup.style.display = 'flex';
    document.getElementById('popup-overlay').style.display = 'block';
-
 
    document.getElementById('save-info-btn').onclick = () => {
       tileData.name = document.getElementById('edit-name-input').value;
       tileData.platform = document.getElementById('edit-platform-input').value;
       tileData.age = document.getElementById('edit-age-input').value;
       tileData.description = document.getElementById('edit-description-input').value;
-      saveTiles();
+      tileData.alt = document.getElementById('edit-alt-input').value; // Save the alt text
+
+      // Update the alt text of the corresponding <img> element
+      const imgElement = tileElement.querySelector('img'); // Assuming the <img> is a child of the tileElement
+      if (imgElement) {
+         imgElement.alt = tileData.alt; // Change the alt text
+      }
+
+      saveTiles(); // Save to local storage
       updateTagFilter();
       popup.style.display = 'none';
       document.getElementById('popup-overlay').style.display = 'none';
-
    };
 
    document.getElementById('cancel-info-btn').onclick = () => {
       popup.style.display = 'none';
       document.getElementById('popup-overlay').style.display = 'none';
-
    };
 }
 
@@ -2009,8 +2115,6 @@ function showEditTagsPopup(tileData, tileElement) {
    };
 }
 
-
-
 // Theme management
 function setTheme(theme) {
    document.body.className = theme;
@@ -2031,22 +2135,14 @@ for (i = 0; i < coll.length; i++) {
    });
 }
 
-function applyStoredTheme() {
-   const storedTheme = localStorage.getItem('theme') || '';
-   setTheme(storedTheme);
-}
-
 const themeToggleBtn = document.getElementById('theme-toggle-btn');
 
 const themes = ['', 'dark-mode', 'amoled-mode'];
 let currentThemeIndex = 0;  // Index to track the current theme
 
-// Function to apply the theme
 function setTheme(theme) {
-    // Apply the theme to the body or wherever it’s needed
-    document.body.className = theme;
-
-    // Save the theme in local storage
+    const accessTheme = localStorage.getItem('accessTheme');
+    // Save the theme value in local storage
     localStorage.setItem('theme', theme);
 
     // Update the button text based on the theme
@@ -2057,6 +2153,11 @@ function setTheme(theme) {
     } else if (theme === 'amoled-mode') {
         themeToggleBtn.textContent = 'Amoled Mode';
     }
+
+    // Apply the theme only if accessTheme has no value
+    if (!accessTheme) {
+        document.body.className = theme;
+    }
 }
 
 // Function to cycle through the themes
@@ -2065,19 +2166,68 @@ function toggleTheme() {
     currentThemeIndex = (currentThemeIndex + 1) % themes.length;
     setTheme(themes[currentThemeIndex]);
 }
-
+// Apply theme on load
+applyStoredTheme();
 // Function to apply the stored theme on page load
 function applyStoredTheme() {
+    const accessTheme = localStorage.getItem('accessTheme');
     const storedTheme = localStorage.getItem('theme') || '';
-    currentThemeIndex = themes.indexOf(storedTheme);
-    setTheme(storedTheme);
+
+    // Set the theme based on the stored value
+    setTheme(storedTheme); 
+        applyTheme(); // Apply the accessTheme
 }
+
 
 // Add event listener to the button
 themeToggleBtn.addEventListener('click', toggleTheme);
 
-// Apply theme on load
-applyStoredTheme();
+
+
+
+// Get the select element
+const themeDropdown = document.getElementById('theme-dropdown-accessibility');
+
+
+// Function to apply the theme based on the value in local storage
+function applyTheme() {
+    const theme = localStorage.getItem('accessTheme');
+
+    // Remove existing theme classes
+    document.body.classList.remove('high-contrast-dark-mode', 'high-contrast-light-mode');
+
+    // Add the new theme class if applicable
+    if (theme === 'high-contrast-dark-mode') {
+        document.body.classList.add('high-contrast-dark-mode');
+    } else if (theme === 'high-contrast-light-mode') {
+        document.body.classList.add('high-contrast-light-mode');
+    }
+}
+
+// Load the theme from local storage on page load
+themeDropdown.addEventListener('change', function () {
+    const selectedValue = this.value;
+
+    // Check if the selected value is not "disabled"
+    if (selectedValue !== 'disabled') {
+        const accessTheme = selectedValue === 'high-contrast-dark' ? 'high-contrast-dark-mode' : 'high-contrast-light-mode';
+
+        // Store the value in local storage
+        
+        localStorage.setItem('accessTheme', accessTheme);
+
+        // Apply the theme
+        applyTheme();
+    } else {
+        // Remove the item from storage if "disabled" is selected
+        localStorage.removeItem('accessTheme');
+        // Remove any applied theme
+        applyTheme();
+    }
+});
+
+
+
 
 // Load saved tiles
 function loadSavedTiles() {
@@ -2115,7 +2265,7 @@ function createImageTile(tileData) {
 
    newImageItem.innerHTML = `
                 <a href="${tileData.link}" target="_blank" class="image-container">
-                    <img src="${tileData.imageData}" alt="User uploaded image">
+                    <img src="${tileData.imageData}" alt="${tileData.alt || 'User uploaded image'}"> <!-- Set alt text -->
                 </a>
                 <div class="tile-buttons">
                     <button class="edit-image-btn" title="Edit Image">🖼️</button>
@@ -2185,6 +2335,7 @@ function createImageTile(tileData) {
       showEditInfoPopup(tileData, newImageItem);
    });
 }
+
 
 function showLinksPopup(links) {
     document.getElementById('popup-overlay').style.display = 'block';
@@ -2680,12 +2831,18 @@ blurNSFWBtn.addEventListener('click', toggleBlurNSFW);
 // Load saved tiles on page load
 loadSavedTiles();
 const randomCharacterBtn = document.getElementById('random-character-btn');
-const settingsBtn = document.getElementById('settings-btn')
+const settingsBtn = document.getElementById('settings-btn');
+const accessibilityBtn = document.getElementById('acccessibility-btn');
 const characterPopup = document.getElementById('character-popup');
 const popupClose = document.getElementById('popup-close');
 const popupCloseBtn = document.getElementById('popup-close-btn');
 const popupImage = document.getElementById('popup-image');
 const popupTags = document.getElementById('popup-tags');
+
+accessibilityBtn.addEventListener('click', () => {
+    document.getElementById('accessibility-popup').style.display = 'flex';
+    document.getElementById('popup-overlay').style.display = 'block';
+});
 
 settingsBtn.addEventListener('click', () => {
       document.getElementById('settings-popup').style.display = 'flex';
