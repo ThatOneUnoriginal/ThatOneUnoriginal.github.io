@@ -11,7 +11,7 @@
 .theme-toggle button, #tag-filter, #tag-filter-mobile, #export-btn, #import-btn, #tile-size, #colorSelector, #popup-button, #reroll-btn, #local-upload-btn, #url-upload-btn,
 #url-popup-close, #url-popup-close-url, #local-image-btn, #url-image-btn, #urlURL-popup-close, #url-popup-close-url1, #popup-close, .collapsible, .edit-popup button,
 #submit-url-btn, #submit-url-btn1, #share-url-popup button, #nsfw-inclusion-popup button, #image-upload-choice-popup button, #tile-creation-popup button, #settings-popup button, 
-#tileSize, #undo-delete-popup button, #popup-close-btn {
+#tileSize, #undo-delete-popup button, #popup-close-btn, #new-confirm-image-btn, #confirm-image-btn, #new-cancel-image-btn, #cancel-image-btn {
 	background-color: var(--button-bg-1);
 }
 
@@ -55,7 +55,7 @@
 	border-radius: 4px;
 }
 
-#tile-creation-popup button {
+#tile-creation-popup button, #new-confirm-image-btn, #confirm-image-btn, #new-cancel-image-btn, #cancel-image-btn  {
 	padding: 10px 20px;
 	color: var(--button-color);
 	border: none;
@@ -453,7 +453,7 @@ img:hover {
 	position: relative;
 }
 
-#popup-image, #preview-image {
+#popup-image, #preview-image, #new-preview-image {
 	min-width: unset;
 	width: 250px;
 	height: 250px;
@@ -463,7 +463,7 @@ img:hover {
 	margin-bottom: 10px;
 }
 
-#popup-image, #preview-image:hover {
+#popup-image, #preview-image:hover, #new-preview-image:hover {
 	transform: scale(1)
 }
 
@@ -516,7 +516,7 @@ img:hover {
 	border-color: transparent;
 	width: 100%
 }
-#image-confirmation-popup{
+#image-confirmation-popup, #new-image-confirmation-popup{
     z-index: 1002;
 }
 #popup-close{
@@ -603,7 +603,7 @@ img:hover {
 	margin-bottom: 10px;
 }
 
-.edit-popup, #image-popup, #image-source-popup, #url-input-popup, #url-popup {
+.edit-popup, #image-popup, #image-source-popup, #url-input-popup, #url-popup, #new-image-confirmation-popup {
 	position: fixed;
 	top: 50%;
 	left: 50%;
@@ -755,7 +755,8 @@ img:hover {
 }
 
 .theme-toggle button:hover, #tag-filter:hover, #tag-filter-mobile, #export-btn:hover, #import-btn:hover, #image-upload-choice-popup button:hover, #nsfw-inclusion-popup button:hover,
-#share-url-popup button:hover, .edit-popup button:hover, .active, .collapsible:hover, #popup-close-btn:hover ,#popup-close:hover, #settings-popup button:hover, #undo-delete-popup button:hover {
+#share-url-popup button:hover, .edit-popup button:hover, .active, .collapsible:hover, #popup-close-btn:hover ,#popup-close:hover, #settings-popup button:hover, #undo-delete-popup button:hover, #new-confirm-image-btn:hover, #confirm-image-btn:hover,
+#new-cancel-image-btn:hover, #cancel-image-btn:hover{
 	background-color: var(--button-bg-hover-1)
 }
 
@@ -1261,6 +1262,16 @@ img:hover {
             <button id="cancel-image-btn">No</button>
         </div>
     </div>    
+
+    <div id="new-image-confirmation-popup" class="popup hidden">
+        <div class="popup-content">
+            <img id="new-preview-image" src="" alt="Image Preview">
+            <p>Does this image look correct?</p>
+            <button id="new-confirm-image-btn">Yes</button>
+            <button id="new-cancel-image-btn">No</button>
+        </div>
+    </div>
+    
     <!-- Add this HTML for the URL input popup -->
     <div id="url-input-popup" class="popup hidden">
         <h2>Enter Image URL</h2>
@@ -1783,29 +1794,29 @@ document.getElementById('url-image-btn').addEventListener('click', () => {
 document.getElementById('submit-url-btn').addEventListener('click', () => {
     const imageUrl = document.getElementById('image-url-input').value.trim();
     if (imageUrl) {
-        // Hide the initial input popup
-        document.getElementById('url-input-popup').style.display = 'none';
-        document.getElementById('popup-overlay').style.display = 'none';
+        // Set the preview image
+        document.getElementById('new-preview-image').src = imageUrl; 
 
-        // Set the preview image source and show the confirmation popup
-        document.getElementById('preview-image').src = imageUrl; // Set the preview image
-        document.getElementById('image-confirmation-popup').style.display = 'block'; // Show the popup
+        // Show the confirmation popup
+        document.getElementById('new-image-confirmation-popup').style.display = 'block';
 
         // Confirm button click event
-        document.getElementById('confirm-image-btn').onclick = () => {
-            // Commit the changes here, e.g., creating the tile
-            // Example: createTile(imageUrl); // You would replace this with your actual tile creation logic
-            saveTiles(); // Save the changes if necessary
+        document.getElementById('new-confirm-image-btn').onclick = () => {
+            // Trigger the tile creation popup with the confirmed image URL
+            showTileCreationPopup(imageUrl);
             closePopups(); // Close all popups
         };
 
         // Cancel button click event
-        document.getElementById('cancel-image-btn').onclick = () => {
-            closePopups(); // Just close the popups without any action
+        document.getElementById('new-cancel-image-btn').onclick = () => {
+            closePopups(); // Just close the popups without taking any action
         };
+
+        // Close the URL input popup
+        document.getElementById('url-input-popup').style.display = 'none';
+        document.getElementById('popup-overlay').style.display = 'none';
     }
 });
-
 
 document.getElementById('create-tile-btn').addEventListener('click', () => {
     document.getElementById('popup-overlay').style.display = 'none';
