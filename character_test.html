@@ -2,16 +2,17 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/ThatOneUnoriginal/ThatOneUnoriginal.github.io/dev-test/Character%20Tools/Assets/BookmarkingToolIcon.ico">
+    <link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/ThatOneUnoriginal/ThatOneUnoriginal.github.io/refs/heads/main/Character%20Tools/Assets/BookmarkingToolIcon.ico">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="pinterest" content="nopin" />
     <title>Character Bookmarking Tool</title>
     <style>
     
-.theme-toggle button, #tag-filter, #tag-filter-mobile, #export-btn, #import-btn, #tile-size, #colorSelector, #popup-link, #reroll-btn, #local-upload-btn, #url-upload-btn,
+.theme-toggle button, #tag-filter, #tag-filter-mobile, #export-btn, #import-btn, #tile-size, #colorSelector, #popup-button, #reroll-btn, #local-upload-btn, #url-upload-btn,
 #url-popup-close, #url-popup-close-url, #local-image-btn, #url-image-btn, #urlURL-popup-close, #url-popup-close-url1, #popup-close, .collapsible, .edit-popup button,
 #submit-url-btn, #submit-url-btn1, #share-url-popup button, #nsfw-inclusion-popup button, #image-upload-choice-popup button, #tile-creation-popup button, #settings-popup button, 
-#tileSize, #undo-delete-popup button {
+#tileSize, #undo-delete-popup button, #popup-close-btn, #new-confirm-image-btn, #confirm-image-btn, #new-cancel-image-btn, #cancel-image-btn, #image-confirmation-popup button,
+#new-image-confirmation-popup button {
 	background-color: var(--button-bg-1);
 }
 
@@ -19,9 +20,13 @@
 	width: 90%;
 	max-width: 600px;
 	margin: 0 auto;
+	height: 80%;
+	overflow: scroll;
+}
 }
 
 #popup-content {
+    overflow-y: auto;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -54,13 +59,14 @@
 	border-radius: 4px;
 }
 
-#tile-creation-popup button {
+#tile-creation-popup button, #new-confirm-image-btn, #confirm-image-btn, #new-cancel-image-btn, #cancel-image-btn  {
 	padding: 10px 20px;
 	color: var(--button-color);
 	border: none;
 	border-radius: 4px;
 	cursor: pointer;
 	margin-top: 10px;
+    width: 100%
 }
 
 .info-section {
@@ -304,7 +310,9 @@ p {
 	overflow: hidden;
 	box-shadow: 0 2px 4px var(--tile-shadow);
 }
-
+#popup-image{
+    aspect-ratio: 1/1;
+}
 .image-container {
 	width: 100%;
 	height: 100%;
@@ -402,16 +410,13 @@ img:hover {
 #popup-close-btn {
 	margin-top: 10px;
 	padding: 5px 10px;
-	background-color: #f44336;
 	color: white;
 	border: none;
 	border-radius: 5px;
 	cursor: pointer;
+    transition: background-color 0.3s;
 }
 
-#popup-close-btn:hover {
-	background-color: var(--nsfw-color-1);
-}
 
 .popup {
 	position: fixed;
@@ -454,8 +459,9 @@ img:hover {
 	position: relative;
 }
 
-#popup-image {
-	min-width: unset;
+#popup-image, #preview-image, #new-preview-image {
+	min-width: 250px;
+    min-height: 250px;
 	width: 250px;
 	height: 250px;
 	object-fit: cover;
@@ -464,7 +470,7 @@ img:hover {
 	margin-bottom: 10px;
 }
 
-#popup-image {
+#popup-image, #preview-image:hover, #new-preview-image:hover {
 	transform: scale(1)
 }
 
@@ -475,7 +481,6 @@ img:hover {
 	padding: 15px;
 	overflow-y: auto;
 	max-height: 225px;
-	width: 100%;
 }
 
 .popup-info h3 {
@@ -492,7 +497,7 @@ img:hover {
 	font-style: italic;
 }
 
-#popup-link, #reroll-btn {
+#popup-button, #reroll-btn, #popup-close-btn {
 	display: inline-block;
 	margin-top: 15px;
 	color: var(--button-color);
@@ -502,6 +507,7 @@ img:hover {
 	transition: background-color 0.3s;
 	margin-bottom: 10px;
 	border-color: transparent;
+    width: 100%
 }
 
 #local-upload-btn, #url-upload-btn, #url-popup-close, #url-popup-close-url, #local-image-btn, #url-image-btn, #urlURL-popup-close, #url-popup-close-url1 {
@@ -516,11 +522,13 @@ img:hover {
 	border-color: transparent;
 	width: 100%
 }
-
-#popup-close {
+#image-confirmation-popup, #new-image-confirmation-popup{
+    z-index: 1002 !important;
+}
+#popup-close{
 	position: absolute;
-	top: -10px;
-	right: -10px;
+	top: 10px;
+	right: 15px;
 	color: var(--button-color);
 	width: 30px;
 	height: 30px;
@@ -548,6 +556,18 @@ img:hover {
 	height: 100%;
 	background: rgba(0, 0, 0, 0.5);
 	z-index: 999;
+	backdrop-filter: blur(5px);
+}
+
+.popup-overlay1 {
+	position: fixed;
+	display: none;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.5);
+	z-index: 1001;
 	backdrop-filter: blur(5px);
 }
 
@@ -601,7 +621,7 @@ img:hover {
 	margin-bottom: 10px;
 }
 
-.edit-popup, #image-popup, #image-source-popup, #url-input-popup, #url-popup {
+.edit-popup, #image-popup, #image-source-popup, #url-input-popup, #url-popup, #new-image-confirmation-popup {
 	position: fixed;
 	top: 50%;
 	left: 50%;
@@ -620,7 +640,7 @@ img:hover {
 	animation: float 5s ease-in-out infinite;
 }
 
-.edit-popup input, .edit-popup textarea {
+.edit-popup input, .edit-popup textarea, #image-url-input1, #image-url-input{
 	width: 100%;
 	padding: 10px;
 	margin-bottom: 10px;
@@ -753,7 +773,8 @@ img:hover {
 }
 
 .theme-toggle button:hover, #tag-filter:hover, #tag-filter-mobile, #export-btn:hover, #import-btn:hover, #image-upload-choice-popup button:hover, #nsfw-inclusion-popup button:hover,
-#share-url-popup button:hover, .edit-popup button:hover, .active, .collapsible:hover, #popup-close:hover, #settings-popup button:hover, #undo-delete-popup button:hover {
+#share-url-popup button:hover, .edit-popup button:hover, .active, .collapsible:hover, #popup-close-btn:hover ,#popup-close:hover, #settings-popup button:hover, #undo-delete-popup button:hover, #new-confirm-image-btn:hover, #confirm-image-btn:hover,
+#new-cancel-image-btn:hover, #cancel-image-btn:hover, #image-confirmation-popup button:hover, #new-image-confirmation-popup button:hover{
 	background-color: var(--button-bg-hover-1)
 }
 
@@ -817,11 +838,24 @@ img:hover {
 	}
 }
 
+@media (max-height: 700px) {
+    #settings-popup{
+        height: 80%;
+    }
+}
 @media (max-width: 600px) {
 	#character-popup {
 		max-height: 80vh;
 		overflow-y: auto;
+        width: 80%;
 	}
+
+    #popup-close-btn{
+        display: block
+    }
+    #popup-close{
+        display: none
+    }
 
 	#popup-image {
 		max-height: 200px;
@@ -833,18 +867,21 @@ img:hover {
 		max-height: none;
 	}
 
-	.edit-popup, #share-url-popup, #nsfw-inclusion-popup, #image-popup, #image-source-popup, #url-input-popup, #url-popup, #settings-popup {
+	.edit-popup, #share-url-popup, #nsfw-inclusion-popup, #image-popup, #image-source-popup, #url-input-popup, #url-popup, #settings-popup, #tile-creation-popup {
 		width: 80%;
 		max-width: none;
 		padding: 15px;
 	}
 
-	.edit-popup input, .edit-popup textarea, #nsfw-inclusion-popup button, #local-upload-btn, .edit-popup button, #share-url-popup button, #nsfw-inclusion-popup button, .theme-toggle button, 
+	.edit-popup textarea, #nsfw-inclusion-popup button, #local-upload-btn, .edit-popup button, #share-url-popup button, #nsfw-inclusion-popup button, .theme-toggle button, 
     #export-btn, #import-btn, #tile-size, #tag-filter-mobile, #local-upload-btn, #url-upload-btn, #url-popup-close, #colorSelector, #settings-popup button, #tileSize {
 		width: 100%;
 		margin-bottom: 15px;
 		padding: 15px;
 	}
+    .edit-popup input, #image-url-input1, #image-url-input, #tile-link, #tile-tags, #tile-name, #tile-platform, #tile-age, #tile-description{
+        width: 93% !important;
+    }
 
 	#share-url-popup input {
 		width: 80%;
@@ -885,7 +922,7 @@ img:hover {
 
 	#tag-filter {
 		display: none;
-	}
+    }
 }
     </style>
 </head>
@@ -929,10 +966,24 @@ img:hover {
           <li>18+</li>
           <li>Porn</li>
           <li>Yaoi</li>
+          <li>🔞</li>
        </ul>
-       <p>They're case sensitive, so put them in as shown here. This will cause a <span class="highlight-nsfw">red outline</span> to appear around the tile and the random character popup if it's selected. You can also blur the image with the <span class="highlight">Blur NSFW</span> button.</p>
+       <p>They're case sensitive, so put them in as shown here. This will cause a <span class="highlight-nsfw">red outline</span> to appear around the tile and the random character popup if it's selected. You can also blur the image with the <span class="highlight">Blur NSFW</span> button in the <span class="highlight">Theme Settings</span> menu.</p>
+       <p>Like the favourite system (bellow) the <span class="highlight">NSFW</span> tag will show all the above NSFW tags, though each individual one will appear in the tag filtering dropdown.</p>
        <p><strong>How to indicate characters as Favourites?</strong></p>
-       <p>When prompted to change the tags for the image either when curating the tile or choosing the Edit Tags button, add <span class="highlight">⭐</span> as one of the tags. This will cause a <span class="highlight-favourite">green outline</span> to appear around the tile and random character popup if it's selected.</p>
+       <p>When prompted to change the tags for the image either when curating the tile or choosing the Edit Tags button, add one of the following tags. This will cause a <span class="highlight-favourite">green outline</span> to appear around the tile and random character popup if it's selected.</p>
+       <ul>
+        <li>⭐</li>
+        <li>🌠</li>
+        <li>🤩</li>
+        <li>🌟</li>
+        <li>✨</li>
+        <li>💫</li>
+        <li>❇️</li>
+        <li>✴️</li>
+        <li>✳️</li>
+       </ul>
+       <p>Note that regardless of which ones you use (either one exclusively or a combination) when using the tag filtering dropdown they will be combined to a singular <span class="highlight-favourite">⭐</class> section.</p>
        <p><strong>Can I indicate a character as being NSFW and a Favourite?</strong></p>
        <p>Yes! When prompted to change the tags for the image either when curating the tile or choosing the Edit Tags button, adding one of the NSFW tag triggers and the Favourites tag trigger will cause a special <span class="highlight-special">purple outline</span> to appear on both the tile and random character popup if it's selected.</p>
        <p><strong>Should I Export?</strong></p>
@@ -940,6 +991,33 @@ img:hover {
     </div>
     <button class="collapsible">Update Log</button>
     <div class="collapsible-content">
+        <h2>Update 1.9.1</h2>
+        <ul>
+         <li>Fixed spelling error exlusively -> exclusively</li>
+         <li>Fixed spelling error hyperlinkl -> hyperlink</li>
+         <li>Fixed spelling error aobve -> above</li>
+         <li>Export Theme now includes if tags were hidden or not</li>
+         <li>Removed const value popupOverlay since it was never utilized</li>
+         <li>Moved all the DOMContentLoaded to the bottom of the script section to make things slightly cleaner, more cleaning may come in the future</li>
+         <li>Fixed height issues with the themes popup causing it to overflow on smaller screens (laptops and mobile devices.)</li>
+         <li>Fixed edit URL section so that the secondary overlay won't appear unless the popup appears (aka if there's no text in the URL section it won't show up.)</li>
+         <li>Fixed problems where the popup contents could be horizontally scrollable</li>
+         <li>Fixed problem where the exit button for the random character popup would be cropped away</li>
+     </ul>     
+        <h2>Update 1.9</h2>
+        <ul>
+            <li>The ability to export and import the theme settings</li>
+            <li>Updated the theme popup window to be better responsive on mobile devices</li>
+            <li>Added two new buttons that will allow easier access to the re-ordering tool and merging tool</li>
+            <li>Changed some things up to make UI more uniform</li>
+            <li>Updated the information section to include new information about how to favourite characters</li>
+            <li>🔞 now is an available tag for triggering the NSFW system.</li>
+            <li>Similar to the favourites system, all the NSFW tags can be filtered with the NSFW option, though each one will still appear as their own separate tag in the dropdown.</li>
+            <li>Duplicate tags on a tile will now be removed (so if you include "test" twice on a tag, it will remove one of them for example).</li>
+            <li>When creating or editing links for a tile, if a duplicate link is found (already found in one of the tiles), it will prompt the user if they want to create a tile with a duplicate link.</li>
+            <li>Like the ability to hide away the edit tile functions, you can hide the tags (they will still appear in the dropdown system).</li>
+            <li>When uploading an image through a URL, you will now be prompted to preview the image before uploading it. This should help with ensuring that the image will successfully appear before it's added.</li>
+        </ul>        
         <h2>Updpate 1.8</h2>
         <ul>
             <li>For the favourite tags, all will now appear under the ⭐ tag in the tag filtering dropdown.</li>
@@ -1049,7 +1127,7 @@ img:hover {
              <li>Merge Two Backups Together</li>
              <li>Automatically removes duplicate characters (by their hyperlink/url)</li>
              <li>Prompt to remove NSFW characters when merging files</li>
-             <li>Prompt to remove characters with "https://" as their hyperlinkl</li>
+             <li>Prompt to remove characters with "https://" as their hyperlink</li>
           </ul>
           <li>Reordering Tool</li>
           <ul>
@@ -1067,13 +1145,14 @@ img:hover {
     </div>
     <div class="controls">
        <div class="theme-toggle">
-
           <button id="export-btn">Export</button>
           <button id="import-btn">Import</button>
           <button id="toggleButton">Hide Tile Buttons</button>
           <button id="settings-btn">Theme Settings</button>
           <button id="random-character-btn">Select Random Character</button>
           <button id="flush-button">Reset Remembered State</button>     
+          <button id="openReorderToolButton">Open Reorder Tool</button>
+          <button id="openBackupMergeButton">Open Backup Merge</button>
           <select id="tag-filter-mobile">
              <option value="all">All Tags</option>
           </select>
@@ -1086,7 +1165,6 @@ img:hover {
     </div>
     <!-- Popup Structure -->
     <div id="character-popup" class="popup hidden">
-       <div id="popup-content">
           <img id="popup-image" src="" alt="Character Image">
           <span id="popup-close">&times;</span>
           <div class="popup-info">
@@ -1096,11 +1174,11 @@ img:hover {
              <p id="popup-description"></p>
              <p id="popup-tags"></p>
           </div>
-          <a id="popup-link" href="#" target="_blank">View Profile</a>
+          <button id="popup-button" type="button">View Profile</button>
           <button id="reroll-btn">Reroll</button>
           <button id="popup-close-btn">Close</button>
-       </div>
     </div>
+    
     <!--Tile Creation Popup-->
     <div id="tile-creation-popup">
        <h3>Create New Tile</h3>
@@ -1123,19 +1201,19 @@ img:hover {
     <!--Edit Info Popup-->
     <div id="edit-info-popup" class="edit-popup">
        <h3>Edit Info</h3>
-       <div>
+       <div style="width:100%">
           <span class="input-label">Character Name:</span>
           <input type="text" id="edit-name-input" placeholder="Enter character name">
        </div>
-       <div>
+       <div style="width:100%">
           <span class="input-label">Platform:</span>
           <input type="text" id="edit-platform-input" placeholder="Enter platform">
        </div>
-       <div>
+       <div style="width:100%">
           <span class="input-label">Age:</span>
           <input type="text" id="edit-age-input" placeholder="Enter age">
        </div>
-       <div>
+       <div style="width:100%">
           <span class="input-label">Description:</span>
           <textarea id="edit-description-input" placeholder="Enter description"></textarea>
        </div>
@@ -1158,7 +1236,6 @@ img:hover {
     </div>
     <!-- NSFW Inclusion Popup -->
     <div id="nsfw-inclusion-popup">
-        <div id="popup-content">
         <h3>Include NSFW Characters?</h3>
         <p>Do you want to include NSFW characters in the random selection?</p>
             <button id="include-nsfw-btn">Yes, Include NSFW</button>
@@ -1166,14 +1243,13 @@ img:hover {
         <label>
             <input type="checkbox" id="remember-nsfw-state-checkbox"> Remember my choice</input>
         </label>
-        </div>
     </div>  
     <!-- Settings Popup -->
-    <div id="settings-popup">
-        <div id="popup-content">
+    <div id="settings-popup" style="overflow-y: auto;">
         <h3>Theme Settings</h3>
             <button id="blur-nsfw-btn">Blur NSFW</button>
             <button id="theme-toggle-btn">Light Mode</button>
+            <button id="hide-tags-button">Hide Tags</button>
             <button id="toggle-position-btn">Move Add Image to Beginning</button>
             <select id="colorSelector">
                 <option value="original">Original</option>
@@ -1186,25 +1262,36 @@ img:hover {
                 <option value="medium" selected>Medium Tiles</option>
                 <option value="large">Large Tiles</option>
             </select>
+            <button id="exportButton">Export Theme Settings</button>
+            <input type="file" id="importFile" accept=".json" style="display: none;" />
+            <button id="importButton">Import Theme Settings</button>
             <button id="settings-close">Close</button>
-        </div>
     </div>    
 
     <div id="image-popup" class="popup hidden">
-       <div id="popup-content">
           <h3>Select Image Source</h3>
           <button id="local-upload-btn">Upload from Device</button>
           <button id="url-upload-btn">Provide Image URL</button>
           <button id="url-popup-close">Close</button>
-       </div>
     </div>
     <div id="image-source-popup" class="popup hidden">
-        <div id="popup-content">
         <h2>Select Image Source</h2>
         <button id="local-image-btn">Upload from Device</button>
         <button id="url-image-btn">Provide URL</button>
         <button id="urlURL-popup-close">Close</button>
-        </div>
+    </div>
+    <div id="image-confirmation-popup" class="popup hidden">
+            <img id="preview-image" src="" alt="Image Preview">
+            <p>Does this image look correct?</p>
+            <button id="confirm-image-btn">Yes</button>
+            <button id="cancel-image-btn">No</button>
+    </div>    
+
+    <div id="new-image-confirmation-popup" class="popup hidden">
+            <img id="new-preview-image" src="" alt="Image Preview">
+            <p>Does this image look correct?</p>
+            <button id="new-confirm-image-btn">Yes</button>
+            <button id="new-cancel-image-btn">No</button>
     </div>
     
     <!-- Add this HTML for the URL input popup -->
@@ -1215,21 +1302,17 @@ img:hover {
         <button id="url-popup-close-url1">Close</button>
     </div>
     <div id="url-popup" class="popup hidden">
-        <div id="popup-content">
            <h3>Enter Image URL</h3>
            <input type="text" id="image-url-input1" placeholder="Paste image URL here" />
            <button id="submit-url-btn1">Submit</button>
            <button id="url-popup-close-url">Close</button>
-        </div>
      </div>
     <!-- Image Selection Prompt -->
     <div id="image-method-popup" class="popup hidden">
-       <div class="popup-content">
           <h2>Select Image Source</h2>
           <button id="local-image-btn">Upload Local Image</button>
           <button id="url-image-btn">Use Image URL</button>
           <button id="cancel-image-selection">Cancel</button>
-       </div>
     </div>
     <div id="undo-delete-popup">
   <p>Tile deleted. <span id="undo-timer">30</span>s</p>
@@ -1238,6 +1321,14 @@ img:hover {
     <button id="dismiss-undo">✕</button>
   </div>
 </div>
+
+<div id="crop-image-popup" class="popup hidden">
+        <img id="full-image" src="" alt="Full Image" style="max-width: 100%; position: relative;">
+        <div id="crop-area" style="position: absolute; border: 2px dashed #fff; background-color: rgba(255, 255, 255, 0.5);"></div>
+        <button id="confirm-crop-btn">Confirm Crop</button>
+        <button id="cancel-crop-btn">Cancel</button>
+</div>
+
     <!-- Add the file input for uploading images -->
     <input type="file" id="file-input" accept="image/*,.avif,.jxl,.cur,.jps,.jfif" class="hidden">
     <div class="image-grid" id="image-grid">
@@ -1248,9 +1339,8 @@ img:hover {
     <input type="file" id="file-input" accept="image/*,.avif,.jxl,.cur,.jps,.jfif">
     <input type="file" id="import-file-input" accept="application/json">
     <div id="popup-overlay" class="popup-overlay"></div>
-    
+    <div id="popup-overlay1" class="popup-overlay1"></div>
     <script>
-const popupOverlay = document.getElementById("popup-overlay");
 const imageGrid = document.getElementById('image-grid');
 const addImageButton = document.getElementById('add-image');
 const fileInput = document.getElementById('file-input');
@@ -1269,6 +1359,43 @@ const undoButton = document.getElementById('undo-delete-btn');
 const dismissButton = document.getElementById('dismiss-undo');
 const timerSpan = document.getElementById('undo-timer');
 const tileSizeSelector = document.getElementById('tileSize');
+const starTags = ['⭐', '🌟', '✨', '🌠', '💫', '🤩', '❇️', '✴️', '✳️'];
+const nsfwTags = ['18+', 'NSFW', "Hentai", "Porn", "Yaoi", "🔞"]; 
+const hideTagsButton = document.getElementById("hide-tags-button");
+const tags = document.querySelectorAll(".tag");
+
+let tagsVisible = true;
+
+// Load the visibility state from local storage on page load
+window.addEventListener('load', function() {
+    const storedVisibility = localStorage.getItem('tagsVisible');
+    if (storedVisibility !== null) {
+        tagsVisible = storedVisibility === 'true'; // Convert string to boolean
+    }
+    updateTagVisibility(tagsVisible);
+});
+
+hideTagsButton.addEventListener('click', function() {
+    tagsVisible = !tagsVisible; // Toggle visibility
+    updateTagVisibility(tagsVisible);
+    
+    // Save the visibility state in local storage
+    localStorage.setItem('tagsVisible', tagsVisible);
+});
+
+function updateTagVisibility(visible) {
+    const tags = document.querySelectorAll('.tag');
+    tags.forEach(tag => {
+        tag.style.display = visible ? 'block' : 'none'; // Show or hide the tag
+    });
+
+    // Change the button text based on the tags' state
+    hideTagsButton.textContent = visible ? 'Hide Tags' : 'Show Tags';
+}
+
+// Initialize tag visibility based on the stored state
+updateTagVisibility(tagsVisible);
+
 
 let tiles = [];
 let allTags = new Set();
@@ -1279,6 +1406,82 @@ let deletedTile = null;
 let undoTimer = null;
 
 let isAtEnd =  true;  // Initially, the add-image tile is at the end
+
+
+
+document.getElementById('openReorderToolButton').addEventListener('click', function() {
+        window.open('https://thatoneunoriginal.github.io/reorder%20tool.html', '_blank');
+    });
+
+    document.getElementById('openBackupMergeButton').addEventListener('click', function() {
+        window.open('https://thatoneunoriginal.github.io/backup%20merge.html', '_blank');
+    });
+
+document.getElementById('exportButton').addEventListener('click', () => {
+    // Retrieve values from local storage
+    const settings = {
+        isBlurred: localStorage.getItem('isBlurred'),
+        theme: localStorage.getItem('theme'),
+        addImagePosition: localStorage.getItem('addImagePosition'),
+        selectedColorOption: localStorage.getItem('selectedColorOption'),
+        tileSize: localStorage.getItem('tileSize'),
+        tagsVisible: localStorage.getItem('tagsVisible')
+    };
+
+    // Convert settings to a JSON string
+    const settingsJSON = JSON.stringify(settings, null, 2);
+
+    // Create a Blob object to facilitate download
+    const blob = new Blob([settingsJSON], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+
+    // Create a temporary link element for downloading
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'settings.json'; // Filename for the downloaded file
+    document.body.appendChild(a);
+    a.click(); // Trigger the download
+    document.body.removeChild(a); // Clean up
+
+    // Release the blob URL
+    URL.revokeObjectURL(url);
+});
+
+document.getElementById('importButton').addEventListener('click', () => {
+    const fileInput = document.getElementById('importFile');
+    fileInput.click(); // Programmatically click the file input
+
+    // Add an event listener for when a file is selected
+    fileInput.addEventListener('change', () => {
+        const file = fileInput.files[0];
+
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                try {
+                    const settings = JSON.parse(event.target.result);
+                    
+                    // Apply settings to local storage
+                    localStorage.setItem('isBlurred', settings.isBlurred);
+                    localStorage.setItem('theme', settings.theme);
+                    localStorage.setItem('addImagePosition', settings.addImagePosition);
+                    localStorage.setItem('selectedColorOption', settings.selectedColorOption);
+                    localStorage.setItem('tileSize', settings.tileSize);
+                    localStorage.setItem('tagsVisible', settings.tagsVisible);
+                    
+                    alert('Settings imported successfully! Refresh the page to have the changes apply');
+                } catch (error) {
+                    alert('Failed to import settings: ' + error.message);
+                }
+            };
+
+            reader.readAsText(file);
+        } else {
+            alert('No file selected.');
+        }
+    }, { once: true }); // Ensure the listener is only added once
+});
+
 
 // Function to toggle the position of the add-image tile
 function toggleAddImagePosition() {
@@ -1312,9 +1515,6 @@ function applySavedPosition() {
     }
 }
 
-// Apply the saved position when the DOM is fully loaded
-document.addEventListener('DOMContentLoaded', applySavedPosition);
-
 // Add event listener to the button
 togglePositionBtn.addEventListener('click', toggleAddImagePosition);
 
@@ -1338,12 +1538,7 @@ function setTileSize(size) {
     imageGrid.style.setProperty('--tile-size', sizeValue);
 }
 
-// Load the saved tile size from local storage on page load
-window.addEventListener('DOMContentLoaded', function() {
-    const savedSize = localStorage.getItem('tileSize') || 'medium'; // Default to 'medium' if no value is found
-    tileSizeSelector.value = savedSize; // Set the dropdown to the saved value
-    setTileSize(savedSize); // Apply the saved size to the grid
-});
+
 
 // Save the tile size to local storage when the user changes it
 tileSizeSelector.addEventListener('change', function() {
@@ -1378,16 +1573,17 @@ document.getElementById('colorSelector').addEventListener('change', function() {
     const selectedColorOption = this.value; 
     localStorage.setItem('selectedColorOption', selectedColorOption); // Save to local storage
 
-    const nsfwTiles = document.querySelectorAll('.nsfw-outline, .highlight-nsfw, #popup-close-btn:hover');
+    const nsfwTiles = document.querySelectorAll('.nsfw-outline, .highlight-nsfw');
     const specialTiles = document.querySelectorAll('.special-outline');
     const starTiles = document.querySelectorAll('.star-outline, .highlight-favourite');
 
     // Select all specified buttons
     const buttons = document.querySelectorAll(
-        '.theme-toggle button, #tag-filter, #tag-filter-mobile, #export-btn, #import-btn, #tile-size, #colorSelector, #popup-link, #reroll-btn, ' +
+        '.theme-toggle button, #tag-filter, #tag-filter-mobile, #export-btn, #import-btn, #tile-size, #colorSelector, #popup-button, #reroll-btn, ' +
         '#local-upload-btn, #url-upload-btn, #url-popup-close, #url-popup-close-url, #local-image-btn, #url-image-btn, #urlURL-popup-close, ' +
         '#url-popup-close-url1, #popup-close, .collapsible, .edit-popup button, #submit-url-btn, #submit-url-btn1, #share-url-popup button, ' +
-        '#nsfw-inclusion-popup button, #image-upload-choice-popup button, #settings-popup button, #tileSize, #undo-delete-popup button, .highlight'
+        '#nsfw-inclusion-popup button, #image-upload-choice-popup button, #settings-popup button, #tileSize, #undo-delete-popup button, .highlight, #popup-close-btn, ' +
+        '#image-confirmation-popup button,#new-image-confirmation-popup button'
     );
 
     // Define colors based on the selected option
@@ -1476,9 +1672,7 @@ function loadSelectedColorOption() {
     }
 }
 
-// Call this function when the page loads
-window.onload = loadSelectedColorOption;
-document.addEventListener('DOMContentLoaded', loadSelectedColorOption);
+
 
 document.getElementById('toggleButton').addEventListener('click', function() {
     // Get all elements with class 'edit-image-btn', 'edit-url-btn', etc.
@@ -1509,52 +1703,30 @@ document.getElementById('toggleButton').addEventListener('click', function() {
     this.textContent = isHidden ? 'Show Tile Buttons' : 'Hide Tile Buttons';
 });
 
-// On page load, apply the saved toggle state from localStorage
-document.addEventListener('DOMContentLoaded', function() {
-    const editButtons = document.querySelectorAll('.edit-image-btn');
-    const editURL = document.querySelectorAll('.edit-url-btn');
-    const editTags = document.querySelectorAll('.edit-tags-btn');
-    const editInfo = document.querySelectorAll('.edit-info-btn');
-    const editDelete = document.querySelectorAll('.delete-btn');
-    const toggleButton = document.getElementById('toggleButton');
-
-    // Get the saved state from localStorage
-    const isHidden = localStorage.getItem('buttonsHidden') === 'true';
-
-    // Function to apply the display state
-    const setDisplay = (buttons, display) => {
-        buttons.forEach(button => {
-            button.style.display = display;
-        });
-    };
-
-    // Apply the saved state to the buttons
-    setDisplay(editButtons, isHidden ? 'none' : 'flex');
-    setDisplay(editURL, isHidden ? 'none' : 'flex');
-    setDisplay(editTags, isHidden ? 'none' : 'flex');
-    setDisplay(editInfo, isHidden ? 'none' : 'flex');
-    setDisplay(editDelete, isHidden ? 'none' : 'flex');
-
-    // Set the toggle button text based on the state
-    toggleButton.textContent = isHidden ? 'Show Tile Buttons' : 'Hide Tile Buttons';
-});
-
 
 
 tagFilterMobile.addEventListener('change', filterTilesMobile);
-const starTags = ['⭐', '🌟', '✨', '🌠', '💫', '🤩', '❇️', '✴️', '✳️'];
 
 function updateTagFilterMobile() {
     const currentFilter = tagFilterMobile.value;
     tagFilterMobile.innerHTML = '<option value="all">All Tags</option>';
 
     allTags.forEach(tag => {
-        // Add only the ⭐ option if any star-related tags exist
+        // Add star-related tags as "⭐" if any exist
         if (starTags.includes(tag)) {
             if (!Array.from(tagFilterMobile.options).some(option => option.value === '⭐')) {
                 const option = document.createElement('option');
                 option.value = '⭐';
                 option.textContent = '⭐';
+                tagFilterMobile.appendChild(option);
+            }
+        } 
+        // Add NSFW and 18+ tags separately
+        else if (nsfwTags.includes(tag)) {
+            if (!Array.from(tagFilterMobile.options).some(option => option.value === tag)) {
+                const option = document.createElement('option');
+                option.value = tag;
+                option.textContent = tag;
                 tagFilterMobile.appendChild(option);
             }
         } else {
@@ -1564,7 +1736,7 @@ function updateTagFilterMobile() {
             tagFilterMobile.appendChild(option);
         }
     });
-    
+
     tagFilterMobile.value = currentFilter;
     filterTilesMobile();
 }
@@ -1583,7 +1755,10 @@ function filterTilesMobile() {
         // Treat ⭐ as matching all star-related tags
         const isStarEquivalent = (selectedTag === '⭐' && tile.tags.some(tag => starTags.includes(tag)));
 
-        if (isMatchingTag || isStarEquivalent) {
+        // Treat 18+ as matching both "NSFW" and "18+"
+        const isNSFWEquivalent = (selectedTag === 'NSFW' && tile.tags.some(tag => nsfwTags.includes(tag)));
+
+        if (isMatchingTag || isStarEquivalent || isNSFWEquivalent) {
             tileElement.style.display = '';
         } else {
             tileElement.style.display = 'none';
@@ -1609,9 +1784,31 @@ document.getElementById('url-image-btn').addEventListener('click', () => {
 document.getElementById('submit-url-btn').addEventListener('click', () => {
     const imageUrl = document.getElementById('image-url-input').value.trim();
     if (imageUrl) {
-        document.getElementById('url-input-popup').style.display = 'none';
-        document.getElementById('popup-overlay').style.display = 'none';
-        showTileCreationPopup(imageUrl);
+        // Set the preview image
+        document.getElementById('new-preview-image').src = imageUrl; 
+
+        // Show the confirmation popup
+        document.getElementById('new-image-confirmation-popup').style.display = 'block';
+        document.getElementById('popup-overlay1').style.display = 'block';
+        // Confirm button click event
+        document.getElementById('new-confirm-image-btn').onclick = () => {
+            // Trigger the tile creation popup with the confirmed image URL
+            document.getElementById('url-input-popup').style.display = 'none';
+            document.getElementById('popup-overlay').style.display = 'none';
+            document.getElementById('popup-overlay1').style.display = 'none';
+            document.getElementById('new-image-confirmation-popup').style.display = 'none';
+            showTileCreationPopup(imageUrl);
+            closePopups(); // Close all popups
+        };
+
+        // Cancel button click event
+        document.getElementById('new-cancel-image-btn').onclick = () => {
+            document.getElementById('new-image-confirmation-popup').style.display = 'none';
+            document.getElementById('popup-overlay1').style.display = 'none';
+            closePopups(); // Just close the popups without taking any action
+        };
+
+        // Close the URL input popup
     }
 });
 
@@ -1636,7 +1833,6 @@ document.getElementById('popup-overlay').addEventListener('click', () => {
    document.getElementById('image-source-popup').style.display = 'none';
    document.getElementById('url-input-popup').style.display = 'none';
    document.getElementById('popup-overlay').style.display = 'none';
-   document.getElementById('popup-overlay').style.display = 'none';
    document.getElementById('settings-popup').style.display = 'none';
    document.getElementById('edit-url-popup').style.display = 'none';
    document.getElementById('tile-creation-popup').style.display = 'none';
@@ -1645,6 +1841,12 @@ document.getElementById('popup-overlay').addEventListener('click', () => {
    document.getElementById('edit-tags-popup').style.display = 'none';
    document.getElementById('share-url-popup').style.display = 'none';
    document.getElementById('nsfw-inclusion-popup').style.display = 'none';
+});
+
+document.getElementById('popup-overlay1').addEventListener('click', () => {
+    document.getElementById('popup-overlay1').style.display = 'none';
+    document.getElementById('new-image-confirmation-popup').style.display = 'none';
+    document.getElementById('image-confirmation-popup').style.display= 'none';
 });
 
 function showEditUrlPopup(tileData, tileElement) {
@@ -1666,6 +1868,22 @@ function showEditUrlPopup(tileData, tileElement) {
       document.getElementById('popup-overlay').style.display = 'none';
    };
 }
+
+function filterTilesByPlatform() {
+   const selectedPlatform = document.getElementById('platform-filter').value;
+   const tiles = document.querySelectorAll('.tile'); // Assuming .tile is the class for each tile
+
+   tiles.forEach(tile => {
+      const platform = tile.getAttribute('data-platform'); // Assuming platform info is stored in a data attribute
+
+      if (selectedPlatform === 'all' || platform === selectedPlatform) {
+         tile.style.display = 'block'; // Show the tile
+      } else {
+         tile.style.display = 'none'; // Hide the tile
+      }
+   });
+}
+
 
 function showEditInfoPopup(tileData, tileElement) {
    const popup = document.getElementById('edit-info-popup');
@@ -1703,9 +1921,13 @@ function showEditTagsPopup(tileData, tileElement) {
    popup.style.display = 'flex';
    document.getElementById('popup-overlay').style.display = 'block';
 
-
    document.getElementById('save-tags-btn').onclick = () => {
-      const newTags = document.getElementById('edit-tags-input').value.split(',').map(tag => tag.trim()).filter(tag => tag);
+      const newTags = document.getElementById('edit-tags-input').value.split(',')
+         .map(tag => tag.trim()) // Trim whitespace from each tag
+         .filter(tag => tag) // Remove empty tags
+         .filter((tag, index, self) => self.indexOf(tag) === index); // Remove duplicates
+
+
       tileData.tags = newTags;
       updateTileTags(tileElement, tileData.tags);
       updateTileOutline(tileElement, tileData.tags);
@@ -1720,6 +1942,8 @@ function showEditTagsPopup(tileData, tileElement) {
       document.getElementById('popup-overlay').style.display = 'none';
    };
 }
+
+
 
 // Theme management
 function setTheme(theme) {
@@ -1808,7 +2032,7 @@ function createImageTile(tileData) {
    const newImageItem = document.createElement('div');
    newImageItem.className = 'image-item';
 
-   const hasNSFW = tileData.tags.includes('18+') || tileData.tags.includes('NSFW') || tileData.tags.includes('Hentai') || tileData.tags.includes('Porn') || tileData.tags.includes('Yaoi');
+   const hasNSFW = tileData.tags.includes('18+') || tileData.tags.includes('NSFW') || tileData.tags.includes('Hentai') || tileData.tags.includes('Porn') || tileData.tags.includes('Yaoi') || tileData.tags.includes('🔞');
    const hasStar = tileData.tags.includes('⭐') || tileData.tags.includes('✨') || tileData.tags.includes('🌠') || tileData.tags.includes('🌟') ||
                    tileData.tags.includes('💫') || tileData.tags.includes('🤩') || tileData.tags.includes('❇️') || tileData.tags.includes('✴️') ||
                    tileData.tags.includes('✳️') || tileData.tags.includes('🔥') || tileData.tags.includes('💎');
@@ -1892,7 +2116,7 @@ function createImageTile(tileData) {
 function updateTileOutline(tileElement, tags) {
    tileElement.classList.remove('nsfw-outline', 'star-outline', 'special-outline');
    
-   const hasNSFW = tags.includes('18+') || tags.includes('NSFW') || tags.includes('Porn') || tags.includes('Hentai') || tags.includes('Yaoi');
+   const hasNSFW = tags.includes('18+') || tags.includes('NSFW') || tags.includes('Porn') || tags.includes('Hentai') || tags.includes('Yaoi') || tags.includes('🔞');
    const hasStar = tags.includes('⭐') || tags.includes('✨') || tags.includes('🌠') || tags.includes('🌟') ||
                    tags.includes('💫') || tags.includes('🤩') || tags.includes('❇️') || tags.includes('✴️') ||
                    tags.includes('✳️') || tags.includes('🔥') || tags.includes('💎');
@@ -1982,21 +2206,34 @@ function editImage(tileData, tileElement) {
 
         // Submit URL functionality
         document.getElementById('submit-url-btn1').onclick = () => {
-            console.log('TEST4');
-            let imageUrl = urlInput1.value.trim();
+    let imageUrl = urlInput1.value.trim();
+    if (imageUrl) {
+        document.getElementById('popup-overlay1').style.display = 'block';
+        imageUrl = stripUrlParams(imageUrl); // Strip query parameters from URL
+        document.getElementById('preview-image').src = imageUrl; // Set preview image
 
-            if (imageUrl) {
-                imageUrl = stripUrlParams(imageUrl); // Strip query parameters from URL
-                tileData.imageData = imageUrl;
-                tileElement.querySelector('img').src = imageUrl;
-                console.log('TEST');
-                saveTiles();
-            }
-            document.getElementById('image-popup').style.display = 'none';
-            document.getElementById('url-popup').style.display = 'none';
+        // Show confirmation popup
+        document.getElementById('image-confirmation-popup').style.display = 'block';
+
+        // Confirm button click event
+        document.getElementById('confirm-image-btn').onclick = () => {
+            document.getElementById('image-confirmation-popup').style.display = 'none';
             document.getElementById('popup-overlay').style.display = 'none';
-            urlPopup.classList.add('hidden');
+            document.getElementById('popup-overlay1').style.display = 'none';
+            document.getElementById('url-popup').style.display = 'none';
+            tileData.imageData = imageUrl; // Commit the changes
+            tileElement.querySelector('img').src = imageUrl; // Update the tile image
+            saveTiles(); // Save the changes
+            closePopups(); // Close all popups
         };
+
+        // Cancel button click event
+        document.getElementById('cancel-image-btn').onclick = () => {
+            document.getElementById('image-confirmation-popup').style.display = 'none';
+            document.getElementById('popup-overlay1').style.display = 'none';
+        };
+    }
+};
 
         // Close URL popup functionality
         urlPopupClose.onclick = () => {
@@ -2126,6 +2363,15 @@ function updateTagFilter() {
                 option.textContent = '⭐';
                 tagFilter.appendChild(option);
             }
+        } 
+        // Add NSFW and 18+ tags separately
+        else if (nsfwTags.includes(tag)) {
+            if (!Array.from(tagFilter.options).some(option => option.value === tag)) {
+                const option = document.createElement('option');
+                option.value = tag;
+                option.textContent = tag;
+                tagFilter.appendChild(option);
+            }
         } else {
             const option = document.createElement('option');
             option.value = tag;
@@ -2141,27 +2387,31 @@ function updateTagFilter() {
     updateTagFilterMobile();
 }
 
+
 // Filter tiles based on selected tag for desktop
 function filterTiles() {
-   const selectedTag = tagFilter.value;
-   tiles.forEach((tile, index) => {
-      const tileElement = imageGrid.children[index];
-      
-      // Check if the tile matches the selected tag or its equivalent
-      const isMatchingTag = selectedTag === 'all' ||
-         tile.tags.includes(selectedTag) ||
-         tile.platform === selectedTag ||
-         tile.age === selectedTag;
+    const selectedTag = tagFilter.value;
+    tiles.forEach((tile, index) => {
+        const tileElement = imageGrid.children[index];
+        
+        // Check if the tile matches the selected tag or its equivalent
+        const isMatchingTag = selectedTag === 'all' ||
+            tile.tags.includes(selectedTag) ||
+            tile.platform === selectedTag ||
+            tile.age === selectedTag;
 
-      // Treat ⭐ as matching all star-related tags
-      const isStarEquivalent = (selectedTag === '⭐' && tile.tags.some(tag => starTags.includes(tag)));
+        // Treat ⭐ as matching all star-related tags
+        const isStarEquivalent = (selectedTag === '⭐' && tile.tags.some(tag => starTags.includes(tag)));
 
-      if (isMatchingTag || isStarEquivalent) {
-         tileElement.style.display = '';
-      } else {
-         tileElement.style.display = 'none';
-      }
-   });
+        // Treat 18+ as matching both "NSFW" and "18+"
+        const isNSFWEquivalent = (selectedTag === 'NSFW' && tile.tags.some(tag => nsfwTags.includes(tag)));
+
+        if (isMatchingTag || isStarEquivalent || isNSFWEquivalent) {
+            tileElement.style.display = '';
+        } else {
+            tileElement.style.display = 'none';
+        }
+    });
 }
 
 // Handle file selection
@@ -2178,42 +2428,65 @@ fileInput.addEventListener('change', (event) => {
         document.getElementById('popup-overlay').style.display = 'none';
     });
 
+function clearTileCreationPopupInputs() {
+    document.getElementById('tile-link').value = '';
+    document.getElementById('tile-tags').value = '';
+    document.getElementById('tile-name').value = '';
+    document.getElementById('tile-platform').value = '';
+    document.getElementById('tile-age').value = '';
+    document.getElementById('tile-description').value = '';
+}
 
 
-    function showTileCreationPopup(imageSource) {
-        document.getElementById('image-source-popup').style.display = 'none';
-        const popup = document.getElementById('tile-creation-popup');
-        popup.style.display = 'flex';
-        document.getElementById('popup-overlay').style.display = 'block';
+function showTileCreationPopup(imageSource) {
+    document.getElementById('image-source-popup').style.display = 'none';
+    const popup = document.getElementById('tile-creation-popup');
+    popup.style.display = 'flex';
+    document.getElementById('popup-overlay').style.display = 'block';
 
-        const createBtn = document.getElementById('create-tile-btn');
-        const cancelBtn = document.getElementById('cancel-tile-btn');
+    const createBtn = document.getElementById('create-tile-btn');
+    const cancelBtn = document.getElementById('cancel-tile-btn');
 
-        createBtn.onclick = () => {
-            const link = document.getElementById('tile-link').value;
-            const tags = document.getElementById('tile-tags').value.split(',').map(tag => tag.trim()).filter(tag => tag);
-            const name = document.getElementById('tile-name').value;
-            const platform = document.getElementById('tile-platform').value;
-            const age = document.getElementById('tile-age').value;
-            const description = document.getElementById('tile-description').value;
+    createBtn.onclick = () => {
+        const link = document.getElementById('tile-link').value;
+        const tags = document.getElementById('tile-tags').value.split(',')
+            .map(tag => tag.trim()) // Trim whitespace from each tag
+            .filter(tag => tag) // Remove empty tags
+            .filter((tag, index, self) => self.indexOf(tag) === index); // Remove duplicates
+        const name = document.getElementById('tile-name').value;
+        const platform = document.getElementById('tile-platform').value;
+        const age = document.getElementById('tile-age').value;
+        const description = document.getElementById('tile-description').value;
 
-            const newTile = createTileData(imageSource, link, tags, name, platform, age, description);
-            tiles.push(newTile);
-            createImageTile(newTile);
-            saveTiles();
-            updateTagFilter();
+        // Check for duplicate links
+        const hasDuplicateLink = tiles.some(tile => tile.link === link);
+        if (hasDuplicateLink) {
+            const userResponse = confirm('A tile with this link already exists. Do you want to create a new tile with this duplicate link?');
+            if (!userResponse) {
+                document.getElementById('popup-overlay').style.display = 'block';
+                return; // Don't create the tile if the user cancels
+            }
+        }
 
-            popup.style.display = 'none';
-            document.getElementById('popup-overlay').style.display = 'none';
-            clearTileCreationPopupInputs();
-        };
+        const newTile = createTileData(imageSource, link, tags, name, platform, age, description);
+        tiles.push(newTile);
+        createImageTile(newTile);
+        saveTiles();
+        updateTagFilter();
 
-        cancelBtn.onclick = () => {
-            popup.style.display = 'none';
-            document.getElementById('popup-overlay').style.display = 'none';
-            clearTileCreationPopupInputs();
-        };
-    }
+        popup.style.display = 'none';
+        document.getElementById('popup-overlay').style.display = 'none';
+        clearTileCreationPopupInputs();
+    };
+
+    cancelBtn.onclick = () => {
+        popup.style.display = 'none';
+        document.getElementById('popup-overlay').style.display = 'none';
+        clearTileCreationPopupInputs(); // Optional: Clear the inputs
+    };
+}
+
+
 
 // Filter tiles when tag is selected
 tagFilter.addEventListener('change', filterTiles);
@@ -2261,7 +2534,7 @@ importFileInput.addEventListener('change', (event) => {
 });
 // Function to toggle blur on NSFW content
 function toggleBlurNSFW() {
-   const nsfwTags = ['18+', 'NSFW', "Hentai", "Porn", "Yaoi"]; // Tags considered NSFW
+   const nsfwTags = ['18+', 'NSFW', "Hentai", "Porn", "Yaoi", "🔞"]; // Tags considered NSFW
    const imageItems = document.querySelectorAll('.image-item');
 
    imageItems.forEach(item => {
@@ -2293,7 +2566,6 @@ const popupClose = document.getElementById('popup-close');
 const popupCloseBtn = document.getElementById('popup-close-btn');
 const popupImage = document.getElementById('popup-image');
 const popupTags = document.getElementById('popup-tags');
-const popupLink = document.getElementById('popup-link');
 
 settingsBtn.addEventListener('click', () => {
       document.getElementById('settings-popup').style.display = 'flex';
@@ -2314,7 +2586,7 @@ function selectRandomCharacter() {
    }
    let availableCharacters = includeNSFW ? characters : characters.filter(char => {
       const tags = Array.from(char.querySelectorAll('.tag')).map(tag => tag.textContent);
-      return !tags.some(tag => ['18+', 'NSFW', 'Porn', 'Hentai', 'Yaoi'].includes(tag));
+      return !tags.some(tag => ['18+', 'NSFW', 'Porn', 'Hentai', 'Yaoi', '🔞'].includes(tag));
    });
 
    if (availableCharacters.length === 0) {
@@ -2334,11 +2606,15 @@ function selectRandomCharacter() {
    document.getElementById('popup-age').textContent = `Age: ${tileData.age || 'N/A'}`;
    document.getElementById('popup-description').textContent = tileData.description || 'No description available.';
    document.getElementById('popup-tags').textContent = `Tags: ${tileData.tags.join(', ')}`;
-   document.getElementById('popup-link').href = tileData.link;
+   document.getElementById('popup-button').addEventListener('click', function() {
+    const tileData = tiles[characters.indexOf(selectedCharacter)];
+    window.open(tileData.link, '_blank'); // Open link in new tab
+    });
+
 
    updateTileOutline(characterPopup, tileData.tags);
 
-   if (isBlurred && (tileData.tags.includes('18+') || tileData.tags.includes('NSFW') || tileData.tags.includes('Hentai') || tileData.tags.includes('Porn') || tileData.tags.includes('Yaoi'))) {
+   if (isBlurred && (tileData.tags.includes('18+') || tileData.tags.includes('NSFW') || tileData.tags.includes('Hentai') || tileData.tags.includes('Porn') || tileData.tags.includes('Yaoi') || tileData.tags.includes('🔞'))) {
       popupImage.classList.add('blurred-image');
    } else {
       popupImage.classList.remove('blurred-image');
@@ -2362,10 +2638,10 @@ function closePopup() {
 // Event listener for the random character button
 randomCharacterBtn.addEventListener('click', () => {
     // Check if any character has the NSFW tag
-    const hasNSFWCharacter = tiles.some(tile => tile.tags.includes('NSFW') || tile.tags.includes('18+') || tile.tags.includes('Porn') || tile.tags.includes('Hentai') || tile.tags.includes('Yaoi'));
+    const hasNSFWCharacter = tiles.some(tile => tile.tags.includes('NSFW') || tile.tags.includes('18+') || tile.tags.includes('Porn') || tile.tags.includes('Hentai') || tile.tags.includes('Yaoi') || tile.tags.includes('🔞'));
     
     // Check if all tiles have the NSFW tag
-    const allTilesNSFW = tiles.every(tile => tile.tags.includes('NSFW') || tile.tags.includes('18+') || tile.tags.includes('Porn') || tile.tags.includes('Hentai') || tile.tags.includes('Yaoi'));
+    const allTilesNSFW = tiles.every(tile => tile.tags.includes('NSFW') || tile.tags.includes('18+') || tile.tags.includes('Porn') || tile.tags.includes('Hentai') || tile.tags.includes('Yaoi') || tile.tags.includes('🔞'));
 
     if (!hasNSFWCharacter) {
         // If no NSFW characters exist, select a random character
@@ -2419,7 +2695,7 @@ function checkForSpecialTiles() {
    tileElements.forEach((tileElement, index) => {
       const tileData = tiles[index];
       if (
-         (tileData.tags.includes('18+') || tileData.tags.includes('NSFW') || tileData.tags.includes('Hentai') || tileData.tags.includes('Porn')|| tileData.tags.includes('Yaoi')) &&
+         (tileData.tags.includes('18+') || tileData.tags.includes('NSFW') || tileData.tags.includes('Hentai') || tileData.tags.includes('Porn')|| tileData.tags.includes('Yaoi') || tileData.tags.includes('🔞')) &&
          (tileData.tags.includes('⭐') || tileData.tags.includes('✨') || tileData.tags.includes('🌠') || tileData.tags.includes('🌟') ||
           tileData.tags.includes('💫') || tileData.tags.includes('🤩') || tileData.tags.includes('❇️') || tileData.tags.includes('✴️') ||
           tileData.tags.includes('✳️') || tileData.tags.includes('🔥') || tileData.tags.includes('💎'))
@@ -2433,12 +2709,9 @@ function checkForSpecialTiles() {
 
 
 
-// Run the check once on page load
-document.addEventListener('DOMContentLoaded', checkForSpecialTiles);
-
 // Function to apply blur status on page load
 function applyBlurNSFWStatus() {
-   const nsfwTags = ['18+', 'NSFW', "Hentai", "Porn", "Yaoi"]; // Tags considered NSFW
+   const nsfwTags = ['18+', 'NSFW', "Hentai", "Porn", "Yaoi", "🔞"]; // Tags considered NSFW
    const imageItems = document.querySelectorAll('.image-item');
 
    imageItems.forEach(item => {
@@ -2456,8 +2729,6 @@ function applyBlurNSFWStatus() {
 // Add event listener to the button
 blurNSFWBtn.addEventListener('click', toggleBlurNSFW);
 
-// Apply blur status when the page loads
-document.addEventListener('DOMContentLoaded', applyBlurNSFWStatus);
 
 document.getElementById('flush-button').addEventListener('click', () => {
     rememberNSFWChoice = false;
@@ -2466,6 +2737,58 @@ document.getElementById('flush-button').addEventListener('click', () => {
     localStorage.setItem('rememberNSFWChoice', JSON.stringify(rememberNSFWChoice));
     localStorage.setItem('includeNSFW', JSON.stringify(includeNSFW));
 });
+
+
+
+// Apply the saved position when the DOM is fully loaded
+document.addEventListener('DOMContentLoaded', applySavedPosition);
+
+// Load the saved tile size from local storage on page load
+window.addEventListener('DOMContentLoaded', function() {
+    const savedSize = localStorage.getItem('tileSize') || 'medium'; // Default to 'medium' if no value is found
+    tileSizeSelector.value = savedSize; // Set the dropdown to the saved value
+    setTileSize(savedSize); // Apply the saved size to the grid
+});
+
+// Call this function when the page loads
+window.onload = loadSelectedColorOption;
+document.addEventListener('DOMContentLoaded', loadSelectedColorOption);
+
+// On page load, apply the saved toggle state from localStorage
+document.addEventListener('DOMContentLoaded', function() {
+    const editButtons = document.querySelectorAll('.edit-image-btn');
+    const editURL = document.querySelectorAll('.edit-url-btn');
+    const editTags = document.querySelectorAll('.edit-tags-btn');
+    const editInfo = document.querySelectorAll('.edit-info-btn');
+    const editDelete = document.querySelectorAll('.delete-btn');
+    const toggleButton = document.getElementById('toggleButton');
+
+    // Get the saved state from localStorage
+    const isHidden = localStorage.getItem('buttonsHidden') === 'true';
+
+    // Function to apply the display state
+    const setDisplay = (buttons, display) => {
+        buttons.forEach(button => {
+            button.style.display = display;
+        });
+    };
+
+    // Apply the saved state to the buttons
+    setDisplay(editButtons, isHidden ? 'none' : 'flex');
+    setDisplay(editURL, isHidden ? 'none' : 'flex');
+    setDisplay(editTags, isHidden ? 'none' : 'flex');
+    setDisplay(editInfo, isHidden ? 'none' : 'flex');
+    setDisplay(editDelete, isHidden ? 'none' : 'flex');
+
+    // Set the toggle button text based on the state
+    toggleButton.textContent = isHidden ? 'Show Tile Buttons' : 'Hide Tile Buttons';
+});
+
+// Apply blur status when the page loads
+document.addEventListener('DOMContentLoaded', applyBlurNSFWStatus);
+
+// Run the check once on page load
+document.addEventListener('DOMContentLoaded', checkForSpecialTiles);
     </script>
 </body>
 </html>
