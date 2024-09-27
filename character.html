@@ -5,6 +5,7 @@
     <link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/ThatOneUnoriginal/ThatOneUnoriginal.github.io/refs/heads/main/Character%20Tools/Assets/BookmarkingToolIcon.ico">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="pinterest" content="nopin" />
+    <link id="font-link" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto&display=swap">
     <title>Character Bookmarking Tool</title>
     <style>
     
@@ -12,15 +13,16 @@
 #url-popup-close, #url-popup-close-url, #local-image-btn, #url-image-btn, #urlURL-popup-close, #url-popup-close-url1, #popup-close, .collapsible, .edit-popup button,
 #submit-url-btn, #submit-url-btn1, #share-url-popup button, #nsfw-inclusion-popup button, #image-upload-choice-popup button, #tile-creation-popup button, #settings-popup button, 
 #tileSize, #undo-delete-popup button, #popup-close-btn, #new-confirm-image-btn, #confirm-image-btn, #new-cancel-image-btn, #cancel-image-btn, #image-confirmation-popup button,
-#new-image-confirmation-popup button, .link-button, #close-links-popup, #accessibility-popup button{
+#new-image-confirmation-popup button, .link-button, #close-links-popup, #accessibility-popup button, #theme-dropdown-accessibility, #close-multi-links-popup, #font-dropdown{
 	background-color: var(--button-bg-1);
 }
+
+
 
 #character-popup {
 	width: 90%;
 	max-width: 600px;
 	margin: 0 auto;
-	height: 80%;
 	overflow: scroll;
 }
 
@@ -570,7 +572,7 @@ img:hover {
 	border-color: transparent;
 	width: 100%
 }
-#image-confirmation-popup, #new-image-confirmation-popup{
+#image-confirmation-popup, #new-image-confirmation-popup, #multi-links-popup{
     z-index: 1002 !important;
 }
 #popup-close{
@@ -636,11 +638,11 @@ img:hover {
 	border: 5px solid var(--special-outline-color-1);
 }
 
-#links-list li {
+#links-list li, #multi-links-list li {
     list-style-type: none;
     width: 100%;
 }
-#links-list{
+#links-list, #multi-links-list{
     width: 100%;
     padding-left: 0px;
 }
@@ -706,7 +708,7 @@ img:hover {
 	border-radius: 4px;
 }
 
-.edit-popup button, .link-button, #close-links-popup {
+.edit-popup button, .link-button, #close-links-popup, #close-multi-links-popup {
 	padding: 10px 20px;
 	color: var(--button-color);
 	border: none;
@@ -773,7 +775,7 @@ img:hover {
 	margin-top: 10px;
 }
 
-#nsfw-inclusion-popup, #settings-popup, .links-popup, #accessibility-popup {
+#nsfw-inclusion-popup, #settings-popup, .links-popup, #accessibility-popup, .multi-links-popup {
 	position: fixed;
 	top: 50%;
 	left: 50%;
@@ -792,7 +794,7 @@ img:hover {
 	animation: float 5s ease-in-out infinite
 }
 
-#nsfw-inclusion-popup button, #settings-popup button, #colorSelector, #tileSize, #accessibility-popup button {
+#nsfw-inclusion-popup button, #settings-popup button, #colorSelector, #tileSize, #accessibility-popup button, #theme-dropdown-accessibility, #font-dropdown{
 	width: 100%;
 	margin-top: 10px;
 	padding: 10px 20px;
@@ -830,9 +832,9 @@ img:hover {
 	width: 80%;
 }
 
-.theme-toggle button:hover, #tag-filter:hover, #tag-filter-mobile, #export-btn:hover, #import-btn:hover, #image-upload-choice-popup button:hover, #nsfw-inclusion-popup button:hover,
+#font-dropdown:hover, .theme-toggle button:hover, #tag-filter:hover, #tag-filter-mobile, #export-btn:hover, #import-btn:hover, #image-upload-choice-popup button:hover, #nsfw-inclusion-popup button:hover, #theme-dropdown-accessibility:hover,
 #share-url-popup button:hover, .edit-popup button:hover, .active, .collapsible:hover, #popup-close-btn:hover ,#popup-close:hover, #settings-popup button:hover, #undo-delete-popup button:hover, #new-confirm-image-btn:hover, #confirm-image-btn:hover,
-#new-cancel-image-btn:hover, #cancel-image-btn:hover, #image-confirmation-popup button:hover, #new-image-confirmation-popup button:hover, .link-button:hover, #close-links-popup:hover, #accessibility-popup button:hover{
+#new-cancel-image-btn:hover, #cancel-image-btn:hover, #image-confirmation-popup button:hover, #new-image-confirmation-popup button:hover, .link-button:hover, #close-multi-links-popup:hover, #close-links-popup:hover, #accessibility-popup button:hover{
 	background-color: var(--button-bg-hover-1)
 }
 
@@ -981,6 +983,10 @@ img:hover {
 	#tag-filter {
 		display: none;
     }
+}
+.no-animation {
+    animation: none !important;
+    transition: none !important;
 }
 
 .url-input-container {
@@ -1274,8 +1280,8 @@ img:hover {
             <input type="text" id="edit-url-input" placeholder="Enter new URL">
         </div>
         <div class="button-container">
-            <button id="add-url-btn">+</button> <!-- Button to add more links -->
-            <button id="remove-url-btn" disabled>-</button> <!-- Button to remove the most recent link -->
+            <button id="add-url-btn" alt="Add Another Link">+</button> <!-- Button to add more links -->
+            <button id="remove-url-btn" disabled alt="Remove Most Recently Added Link">-</button> <!-- Button to remove the most recent link -->
         </div>         
         <button id="save-url-btn">Save</button>
         <button id="cancel-url-btn">Cancel</button>
@@ -1355,6 +1361,55 @@ img:hover {
     </div>    
     <div id="accessibility-popup" style="overflow-y: auto;">
         <h3>Accessibility Settings</h3>
+        <button id="toggle-animations">Toggle Animations On</button>
+        <div class="button-container">
+            <button id="increase-weight">Increase Font Weight</button>
+            <button id="decrease-weight">Decrease Font Weight</button>           
+        </div>
+        <div class="button-container">
+            <button id="increase-font-btn">Increase Font Size</button>
+            <button id="decrease-font-btn">Decrease Font Size</button>
+        </div>
+        <select id="font-dropdown">
+            <option value="" disabled selected>Select a font</option>
+            <option value="Roboto">Roboto</option>
+            <option value="Open Sans">Open Sans</option>
+            <option value="Lato">Lato</option>
+            <option value="Montserrat">Montserrat</option>
+            <option value="Poppins">Poppins</option>
+            <option value="Arial">Arial</option>
+            <option value="Oswald">Oswald</option>
+            <option value="Slabo 27px">Slabo 27px</option>
+            <option value="Source Sans Pro">Source Sans Pro</option>
+            <option value="Nunito">Nunito</option>
+            <option value="Merriweather">Merriweather</option>
+            <option value="Dancing Script">Dancing Script</option>
+            <option value="Lora">Lora</option>
+            <option value="Playfair Display">Playfair Display</option>
+            <option value="Raleway">Raleway</option>
+            <option value="Cabin">Cabin</option>
+            <option value="Rubik">Rubik</option>
+            <option value="Josefin Sans">Josefin Sans</option>
+            <option value="Titillium Web">Titillium Web</option>
+            <option value="Bebas Neue">Bebas Neue</option>
+            <option value="Cinzel">Cinzel</option>
+            <option value="Anton">Anton</option>
+            <option value="Fjalla One">Fjalla One</option>
+            <option value="Quicksand">Quicksand</option>
+            <option value="Karla">Karla</option>
+            <option value="Inconsolata">Inconsolata</option>
+            <option value="Varela Round">Varela Round</option>
+            <option value="Coda">Coda</option>
+            <option value="Zilla Slab">Zilla Slab</option>
+            <option value="Noto Sans">Noto Sans</option>
+            <option value="Fira Sans">Fira Sans</option>
+            <option value="Roboto Condensed">Roboto Condensed</option>
+            <option value="Oxygen">Oxygen</option>
+            <option value="Muli">Muli</option>
+            <option value="Lobster">Lobster</option>
+            <option value="Amatic SC">Amatic SC</option>
+            <option value="Permanent Marker">Permanent Marker</option>
+        </select>         
         <select id="theme-dropdown-accessibility">
             <option value="disabled">High Contrast Theme Disable</option>
             <option value="high-contrast-dark">High Contrast Dark</option>
@@ -1366,7 +1421,7 @@ img:hover {
             <option value="colour2">Protanopia</option>
             <option value="colour3">Tritanopia</option> 
         </select>   
-        <button id="settings-close">Close</button>       
+        <button id="accessibility-settings-close">Close</button>       
     </div>
     <div id="image-popup" class="popup hidden">
           <h3>Select Image Source</h3>
@@ -1428,6 +1483,15 @@ img:hover {
         <button id="close-links-popup">Close</button>
     </div>
 </div>
+
+<div id="multi-links-popup" class="multi-links-popup">
+    <div class="popup-content">
+        <h3 style="text-align: center;">Select a Link for the Character</h3>
+        <ul id="multi-links-list"></ul>
+        <button id="close-multi-links-popup">Close</button>
+    </div>
+</div>
+
 <div id="crop-image-popup" class="popup hidden">
         <img id="full-image" src="" alt="Full Image" style="max-width: 100%; position: relative;">
         <div id="crop-area" style="position: absolute; border: 2px dashed #fff; background-color: rgba(255, 255, 255, 0.5);"></div>
@@ -1472,6 +1536,8 @@ const tags = document.querySelectorAll(".tag");
 
 let tagsVisible = true;
 
+
+
 // Load the visibility state from local storage on page load
 window.addEventListener('load', function() {
     const storedVisibility = localStorage.getItem('tagsVisible');
@@ -1515,6 +1581,8 @@ let isAtEnd =  true;  // Initially, the add-image tile is at the end
 
 
 
+
+
 document.getElementById('openReorderToolButton').addEventListener('click', function() {
         window.open('https://thatoneunoriginal.github.io/reorder%20tool.html', '_blank');
     });
@@ -1531,7 +1599,11 @@ document.getElementById('exportButton').addEventListener('click', () => {
         addImagePosition: localStorage.getItem('addImagePosition'),
         selectedColorOption: localStorage.getItem('selectedColorOption'),
         tileSize: localStorage.getItem('tileSize'),
-        tagsVisible: localStorage.getItem('tagsVisible')
+        tagsVisible: localStorage.getItem('tagsVisible'),
+        fontSize: localStorage.getItem('fontSize'),
+        fontweightindex: localStorage.getItem('font-weight-index'),
+        accessTheme: localStorage.getItem('accessTheme'),
+        selectedFont: localStorage.getItem('selectedFont')
     };
 
     // Convert settings to a JSON string
@@ -1552,6 +1624,36 @@ document.getElementById('exportButton').addEventListener('click', () => {
     // Release the blob URL
     URL.revokeObjectURL(url);
 });
+
+const elementsToAdjust = document.querySelectorAll(
+    'li, p, .theme-toggle button, #tag-filter, #tag-filter-mobile, #export-btn, #import-btn, #tile-size, #colorSelector, #popup-button, #reroll-btn, #local-upload-btn, #url-upload-btn, #url-popup-close, #url-popup-close-url, #local-image-btn, #url-image-btn, #urlURL-popup-close, #url-popup-close-url1, #popup-close, .collapsible, .edit-popup button, #submit-url-btn, #submit-url-btn1, #share-url-popup button, #nsfw-inclusion-popup button, #image-upload-choice-popup button, #tile-creation-popup button, #settings-popup button, #tileSize, #undo-delete-popup button, #popup-close-btn, #new-confirm-image-btn, #confirm-image-btn, #new-cancel-image-btn, #cancel-image-btn, #image-confirmation-popup button, #new-image-confirmation-popup button, .link-button, #close-links-popup, #accessibility-popup button, #theme-dropdown-accessibility, #close-multi-links-popup, #font-dropdown'
+);
+
+let currentFontSize = localStorage.getItem('fontSize') ? parseInt(localStorage.getItem('fontSize')) : 16; // Load from local storage or default to 16
+
+// Apply the saved font size on page load
+adjustFontSize(currentFontSize);
+
+document.getElementById('increase-font-btn').addEventListener('click', () => {
+    currentFontSize += 2; // Increase by 2 pixels
+    adjustFontSize(currentFontSize);
+});
+
+document.getElementById('decrease-font-btn').addEventListener('click', () => {
+    if (currentFontSize > 10) { // Prevent font size from going below 10 pixels
+        currentFontSize -= 2; // Decrease by 2 pixels
+        adjustFontSize(currentFontSize);
+    }
+});
+
+function adjustFontSize(size) {
+    elementsToAdjust.forEach(element => {
+        element.style.fontSize = size + 'px';
+    });
+    localStorage.setItem('fontSize', size); // Save the current font size to local storage
+}
+
+
 
 document.getElementById('importButton').addEventListener('click', () => {
     const fileInput = document.getElementById('importFile');
@@ -1574,7 +1676,11 @@ document.getElementById('importButton').addEventListener('click', () => {
                     localStorage.setItem('selectedColorOption', settings.selectedColorOption);
                     localStorage.setItem('tileSize', settings.tileSize);
                     localStorage.setItem('tagsVisible', settings.tagsVisible);
-                    
+                    localStorage.setItem('fontSize', settings.fontSize);
+                    localStorage.setItem('fontweightindex', settings.fontweightindex);
+                    localStorage.setItem('accessTheme', settings.accessTheme);
+                    localStorage.setItem('selectedFont', settings.selectedFont);
+
                     alert('Settings imported successfully! Refresh the page to have the changes apply');
                 } catch (error) {
                     alert('Failed to import settings: ' + error.message);
@@ -1646,6 +1752,10 @@ function setTileSize(size) {
 
 
 
+
+
+
+
 // Save the tile size to local storage when the user changes it
 tileSizeSelector.addEventListener('change', function() {
     const selectedSize = this.value;
@@ -1675,6 +1785,7 @@ function hideUndoPopup() {
 }
 
 // Save the selected color option in localStorage
+// Save the selected color option in localStorage
 document.getElementById('colorSelector').addEventListener('change', function() {
     const selectedColorOption = this.value; 
     localStorage.setItem('selectedColorOption', selectedColorOption); // Save to local storage
@@ -1685,11 +1796,7 @@ document.getElementById('colorSelector').addEventListener('change', function() {
 
     // Select all specified buttons
     const buttons = document.querySelectorAll(
-        '.theme-toggle button, #tag-filter, #tag-filter-mobile, #export-btn, #import-btn, #tile-size, #colorSelector, #popup-button, #reroll-btn, ' +
-        '#local-upload-btn, #url-upload-btn, #url-popup-close, #url-popup-close-url, #local-image-btn, #url-image-btn, #urlURL-popup-close, ' +
-        '#url-popup-close-url1, #popup-close, .collapsible, .edit-popup button, #submit-url-btn, #submit-url-btn1, #share-url-popup button, ' +
-        '#nsfw-inclusion-popup button, #image-upload-choice-popup button, #settings-popup button, #tileSize, #undo-delete-popup button, .highlight, #popup-close-btn, ' +
-        '#image-confirmation-popup button,#new-image-confirmation-popup button'
+       '#font-dropdown, .li button, .theme-toggle button, #tag-filter, #tag-filter-mobile, #export-btn, #import-btn, #tile-size, #colorSelector, #popup-button, #reroll-btn, #local-upload-btn, #url-upload-btn, #url-popup-close, #url-popup-close-url, #local-image-btn, #url-image-btn, #urlURL-popup-close, #url-popup-close-url1, #popup-close, .collapsible, .edit-popup button, #submit-url-btn, #submit-url-btn1, #share-url-popup button, #nsfw-inclusion-popup button, #image-upload-choice-popup button, #tile-creation-popup button, #settings-popup button, #tileSize, #undo-delete-popup button, #popup-close-btn, #new-confirm-image-btn, #confirm-image-btn, #new-cancel-image-btn, #cancel-image-btn, #image-confirmation-popup button, #new-image-confirmation-popup button, .link-button, #close-links-popup, #accessibility-popup button, #theme-dropdown-accessibility, #close-multi-links-popup'
     );
 
     // Define colors based on the selected option
@@ -1764,7 +1871,27 @@ document.getElementById('colorSelector').addEventListener('change', function() {
             button.style.backgroundColor = selectedButtonColor;
         });
     });
+
+    // Remove any existing dynamic style tag for the link-button class
+    const existingStyleTag = document.getElementById('link-button-style');
+    if (existingStyleTag) {
+        existingStyleTag.remove();
+    }
+
+    // Create a new style element for the link-button with !important rules
+    const styleTag = document.createElement('style');
+    styleTag.id = 'link-button-style';
+    styleTag.innerHTML = `
+        .link-button {
+            background-color: ${selectedButtonColor} !important;
+        }
+        .link-button:hover {
+            background-color: ${selectedButtonHoverColor} !important;
+        }
+    `;
+    document.head.appendChild(styleTag);
 });
+
 
 // Load the selected color option on page load
 function loadSelectedColorOption() {
@@ -1935,12 +2062,17 @@ document.getElementById('settings-close').addEventListener('click', () => {
     document.getElementById('popup-overlay').style.display = 'none';
     document.getElementById('settings-popup').style.display = 'none';
 });
+document.getElementById('accessibility-settings-close').addEventListener('click', () => {
+    document.getElementById('accessibility-popup').style.display = 'none';
+    document.getElementById('popup-overlay').style.display = 'none';
+});
 document.getElementById('popup-overlay').addEventListener('click', () => {
    document.getElementById('image-source-popup').style.display = 'none';
    document.getElementById('url-input-popup').style.display = 'none';
    document.getElementById('popup-overlay').style.display = 'none';
    document.getElementById('links-popup').style.display = 'none';
    document.getElementById('settings-popup').style.display = 'none';
+   document.getElementById('accessibility-popup').style.display = 'none';
    document.getElementById('edit-url-popup').style.display = 'none';
    document.getElementById('tile-creation-popup').style.display = 'none';
    document.getElementById('character-popup').style.display = 'none';
@@ -1952,6 +2084,7 @@ document.getElementById('popup-overlay').addEventListener('click', () => {
 
 document.getElementById('popup-overlay1').addEventListener('click', () => {
     document.getElementById('popup-overlay1').style.display = 'none';
+    document.getElementById('multi-links-popup').style.display = 'none';
     document.getElementById('new-image-confirmation-popup').style.display = 'none';
     document.getElementById('image-confirmation-popup').style.display= 'none';
 });
@@ -2268,12 +2401,12 @@ function createImageTile(tileData) {
                     <img src="${tileData.imageData}" alt="${tileData.alt || 'User uploaded image'}"> <!-- Set alt text -->
                 </a>
                 <div class="tile-buttons">
-                    <button class="edit-image-btn" title="Edit Image">🖼️</button>
-                    <button class="edit-url-btn" title="Edit URL">🔗</button>
-                    <button class="edit-tags-btn" title="Edit Tags">🏷️</button>
-                    <button class="edit-info-btn" title="Edit Info">ℹ️</button>
-                    <button class="share-btn" title="Share">📤</button>
-                    <button class="delete-btn" title="Delete">×</button>
+                    <button class="edit-image-btn" title="Edit Image" alt="Edit Image Button">🖼️</button>
+                    <button class="edit-url-btn" title="Edit URL" alt="Edit URL Button">🔗</button>
+                    <button class="edit-tags-btn" title="Edit Tags" alt="Edit Tags Button">🏷️</button>
+                    <button class="edit-info-btn" title="Edit Info" alt="Edit Character Information Button">ℹ️</button>
+                    <button class="share-btn" title="Share" alt="Share URL Button">📤</button>
+                    <button class="delete-btn" title="Delete" alt="Delete Tile">×</button>
                 </div>
                 <div class="tags">
                     ${tileData.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
@@ -2374,13 +2507,6 @@ function showLinksPopup(links) {
     document.getElementById('close-links-popup').addEventListener('click', () => {
         popup.style.display = 'none';
         document.getElementById('popup-overlay').style.display = 'none';
-    });
-
-    // Optionally close the popup by clicking outside of it
-    window.addEventListener('click', (e) => {
-        if (e.target === popup) {
-            popup.style.display = 'none';
-        }
     });
 }
 
@@ -2784,25 +2910,36 @@ importFileInput.addEventListener('change', (event) => {
    if (file) {
       const reader = new FileReader();
       reader.onload = (e) => {
+         const previousTiles = [...tiles]; // Save current tiles state before import
          try {
             const importedTiles = JSON.parse(e.target.result);
             tiles = importedTiles;
-            imageGrid.innerHTML = '';
-            imageGrid.appendChild(addImageButton);
+            imageGrid.innerHTML = '';  // Clear the grid
+            imageGrid.appendChild(addImageButton);  // Re-append the 'add image' button
             tiles.forEach(tile => {
                createImageTile(tile);
                tile.tags.forEach(tag => allTags.add(tag));
             });
-            saveTiles();
-            updateTagFilter();
+            saveTiles();  // Save the new imported tiles
+            updateTagFilter();  // Update tag filters
          } catch (error) {
             console.error('Error parsing imported data:', error);
             alert('Error importing data. Please make sure the file is in the correct format.');
+
+            // Restore the previous tiles if there's an error
+            tiles = previousTiles;
+            imageGrid.innerHTML = '';  // Clear the grid again
+            imageGrid.appendChild(addImageButton);  // Re-append the 'add image' button
+            tiles.forEach(tile => {
+               createImageTile(tile);
+               tile.tags.forEach(tag => allTags.add(tag));
+            });
          }
       };
       reader.readAsText(file);
    }
 });
+
 // Function to toggle blur on NSFW content
 function toggleBlurNSFW() {
    const nsfwTags = ['18+', 'NSFW', "Hentai", "Porn", "Yaoi", "🔞"]; // Tags considered NSFW
@@ -2854,13 +2991,15 @@ popupClose.addEventListener('click', closePopup);
 popupCloseBtn.addEventListener('click', closePopup);
 
 // Function to pick a random character
+// Function to pick a random character
+// Function to pick a random character
 function selectRandomCharacter() {
-
    const characters = Array.from(document.querySelectorAll('.image-item:not(.add-image)'));
    if (characters.length === 0) {
       alert('No characters available.');
       return;
    }
+
    let availableCharacters = includeNSFW ? characters : characters.filter(char => {
       const tags = Array.from(char.querySelectorAll('.tag')).map(tag => tag.textContent);
       return !tags.some(tag => ['18+', 'NSFW', 'Porn', 'Hentai', 'Yaoi', '🔞'].includes(tag));
@@ -2868,40 +3007,107 @@ function selectRandomCharacter() {
 
    if (availableCharacters.length === 0) {
       document.getElementById('popup-overlay').style.display = 'none';
-      alert('No characters available with current NSFW settings. If you checked the box for it to remembner which option you chose, click the "Reset Remembered State" to get the prompt back up');
+      alert('No characters available with current NSFW settings. If you checked the box for it to remember which option you chose, click the "Reset Remembered State" to get the prompt back up.');
       return;
-
    }
 
    const randomIndex = Math.floor(Math.random() * availableCharacters.length);
    const selectedCharacter = availableCharacters[randomIndex];
    const tileData = tiles[characters.indexOf(selectedCharacter)];
 
+   // Populate the character popup with character data
    document.getElementById('popup-image').src = tileData.imageData;
    document.getElementById('popup-name').textContent = tileData.name || 'Unknown';
    document.getElementById('popup-platform').textContent = `Platform: ${tileData.platform || 'N/A'}`;
    document.getElementById('popup-age').textContent = `Age: ${tileData.age || 'N/A'}`;
    document.getElementById('popup-description').textContent = tileData.description || 'No description available.';
    document.getElementById('popup-tags').textContent = `Tags: ${tileData.tags.join(', ')}`;
-   document.getElementById('popup-button').addEventListener('click', function() {
-    const tileData = tiles[characters.indexOf(selectedCharacter)];
-    window.open(tileData.link, '_blank'); // Open link in new tab
-    });
-
 
    updateTileOutline(characterPopup, tileData.tags);
 
+   // Check if the tile contains multiple links
+   const viewProfileButton = document.getElementById('popup-button');
+   if (tileData.links && tileData.links.length > 1) {
+      // If multiple links, show the new multi-links popup on button click
+      viewProfileButton.addEventListener('click', function() {
+         showMultiLinksPopup(tileData.links); // Use the new multi-links popup
+      });
+   } else {
+      // If only one link, open it directly
+      viewProfileButton.addEventListener('click', function() {
+         window.open(tileData.links[0], '_blank'); // Open the single link in a new tab
+      });
+   }
+
+   // Handle blurred image for NSFW content
    if (isBlurred && (tileData.tags.includes('18+') || tileData.tags.includes('NSFW') || tileData.tags.includes('Hentai') || tileData.tags.includes('Porn') || tileData.tags.includes('Yaoi') || tileData.tags.includes('🔞'))) {
       popupImage.classList.add('blurred-image');
    } else {
       popupImage.classList.remove('blurred-image');
    }
 
+   // Display the character popup
    characterPopup.classList.remove('hidden');
    document.getElementById('character-popup').style.display = 'block';
    document.getElementById('popup-overlay').style.display = 'block';
-
 }
+
+function showMultiLinksPopup(links) {
+    document.getElementById('popup-overlay1').style.display = 'block'; // Ensure overlay is shown
+    const popup = document.getElementById('multi-links-popup');
+    const linksList = document.getElementById('multi-links-list');
+    linksList.innerHTML = ''; // Clear the existing list
+
+    const selectedButtonColor = getComputedStyle(document.documentElement).getPropertyValue('--button-bg-1'); // Use dynamic color
+    const selectedButtonHoverColor = getComputedStyle(document.documentElement).getPropertyValue('--button-bg-hover-1'); // Use dynamic hover color
+
+    links.forEach(link => {
+        const listItem = document.createElement('li');
+        const buttonElement = document.createElement('button');
+
+        // Add a class to the button
+        buttonElement.classList.add('link-button');
+
+        // Set inline style for background color
+        buttonElement.style.backgroundColor = selectedButtonColor;
+
+        // Set up hover effect for the button
+        buttonElement.addEventListener('mouseenter', () => {
+            buttonElement.style.backgroundColor = selectedButtonHoverColor;
+        });
+        buttonElement.addEventListener('mouseleave', () => {
+            buttonElement.style.backgroundColor = selectedButtonColor;
+        });
+
+        // Extract domain name from URL
+        const domain = (new URL(link)).hostname;
+        const formattedDomain = domain
+            .split('.')
+            .slice(-2) // Get the last two parts (e.g., 'example.com')
+            .join('.')
+            .replace(/^\w/, c => c.toUpperCase()); // Capitalize first letter
+
+        buttonElement.textContent = formattedDomain;
+
+        buttonElement.addEventListener('click', () => {
+            window.open(link, '_blank'); // Open the link in a new tab
+        });
+
+        listItem.appendChild(buttonElement);
+        linksList.appendChild(listItem);
+    });
+
+    popup.style.display = 'block'; // Show the new popup
+
+    // Close button functionality
+    document.getElementById('close-multi-links-popup').addEventListener('click', () => {
+        popup.style.display = 'none';
+        document.getElementById('popup-overlay1').style.display = 'none'; // Hide overlay
+    });
+}
+
+
+
 // Modify the closePopup function
 function closePopup() {
    document.getElementById('popup-overlay').style.display = 'none';
@@ -3003,6 +3209,76 @@ function applyBlurNSFWStatus() {
    blurNSFWBtn.textContent = isBlurred ? 'Unblur NSFW' : 'Blur NSFW'; // Set button text based on status
 }
 
+
+// Define font weight options
+const fontWeightOptions = [400, 500, 600, 700, 800, 900];
+let currentFontWeightIndex = 0;
+
+// Load font weight from localStorage when the page loads
+function loadFontWeight() {
+    const savedIndex = localStorage.getItem('fontweightindex');
+    if (savedIndex !== null) {
+        currentFontWeightIndex = parseInt(savedIndex);
+        applyFontWeight();
+    }
+}
+
+// Save the current font weight index in localStorage
+function saveFontWeight() {
+    localStorage.setItem('fontweightindex', currentFontWeightIndex.toString());
+}
+
+// Apply the current font weight to all relevant elements
+function applyFontWeight() {
+    const elements = document.querySelectorAll('#increase-weight, #tileSize, #tag-filter, #colorSelector, #theme-dropdown-accessibility, li, p, strong, h3, button, tags, span, tag, #font-dropdown');
+    const currentWeight = fontWeightOptions[currentFontWeightIndex];
+    elements.forEach((element) => {
+        element.style.fontWeight = currentWeight;
+    });
+}
+
+// Increase font weight
+function increaseFontWeight() {
+    if (currentFontWeightIndex < fontWeightOptions.length - 1) {
+        currentFontWeightIndex++;
+        applyFontWeight();
+        saveFontWeight();
+    }
+}
+
+// Decrease font weight
+function decreaseFontWeight() {
+    if (currentFontWeightIndex > 0) {
+        currentFontWeightIndex--;
+        applyFontWeight();
+        saveFontWeight();
+    }
+}
+
+// Set maximum font weight
+function setMaxFontWeight() {
+    currentFontWeightIndex = fontWeightOptions.length - 1;
+    applyFontWeight();
+    saveFontWeight();
+}
+
+// Remove custom font weight
+function removeFontWeight() {
+    const elements = document.querySelectorAll('#increase-weight, #tileSize, #tag-filter, #colorSelector, #theme-dropdown-accessibility, li, p, strong, h3, button, tags, span, tag, #font-dropdown');
+    elements.forEach((element) => {
+        element.style.removeProperty('font-weight');
+    });
+    localStorage.removeItem('fontweightindex');
+    currentFontWeightIndex = 0;
+}
+
+// Event listeners
+document.getElementById('increase-weight').addEventListener('click', increaseFontWeight);
+document.getElementById('decrease-weight').addEventListener('click', decreaseFontWeight);
+
+// Initialize
+loadFontWeight();
+
 // Add event listener to the button
 blurNSFWBtn.addEventListener('click', toggleBlurNSFW);
 
@@ -3066,6 +3342,173 @@ document.addEventListener('DOMContentLoaded', applyBlurNSFWStatus);
 
 // Run the check once on page load
 document.addEventListener('DOMContentLoaded', checkForSpecialTiles);
+
+
+let animationsEnabled = true; // Variable to track animation state
+
+// Set the initial button text based on the default state
+document.getElementById('toggle-animations').textContent = 'Toggle Animations Off';
+
+document.getElementById('toggle-animations').addEventListener('click', function() {
+    const popups = [
+        '.popup',
+        '.edit-popup',
+        '#image-popup',
+        '#image-source-popup',
+        '#url-input-popup',
+        '#url-popup',
+        '#new-image-confirmation-popup',
+        '#share-url-popup',
+        '#nsfw-inclusion-popup',
+        '#settings-popup',
+        '.links-popup',
+        '#accessibility-popup',
+        '#multi-links-popup'
+    ];
+
+    popups.forEach(selector => {
+        const elements = document.querySelectorAll(selector);
+        elements.forEach(el => {
+            el.classList.toggle('no-animation');
+        });
+    });
+
+    // Toggle the animation state
+    animationsEnabled = !animationsEnabled;
+    
+    // Update the button text
+    this.textContent = animationsEnabled ? 'Toggle Animations Off' : 'Toggle Animations On';
+});
+
+
+
+
+// Function to apply the selected font
+function applyFont(font) {
+    const fonts = {
+        "Roboto": "https://fonts.googleapis.com/css2?family=Roboto&display=swap",
+        "Open Sans": "https://fonts.googleapis.com/css2?family=Open+Sans&display=swap",
+        "Lato": "https://fonts.googleapis.com/css2?family=Lato&display=swap",
+        "Montserrat": "https://fonts.googleapis.com/css2?family=Montserrat&display=swap",
+        "Poppins": "https://fonts.googleapis.com/css2?family=Poppins&display=swap",
+        "Arial": "https://fonts.googleapis.com/css2?family=Arial&display=swap", // Note: Arial is generally a system font
+        "Oswald": "https://fonts.googleapis.com/css2?family=Oswald&display=swap",
+        "Slabo 27px": "https://fonts.googleapis.com/css2?family=Slabo+27px&display=swap",
+        "Source Sans Pro": "https://fonts.googleapis.com/css2?family=Source+Sans+Pro&display=swap",
+        "Nunito": "https://fonts.googleapis.com/css2?family=Nunito&display=swap",
+        "Merriweather": "https://fonts.googleapis.com/css2?family=Merriweather&display=swap",
+        "Dancing Script": "https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap",
+        "Lora": "https://fonts.googleapis.com/css2?family=Lora&display=swap",
+        "Playfair Display": "https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap",
+        "Raleway": "https://fonts.googleapis.com/css2?family=Raleway&display=swap",
+        "Cabin": "https://fonts.googleapis.com/css2?family=Cabin&display=swap",
+        "Rubik": "https://fonts.googleapis.com/css2?family=Rubik&display=swap",
+        "Josefin Sans": "https://fonts.googleapis.com/css2?family=Josefin+Sans&display=swap",
+        "Titillium Web": "https://fonts.googleapis.com/css2?family=Titillium+Web&display=swap",
+        "Bebas Neue": "https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap",
+        "Cinzel": "https://fonts.googleapis.com/css2?family=Cinzel&display=swap",
+        "Anton": "https://fonts.googleapis.com/css2?family=Anton&display=swap",
+        "Fjalla One": "https://fonts.googleapis.com/css2?family=Fjalla+One&display=swap",
+        "Quicksand": "https://fonts.googleapis.com/css2?family=Quicksand&display=swap",
+        "Karla": "https://fonts.googleapis.com/css2?family=Karla&display=swap",
+        "Inconsolata": "https://fonts.googleapis.com/css2?family=Inconsolata&display=swap",
+        "Varela Round": "https://fonts.googleapis.com/css2?family=Varela+Round&display=swap",
+        "Coda": "https://fonts.googleapis.com/css2?family=Coda&display=swap",
+        "Zilla Slab": "https://fonts.googleapis.com/css2?family=Zilla+Slab&display=swap",
+        "Noto Sans": "https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap",
+        "Fira Sans": "https://fonts.googleapis.com/css2?family=Fira+Sans&display=swap",
+        "Roboto Condensed": "https://fonts.googleapis.com/css2?family=Roboto+Condensed&display=swap",
+        "Oxygen": "https://fonts.googleapis.com/css2?family=Oxygen&display=swap",
+        "Muli": "https://fonts.googleapis.com/css2?family=Muli&display=swap",
+        "Lobster": "https://fonts.googleapis.com/css2?family=Lobster&display=swap",
+        "Amatic SC": "https://fonts.googleapis.com/css2?family=Amatic+SC&display=swap",
+        "Permanent Marker": "https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap"
+    };
+
+    // Update the font link in the head
+    const fontLink = document.getElementById('font-link');
+    fontLink.href = fonts[font];
+
+    // Change the font of the body and specified elements
+    document.body.style.fontFamily = font;
+
+    const elementsToUpdate = [
+        '.theme-toggle button', 
+        '#tag-filter', 
+        '#tag-filter-mobile', 
+        '#export-btn', 
+        '#import-btn', 
+        '#tile-size', 
+        '#colorSelector', 
+        '#popup-button', 
+        '#reroll-btn', 
+        '#local-upload-btn', 
+        '#url-upload-btn',
+        '#url-popup-close', 
+        '#url-popup-close-url', 
+        '#local-image-btn', 
+        '#url-image-btn', 
+        '#urlURL-popup-close', 
+        '#url-popup-close-url1', 
+        '#popup-close', 
+        '.collapsible', 
+        '.edit-popup button',
+        '#submit-url-btn', 
+        '#submit-url-btn1', 
+        '#share-url-popup button', 
+        '#nsfw-inclusion-popup button', 
+        '#image-upload-choice-popup button', 
+        '#tile-creation-popup button', 
+        '#settings-popup button', 
+        '#tileSize', 
+        '#undo-delete-popup button', 
+        '#popup-close-btn', 
+        '#new-confirm-image-btn', 
+        '#confirm-image-btn', 
+        '#new-cancel-image-btn', 
+        '#cancel-image-btn', 
+        '#image-confirmation-popup button',
+        '#new-image-confirmation-popup button', 
+        '.link-button', 
+        '#close-links-popup', 
+        '#accessibility-popup button', 
+        '#theme-dropdown-accessibility', 
+        '#close-multi-links-popup', 
+        '#font-dropdown'
+    ];
+
+    elementsToUpdate.forEach(selector => {
+        const elements = document.querySelectorAll(selector);
+        elements.forEach(element => {
+            element.style.fontFamily = font;
+        });
+    });
+}
+
+// Event listener for font dropdown change
+document.getElementById('font-dropdown').addEventListener('change', function () {
+    const selectedFont = this.value;
+    console.log(`Selected font: ${selectedFont}`); // Debug log
+
+    // Save the selected font to local storage
+    localStorage.setItem('selectedFont', selectedFont);
+    console.log(`Font saved to local storage: ${localStorage.getItem('selectedFont')}`); // Debug log
+
+    // Apply the selected font
+    applyFont(selectedFont);
+});
+
+// Load the selected font from local storage on page load
+window.onload = function() {
+    const savedFont = localStorage.getItem('selectedFont');
+    console.log(`Loaded font from local storage: ${savedFont}`); // Debug log
+    if (savedFont) {
+        // Set the dropdown value to the saved font
+        document.getElementById('font-dropdown').value = savedFont;
+        // Apply the saved font
+        applyFont(savedFont);
+    }
+};
     </script>
 </body>
 </html>
