@@ -1072,6 +1072,7 @@ img:hover {
        <p>Yes, it's recommended that you export your grid/list any time you make any changes to it. Everything is stored locally on the browser, so if anything happens (cookies reset, change browsers, change devices, etc...) the page will reset to be blank. If this happens, just use the Import button to bring back the characters. With the export/backup file, you'll also be able to use the Reorder Tool and Merge Tool.</p>
     </div>
     <button class="collapsible">Update Log (2.0.1 to 3.0)</button>
+    <div class="collapsible-content">
         <h2>Update 2.0.1</h2>
         <ul>
             <li>Fixed error where <code>accessTheme</code> would sometimes be set to null (by first checking the value and deleting it if it is detected as null).</li>
@@ -1082,6 +1083,7 @@ img:hover {
             <li>Fixed problem where importing the wrong <code>.json</code> file in the import theme prompt would cause the entire site to error out.</li>
             <li>Added a temporary check if any of the affected theme values have a value of "undefined" and clears the value.</li>
         </ul>
+    </div>
     <button class="collapsible">Update Log (1.0 to 2.0)</button>
     <div class="collapsible-content">
         <h2>Update 2.0</h2>
