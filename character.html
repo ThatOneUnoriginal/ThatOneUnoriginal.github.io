@@ -1071,7 +1071,18 @@ img:hover {
        <p><strong>Should I Export?</strong></p>
        <p>Yes, it's recommended that you export your grid/list any time you make any changes to it. Everything is stored locally on the browser, so if anything happens (cookies reset, change browsers, change devices, etc...) the page will reset to be blank. If this happens, just use the Import button to bring back the characters. With the export/backup file, you'll also be able to use the Reorder Tool and Merge Tool.</p>
     </div>
-    <button class="collapsible">Update Log</button>
+    <button class="collapsible">Update Log (2.0.1 to 3.0)</button>
+        <h2>Update 2.0.1</h2>
+        <ul>
+            <li>Fixed error where <code>accessTheme</code> would sometimes be set to null (by first checking the value and deleting it if it is detected as null).</li>
+            <li>Added a "Reset Theme" button in the theme settings that will revert/wipe all the theme settings. You need to click 6 times before it triggers (to ensure that it doesn't accidentally get triggered).</li>
+            <li>Instead of prompting users to refresh the page after importing the theme settings, it will now automatically refresh the page.</li>
+            <li>If <code>accessTheme</code> is disabled, the page will now refresh to compensate for an issue where the theme goes to light mode regardless of theme choice. Will see how this can be improved other ways.</li>
+            <li>Fixed problem where <code>animationsEnabled</code> wasn't saved to local storage and wasn't included in the theme export system.</li>
+            <li>Fixed problem where importing the wrong <code>.json</code> file in the import theme prompt would cause the entire site to error out.</li>
+            <li>Added a temporary check if any of the affected theme values have a value of "undefined" and clears the value.</li>
+        </ul>
+    <button class="collapsible">Update Log (1.0 to 2.0)</button>
     <div class="collapsible-content">
         <h2>Update 2.0</h2>
         <ul>
@@ -1369,6 +1380,7 @@ img:hover {
             <input type="file" id="importFile" accept=".json" style="display: none;" />
             <button id="importButton">Import Theme Settings</button>
             </div>
+            <button id="reset-theme-btn">Reset Theme (6 clicks needed)</button>
             <button id="settings-close">Close</button>
     </div>    
     <div id="accessibility-popup" style="overflow-y: auto;">
@@ -1545,11 +1557,49 @@ const starTags = ['⭐', '🌟', '✨', '🌠', '💫', '🤩', '❇️', '✴�
 const nsfwTags = ['18+', 'NSFW', "Hentai", "Porn", "Yaoi", "🔞"]; 
 const hideTagsButton = document.getElementById("hide-tags-button");
 const tags = document.querySelectorAll(".tag");
+const resetButton = document.getElementById('reset-theme-btn');
+const settingsClose = document.getElementById('settings-close');
+const popupOverlay = document.getElementById('popup-overlay');
 
 let tagsVisible = true;
+let clickCount = 0;
 
 
 
+function resetClickCounter() {
+    clickCount = 0;
+    resetButton.textContent = 'Reset Theme (6 clicks needed)';
+}
+
+resetButton.addEventListener('click', function() {
+    clickCount++;
+
+    if (clickCount < 6) {
+        resetButton.textContent = `Reset Theme (${6 - clickCount} clicks needed)`;
+    } else {
+        // Clear the specified local storage items
+        localStorage.removeItem('theme');
+        localStorage.removeItem('isBlurred');
+        localStorage.removeItem('tagsVisible');
+        localStorage.removeItem('buttonsHidden');
+        localStorage.removeItem('addImagePosition');
+        localStorage.removeItem('tileSize');
+        localStorage.removeItem('fontweightindex');
+        localStorage.removeItem('selectedFont');
+        localStorage.removeItem('accessTheme');
+        localStorage.removeItem('selectedColorOption');
+        localStorage.removeItem('animationsEnabled');
+
+        // Set fontSize to 16
+        localStorage.setItem('fontSize', 16);
+
+        window.location.reload();
+    }
+});
+
+// Reset counter when "settings-close" or "popup-overlay" are clicked
+settingsClose.addEventListener('click', resetClickCounter);
+popupOverlay.addEventListener('click', resetClickCounter);
 // Load the visibility state from local storage on page load
 window.addEventListener('load', function() {
     const storedVisibility = localStorage.getItem('tagsVisible');
@@ -1591,8 +1641,21 @@ let undoTimer = null;
 
 let isAtEnd =  true;  // Initially, the add-image tile is at the end
 
+// Function to check and clear accessTheme if it's "null"
+function checkAndClearAccessTheme() {
+    // Retrieve the accessTheme value from local storage
+    const accessTheme = localStorage.getItem('accessTheme');
+    
+    // Check if accessTheme is "null"
+    if (accessTheme === "null") {
+        // Remove accessTheme from local storage
+        localStorage.removeItem('accessTheme');
+        console.log("accessTheme was 'null' and has been cleared.");
+    }
+}
 
-
+// Call the function on page load or when needed
+checkAndClearAccessTheme();
 
 
 document.getElementById('openReorderToolButton').addEventListener('click', function() {
@@ -1603,19 +1666,20 @@ document.getElementById('openReorderToolButton').addEventListener('click', funct
         window.open('https://thatoneunoriginal.github.io/backup%20merge.html', '_blank');
     });
 
-document.getElementById('exportButton').addEventListener('click', () => {
-    // Retrieve values from local storage
+    document.getElementById('exportButton').addEventListener('click', () => {
+    // Retrieve values from local storage, defaulting to an empty string if not present
     const settings = {
-        isBlurred: localStorage.getItem('isBlurred'),
-        theme: localStorage.getItem('theme'),
-        addImagePosition: localStorage.getItem('addImagePosition'),
-        selectedColorOption: localStorage.getItem('selectedColorOption'),
-        tileSize: localStorage.getItem('tileSize'),
-        tagsVisible: localStorage.getItem('tagsVisible'),
-        fontSize: localStorage.getItem('fontSize'),
-        fontweightindex: localStorage.getItem('font-weight-index'),
-        accessTheme: localStorage.getItem('accessTheme'),
-        selectedFont: localStorage.getItem('selectedFont')
+        isBlurred: localStorage.getItem('isBlurred') || "",
+        theme: localStorage.getItem('theme') || "",
+        addImagePosition: localStorage.getItem('addImagePosition') || "",
+        selectedColorOption: localStorage.getItem('selectedColorOption') || "",
+        tileSize: localStorage.getItem('tileSize') || "",
+        tagsVisible: localStorage.getItem('tagsVisible') || "",
+        fontSize: localStorage.getItem('fontSize') || "",
+        fontweightindex: localStorage.getItem('fontweightindex') || "", // Corrected from 'font-weight-index'
+        accessTheme: localStorage.getItem('accessTheme') || "",
+        selectedFont: localStorage.getItem('selectedFont') || "",
+        animationsEnabled: localStorage.getItem('animationsEnabled') || ""
     };
 
     // Convert settings to a JSON string
@@ -1636,6 +1700,7 @@ document.getElementById('exportButton').addEventListener('click', () => {
     // Release the blob URL
     URL.revokeObjectURL(url);
 });
+
 
 const elementsToAdjust = document.querySelectorAll(
     'li, p, .theme-toggle button, #tag-filter, #tag-filter-mobile, #export-btn, #import-btn, #tile-size, #colorSelector, #popup-button, #reroll-btn, #local-upload-btn, #url-upload-btn, #url-popup-close, #url-popup-close-url, #local-image-btn, #url-image-btn, #urlURL-popup-close, #url-popup-close-url1, #popup-close, .collapsible, .edit-popup button, #submit-url-btn, #submit-url-btn1, #share-url-popup button, #nsfw-inclusion-popup button, #image-upload-choice-popup button, #tile-creation-popup button, #settings-popup button, #tileSize, #undo-delete-popup button, #popup-close-btn, #new-confirm-image-btn, #confirm-image-btn, #new-cancel-image-btn, #cancel-image-btn, #image-confirmation-popup button, #new-image-confirmation-popup button, .link-button, #close-links-popup, #accessibility-popup button, #theme-dropdown-accessibility, #close-multi-links-popup, #font-dropdown'
@@ -1681,19 +1746,20 @@ document.getElementById('importButton').addEventListener('click', () => {
                 try {
                     const settings = JSON.parse(event.target.result);
                     
-                    // Apply settings to local storage
-                    localStorage.setItem('isBlurred', settings.isBlurred);
-                    localStorage.setItem('theme', settings.theme);
-                    localStorage.setItem('addImagePosition', settings.addImagePosition);
-                    localStorage.setItem('selectedColorOption', settings.selectedColorOption);
-                    localStorage.setItem('tileSize', settings.tileSize);
-                    localStorage.setItem('tagsVisible', settings.tagsVisible);
-                    localStorage.setItem('fontSize', settings.fontSize);
-                    localStorage.setItem('fontweightindex', settings.fontweightindex);
-                    localStorage.setItem('accessTheme', settings.accessTheme);
-                    localStorage.setItem('selectedFont', settings.selectedFont);
+                    // Apply settings to local storage with default values if not present
+                    localStorage.setItem('isBlurred', settings.isBlurred || "");
+                    localStorage.setItem('theme', settings.theme || "");
+                    localStorage.setItem('addImagePosition', settings.addImagePosition || "");
+                    localStorage.setItem('selectedColorOption', settings.selectedColorOption || "");
+                    localStorage.setItem('tileSize', settings.tileSize || "");
+                    localStorage.setItem('tagsVisible', settings.tagsVisible || "");
+                    localStorage.setItem('fontSize', settings.fontSize || ""); // Set to "" if not a number
+                    localStorage.setItem('fontweightindex', settings.fontweightindex || ""); // Set to "" if not a number
+                    localStorage.setItem('accessTheme', settings.accessTheme || "");
+                    localStorage.setItem('selectedFont', settings.selectedFont || "");
+                    localStorage.setItem('animationsEnabled', settings.animationsEnabled || "");
 
-                    alert('Settings imported successfully! Refresh the page to have the changes apply');
+                    window.location.reload(); // Reload page after applying settings
                 } catch (error) {
                     alert('Failed to import settings: ' + error.message);
                 }
@@ -1705,6 +1771,7 @@ document.getElementById('importButton').addEventListener('click', () => {
         }
     }, { once: true }); // Ensure the listener is only added once
 });
+
 
 
 // Function to toggle the position of the add-image tile
@@ -2368,6 +2435,7 @@ themeDropdown.addEventListener('change', function () {
         localStorage.removeItem('accessTheme');
         // Remove any applied theme
         applyTheme();
+        window.location.reload();
     }
 });
 
@@ -3356,12 +3424,13 @@ document.addEventListener('DOMContentLoaded', applyBlurNSFWStatus);
 document.addEventListener('DOMContentLoaded', checkForSpecialTiles);
 
 
-let animationsEnabled = true; // Variable to track animation state
+let animationsEnabled = localStorage.getItem('animationsEnabled') === 'true'; // Retrieve saved state from local storage
 
-// Set the initial button text based on the default state
-document.getElementById('toggle-animations').textContent = 'Toggle Animations Off';
+// Set the initial button text based on the saved state
+document.getElementById('toggle-animations').textContent = animationsEnabled ? 'Toggle Animations Off' : 'Toggle Animations On';
 
-document.getElementById('toggle-animations').addEventListener('click', function() {
+// Function to apply or remove the 'no-animation' class based on the animation state
+function applyAnimationState() {
     const popups = [
         '.popup',
         '.edit-popup',
@@ -3381,16 +3450,32 @@ document.getElementById('toggle-animations').addEventListener('click', function(
     popups.forEach(selector => {
         const elements = document.querySelectorAll(selector);
         elements.forEach(el => {
-            el.classList.toggle('no-animation');
+            if (animationsEnabled) {
+                el.classList.remove('no-animation');
+            } else {
+                el.classList.add('no-animation');
+            }
         });
     });
+}
 
+// Apply the saved animation state on page load
+applyAnimationState();
+
+document.getElementById('toggle-animations').addEventListener('click', function() {
     // Toggle the animation state
     animationsEnabled = !animationsEnabled;
-    
+
+    // Save the new state to local storage
+    localStorage.setItem('animationsEnabled', animationsEnabled);
+
     // Update the button text
     this.textContent = animationsEnabled ? 'Toggle Animations Off' : 'Toggle Animations On';
+
+    // Apply the updated animation state
+    applyAnimationState();
 });
+
 
 
 
@@ -3521,6 +3606,30 @@ window.onload = function() {
         applyFont(savedFont);
     }
 };
+
+window.onload = function() {
+    const keysToCheck = [
+        'isBlurred',
+        'theme',
+        'addImagePosition',
+        'selectedColorOption',
+        'tileSize',
+        'tagsVisible',
+        'fontSize',
+        'fontweightindex',
+        'accessTheme',
+        'selectedFont',
+        'animationsEnabled'
+    ];
+
+    keysToCheck.forEach(key => {
+        const value = localStorage.getItem(key);
+        if (value === "undefined" || value === "NaN") {
+            localStorage.removeItem(key);
+        }
+    });
+};
+
     </script>
 </body>
 </html>
