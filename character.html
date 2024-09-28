@@ -1078,6 +1078,7 @@ img:hover {
             <li>Fixed problem where the platforms field would only appear in the tag filter list after editing the tags of the tile</li>
             <li>Fixed problem where long inputs for either the tags or the platform would cause the tags dropdown to expand in size excessively</li>
             <li>Removed Age from ever appearing on the tag dropdown</li>
+            <li>You can now add multiple platforms to the platform section (previously it would treat the entire input as 1 option)</li>
         </ul>
         <h2>Update 2.0.1</h2>
         <ul>
@@ -2831,11 +2832,19 @@ function updateTileTags(tileElement, tags) {
 function updateAllTags() {
    allTags.clear();
    tiles.forEach(tile => {
+      // Add regular tags
       tile.tags.forEach(tag => allTags.add(tag));
-      if (tile.platform) allTags.add(tile.platform);
+
+      // Check if tile.platform exists
+      if (tile.platform) {
+         // Split the platform by commas, trim whitespace, and add each as a new tag
+         const platforms = tile.platform.split(',').map(p => p.trim()).filter(p => p !== '');
+         platforms.forEach(platform => allTags.add(platform));
+      }
    });
    updateTagFilter();
 }
+
 
 function updateTagFilter() {
     const currentFilter = tagFilter.value;
