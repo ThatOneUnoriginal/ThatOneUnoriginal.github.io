@@ -1071,7 +1071,27 @@ img:hover {
        <p><strong>Should I Export?</strong></p>
        <p>Yes, it's recommended that you export your grid/list any time you make any changes to it. Everything is stored locally on the browser, so if anything happens (cookies reset, change browsers, change devices, etc...) the page will reset to be blank. If this happens, just use the Import button to bring back the characters. With the export/backup file, you'll also be able to use the Reorder Tool and Merge Tool.</p>
     </div>
-    <button class="collapsible">Update Log</button>
+    <button class="collapsible">Update Log (2.0.1 to 3.0)</button>
+    <div class="collapsible-content">
+        <h2>Update 2.0.2</h2>
+        <ul>
+            <li>Fixed problem where the platforms field would only appear in the tag filter list after editing the tags of the tile</li>
+            <li>Fixed problem where long inputs for either the tags or the platform would cause the tags dropdown to expand in size excessively</li>
+            <li>Removed Age from ever appearing on the tag dropdown</li>
+            <li>You can now add multiple platforms to the platform section (previously it would treat the entire input as 1 option)</li>
+        </ul>
+        <h2>Update 2.0.1</h2>
+        <ul>
+            <li>Fixed error where <code>accessTheme</code> would sometimes be set to null (by first checking the value and deleting it if it is detected as null).</li>
+            <li>Added a "Reset Theme" button in the theme settings that will revert/wipe all the theme settings. You need to click 6 times before it triggers (to ensure that it doesn't accidentally get triggered).</li>
+            <li>Instead of prompting users to refresh the page after importing the theme settings, it will now automatically refresh the page.</li>
+            <li>If <code>accessTheme</code> is disabled, the page will now refresh to compensate for an issue where the theme goes to light mode regardless of theme choice. Will see how this can be improved other ways.</li>
+            <li>Fixed problem where <code>animationsEnabled</code> wasn't saved to local storage and wasn't included in the theme export system.</li>
+            <li>Fixed problem where importing the wrong <code>.json</code> file in the import theme prompt would cause the entire site to error out.</li>
+            <li>Added a temporary check if any of the affected theme values have a value of "undefined" and clears the value.</li>
+        </ul>
+    </div>
+    <button class="collapsible">Update Log (1.0 to 2.0)</button>
     <div class="collapsible-content">
         <h2>Update 2.0</h2>
         <ul>
@@ -1084,7 +1104,7 @@ img:hover {
             <li>A new button allows you to disable the floating animations for the popups.</li>
             <li>When importing a file, if the import fails, the tile data currently on the website won't be affected (previously it would wipe the information).</li>
             <li>Cleaned up the CSS.</li>
-          </ul>          
+          </ul> 
         <h2>Update 1.9.1</h2>
         <ul>
          <li>Fixed spelling error exlusively -> exclusively</li>
@@ -1275,15 +1295,17 @@ img:hover {
     
     <!--Tile Creation Popup-->
     <div id="tile-creation-popup">
-       <h3>Create New Tile</h3>
-       <input type="text" id="tile-link" placeholder="Enter a link for this image">
-       <input type="text" id="tile-tags" placeholder="Enter tags separated by commas">
-       <input type="text" id="tile-name" placeholder="Enter character name">
-       <input type="text" id="tile-platform" placeholder="Enter platform">
-       <input type="text" id="tile-age" placeholder="Enter age">
-       <textarea id="tile-description" placeholder="Enter description"></textarea>
-       <button id="create-tile-btn">Create Tile</button>
-       <button id="cancel-tile-btn">Cancel</button>
+        <h3>Create New Tile</h3>
+        <div id="url-input-container"></div>
+        <button id="add-url-btn">+</button>
+        <button id="remove-url-btn">-</button>
+        <input type="text" id="tile-tags" placeholder="Enter tags separated by commas">
+        <input type="text" id="tile-name" placeholder="Enter character name">
+        <input type="text" id="tile-platform" placeholder="Enter platform">
+        <input type="text" id="tile-age" placeholder="Enter age">
+        <textarea id="tile-description" placeholder="Enter description"></textarea>
+        <button id="create-tile-btn">Create Tile</button>
+        <button id="cancel-tile-btn">Cancel</button>
     </div>
     <!--Edit URL Popup-->
     <div id="edit-url-popup" class="edit-popup">
@@ -1301,30 +1323,13 @@ img:hover {
     <!--Edit Info Popup-->
     <div id="edit-info-popup" class="edit-popup">
         <h3>Edit Info</h3>
-        <div style="width:100%">
-           <span class="input-label">Character Name:</span>
-           <input type="text" id="edit-name-input" placeholder="Enter character name">
+        <div id="input-container" style="width:100%">
+
         </div>
-        <div style="width:100%">
-           <span class="input-label">Platform:</span>
-           <input type="text" id="edit-platform-input" placeholder="Enter platform">
-        </div>
-        <div style="width:100%">
-           <span class="input-label">Age:</span>
-           <input type="text" id="edit-age-input" placeholder="Enter age">
-        </div>
-        <div style="width:100%">
-           <span class="input-label">Description:</span>
-           <textarea id="edit-description-input" placeholder="Enter description"></textarea>
-        </div>
-        <div style="width:100%">
-           <span class="input-label">Alt Text:</span>
-           <input type="text" id="edit-alt-input" placeholder="Enter alt text">
-        </div>
+        <button id="add-input-btn">Add New Input</button>
         <button id="save-info-btn">Save</button>
         <button id="cancel-info-btn">Cancel</button>
-     </div>
-     
+    </div>    
     <!--Edit Tags Popup-->
     <div id="edit-tags-popup" class="edit-popup">
        <h3>Edit Tags</h3>
@@ -1369,6 +1374,7 @@ img:hover {
             <input type="file" id="importFile" accept=".json" style="display: none;" />
             <button id="importButton">Import Theme Settings</button>
             </div>
+            <button id="reset-theme-btn">Reset Theme (6 clicks needed)</button>
             <button id="settings-close">Close</button>
     </div>    
     <div id="accessibility-popup" style="overflow-y: auto;">
@@ -1545,11 +1551,49 @@ const starTags = ['⭐', '🌟', '✨', '🌠', '💫', '🤩', '❇️', '✴�
 const nsfwTags = ['18+', 'NSFW', "Hentai", "Porn", "Yaoi", "🔞"]; 
 const hideTagsButton = document.getElementById("hide-tags-button");
 const tags = document.querySelectorAll(".tag");
+const resetButton = document.getElementById('reset-theme-btn');
+const settingsClose = document.getElementById('settings-close');
+const popupOverlay = document.getElementById('popup-overlay');
 
 let tagsVisible = true;
+let clickCount = 0;
 
 
 
+function resetClickCounter() {
+    clickCount = 0;
+    resetButton.textContent = 'Reset Theme (6 clicks needed)';
+}
+
+resetButton.addEventListener('click', function() {
+    clickCount++;
+
+    if (clickCount < 6) {
+        resetButton.textContent = `Reset Theme (${6 - clickCount} clicks needed)`;
+    } else {
+        // Clear the specified local storage items
+        localStorage.removeItem('theme');
+        localStorage.removeItem('isBlurred');
+        localStorage.removeItem('tagsVisible');
+        localStorage.removeItem('buttonsHidden');
+        localStorage.removeItem('addImagePosition');
+        localStorage.removeItem('tileSize');
+        localStorage.removeItem('fontweightindex');
+        localStorage.removeItem('selectedFont');
+        localStorage.removeItem('accessTheme');
+        localStorage.removeItem('selectedColorOption');
+        localStorage.removeItem('animationsEnabled');
+
+        // Set fontSize to 16
+        localStorage.setItem('fontSize', 16);
+
+        window.location.reload();
+    }
+});
+
+// Reset counter when "settings-close" or "popup-overlay" are clicked
+settingsClose.addEventListener('click', resetClickCounter);
+popupOverlay.addEventListener('click', resetClickCounter);
 // Load the visibility state from local storage on page load
 window.addEventListener('load', function() {
     const storedVisibility = localStorage.getItem('tagsVisible');
@@ -1591,8 +1635,21 @@ let undoTimer = null;
 
 let isAtEnd =  true;  // Initially, the add-image tile is at the end
 
+// Function to check and clear accessTheme if it's "null"
+function checkAndClearAccessTheme() {
+    // Retrieve the accessTheme value from local storage
+    const accessTheme = localStorage.getItem('accessTheme');
+    
+    // Check if accessTheme is "null"
+    if (accessTheme === "null") {
+        // Remove accessTheme from local storage
+        localStorage.removeItem('accessTheme');
+        console.log("accessTheme was 'null' and has been cleared.");
+    }
+}
 
-
+// Call the function on page load or when needed
+checkAndClearAccessTheme();
 
 
 document.getElementById('openReorderToolButton').addEventListener('click', function() {
@@ -1603,19 +1660,20 @@ document.getElementById('openReorderToolButton').addEventListener('click', funct
         window.open('https://thatoneunoriginal.github.io/backup%20merge.html', '_blank');
     });
 
-document.getElementById('exportButton').addEventListener('click', () => {
-    // Retrieve values from local storage
+    document.getElementById('exportButton').addEventListener('click', () => {
+    // Retrieve values from local storage, defaulting to an empty string if not present
     const settings = {
-        isBlurred: localStorage.getItem('isBlurred'),
-        theme: localStorage.getItem('theme'),
-        addImagePosition: localStorage.getItem('addImagePosition'),
-        selectedColorOption: localStorage.getItem('selectedColorOption'),
-        tileSize: localStorage.getItem('tileSize'),
-        tagsVisible: localStorage.getItem('tagsVisible'),
-        fontSize: localStorage.getItem('fontSize'),
-        fontweightindex: localStorage.getItem('font-weight-index'),
-        accessTheme: localStorage.getItem('accessTheme'),
-        selectedFont: localStorage.getItem('selectedFont')
+        isBlurred: localStorage.getItem('isBlurred') || "",
+        theme: localStorage.getItem('theme') || "",
+        addImagePosition: localStorage.getItem('addImagePosition') || "",
+        selectedColorOption: localStorage.getItem('selectedColorOption') || "",
+        tileSize: localStorage.getItem('tileSize') || "",
+        tagsVisible: localStorage.getItem('tagsVisible') || "",
+        fontSize: localStorage.getItem('fontSize') || "",
+        fontweightindex: localStorage.getItem('fontweightindex') || "", // Corrected from 'font-weight-index'
+        accessTheme: localStorage.getItem('accessTheme') || "",
+        selectedFont: localStorage.getItem('selectedFont') || "",
+        animationsEnabled: localStorage.getItem('animationsEnabled') || ""
     };
 
     // Convert settings to a JSON string
@@ -1636,6 +1694,7 @@ document.getElementById('exportButton').addEventListener('click', () => {
     // Release the blob URL
     URL.revokeObjectURL(url);
 });
+
 
 const elementsToAdjust = document.querySelectorAll(
     'li, p, .theme-toggle button, #tag-filter, #tag-filter-mobile, #export-btn, #import-btn, #tile-size, #colorSelector, #popup-button, #reroll-btn, #local-upload-btn, #url-upload-btn, #url-popup-close, #url-popup-close-url, #local-image-btn, #url-image-btn, #urlURL-popup-close, #url-popup-close-url1, #popup-close, .collapsible, .edit-popup button, #submit-url-btn, #submit-url-btn1, #share-url-popup button, #nsfw-inclusion-popup button, #image-upload-choice-popup button, #tile-creation-popup button, #settings-popup button, #tileSize, #undo-delete-popup button, #popup-close-btn, #new-confirm-image-btn, #confirm-image-btn, #new-cancel-image-btn, #cancel-image-btn, #image-confirmation-popup button, #new-image-confirmation-popup button, .link-button, #close-links-popup, #accessibility-popup button, #theme-dropdown-accessibility, #close-multi-links-popup, #font-dropdown'
@@ -1681,19 +1740,20 @@ document.getElementById('importButton').addEventListener('click', () => {
                 try {
                     const settings = JSON.parse(event.target.result);
                     
-                    // Apply settings to local storage
-                    localStorage.setItem('isBlurred', settings.isBlurred);
-                    localStorage.setItem('theme', settings.theme);
-                    localStorage.setItem('addImagePosition', settings.addImagePosition);
-                    localStorage.setItem('selectedColorOption', settings.selectedColorOption);
-                    localStorage.setItem('tileSize', settings.tileSize);
-                    localStorage.setItem('tagsVisible', settings.tagsVisible);
-                    localStorage.setItem('fontSize', settings.fontSize);
-                    localStorage.setItem('fontweightindex', settings.fontweightindex);
-                    localStorage.setItem('accessTheme', settings.accessTheme);
-                    localStorage.setItem('selectedFont', settings.selectedFont);
+                    // Apply settings to local storage with default values if not present
+                    localStorage.setItem('isBlurred', settings.isBlurred || "");
+                    localStorage.setItem('theme', settings.theme || "");
+                    localStorage.setItem('addImagePosition', settings.addImagePosition || "");
+                    localStorage.setItem('selectedColorOption', settings.selectedColorOption || "");
+                    localStorage.setItem('tileSize', settings.tileSize || "");
+                    localStorage.setItem('tagsVisible', settings.tagsVisible || "");
+                    localStorage.setItem('fontSize', settings.fontSize || ""); // Set to "" if not a number
+                    localStorage.setItem('fontweightindex', settings.fontweightindex || ""); // Set to "" if not a number
+                    localStorage.setItem('accessTheme', settings.accessTheme || "");
+                    localStorage.setItem('selectedFont', settings.selectedFont || "");
+                    localStorage.setItem('animationsEnabled', settings.animationsEnabled || "");
 
-                    alert('Settings imported successfully! Refresh the page to have the changes apply');
+                    window.location.reload(); // Reload page after applying settings
                 } catch (error) {
                     alert('Failed to import settings: ' + error.message);
                 }
@@ -1705,6 +1765,7 @@ document.getElementById('importButton').addEventListener('click', () => {
         }
     }, { once: true }); // Ensure the listener is only added once
 });
+
 
 
 // Function to toggle the position of the add-image tile
@@ -1957,6 +2018,9 @@ function updateTagFilterMobile() {
     tagFilterMobile.innerHTML = '<option value="all">All Tags</option>';
 
     allTags.forEach(tag => {
+        // Truncate tag if longer than 12 characters
+        const displayTag = tag.length > 12 ? tag.slice(0, 12) + '...' : tag;
+
         // Add star-related tags as "⭐" if any exist
         if (starTags.includes(tag)) {
             if (!Array.from(tagFilterMobile.options).some(option => option.value === '⭐')) {
@@ -1971,13 +2035,13 @@ function updateTagFilterMobile() {
             if (!Array.from(tagFilterMobile.options).some(option => option.value === tag)) {
                 const option = document.createElement('option');
                 option.value = tag;
-                option.textContent = tag;
+                option.textContent = displayTag;  // Apply truncation
                 tagFilterMobile.appendChild(option);
             }
         } else {
             const option = document.createElement('option');
             option.value = tag;
-            option.textContent = tag;
+            option.textContent = displayTag;  // Apply truncation
             tagFilterMobile.appendChild(option);
         }
     });
@@ -1985,6 +2049,7 @@ function updateTagFilterMobile() {
     tagFilterMobile.value = currentFilter;
     filterTilesMobile();
 }
+
 
 function filterTilesMobile() {
     const selectedTag = tagFilterMobile.value;
@@ -1994,8 +2059,7 @@ function filterTilesMobile() {
         // Check if the tile matches the selected tag or its equivalent
         const isMatchingTag = selectedTag === 'all' ||
             tile.tags.includes(selectedTag) ||
-            tile.platform === selectedTag ||
-            tile.age === selectedTag;
+            tile.platform === selectedTag
 
         // Treat ⭐ as matching all star-related tags
         const isStarEquivalent = (selectedTag === '⭐' && tile.tags.some(tag => starTags.includes(tag)));
@@ -2102,134 +2166,223 @@ document.getElementById('popup-overlay1').addEventListener('click', () => {
 });
 
 function showEditUrlPopup(tileData, tileElement) {
-   const popup = document.getElementById('edit-url-popup');
-   const urlInputContainer = document.getElementById('url-input-container');
-   const removeUrlBtn = document.getElementById('remove-url-btn');
+    const popup = document.getElementById('edit-url-popup');
+    const urlInputContainer = document.getElementById('url-input-container');
+    const removeUrlBtn = document.getElementById('remove-url-btn');
 
-   // Clear previous inputs
-   urlInputContainer.innerHTML = '';
+    // Clear previous inputs
+    urlInputContainer.innerHTML = '';
 
-   // Ensure tileData.links is an array, even if it's empty
-   tileData.links = tileData.links || [];
+    // Ensure tileData.links is an array, even if it's empty
+    tileData.links = tileData.links || [];
 
-   // Add at least one input field (show the first input box by default)
-   if (tileData.links.length === 0) {
-      tileData.links.push('');  // Add an empty link if none exists
-   }
+    // If no links exist, add an empty input field
+    if (tileData.links.length === 0) {
+        tileData.links.push('');  // Add an empty link if none exists
+    }
 
-   // Create input fields for each link
-   tileData.links.forEach((link, index) => {
-      const input = document.createElement('input');
-      input.type = 'text';
-      input.value = link;
-      input.placeholder = `Enter URL ${index + 1}`;
-      input.classList.add('url-input');
-      urlInputContainer.appendChild(input);
-   });
+    // Create input fields for each link
+    tileData.links.forEach((link, index) => {
+        const inputContainer = document.createElement('div'); // Create a container for each input
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.value = link; // Set the value to the existing link
+        input.placeholder = `Enter URL ${index + 1}`;
+        input.classList.add('url-input');
+        inputContainer.appendChild(input); // Append input to the container
+        
+        // Add a remove button for individual links
+        const removeLinkBtn = document.createElement('button');
+        removeLinkBtn.textContent = 'Remove';
+        removeLinkBtn.onclick = () => {
+            urlInputContainer.removeChild(inputContainer); // Remove input container
+            tileData.links.splice(index, 1); // Remove the link from tileData.links
+            updateRemoveButtonState(); // Update state after removing
+        };
 
-   // Function to validate URLs
-   function isValidUrl(url) {
-      const urlPattern = /^(https?:\/\/)?([a-z0-9.-]+\.[a-z]{2,})(\/.*)?$/i;
-      return urlPattern.test(url);
-   }
+        inputContainer.appendChild(removeLinkBtn); // Append remove button to the container
+        urlInputContainer.appendChild(inputContainer); // Append container to the URL input container
+    });
 
-   // Enable or disable the remove button based on the number of input fields
-   function updateRemoveButtonState() {
-      removeUrlBtn.disabled = urlInputContainer.childElementCount <= 1;
-   }
-   updateRemoveButtonState(); // Set initial state
+    // Function to validate URLs
+    function isValidUrl(url) {
+        const urlPattern = /^(https?:\/\/)?([a-z0-9.-]+\.[a-z]{2,})(\/.*)?$/i;
+        return urlPattern.test(url);
+    }
 
-   // Handle saving the URLs
-   document.getElementById('save-url-btn').onclick = () => {
-      const urlInputs = document.querySelectorAll('.url-input');
-      const validLinks = [];
+    // Enable or disable the remove button based on the number of input fields
+    function updateRemoveButtonState() {
+        removeUrlBtn.disabled = urlInputContainer.childElementCount <= 1;
+    }
+    updateRemoveButtonState(); // Set initial state
 
-      // Filter out invalid URLs and remove invalid input fields
-      urlInputs.forEach((input, index) => {
-         const urlValue = input.value.trim();
-         if (isValidUrl(urlValue)) {
-            validLinks.push(urlValue);
-         } else {
-            input.remove(); // Remove invalid input field
-         }
-      });
+    // Handle saving the URLs
+    document.getElementById('save-url-btn').onclick = () => {
+        const urlInputs = document.querySelectorAll('.url-input');
+        const validLinks = [];
 
-      // Update tileData.links with valid links only
-      tileData.links = validLinks;
-      tileElement.querySelector('a').href = validLinks[0] || '#'; // Use first valid link, or fallback to '#'
-      saveTiles(); // Assuming saveTiles() saves the updated data
+        // Filter out invalid URLs and remove invalid input fields
+        urlInputs.forEach((input) => {
+            const urlValue = input.value.trim();
+            if (isValidUrl(urlValue)) {
+                validLinks.push(urlValue);
+            } else {
+                input.remove(); // Remove invalid input field
+            }
+        });
 
-      // Hide the popup after saving
-      popup.style.display = 'none';
-      document.getElementById('popup-overlay').style.display = 'none';
-   };
+        // Update tileData.links with valid links only
+        tileData.links = validLinks;
+        tileElement.querySelector('a').href = validLinks[0] || '#'; // Use first valid link, or fallback to '#'
+        saveTiles(); // Assuming saveTiles() saves the updated data
 
-   // Handle cancel button
-   document.getElementById('cancel-url-btn').onclick = () => {
-      popup.style.display = 'none';
-      document.getElementById('popup-overlay').style.display = 'none';
-   };
+        // Hide the popup after saving
+        popup.style.display = 'none';
+        document.getElementById('popup-overlay').style.display = 'none';
+    };
 
-   // Add more URL inputs when '+' is clicked
-   document.getElementById('add-url-btn').onclick = () => {
-      const input = document.createElement('input');
-      input.type = 'text';
-      input.placeholder = `Enter URL ${urlInputContainer.childElementCount + 1}`;
-      input.classList.add('url-input');
-      urlInputContainer.appendChild(input);
-      updateRemoveButtonState(); // Update state after adding
-   };
+    // Handle cancel button
+    document.getElementById('cancel-url-btn').onclick = () => {
+        popup.style.display = 'none';
+        document.getElementById('popup-overlay').style.display = 'none';
+    };
 
-   // Remove the most recent URL input when '-' is clicked
-   removeUrlBtn.onclick = () => {
-      if (urlInputContainer.childElementCount > 1) {
-         urlInputContainer.removeChild(urlInputContainer.lastChild); // Remove the last input
-         tileData.links.pop(); // Remove the last link from the array
-         updateRemoveButtonState(); // Update state after removing
-      }
-   };
+    // Add more URL inputs when '+' is clicked
+    document.getElementById('add-url-btn').onclick = () => {
+        const inputContainer = document.createElement('div'); // Create a container for the new input
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.placeholder = `Enter URL ${urlInputContainer.childElementCount + 1}`;
+        input.classList.add('url-input');
+        inputContainer.appendChild(input);
 
-   // Show the popup
-   popup.style.display = 'flex';
-   document.getElementById('popup-overlay').style.display = 'block';
+        // Add a remove button for the new input
+        const removeLinkBtn = document.createElement('button');
+        removeLinkBtn.textContent = 'Remove';
+        removeLinkBtn.onclick = () => {
+            urlInputContainer.removeChild(inputContainer); // Remove input container
+            updateRemoveButtonState(); // Update state after removing
+        };
+
+        inputContainer.appendChild(removeLinkBtn); // Append remove button to the container
+        urlInputContainer.appendChild(inputContainer); // Append container to the URL input container
+        updateRemoveButtonState(); // Update state after adding
+    };
+
+    // Show the popup
+    popup.style.display = 'flex';
+    document.getElementById('popup-overlay').style.display = 'block';
 }
+
 
 
 function showEditInfoPopup(tileData, tileElement) {
-   const popup = document.getElementById('edit-info-popup');
-   document.getElementById('edit-name-input').value = tileData.name || '';
-   document.getElementById('edit-platform-input').value = tileData.platform || '';
-   document.getElementById('edit-age-input').value = tileData.age || '';
-   document.getElementById('edit-description-input').value = tileData.description || '';
-   document.getElementById('edit-alt-input').value = tileData.alt || ''; // Set the alt text
+    const popup = document.getElementById('edit-info-popup');
+    const inputContainer = document.getElementById('input-container');
 
-   popup.style.display = 'flex';
-   document.getElementById('popup-overlay').style.display = 'block';
+    console.log("showEditInfoPopup called");
 
-   document.getElementById('save-info-btn').onclick = () => {
-      tileData.name = document.getElementById('edit-name-input').value;
-      tileData.platform = document.getElementById('edit-platform-input').value;
-      tileData.age = document.getElementById('edit-age-input').value;
-      tileData.description = document.getElementById('edit-description-input').value;
-      tileData.alt = document.getElementById('edit-alt-input').value; // Save the alt text
+    // Clear the input container before adding new inputs
+    inputContainer.innerHTML = '';
 
-      // Update the alt text of the corresponding <img> element
-      const imgElement = tileElement.querySelector('img'); // Assuming the <img> is a child of the tileElement
-      if (imgElement) {
-         imgElement.alt = tileData.alt; // Change the alt text
-      }
+    // Function to create an input section
+    const createInputSection = (label, value, type, id) => {
+        const inputSection = document.createElement('div');
+        inputSection.className = 'input-section';
+        inputSection.innerHTML = `
+            <span class="input-label">${label}:</span>
+            ${type === 'textarea' ? 
+                `<textarea id="${id}" placeholder="Enter ${label.toLowerCase()}">${value}</textarea>` :
+                `<input type="${type}" id="${id}" placeholder="Enter ${label.toLowerCase()}" value="${value}">`}
+        `;
+        inputContainer.appendChild(inputSection);
+    };
 
-      saveTiles(); // Save to local storage
-      updateTagFilter();
-      popup.style.display = 'none';
-      document.getElementById('popup-overlay').style.display = 'none';
-   };
+    // Add default inputs
+    console.log("Adding default inputs");
+    createInputSection('Character Name', tileData.name || '', 'text', 'edit-name-input');
+    createInputSection('Platform', tileData.platform || '', 'text', 'edit-platform-input');
+    createInputSection('Age', tileData.age || '', 'text', 'edit-age-input');
+    createInputSection('Description', tileData.description || '', 'textarea', 'edit-description-input');
+    createInputSection('Alt Text', tileData.alt || '', 'text', 'edit-alt-input');
 
-   document.getElementById('cancel-info-btn').onclick = () => {
-      popup.style.display = 'none';
-      document.getElementById('popup-overlay').style.display = 'none';
-   };
+    // Populate existing custom inputs if they exist
+    if (tileData.customInputs) {
+        console.log("Adding custom inputs");
+        tileData.customInputs.forEach(customInput => {
+            const customInputSection = document.createElement('div');
+            customInputSection.className = 'input-section';
+            customInputSection.innerHTML = `
+                <span class="input-label">${customInput.label}:</span>
+                <input type="text" placeholder="Enter ${customInput.label.toLowerCase()}" value="${customInput.value}">
+                <button class="remove-input-btn">Remove</button>
+            `;
+            inputContainer.appendChild(customInputSection);
+
+            // Add event listener to the remove button
+            customInputSection.querySelector('.remove-input-btn').onclick = () => {
+                inputContainer.removeChild(customInputSection);
+            };
+        });
+    }
+
+    // Show the popup
+    popup.style.display = 'flex';
+    document.getElementById('popup-overlay').style.display = 'block';
+
+    // Function to save all inputs
+    const saveInputs = () => {
+        const inputs = Array.from(inputContainer.getElementsByClassName('input-section'));
+        tileData.customInputs = inputs.filter(inputSection => !inputSection.querySelector('input, textarea').id)
+            .map(inputSection => {
+                const inputLabel = inputSection.querySelector('.input-label').textContent.replace(':', '');
+                const inputField = inputSection.querySelector('input, textarea');
+                return { label: inputLabel, value: inputField.value };
+            });
+    };
+
+    document.getElementById('add-input-btn').onclick = () => {
+        const newInputSection = document.createElement('div');
+        newInputSection.className = 'input-section';
+        newInputSection.innerHTML = `
+            <span class="input-label">New Input:</span>
+            <input type="text" placeholder="Enter new value">
+            <button class="remove-input-btn">Remove</button>
+        `;
+        inputContainer.appendChild(newInputSection);
+
+        // Add event listener to the remove button
+        newInputSection.querySelector('.remove-input-btn').onclick = () => {
+            inputContainer.removeChild(newInputSection);
+        };
+    };
+
+    document.getElementById('save-info-btn').onclick = () => {
+        tileData.name = document.getElementById('edit-name-input').value;
+        tileData.platform = document.getElementById('edit-platform-input').value;
+        tileData.age = document.getElementById('edit-age-input').value;
+        tileData.description = document.getElementById('edit-description-input').value;
+        tileData.alt = document.getElementById('edit-alt-input').value;
+
+        saveInputs(); // Save all custom inputs
+
+        const imgElement = tileElement.querySelector('img');
+        if (imgElement) {
+            imgElement.alt = tileData.alt; // Change the alt text
+        }
+
+        saveTiles(); // Save to local storage
+        updateAllTags();
+        popup.style.display = 'none';
+        document.getElementById('popup-overlay').style.display = 'none';
+    };
+
+    document.getElementById('cancel-info-btn').onclick = () => {
+        popup.style.display = 'none';
+        document.getElementById('popup-overlay').style.display = 'none';
+    };
 }
+
 
 // Function to show the edit tags popup
 function showEditTagsPopup(tileData, tileElement) {
@@ -2368,6 +2521,7 @@ themeDropdown.addEventListener('change', function () {
         localStorage.removeItem('accessTheme');
         // Remove any applied theme
         applyTheme();
+        window.location.reload();
     }
 });
 
@@ -2381,7 +2535,7 @@ function loadSavedTiles() {
       createImageTile(tile);
       tile.tags.forEach(tag => allTags.add(tag));
    });
-   updateTagFilter();
+   updateAllTags();
 }
 
 // Save tiles
@@ -2390,6 +2544,12 @@ function saveTiles() {
 }
 
 function createImageTile(tileData) {
+    const tile = document.createElement('div');
+    tile.classList.add('image-item');
+
+    // Store the necessary data in the tile (including links and platform)
+    tile.dataset.links = JSON.stringify(tileData.links); // Save links as JSON
+    tile.dataset.platform = tileData.platform || 'N/A';  // Save platform
    const newImageItem = document.createElement('div');
    newImageItem.className = 'image-item';
 
@@ -2438,7 +2598,7 @@ function createImageTile(tileData) {
    newImageItem.querySelector('a').addEventListener('click', (e) => {
       e.preventDefault(); // Prevent default behavior of opening the first link
       if (tileData.links && tileData.links.length > 1) {
-         showLinksPopup(tileData.links);
+         showLinksPopup(tileData.links, tileData.platform);
       } else {
          window.open(tileData.link, '_blank'); // If only one link, open it directly
       }
@@ -2482,13 +2642,16 @@ function createImageTile(tileData) {
 }
 
 
-function showLinksPopup(links) {
+function showLinksPopup(links, platform) {
     document.getElementById('popup-overlay').style.display = 'block';
     const popup = document.getElementById('links-popup');
     const linksList = document.getElementById('links-list');
     linksList.innerHTML = ''; // Clear the existing list
 
-    links.forEach(link => {
+    // Split the platform string by commas to handle multiple platforms
+    const platforms = platform.split(',');
+
+    links.forEach((link, index) => {
         const listItem = document.createElement('li');
         const buttonElement = document.createElement('button');
 
@@ -2503,7 +2666,8 @@ function showLinksPopup(links) {
             .join('.')
             .replace(/^\w/, c => c.toUpperCase()); // Capitalize first letter
 
-        buttonElement.textContent = formattedDomain;
+        // Use the platform name for the button, cycling through if there are multiple
+        buttonElement.textContent = platforms[index] ? platforms[index].trim() : formattedDomain; // Use trimmed platform names
 
         buttonElement.addEventListener('click', () => {
             window.open(link, '_blank');
@@ -2521,6 +2685,7 @@ function showLinksPopup(links) {
         document.getElementById('popup-overlay').style.display = 'none';
     });
 }
+
 
 function updateTileOutline(tileElement, tags) {
    tileElement.classList.remove('nsfw-outline', 'star-outline', 'special-outline');
@@ -2752,18 +2917,28 @@ function updateTileTags(tileElement, tags) {
 function updateAllTags() {
    allTags.clear();
    tiles.forEach(tile => {
+      // Add regular tags
       tile.tags.forEach(tag => allTags.add(tag));
-      if (tile.platform) allTags.add(tile.platform);
-      if (tile.age) allTags.add(tile.age);
+
+      // Check if tile.platform exists
+      if (tile.platform) {
+         // Split the platform by commas, trim whitespace, and add each as a new tag
+         const platforms = tile.platform.split(',').map(p => p.trim()).filter(p => p !== '');
+         platforms.forEach(platform => allTags.add(platform));
+      }
    });
    updateTagFilter();
 }
+
 
 function updateTagFilter() {
     const currentFilter = tagFilter.value;
     tagFilter.innerHTML = '<option value="all">All Tags</option>';
     
     allTags.forEach(tag => {
+        // Truncate tag if longer than 12 characters
+        const displayTag = tag.length > 12 ? tag.slice(0, 12) + '...' : tag;
+
         // Add only the ⭐ option if any star-related tags exist
         if (starTags.includes(tag)) {
             if (!Array.from(tagFilter.options).some(option => option.value === '⭐')) {
@@ -2778,13 +2953,13 @@ function updateTagFilter() {
             if (!Array.from(tagFilter.options).some(option => option.value === tag)) {
                 const option = document.createElement('option');
                 option.value = tag;
-                option.textContent = tag;
+                option.textContent = displayTag;  // Apply truncation
                 tagFilter.appendChild(option);
             }
         } else {
             const option = document.createElement('option');
             option.value = tag;
-            option.textContent = tag;
+            option.textContent = displayTag;  // Apply truncation
             tagFilter.appendChild(option);
         }
     });
@@ -2797,6 +2972,7 @@ function updateTagFilter() {
 }
 
 
+
 // Filter tiles based on selected tag for desktop
 function filterTiles() {
     const selectedTag = tagFilter.value;
@@ -2806,8 +2982,7 @@ function filterTiles() {
         // Check if the tile matches the selected tag or its equivalent
         const isMatchingTag = selectedTag === 'all' ||
             tile.tags.includes(selectedTag) ||
-            tile.platform === selectedTag ||
-            tile.age === selectedTag;
+            tile.platform === selectedTag
 
         // Treat ⭐ as matching all star-related tags
         const isStarEquivalent = (selectedTag === '⭐' && tile.tags.some(tag => starTags.includes(tag)));
@@ -2850,39 +3025,84 @@ function clearTileCreationPopupInputs() {
 function showTileCreationPopup(imageSource) {
     document.getElementById('image-source-popup').style.display = 'none';
     const popup = document.getElementById('tile-creation-popup');
+    const urlInputContainer = document.getElementById('url-input-container');
+    const removeUrlBtn = document.getElementById('remove-url-btn');
     popup.style.display = 'flex';
     document.getElementById('popup-overlay').style.display = 'block';
 
     const createBtn = document.getElementById('create-tile-btn');
     const cancelBtn = document.getElementById('cancel-tile-btn');
 
+    // Ensure at least one input field for URL
+    if (urlInputContainer.childElementCount === 0) {
+        addUrlInputField();
+    }
+
+    // Add a new input field for URLs
+    document.getElementById('add-url-btn').onclick = () => {
+        addUrlInputField();
+        updateRemoveButtonState();
+    };
+
+    // Remove the most recent URL input when '-' is clicked
+    removeUrlBtn.onclick = () => {
+        if (urlInputContainer.childElementCount > 1) {
+            urlInputContainer.removeChild(urlInputContainer.lastChild);
+            updateRemoveButtonState();
+        }
+    };
+
+    // Function to add a new URL input field
+    function addUrlInputField() {
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.placeholder = `Enter URL ${urlInputContainer.childElementCount + 1}`;
+        input.classList.add('url-input');
+        urlInputContainer.appendChild(input);
+    }
+
+    // Function to validate URLs
+    function isValidUrl(url) {
+        const urlPattern = /^(https?:\/\/)?([a-z0-9.-]+\.[a-z]{2,})(\/.*)?$/i;
+        return urlPattern.test(url);
+    }
+
+    // Update remove button state based on input count
+    function updateRemoveButtonState() {
+        removeUrlBtn.disabled = urlInputContainer.childElementCount <= 1;
+    }
+
     createBtn.onclick = () => {
-        const link = document.getElementById('tile-link').value;
+        const urlInputs = document.querySelectorAll('.url-input');
+        const validLinks = [];
+
+        // Validate URLs
+        urlInputs.forEach(input => {
+            const urlValue = input.value.trim();
+            if (isValidUrl(urlValue)) {
+                validLinks.push(urlValue);
+            } else {
+                input.remove(); // Remove invalid input field
+            }
+        });
+
         const tags = document.getElementById('tile-tags').value.split(',')
-            .map(tag => tag.trim()) // Trim whitespace from each tag
-            .filter(tag => tag) // Remove empty tags
+            .map(tag => tag.trim())
+            .filter(tag => tag)
             .filter((tag, index, self) => self.indexOf(tag) === index); // Remove duplicates
         const name = document.getElementById('tile-name').value;
         const platform = document.getElementById('tile-platform').value;
         const age = document.getElementById('tile-age').value;
         const description = document.getElementById('tile-description').value;
 
-        // Check for duplicate links
-        const hasDuplicateLink = tiles.some(tile => tile.link === link);
-        if (hasDuplicateLink) {
-            const userResponse = confirm('A tile with this link already exists. Do you want to create a new tile with this duplicate link?');
-            if (!userResponse) {
-                document.getElementById('popup-overlay').style.display = 'block';
-                return; // Don't create the tile if the user cancels
-            }
-        }
-
-        const newTile = createTileData(imageSource, link, tags, name, platform, age, description);
+        // Create new tile with multiple links
+        const newTile = createTileData(imageSource, validLinks, tags, name, platform, age, description);
         tiles.push(newTile);
         createImageTile(newTile);
         saveTiles();
         updateTagFilter();
 
+        // Close the popup and clear inputs
         popup.style.display = 'none';
         document.getElementById('popup-overlay').style.display = 'none';
         clearTileCreationPopupInputs();
@@ -2894,6 +3114,8 @@ function showTileCreationPopup(imageSource) {
         clearTileCreationPopupInputs(); // Optional: Clear the inputs
     };
 }
+
+
 
 
 
@@ -3038,19 +3260,10 @@ function selectRandomCharacter() {
    updateTileOutline(characterPopup, tileData.tags);
 
    // Check if the tile contains multiple links
-   const viewProfileButton = document.getElementById('popup-button');
-   if (tileData.links && tileData.links.length > 1) {
-      // If multiple links, show the new multi-links popup on button click
-      viewProfileButton.addEventListener('click', function() {
-         showMultiLinksPopup(tileData.links); // Use the new multi-links popup
-      });
-   } else {
-      // If only one link, open it directly
-      viewProfileButton.addEventListener('click', function() {
-         window.open(tileData.links[0], '_blank'); // Open the single link in a new tab
-      });
-   }
-
+  document.getElementById('popup-button').addEventListener('click', function() {
+    const tileData = tiles[characters.indexOf(selectedCharacter)];
+    showMultiLinksPopup(tileData.links, tileData.platform);
+    });
    // Handle blurred image for NSFW content
    if (isBlurred && (tileData.tags.includes('18+') || tileData.tags.includes('NSFW') || tileData.tags.includes('Hentai') || tileData.tags.includes('Porn') || tileData.tags.includes('Yaoi') || tileData.tags.includes('🔞'))) {
       popupImage.classList.add('blurred-image');
@@ -3064,26 +3277,29 @@ function selectRandomCharacter() {
    document.getElementById('popup-overlay').style.display = 'block';
 }
 
-function showMultiLinksPopup(links) {
-    document.getElementById('popup-overlay1').style.display = 'block'; // Ensure overlay is shown
+function showMultiLinksPopup(links, platform) {
+    document.getElementById('popup-overlay1').style.display = 'block';
     const popup = document.getElementById('multi-links-popup');
     const linksList = document.getElementById('multi-links-list');
     linksList.innerHTML = ''; // Clear the existing list
 
-    const selectedButtonColor = getComputedStyle(document.documentElement).getPropertyValue('--button-bg-1'); // Use dynamic color
-    const selectedButtonHoverColor = getComputedStyle(document.documentElement).getPropertyValue('--button-bg-hover-1'); // Use dynamic hover color
+    const selectedButtonColor = getComputedStyle(document.documentElement).getPropertyValue('--button-bg-1').trim(); // Get button color
+    const selectedButtonHoverColor = getComputedStyle(document.documentElement).getPropertyValue('--button-bg-hover-1').trim(); // Get hover color
 
-    links.forEach(link => {
+    // Split the platform string by commas to handle multiple platforms
+    const platforms = platform.split(',');
+
+    links.forEach((link, index) => {
         const listItem = document.createElement('li');
         const buttonElement = document.createElement('button');
 
         // Add a class to the button
         buttonElement.classList.add('link-button');
-
-        // Set inline style for background color
+        
+        // Set button background color dynamically
         buttonElement.style.backgroundColor = selectedButtonColor;
 
-        // Set up hover effect for the button
+        // Hover effects
         buttonElement.addEventListener('mouseenter', () => {
             buttonElement.style.backgroundColor = selectedButtonHoverColor;
         });
@@ -3099,24 +3315,29 @@ function showMultiLinksPopup(links) {
             .join('.')
             .replace(/^\w/, c => c.toUpperCase()); // Capitalize first letter
 
-        buttonElement.textContent = formattedDomain;
+        // Use the platform name for the button, default to the formatted domain if no platform is available
+        buttonElement.textContent = platforms[index] ? platforms[index].trim() : formattedDomain;
 
+        // Button click opens link in a new tab
         buttonElement.addEventListener('click', () => {
-            window.open(link, '_blank'); // Open the link in a new tab
+            window.open(link, '_blank');
         });
 
         listItem.appendChild(buttonElement);
         linksList.appendChild(listItem);
     });
 
-    popup.style.display = 'block'; // Show the new popup
+    popup.style.display = 'block'; // Show the popup
 
     // Close button functionality
     document.getElementById('close-multi-links-popup').addEventListener('click', () => {
         popup.style.display = 'none';
-        document.getElementById('popup-overlay1').style.display = 'none'; // Hide overlay
+        document.getElementById('popup-overlay1').style.display = 'none'; // Hide the overlay
     });
 }
+
+
+
 
 
 
@@ -3356,12 +3577,13 @@ document.addEventListener('DOMContentLoaded', applyBlurNSFWStatus);
 document.addEventListener('DOMContentLoaded', checkForSpecialTiles);
 
 
-let animationsEnabled = true; // Variable to track animation state
+let animationsEnabled = localStorage.getItem('animationsEnabled') === 'true'; // Retrieve saved state from local storage
 
-// Set the initial button text based on the default state
-document.getElementById('toggle-animations').textContent = 'Toggle Animations Off';
+// Set the initial button text based on the saved state
+document.getElementById('toggle-animations').textContent = animationsEnabled ? 'Toggle Animations Off' : 'Toggle Animations On';
 
-document.getElementById('toggle-animations').addEventListener('click', function() {
+// Function to apply or remove the 'no-animation' class based on the animation state
+function applyAnimationState() {
     const popups = [
         '.popup',
         '.edit-popup',
@@ -3381,16 +3603,32 @@ document.getElementById('toggle-animations').addEventListener('click', function(
     popups.forEach(selector => {
         const elements = document.querySelectorAll(selector);
         elements.forEach(el => {
-            el.classList.toggle('no-animation');
+            if (animationsEnabled) {
+                el.classList.remove('no-animation');
+            } else {
+                el.classList.add('no-animation');
+            }
         });
     });
+}
 
+// Apply the saved animation state on page load
+applyAnimationState();
+
+document.getElementById('toggle-animations').addEventListener('click', function() {
     // Toggle the animation state
     animationsEnabled = !animationsEnabled;
-    
+
+    // Save the new state to local storage
+    localStorage.setItem('animationsEnabled', animationsEnabled);
+
     // Update the button text
     this.textContent = animationsEnabled ? 'Toggle Animations Off' : 'Toggle Animations On';
+
+    // Apply the updated animation state
+    applyAnimationState();
 });
+
 
 
 
@@ -3521,6 +3759,30 @@ window.onload = function() {
         applyFont(savedFont);
     }
 };
+
+window.onload = function() {
+    const keysToCheck = [
+        'isBlurred',
+        'theme',
+        'addImagePosition',
+        'selectedColorOption',
+        'tileSize',
+        'tagsVisible',
+        'fontSize',
+        'fontweightindex',
+        'accessTheme',
+        'selectedFont',
+        'animationsEnabled'
+    ];
+
+    keysToCheck.forEach(key => {
+        const value = localStorage.getItem(key);
+        if (value === "undefined" || value === "NaN") {
+            localStorage.removeItem(key);
+        }
+    });
+};
+
     </script>
 </body>
 </html>

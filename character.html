@@ -5,7 +5,6 @@
     <link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/ThatOneUnoriginal/ThatOneUnoriginal.github.io/refs/heads/main/Character%20Tools/Assets/BookmarkingToolIcon.ico">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="pinterest" content="nopin" />
-    <link id="font-link" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto&display=swap">
     <title>Character Bookmarking Tool</title>
     <style>
     
@@ -13,22 +12,17 @@
 #url-popup-close, #url-popup-close-url, #local-image-btn, #url-image-btn, #urlURL-popup-close, #url-popup-close-url1, #popup-close, .collapsible, .edit-popup button,
 #submit-url-btn, #submit-url-btn1, #share-url-popup button, #nsfw-inclusion-popup button, #image-upload-choice-popup button, #tile-creation-popup button, #settings-popup button, 
 #tileSize, #undo-delete-popup button, #popup-close-btn, #new-confirm-image-btn, #confirm-image-btn, #new-cancel-image-btn, #cancel-image-btn, #image-confirmation-popup button,
-#new-image-confirmation-popup button, .link-button, #close-links-popup, #accessibility-popup button, #theme-dropdown-accessibility, #close-multi-links-popup, #font-dropdown{
+#new-image-confirmation-popup button {
 	background-color: var(--button-bg-1);
 }
-
-
 
 #character-popup {
 	width: 90%;
 	max-width: 600px;
 	margin: 0 auto;
+	height: 80%;
 	overflow: scroll;
 }
-
-#edit-description-input, #tile-description {
-    resize: vertical; /* Allow vertical resizing only */
-    overflow: auto; /* Enable scrolling if content overflows */
 }
 
 #popup-content {
@@ -73,6 +67,51 @@
 	cursor: pointer;
 	margin-top: 10px;
     width: 100%
+}
+
+.info-section {
+	background-color: var(--tile-bg);
+	border-radius: 15px;
+	padding: 20px;
+	margin: 20px 0;
+	box-shadow: 0 4px 6px var(--tile-shadow);
+	font-family: 'Arial', sans-serif;
+	line-height: 1.6;
+	max-width: 800px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.info-section h2 {
+	color: var(--button-bg);
+	font-size: 1.8em;
+	margin-bottom: 15px;
+	text-align: center;
+	text-transform: uppercase;
+	letter-spacing: 2px;
+}
+
+.info-section p {
+	margin-bottom: 15px;
+	text-align: justify;
+}
+
+.info-section ul {
+	list-style-type: none;
+	padding-left: 20px;
+}
+
+.info-section li {
+	position: relative;
+	padding-left: 25px;
+	margin-bottom: 10px;
+}
+
+.info-section li::before {
+	content: '✦';
+	position: absolute;
+	left: 0;
+	color: var(--button-bg);
 }
 
 .highlight {
@@ -137,10 +176,10 @@
 	--add-tile-hover: #d0d0d0;
 	--button-color: white;
 	--popup-color: #dfdfdf;
-    --tile-edit: rgba(0, 0, 0, 0.5);
 }
 
 .dark-mode {
+
 	--button-bg-1: #4f8b4f;
 	--button-bg-2: #5f8b4f;
 	--button-bg-3: #6f9b4f;
@@ -173,82 +212,6 @@
 	--add-tile-hover: #666;
 	--button-color: #f4f4f4;
 	--popup-color: #2f2f2f;
-    --tile-edit: rgba(0, 0, 0, 0.5);
-}
-
-.high-contrast-light-mode {
-	--button-bg-1: #3C6E3D; /* Dark green */
-	--button-bg-2: #4C8A3B; /* Medium green */
-	--button-bg-3: #5CAC3A; /* Bright green */
-	--button-bg-4: #3E8FBB; /* Dark blue */
-
-	--button-bg-hover-1: #2A4C2A; /* Darker green */
-	--button-bg-hover-2: #3A6B30; /* Darker medium green */
-	--button-bg-hover-3: #4A9E31; /* Darker bright green */
-	--button-bg-hover-4: #2A6D92; /* Darker blue */
-
-	--nsfw-color-1: #D00000; /* Bright red */
-	--nsfw-color-2: #FF4C4C; /* Light red */
-	--nsfw-color-3: #FF7F7F; /* Pale red */
-	--nsfw-color-4: #FF4C4C; /* Light red */
-
-	--special-outline-color-1: #5D005C; /* Dark purple */
-	--special-outline-color-2: #BF8DFF; /* Light purple */
-	--special-outline-color-3: #A752C4; /* Medium purple */
-	--special-outline-color-4: #A760AF; /* Medium dark purple */
-
-	--star-outline-color-1: #3B7A3B; /* Bright dark green */
-	--star-outline-color-2: #B1A635; /* Bright brown */
-	--star-outline-color-3: #D0D20E; /* Bright yellow */
-	--star-outline-color-4: #7B6E31; /* Bright dark gray */
-
-	--bg-color: #FFFFFF; /* White */
-	--text-color: #222222; /* Very dark gray */
-	--tile-bg: #F9F9F9; /* Light gray */
-	--tile-shadow: rgba(0, 0, 0, 0.15); /* Slightly darker shadow */
-	--add-tile-bg: #D7D7D7; /* Light gray */
-	--add-tile-hover: #C7C7C7; /* Slightly darker gray */
-	--button-color: #FFFFFF; /* White for buttons */
-	--popup-color: #EFEFEF; /* Light gray */
-	--tile-edit: rgb(0, 0, 0); /* Darker edit overlay */
-}
-
-
-.high-contrast-dark-mode {
-	--button-bg-1: #007f00; /* Darker, more distinct green */
-	--button-bg-2: #008000;
-	--button-bg-3: #009000;
-	--button-bg-4: #005f7f; /* More distinct blue-green */
-
-	--button-bg-hover-1: #005f00; /* Even darker hover colors for distinction */
-	--button-bg-hover-2: #006000;
-	--button-bg-hover-3: #007000;
-	--button-bg-hover-4: #004d6f;
-
-	--nsfw-color-1: #FF0000; /* Bright red for high visibility */
-	--nsfw-color-2: #FF3333;
-	--nsfw-color-3: #FF3333;
-	--nsfw-color-4: #FF3333;
-
-	--special-outline-color-1: #BF00FF; /* Brighter purple */
-	--special-outline-color-2: #CF33FF;
-	--special-outline-color-3: #A000BF;
-	--special-outline-color-4: #C400E0;
-
-	--star-outline-color-1: #FFFF00; /* Bright yellow for visibility */
-	--star-outline-color-2: #FFFF66;
-	--star-outline-color-3: #FFFF33;
-	--star-outline-color-4: #E0E000;
-
-	--bg-color: #000; /* Black background for maximum contrast */
-	--text-color: #FFFFFF; /* White text for high contrast */
-	--tile-bg: #222; /* Darker tiles for contrast against background */
-	--tile-shadow: rgba(255, 255, 255, 0.5); /* Light shadow for distinction */
-	--add-tile-bg: #111;
-	--add-tile-hover: #333;
-	--button-color: #FFFFFF; /* White text on buttons for contrast */
-	--popup-color: #000; /* Black popup background for consistency */
-    --tile-edit: rgb(0, 0, 0);
 }
 
 .amoled-mode {
@@ -286,7 +249,6 @@
 	--add-tile-hover: #333;
 	--button-color: #e0e0e0;
 	--popup-color: #111;
-    --tile-edit: rgba(0, 0, 0, 0.5);
 }
 
 body {
@@ -402,7 +364,7 @@ img:hover {
 }
 
 .tile-buttons button {
-	background-color: var(--tile-edit);
+	background-color: rgba(0, 0, 0, 0.5);
 	color: white;
 	border: none;
 	border-radius: 50%;
@@ -426,7 +388,7 @@ img:hover {
 }
 
 .tag {
-	background-color: var(--tile-edit);
+	background-color: rgba(0, 0, 0, 0.5);
 	color: white;
 	padding: 2px 5px;
 	border-radius: 3px;
@@ -473,18 +435,6 @@ img:hover {
 	max-width: 800px;
 	animation: float 5s ease-in-out infinite;
 }
-
-.button-container {
-   display: flex;
-   gap: 10px; /* Adjust the space between the buttons */
-   justify-content: flex-start; /* Align buttons to the left (optional) */
-   width: 100%;
-}
-
-.button-container button {
-   padding: 5px 10px; /* Optional: Adjust button padding */
-}
-
 
 @keyframes float {
 	0% {
@@ -572,7 +522,7 @@ img:hover {
 	border-color: transparent;
 	width: 100%
 }
-#image-confirmation-popup, #new-image-confirmation-popup, #multi-links-popup{
+#image-confirmation-popup, #new-image-confirmation-popup{
     z-index: 1002 !important;
 }
 #popup-close{
@@ -638,16 +588,6 @@ img:hover {
 	border: 5px solid var(--special-outline-color-1);
 }
 
-#links-list li, #multi-links-list li {
-    list-style-type: none;
-    width: 100%;
-}
-#links-list, #multi-links-list{
-    width: 100%;
-    padding-left: 0px;
-}
-
-
 .collapsible {
 	color: var(--button-color);
 	cursor: pointer;
@@ -708,7 +648,7 @@ img:hover {
 	border-radius: 4px;
 }
 
-.edit-popup button, .link-button, #close-links-popup, #close-multi-links-popup {
+.edit-popup button {
 	padding: 10px 20px;
 	color: var(--button-color);
 	border: none;
@@ -775,7 +715,7 @@ img:hover {
 	margin-top: 10px;
 }
 
-#nsfw-inclusion-popup, #settings-popup, .links-popup, #accessibility-popup, .multi-links-popup {
+#nsfw-inclusion-popup, #settings-popup {
 	position: fixed;
 	top: 50%;
 	left: 50%;
@@ -794,7 +734,7 @@ img:hover {
 	animation: float 5s ease-in-out infinite
 }
 
-#nsfw-inclusion-popup button, #settings-popup button, #colorSelector, #tileSize, #accessibility-popup button, #theme-dropdown-accessibility, #font-dropdown{
+#nsfw-inclusion-popup button, #settings-popup button, #colorSelector, #tileSize {
 	width: 100%;
 	margin-top: 10px;
 	padding: 10px 20px;
@@ -832,9 +772,9 @@ img:hover {
 	width: 80%;
 }
 
-#font-dropdown:hover, .theme-toggle button:hover, #tag-filter:hover, #tag-filter-mobile, #export-btn:hover, #import-btn:hover, #image-upload-choice-popup button:hover, #nsfw-inclusion-popup button:hover, #theme-dropdown-accessibility:hover,
+.theme-toggle button:hover, #tag-filter:hover, #tag-filter-mobile, #export-btn:hover, #import-btn:hover, #image-upload-choice-popup button:hover, #nsfw-inclusion-popup button:hover,
 #share-url-popup button:hover, .edit-popup button:hover, .active, .collapsible:hover, #popup-close-btn:hover ,#popup-close:hover, #settings-popup button:hover, #undo-delete-popup button:hover, #new-confirm-image-btn:hover, #confirm-image-btn:hover,
-#new-cancel-image-btn:hover, #cancel-image-btn:hover, #image-confirmation-popup button:hover, #new-image-confirmation-popup button:hover, .link-button:hover, #close-multi-links-popup:hover, #close-links-popup:hover, #accessibility-popup button:hover{
+#new-cancel-image-btn:hover, #cancel-image-btn:hover, #image-confirmation-popup button:hover, #new-image-confirmation-popup button:hover{
 	background-color: var(--button-bg-hover-1)
 }
 
@@ -899,7 +839,7 @@ img:hover {
 }
 
 @media (max-height: 700px) {
-    #settings-popup, #accessibility-popup{
+    #settings-popup{
         height: 80%;
     }
 }
@@ -927,20 +867,20 @@ img:hover {
 		max-height: none;
 	}
 
-	.edit-popup, #share-url-popup, #nsfw-inclusion-popup, #image-popup, #image-source-popup, #url-input-popup, #url-popup, #settings-popup, #tile-creation-popup, #accessibility-popup {
+	.edit-popup, #share-url-popup, #nsfw-inclusion-popup, #image-popup, #image-source-popup, #url-input-popup, #url-popup, #settings-popup, #tile-creation-popup {
 		width: 80%;
 		max-width: none;
 		padding: 15px;
 	}
 
 	.edit-popup textarea, #nsfw-inclusion-popup button, #local-upload-btn, .edit-popup button, #share-url-popup button, #nsfw-inclusion-popup button, .theme-toggle button, 
-    #export-btn, #import-btn, #tile-size, #tag-filter-mobile, #local-upload-btn, #url-upload-btn, #url-popup-close, #colorSelector, #settings-popup button, #tileSize, #accessibility-popup button {
+    #export-btn, #import-btn, #tile-size, #tag-filter-mobile, #local-upload-btn, #url-upload-btn, #url-popup-close, #colorSelector, #settings-popup button, #tileSize {
 		width: 100%;
 		margin-bottom: 15px;
 		padding: 15px;
 	}
     .edit-popup input, #image-url-input1, #image-url-input, #tile-link, #tile-tags, #tile-name, #tile-platform, #tile-age, #tile-description{
-        width: 100% !important;
+        width: 93% !important;
     }
 
 	#share-url-popup input {
@@ -984,28 +924,6 @@ img:hover {
 		display: none;
     }
 }
-.no-animation {
-    animation: none !important;
-    transition: none !important;
-}
-
-.url-input-container {
-   display: flex;
-   flex-wrap: wrap;   /* Allows inputs to wrap within the container */
-   justify-content: center;  /* Centers the inputs horizontally */
-   max-width: 90%;    /* Ensures container does not exceed 90% of its parent */
-   margin: 0 auto;    /* Centers container within the parent */
-   padding: 10px;
-   gap: 10px;         /* Adds space between input elements */
-}
-
-.url-input {
-   flex: 1 1 45%;     /* Ensures inputs take up 45% of the width, allowing two per row */
-   min-width: 200px;  /* Sets a minimum width for inputs to avoid being too small */
-   box-sizing: border-box; /* Ensures padding and borders are included in the width calculation */
-   padding: 8px;
-}
-
     </style>
 </head>
 <body>
@@ -1071,40 +989,8 @@ img:hover {
        <p><strong>Should I Export?</strong></p>
        <p>Yes, it's recommended that you export your grid/list any time you make any changes to it. Everything is stored locally on the browser, so if anything happens (cookies reset, change browsers, change devices, etc...) the page will reset to be blank. If this happens, just use the Import button to bring back the characters. With the export/backup file, you'll also be able to use the Reorder Tool and Merge Tool.</p>
     </div>
-    <button class="collapsible">Update Log (2.0.1 to 3.0)</button>
+    <button class="collapsible">Update Log</button>
     <div class="collapsible-content">
-        <h2>Update 2.0.2</h2>
-        <ul>
-            <li>Fixed problem where the platforms field would only appear in the tag filter list after editing the tags of the tile</li>
-            <li>Fixed problem where long inputs for either the tags or the platform would cause the tags dropdown to expand in size excessively</li>
-            <li>Removed Age from ever appearing on the tag dropdown</li>
-            <li>You can now add multiple platforms to the platform section (previously it would treat the entire input as 1 option)</li>
-        </ul>
-        <h2>Update 2.0.1</h2>
-        <ul>
-            <li>Fixed error where <code>accessTheme</code> would sometimes be set to null (by first checking the value and deleting it if it is detected as null).</li>
-            <li>Added a "Reset Theme" button in the theme settings that will revert/wipe all the theme settings. You need to click 6 times before it triggers (to ensure that it doesn't accidentally get triggered).</li>
-            <li>Instead of prompting users to refresh the page after importing the theme settings, it will now automatically refresh the page.</li>
-            <li>If <code>accessTheme</code> is disabled, the page will now refresh to compensate for an issue where the theme goes to light mode regardless of theme choice. Will see how this can be improved other ways.</li>
-            <li>Fixed problem where <code>animationsEnabled</code> wasn't saved to local storage and wasn't included in the theme export system.</li>
-            <li>Fixed problem where importing the wrong <code>.json</code> file in the import theme prompt would cause the entire site to error out.</li>
-            <li>Added a temporary check if any of the affected theme values have a value of "undefined" and clears the value.</li>
-        </ul>
-    </div>
-    <button class="collapsible">Update Log (1.0 to 2.0)</button>
-    <div class="collapsible-content">
-        <h2>Update 2.0</h2>
-        <ul>
-            <li>You will now be able to include multiple links within a tile. If you have a character that you use on multiple platforms, this should help reduce tile count.</li>
-            <li>You are now able to edit the alt text for the tiles by going to the Edit Info section of a tile once it's been created.</li>
-            <li>A new accessibility settings popup has been added where you can access all the accessibility-related options, including the color blindness options (previously in the theme settings).</li>
-            <li>New "High Contrast Light Mode" and "High Contrast Dark Mode" have been added. These are modified versions of the Light Mode and AMOLED Mode with increased contrast.</li>
-            <li>A new font selector tool has been added that allows you to change between the following fonts: Roboto, Open Sans, Lato, Montserrat, Poppins, Arial, Oswald, Slabo 27px, Source Sans Pro, Nunito, Merriweather, Dancing Script, Lora, Playfair Display, Raleway, Cabin, Rubik, Josefin Sans, Titillium Web, Bebas Neue, Cinzel, Anton, Fjalla One, Quicksand, Karla, Inconsolata, Varela Round, Coda, Zilla Slab, Noto Sans, Fira Sans, Roboto Condensed, Oxygen, Muli, Lobster, Amatic SC, Permanent Marker.</li>
-            <li>A new font size increase and decrease button has been added that dynamically increases or decreases the size of the fonts.</li>
-            <li>A new button allows you to disable the floating animations for the popups.</li>
-            <li>When importing a file, if the import fails, the tile data currently on the website won't be affected (previously it would wipe the information).</li>
-            <li>Cleaned up the CSS.</li>
-          </ul> 
         <h2>Update 1.9.1</h2>
         <ul>
          <li>Fixed spelling error exlusively -> exclusively</li>
@@ -1261,8 +1147,8 @@ img:hover {
        <div class="theme-toggle">
           <button id="export-btn">Export</button>
           <button id="import-btn">Import</button>
+          <button id="toggleButton">Hide Tile Buttons</button>
           <button id="settings-btn">Theme Settings</button>
-          <button id="acccessibility-btn">Accessibility Settings</button>
           <button id="random-character-btn">Select Random Character</button>
           <button id="flush-button">Reset Remembered State</button>     
           <button id="openReorderToolButton">Open Reorder Tool</button>
@@ -1307,44 +1193,33 @@ img:hover {
     </div>
     <!--Edit URL Popup-->
     <div id="edit-url-popup" class="edit-popup">
-        <h3>Edit URL</h3>
-        <div id="url-input-container" style="width: 100%">
-            <input type="text" id="edit-url-input" placeholder="Enter new URL">
-        </div>
-        <div class="button-container">
-            <button id="add-url-btn" alt="Add Another Link">+</button> <!-- Button to add more links -->
-            <button id="remove-url-btn" disabled alt="Remove Most Recently Added Link">-</button> <!-- Button to remove the most recent link -->
-        </div>         
-        <button id="save-url-btn">Save</button>
-        <button id="cancel-url-btn">Cancel</button>
-     </div>     
+       <h3>Edit URL</h3>
+       <input type="text" id="edit-url-input" placeholder="Enter new URL">
+       <button id="save-url-btn">Save</button>
+       <button id="cancel-url-btn">Cancel</button>
+    </div>
     <!--Edit Info Popup-->
     <div id="edit-info-popup" class="edit-popup">
-        <h3>Edit Info</h3>
-        <div style="width:100%">
-           <span class="input-label">Character Name:</span>
-           <input type="text" id="edit-name-input" placeholder="Enter character name">
-        </div>
-        <div style="width:100%">
-           <span class="input-label">Platform:</span>
-           <input type="text" id="edit-platform-input" placeholder="Enter platform">
-        </div>
-        <div style="width:100%">
-           <span class="input-label">Age:</span>
-           <input type="text" id="edit-age-input" placeholder="Enter age">
-        </div>
-        <div style="width:100%">
-           <span class="input-label">Description:</span>
-           <textarea id="edit-description-input" placeholder="Enter description"></textarea>
-        </div>
-        <div style="width:100%">
-           <span class="input-label">Alt Text:</span>
-           <input type="text" id="edit-alt-input" placeholder="Enter alt text">
-        </div>
-        <button id="save-info-btn">Save</button>
-        <button id="cancel-info-btn">Cancel</button>
-     </div>
-     
+       <h3>Edit Info</h3>
+       <div style="width:100%">
+          <span class="input-label">Character Name:</span>
+          <input type="text" id="edit-name-input" placeholder="Enter character name">
+       </div>
+       <div style="width:100%">
+          <span class="input-label">Platform:</span>
+          <input type="text" id="edit-platform-input" placeholder="Enter platform">
+       </div>
+       <div style="width:100%">
+          <span class="input-label">Age:</span>
+          <input type="text" id="edit-age-input" placeholder="Enter age">
+       </div>
+       <div style="width:100%">
+          <span class="input-label">Description:</span>
+          <textarea id="edit-description-input" placeholder="Enter description"></textarea>
+       </div>
+       <button id="save-info-btn">Save</button>
+       <button id="cancel-info-btn">Cancel</button>
+    </div>
     <!--Edit Tags Popup-->
     <div id="edit-tags-popup" class="edit-popup">
        <h3>Edit Tags</h3>
@@ -1374,88 +1249,25 @@ img:hover {
         <h3>Theme Settings</h3>
             <button id="blur-nsfw-btn">Blur NSFW</button>
             <button id="theme-toggle-btn">Light Mode</button>
-            <div class="button-container">
-                <button id="hide-tags-button">Hide Tags</button>
-                <button id="toggleButton">Hide Tile Buttons</button>
-            </div>
+            <button id="hide-tags-button">Hide Tags</button>
             <button id="toggle-position-btn">Move Add Image to Beginning</button>
+            <select id="colorSelector">
+                <option value="original">Original</option>
+                <option value="colour1">Deuteranopia</option>
+                <option value="colour2">Protanopia</option>
+                <option value="colour3">Tritanopia</option> 
+            </select>   
             <select id="tileSize">
                 <option value="small">Small Tiles</option>
                 <option value="medium" selected>Medium Tiles</option>
                 <option value="large">Large Tiles</option>
             </select>
-            <div class="button-container">
             <button id="exportButton">Export Theme Settings</button>
             <input type="file" id="importFile" accept=".json" style="display: none;" />
             <button id="importButton">Import Theme Settings</button>
-            </div>
-            <button id="reset-theme-btn">Reset Theme (6 clicks needed)</button>
             <button id="settings-close">Close</button>
     </div>    
-    <div id="accessibility-popup" style="overflow-y: auto;">
-        <h3>Accessibility Settings</h3>
-        <button id="toggle-animations">Toggle Animations On</button>
-        <div class="button-container">
-            <button id="increase-weight">Increase Font Weight</button>
-            <button id="decrease-weight">Decrease Font Weight</button>           
-        </div>
-        <div class="button-container">
-            <button id="increase-font-btn">Increase Font Size</button>
-            <button id="decrease-font-btn">Decrease Font Size</button>
-        </div>
-        <select id="font-dropdown">
-            <option value="" disabled selected>Select a font</option>
-            <option value="Roboto">Roboto</option>
-            <option value="Open Sans">Open Sans</option>
-            <option value="Lato">Lato</option>
-            <option value="Montserrat">Montserrat</option>
-            <option value="Poppins">Poppins</option>
-            <option value="Arial">Arial</option>
-            <option value="Oswald">Oswald</option>
-            <option value="Slabo 27px">Slabo 27px</option>
-            <option value="Source Sans Pro">Source Sans Pro</option>
-            <option value="Nunito">Nunito</option>
-            <option value="Merriweather">Merriweather</option>
-            <option value="Dancing Script">Dancing Script</option>
-            <option value="Lora">Lora</option>
-            <option value="Playfair Display">Playfair Display</option>
-            <option value="Raleway">Raleway</option>
-            <option value="Cabin">Cabin</option>
-            <option value="Rubik">Rubik</option>
-            <option value="Josefin Sans">Josefin Sans</option>
-            <option value="Titillium Web">Titillium Web</option>
-            <option value="Bebas Neue">Bebas Neue</option>
-            <option value="Cinzel">Cinzel</option>
-            <option value="Anton">Anton</option>
-            <option value="Fjalla One">Fjalla One</option>
-            <option value="Quicksand">Quicksand</option>
-            <option value="Karla">Karla</option>
-            <option value="Inconsolata">Inconsolata</option>
-            <option value="Varela Round">Varela Round</option>
-            <option value="Coda">Coda</option>
-            <option value="Zilla Slab">Zilla Slab</option>
-            <option value="Noto Sans">Noto Sans</option>
-            <option value="Fira Sans">Fira Sans</option>
-            <option value="Roboto Condensed">Roboto Condensed</option>
-            <option value="Oxygen">Oxygen</option>
-            <option value="Muli">Muli</option>
-            <option value="Lobster">Lobster</option>
-            <option value="Amatic SC">Amatic SC</option>
-            <option value="Permanent Marker">Permanent Marker</option>
-        </select>         
-        <select id="theme-dropdown-accessibility">
-            <option value="disabled">High Contrast Theme Disable</option>
-            <option value="high-contrast-dark">High Contrast Dark</option>
-            <option value="high-contrast-light">High Contrast Light</option>
-        </select>        
-        <select id="colorSelector">
-            <option value="original">Original</option>
-            <option value="colour1">Deuteranopia</option>
-            <option value="colour2">Protanopia</option>
-            <option value="colour3">Tritanopia</option> 
-        </select>   
-        <button id="accessibility-settings-close">Close</button>       
-    </div>
+
     <div id="image-popup" class="popup hidden">
           <h3>Select Image Source</h3>
           <button id="local-upload-btn">Upload from Device</button>
@@ -1509,21 +1321,6 @@ img:hover {
     <button id="dismiss-undo">✕</button>
   </div>
 </div>
-<div id="links-popup" class="links-popup">
-    <div class="popup-content">
-        <h3 style="text-align: center;">Select a Link</h3>
-        <ul id="links-list"></ul>
-        <button id="close-links-popup">Close</button>
-    </div>
-</div>
-
-<div id="multi-links-popup" class="multi-links-popup">
-    <div class="popup-content">
-        <h3 style="text-align: center;">Select a Link for the Character</h3>
-        <ul id="multi-links-list"></ul>
-        <button id="close-multi-links-popup">Close</button>
-    </div>
-</div>
 
 <div id="crop-image-popup" class="popup hidden">
         <img id="full-image" src="" alt="Full Image" style="max-width: 100%; position: relative;">
@@ -1566,49 +1363,9 @@ const starTags = ['⭐', '🌟', '✨', '🌠', '💫', '🤩', '❇️', '✴�
 const nsfwTags = ['18+', 'NSFW', "Hentai", "Porn", "Yaoi", "🔞"]; 
 const hideTagsButton = document.getElementById("hide-tags-button");
 const tags = document.querySelectorAll(".tag");
-const resetButton = document.getElementById('reset-theme-btn');
-const settingsClose = document.getElementById('settings-close');
-const popupOverlay = document.getElementById('popup-overlay');
 
 let tagsVisible = true;
-let clickCount = 0;
 
-
-
-function resetClickCounter() {
-    clickCount = 0;
-    resetButton.textContent = 'Reset Theme (6 clicks needed)';
-}
-
-resetButton.addEventListener('click', function() {
-    clickCount++;
-
-    if (clickCount < 6) {
-        resetButton.textContent = `Reset Theme (${6 - clickCount} clicks needed)`;
-    } else {
-        // Clear the specified local storage items
-        localStorage.removeItem('theme');
-        localStorage.removeItem('isBlurred');
-        localStorage.removeItem('tagsVisible');
-        localStorage.removeItem('buttonsHidden');
-        localStorage.removeItem('addImagePosition');
-        localStorage.removeItem('tileSize');
-        localStorage.removeItem('fontweightindex');
-        localStorage.removeItem('selectedFont');
-        localStorage.removeItem('accessTheme');
-        localStorage.removeItem('selectedColorOption');
-        localStorage.removeItem('animationsEnabled');
-
-        // Set fontSize to 16
-        localStorage.setItem('fontSize', 16);
-
-        window.location.reload();
-    }
-});
-
-// Reset counter when "settings-close" or "popup-overlay" are clicked
-settingsClose.addEventListener('click', resetClickCounter);
-popupOverlay.addEventListener('click', resetClickCounter);
 // Load the visibility state from local storage on page load
 window.addEventListener('load', function() {
     const storedVisibility = localStorage.getItem('tagsVisible');
@@ -1650,21 +1407,6 @@ let undoTimer = null;
 
 let isAtEnd =  true;  // Initially, the add-image tile is at the end
 
-// Function to check and clear accessTheme if it's "null"
-function checkAndClearAccessTheme() {
-    // Retrieve the accessTheme value from local storage
-    const accessTheme = localStorage.getItem('accessTheme');
-    
-    // Check if accessTheme is "null"
-    if (accessTheme === "null") {
-        // Remove accessTheme from local storage
-        localStorage.removeItem('accessTheme');
-        console.log("accessTheme was 'null' and has been cleared.");
-    }
-}
-
-// Call the function on page load or when needed
-checkAndClearAccessTheme();
 
 
 document.getElementById('openReorderToolButton').addEventListener('click', function() {
@@ -1675,20 +1417,15 @@ document.getElementById('openReorderToolButton').addEventListener('click', funct
         window.open('https://thatoneunoriginal.github.io/backup%20merge.html', '_blank');
     });
 
-    document.getElementById('exportButton').addEventListener('click', () => {
-    // Retrieve values from local storage, defaulting to an empty string if not present
+document.getElementById('exportButton').addEventListener('click', () => {
+    // Retrieve values from local storage
     const settings = {
-        isBlurred: localStorage.getItem('isBlurred') || "",
-        theme: localStorage.getItem('theme') || "",
-        addImagePosition: localStorage.getItem('addImagePosition') || "",
-        selectedColorOption: localStorage.getItem('selectedColorOption') || "",
-        tileSize: localStorage.getItem('tileSize') || "",
-        tagsVisible: localStorage.getItem('tagsVisible') || "",
-        fontSize: localStorage.getItem('fontSize') || "",
-        fontweightindex: localStorage.getItem('fontweightindex') || "", // Corrected from 'font-weight-index'
-        accessTheme: localStorage.getItem('accessTheme') || "",
-        selectedFont: localStorage.getItem('selectedFont') || "",
-        animationsEnabled: localStorage.getItem('animationsEnabled') || ""
+        isBlurred: localStorage.getItem('isBlurred'),
+        theme: localStorage.getItem('theme'),
+        addImagePosition: localStorage.getItem('addImagePosition'),
+        selectedColorOption: localStorage.getItem('selectedColorOption'),
+        tileSize: localStorage.getItem('tileSize'),
+        tagsVisible: localStorage.getItem('tagsVisible')
     };
 
     // Convert settings to a JSON string
@@ -1710,37 +1447,6 @@ document.getElementById('openReorderToolButton').addEventListener('click', funct
     URL.revokeObjectURL(url);
 });
 
-
-const elementsToAdjust = document.querySelectorAll(
-    'li, p, .theme-toggle button, #tag-filter, #tag-filter-mobile, #export-btn, #import-btn, #tile-size, #colorSelector, #popup-button, #reroll-btn, #local-upload-btn, #url-upload-btn, #url-popup-close, #url-popup-close-url, #local-image-btn, #url-image-btn, #urlURL-popup-close, #url-popup-close-url1, #popup-close, .collapsible, .edit-popup button, #submit-url-btn, #submit-url-btn1, #share-url-popup button, #nsfw-inclusion-popup button, #image-upload-choice-popup button, #tile-creation-popup button, #settings-popup button, #tileSize, #undo-delete-popup button, #popup-close-btn, #new-confirm-image-btn, #confirm-image-btn, #new-cancel-image-btn, #cancel-image-btn, #image-confirmation-popup button, #new-image-confirmation-popup button, .link-button, #close-links-popup, #accessibility-popup button, #theme-dropdown-accessibility, #close-multi-links-popup, #font-dropdown'
-);
-
-let currentFontSize = localStorage.getItem('fontSize') ? parseInt(localStorage.getItem('fontSize')) : 16; // Load from local storage or default to 16
-
-// Apply the saved font size on page load
-adjustFontSize(currentFontSize);
-
-document.getElementById('increase-font-btn').addEventListener('click', () => {
-    currentFontSize += 2; // Increase by 2 pixels
-    adjustFontSize(currentFontSize);
-});
-
-document.getElementById('decrease-font-btn').addEventListener('click', () => {
-    if (currentFontSize > 10) { // Prevent font size from going below 10 pixels
-        currentFontSize -= 2; // Decrease by 2 pixels
-        adjustFontSize(currentFontSize);
-    }
-});
-
-function adjustFontSize(size) {
-    elementsToAdjust.forEach(element => {
-        element.style.fontSize = size + 'px';
-    });
-    localStorage.setItem('fontSize', size); // Save the current font size to local storage
-}
-
-
-
 document.getElementById('importButton').addEventListener('click', () => {
     const fileInput = document.getElementById('importFile');
     fileInput.click(); // Programmatically click the file input
@@ -1755,20 +1461,15 @@ document.getElementById('importButton').addEventListener('click', () => {
                 try {
                     const settings = JSON.parse(event.target.result);
                     
-                    // Apply settings to local storage with default values if not present
-                    localStorage.setItem('isBlurred', settings.isBlurred || "");
-                    localStorage.setItem('theme', settings.theme || "");
-                    localStorage.setItem('addImagePosition', settings.addImagePosition || "");
-                    localStorage.setItem('selectedColorOption', settings.selectedColorOption || "");
-                    localStorage.setItem('tileSize', settings.tileSize || "");
-                    localStorage.setItem('tagsVisible', settings.tagsVisible || "");
-                    localStorage.setItem('fontSize', settings.fontSize || ""); // Set to "" if not a number
-                    localStorage.setItem('fontweightindex', settings.fontweightindex || ""); // Set to "" if not a number
-                    localStorage.setItem('accessTheme', settings.accessTheme || "");
-                    localStorage.setItem('selectedFont', settings.selectedFont || "");
-                    localStorage.setItem('animationsEnabled', settings.animationsEnabled || "");
-
-                    window.location.reload(); // Reload page after applying settings
+                    // Apply settings to local storage
+                    localStorage.setItem('isBlurred', settings.isBlurred);
+                    localStorage.setItem('theme', settings.theme);
+                    localStorage.setItem('addImagePosition', settings.addImagePosition);
+                    localStorage.setItem('selectedColorOption', settings.selectedColorOption);
+                    localStorage.setItem('tileSize', settings.tileSize);
+                    localStorage.setItem('tagsVisible', settings.tagsVisible);
+                    
+                    alert('Settings imported successfully! Refresh the page to have the changes apply');
                 } catch (error) {
                     alert('Failed to import settings: ' + error.message);
                 }
@@ -1780,7 +1481,6 @@ document.getElementById('importButton').addEventListener('click', () => {
         }
     }, { once: true }); // Ensure the listener is only added once
 });
-
 
 
 // Function to toggle the position of the add-image tile
@@ -1840,10 +1540,6 @@ function setTileSize(size) {
 
 
 
-
-
-
-
 // Save the tile size to local storage when the user changes it
 tileSizeSelector.addEventListener('change', function() {
     const selectedSize = this.value;
@@ -1873,7 +1569,6 @@ function hideUndoPopup() {
 }
 
 // Save the selected color option in localStorage
-// Save the selected color option in localStorage
 document.getElementById('colorSelector').addEventListener('change', function() {
     const selectedColorOption = this.value; 
     localStorage.setItem('selectedColorOption', selectedColorOption); // Save to local storage
@@ -1884,7 +1579,11 @@ document.getElementById('colorSelector').addEventListener('change', function() {
 
     // Select all specified buttons
     const buttons = document.querySelectorAll(
-       '#font-dropdown, .li button, .theme-toggle button, #tag-filter, #tag-filter-mobile, #export-btn, #import-btn, #tile-size, #colorSelector, #popup-button, #reroll-btn, #local-upload-btn, #url-upload-btn, #url-popup-close, #url-popup-close-url, #local-image-btn, #url-image-btn, #urlURL-popup-close, #url-popup-close-url1, #popup-close, .collapsible, .edit-popup button, #submit-url-btn, #submit-url-btn1, #share-url-popup button, #nsfw-inclusion-popup button, #image-upload-choice-popup button, #tile-creation-popup button, #settings-popup button, #tileSize, #undo-delete-popup button, #popup-close-btn, #new-confirm-image-btn, #confirm-image-btn, #new-cancel-image-btn, #cancel-image-btn, #image-confirmation-popup button, #new-image-confirmation-popup button, .link-button, #close-links-popup, #accessibility-popup button, #theme-dropdown-accessibility, #close-multi-links-popup'
+        '.theme-toggle button, #tag-filter, #tag-filter-mobile, #export-btn, #import-btn, #tile-size, #colorSelector, #popup-button, #reroll-btn, ' +
+        '#local-upload-btn, #url-upload-btn, #url-popup-close, #url-popup-close-url, #local-image-btn, #url-image-btn, #urlURL-popup-close, ' +
+        '#url-popup-close-url1, #popup-close, .collapsible, .edit-popup button, #submit-url-btn, #submit-url-btn1, #share-url-popup button, ' +
+        '#nsfw-inclusion-popup button, #image-upload-choice-popup button, #settings-popup button, #tileSize, #undo-delete-popup button, .highlight, #popup-close-btn, ' +
+        '#image-confirmation-popup button,#new-image-confirmation-popup button'
     );
 
     // Define colors based on the selected option
@@ -1959,27 +1658,7 @@ document.getElementById('colorSelector').addEventListener('change', function() {
             button.style.backgroundColor = selectedButtonColor;
         });
     });
-
-    // Remove any existing dynamic style tag for the link-button class
-    const existingStyleTag = document.getElementById('link-button-style');
-    if (existingStyleTag) {
-        existingStyleTag.remove();
-    }
-
-    // Create a new style element for the link-button with !important rules
-    const styleTag = document.createElement('style');
-    styleTag.id = 'link-button-style';
-    styleTag.innerHTML = `
-        .link-button {
-            background-color: ${selectedButtonColor} !important;
-        }
-        .link-button:hover {
-            background-color: ${selectedButtonHoverColor} !important;
-        }
-    `;
-    document.head.appendChild(styleTag);
 });
-
 
 // Load the selected color option on page load
 function loadSelectedColorOption() {
@@ -2033,9 +1712,6 @@ function updateTagFilterMobile() {
     tagFilterMobile.innerHTML = '<option value="all">All Tags</option>';
 
     allTags.forEach(tag => {
-        // Truncate tag if longer than 12 characters
-        const displayTag = tag.length > 12 ? tag.slice(0, 12) + '...' : tag;
-
         // Add star-related tags as "⭐" if any exist
         if (starTags.includes(tag)) {
             if (!Array.from(tagFilterMobile.options).some(option => option.value === '⭐')) {
@@ -2050,13 +1726,13 @@ function updateTagFilterMobile() {
             if (!Array.from(tagFilterMobile.options).some(option => option.value === tag)) {
                 const option = document.createElement('option');
                 option.value = tag;
-                option.textContent = displayTag;  // Apply truncation
+                option.textContent = tag;
                 tagFilterMobile.appendChild(option);
             }
         } else {
             const option = document.createElement('option');
             option.value = tag;
-            option.textContent = displayTag;  // Apply truncation
+            option.textContent = tag;
             tagFilterMobile.appendChild(option);
         }
     });
@@ -2064,7 +1740,6 @@ function updateTagFilterMobile() {
     tagFilterMobile.value = currentFilter;
     filterTilesMobile();
 }
-
 
 function filterTilesMobile() {
     const selectedTag = tagFilterMobile.value;
@@ -2074,7 +1749,8 @@ function filterTilesMobile() {
         // Check if the tile matches the selected tag or its equivalent
         const isMatchingTag = selectedTag === 'all' ||
             tile.tags.includes(selectedTag) ||
-            tile.platform === selectedTag
+            tile.platform === selectedTag ||
+            tile.age === selectedTag;
 
         // Treat ⭐ as matching all star-related tags
         const isStarEquivalent = (selectedTag === '⭐' && tile.tags.some(tag => starTags.includes(tag)));
@@ -2153,17 +1829,11 @@ document.getElementById('settings-close').addEventListener('click', () => {
     document.getElementById('popup-overlay').style.display = 'none';
     document.getElementById('settings-popup').style.display = 'none';
 });
-document.getElementById('accessibility-settings-close').addEventListener('click', () => {
-    document.getElementById('accessibility-popup').style.display = 'none';
-    document.getElementById('popup-overlay').style.display = 'none';
-});
 document.getElementById('popup-overlay').addEventListener('click', () => {
    document.getElementById('image-source-popup').style.display = 'none';
    document.getElementById('url-input-popup').style.display = 'none';
    document.getElementById('popup-overlay').style.display = 'none';
-   document.getElementById('links-popup').style.display = 'none';
    document.getElementById('settings-popup').style.display = 'none';
-   document.getElementById('accessibility-popup').style.display = 'none';
    document.getElementById('edit-url-popup').style.display = 'none';
    document.getElementById('tile-creation-popup').style.display = 'none';
    document.getElementById('character-popup').style.display = 'none';
@@ -2175,102 +1845,43 @@ document.getElementById('popup-overlay').addEventListener('click', () => {
 
 document.getElementById('popup-overlay1').addEventListener('click', () => {
     document.getElementById('popup-overlay1').style.display = 'none';
-    document.getElementById('multi-links-popup').style.display = 'none';
     document.getElementById('new-image-confirmation-popup').style.display = 'none';
     document.getElementById('image-confirmation-popup').style.display= 'none';
 });
 
 function showEditUrlPopup(tileData, tileElement) {
    const popup = document.getElementById('edit-url-popup');
-   const urlInputContainer = document.getElementById('url-input-container');
-   const removeUrlBtn = document.getElementById('remove-url-btn');
-
-   // Clear previous inputs
-   urlInputContainer.innerHTML = '';
-
-   // Ensure tileData.links is an array, even if it's empty
-   tileData.links = tileData.links || [];
-
-   // Add at least one input field (show the first input box by default)
-   if (tileData.links.length === 0) {
-      tileData.links.push('');  // Add an empty link if none exists
-   }
-
-   // Create input fields for each link
-   tileData.links.forEach((link, index) => {
-      const input = document.createElement('input');
-      input.type = 'text';
-      input.value = link;
-      input.placeholder = `Enter URL ${index + 1}`;
-      input.classList.add('url-input');
-      urlInputContainer.appendChild(input);
-   });
-
-   // Function to validate URLs
-   function isValidUrl(url) {
-      const urlPattern = /^(https?:\/\/)?([a-z0-9.-]+\.[a-z]{2,})(\/.*)?$/i;
-      return urlPattern.test(url);
-   }
-
-   // Enable or disable the remove button based on the number of input fields
-   function updateRemoveButtonState() {
-      removeUrlBtn.disabled = urlInputContainer.childElementCount <= 1;
-   }
-   updateRemoveButtonState(); // Set initial state
-
-   // Handle saving the URLs
+   const urlInput = document.getElementById('edit-url-input');
+   urlInput.value = tileData.link;
+   popup.style.display = 'flex';
+   document.getElementById('popup-overlay').style.display = 'block';
    document.getElementById('save-url-btn').onclick = () => {
-      const urlInputs = document.querySelectorAll('.url-input');
-      const validLinks = [];
-
-      // Filter out invalid URLs and remove invalid input fields
-      urlInputs.forEach((input, index) => {
-         const urlValue = input.value.trim();
-         if (isValidUrl(urlValue)) {
-            validLinks.push(urlValue);
-         } else {
-            input.remove(); // Remove invalid input field
-         }
-      });
-
-      // Update tileData.links with valid links only
-      tileData.links = validLinks;
-      tileElement.querySelector('a').href = validLinks[0] || '#'; // Use first valid link, or fallback to '#'
-      saveTiles(); // Assuming saveTiles() saves the updated data
-
-      // Hide the popup after saving
+      tileData.link = urlInput.value;
+      tileElement.querySelector('a').href = tileData.link;
+      saveTiles();
       popup.style.display = 'none';
       document.getElementById('popup-overlay').style.display = 'none';
    };
 
-   // Handle cancel button
    document.getElementById('cancel-url-btn').onclick = () => {
       popup.style.display = 'none';
       document.getElementById('popup-overlay').style.display = 'none';
    };
+}
 
-   // Add more URL inputs when '+' is clicked
-   document.getElementById('add-url-btn').onclick = () => {
-      const input = document.createElement('input');
-      input.type = 'text';
-      input.placeholder = `Enter URL ${urlInputContainer.childElementCount + 1}`;
-      input.classList.add('url-input');
-      urlInputContainer.appendChild(input);
-      updateRemoveButtonState(); // Update state after adding
-   };
+function filterTilesByPlatform() {
+   const selectedPlatform = document.getElementById('platform-filter').value;
+   const tiles = document.querySelectorAll('.tile'); // Assuming .tile is the class for each tile
 
-   // Remove the most recent URL input when '-' is clicked
-   removeUrlBtn.onclick = () => {
-      if (urlInputContainer.childElementCount > 1) {
-         urlInputContainer.removeChild(urlInputContainer.lastChild); // Remove the last input
-         tileData.links.pop(); // Remove the last link from the array
-         updateRemoveButtonState(); // Update state after removing
+   tiles.forEach(tile => {
+      const platform = tile.getAttribute('data-platform'); // Assuming platform info is stored in a data attribute
+
+      if (selectedPlatform === 'all' || platform === selectedPlatform) {
+         tile.style.display = 'block'; // Show the tile
+      } else {
+         tile.style.display = 'none'; // Hide the tile
       }
-   };
-
-   // Show the popup
-   popup.style.display = 'flex';
-   document.getElementById('popup-overlay').style.display = 'block';
+   });
 }
 
 
@@ -2280,33 +1891,26 @@ function showEditInfoPopup(tileData, tileElement) {
    document.getElementById('edit-platform-input').value = tileData.platform || '';
    document.getElementById('edit-age-input').value = tileData.age || '';
    document.getElementById('edit-description-input').value = tileData.description || '';
-   document.getElementById('edit-alt-input').value = tileData.alt || ''; // Set the alt text
-
    popup.style.display = 'flex';
    document.getElementById('popup-overlay').style.display = 'block';
+
 
    document.getElementById('save-info-btn').onclick = () => {
       tileData.name = document.getElementById('edit-name-input').value;
       tileData.platform = document.getElementById('edit-platform-input').value;
       tileData.age = document.getElementById('edit-age-input').value;
       tileData.description = document.getElementById('edit-description-input').value;
-      tileData.alt = document.getElementById('edit-alt-input').value; // Save the alt text
-
-      // Update the alt text of the corresponding <img> element
-      const imgElement = tileElement.querySelector('img'); // Assuming the <img> is a child of the tileElement
-      if (imgElement) {
-         imgElement.alt = tileData.alt; // Change the alt text
-      }
-
-      saveTiles(); // Save to local storage
-      updateAllTags();
+      saveTiles();
+      updateTagFilter();
       popup.style.display = 'none';
       document.getElementById('popup-overlay').style.display = 'none';
+
    };
 
    document.getElementById('cancel-info-btn').onclick = () => {
       popup.style.display = 'none';
       document.getElementById('popup-overlay').style.display = 'none';
+
    };
 }
 
@@ -2339,6 +1943,8 @@ function showEditTagsPopup(tileData, tileElement) {
    };
 }
 
+
+
 // Theme management
 function setTheme(theme) {
    document.body.className = theme;
@@ -2359,14 +1965,22 @@ for (i = 0; i < coll.length; i++) {
    });
 }
 
+function applyStoredTheme() {
+   const storedTheme = localStorage.getItem('theme') || '';
+   setTheme(storedTheme);
+}
+
 const themeToggleBtn = document.getElementById('theme-toggle-btn');
 
 const themes = ['', 'dark-mode', 'amoled-mode'];
 let currentThemeIndex = 0;  // Index to track the current theme
 
+// Function to apply the theme
 function setTheme(theme) {
-    const accessTheme = localStorage.getItem('accessTheme');
-    // Save the theme value in local storage
+    // Apply the theme to the body or wherever it’s needed
+    document.body.className = theme;
+
+    // Save the theme in local storage
     localStorage.setItem('theme', theme);
 
     // Update the button text based on the theme
@@ -2377,11 +1991,6 @@ function setTheme(theme) {
     } else if (theme === 'amoled-mode') {
         themeToggleBtn.textContent = 'Amoled Mode';
     }
-
-    // Apply the theme only if accessTheme has no value
-    if (!accessTheme) {
-        document.body.className = theme;
-    }
 }
 
 // Function to cycle through the themes
@@ -2390,69 +1999,19 @@ function toggleTheme() {
     currentThemeIndex = (currentThemeIndex + 1) % themes.length;
     setTheme(themes[currentThemeIndex]);
 }
-// Apply theme on load
-applyStoredTheme();
+
 // Function to apply the stored theme on page load
 function applyStoredTheme() {
-    const accessTheme = localStorage.getItem('accessTheme');
     const storedTheme = localStorage.getItem('theme') || '';
-
-    // Set the theme based on the stored value
-    setTheme(storedTheme); 
-        applyTheme(); // Apply the accessTheme
+    currentThemeIndex = themes.indexOf(storedTheme);
+    setTheme(storedTheme);
 }
-
 
 // Add event listener to the button
 themeToggleBtn.addEventListener('click', toggleTheme);
 
-
-
-
-// Get the select element
-const themeDropdown = document.getElementById('theme-dropdown-accessibility');
-
-
-// Function to apply the theme based on the value in local storage
-function applyTheme() {
-    const theme = localStorage.getItem('accessTheme');
-
-    // Remove existing theme classes
-    document.body.classList.remove('high-contrast-dark-mode', 'high-contrast-light-mode');
-
-    // Add the new theme class if applicable
-    if (theme === 'high-contrast-dark-mode') {
-        document.body.classList.add('high-contrast-dark-mode');
-    } else if (theme === 'high-contrast-light-mode') {
-        document.body.classList.add('high-contrast-light-mode');
-    }
-}
-
-// Load the theme from local storage on page load
-themeDropdown.addEventListener('change', function () {
-    const selectedValue = this.value;
-
-    // Check if the selected value is not "disabled"
-    if (selectedValue !== 'disabled') {
-        const accessTheme = selectedValue === 'high-contrast-dark' ? 'high-contrast-dark-mode' : 'high-contrast-light-mode';
-
-        // Store the value in local storage
-        
-        localStorage.setItem('accessTheme', accessTheme);
-
-        // Apply the theme
-        applyTheme();
-    } else {
-        // Remove the item from storage if "disabled" is selected
-        localStorage.removeItem('accessTheme');
-        // Remove any applied theme
-        applyTheme();
-        window.location.reload();
-    }
-});
-
-
-
+// Apply theme on load
+applyStoredTheme();
 
 // Load saved tiles
 function loadSavedTiles() {
@@ -2461,7 +2020,7 @@ function loadSavedTiles() {
       createImageTile(tile);
       tile.tags.forEach(tag => allTags.add(tag));
    });
-   updateAllTags();
+   updateTagFilter();
 }
 
 // Save tiles
@@ -2490,71 +2049,62 @@ function createImageTile(tileData) {
 
    newImageItem.innerHTML = `
                 <a href="${tileData.link}" target="_blank" class="image-container">
-                    <img src="${tileData.imageData}" alt="${tileData.alt || 'User uploaded image'}"> <!-- Set alt text -->
+                    <img src="${tileData.imageData}" alt="User uploaded image">
                 </a>
                 <div class="tile-buttons">
-                    <button class="edit-image-btn" title="Edit Image" alt="Edit Image Button">🖼️</button>
-                    <button class="edit-url-btn" title="Edit URL" alt="Edit URL Button">🔗</button>
-                    <button class="edit-tags-btn" title="Edit Tags" alt="Edit Tags Button">🏷️</button>
-                    <button class="edit-info-btn" title="Edit Info" alt="Edit Character Information Button">ℹ️</button>
-                    <button class="share-btn" title="Share" alt="Share URL Button">📤</button>
-                    <button class="delete-btn" title="Delete" alt="Delete Tile">×</button>
+                    <button class="edit-image-btn" title="Edit Image">🖼️</button>
+                    <button class="edit-url-btn" title="Edit URL">🔗</button>
+                    <button class="edit-tags-btn" title="Edit Tags">🏷️</button>
+                    <button class="edit-info-btn" title="Edit Info">ℹ️</button>
+                    <button class="share-btn" title="Share">📤</button>
+                    <button class="delete-btn" title="Delete">×</button>
                 </div>
                 <div class="tags">
                     ${tileData.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
                 </div>
             `;
 
+   // Find the last tile that's not the add-image button
    const tiles = Array.from(imageGrid.children);
    const lastTile = tiles.filter(tile => !tile.classList.contains('add-image')).pop();
 
+   // Insert the new tile after the last existing tile, or at the beginning if there are no tiles
    if (lastTile) {
       imageGrid.insertBefore(newImageItem, lastTile.nextSibling);
    } else {
       imageGrid.insertBefore(newImageItem, imageGrid.firstChild);
    }
 
-   // Clicking the tile itself
-   newImageItem.querySelector('a').addEventListener('click', (e) => {
-      e.preventDefault(); // Prevent default behavior of opening the first link
-      if (tileData.links && tileData.links.length > 1) {
-         showLinksPopup(tileData.links);
-      } else {
-         window.open(tileData.link, '_blank'); // If only one link, open it directly
-      }
-   });
-
-   // Other buttons (edit image, tags, etc.) stay the same...
-
+   // Add edit image functionality
    newImageItem.querySelector('.edit-image-btn').addEventListener('click', (e) => {
       e.stopPropagation();
       editImage(tileData, newImageItem);
    });
 
+   // Add edit tags functionality
    newImageItem.querySelector('.edit-tags-btn').addEventListener('click', (e) => {
       e.stopPropagation();
       showEditTagsPopup(tileData, newImageItem);
    });
 
+   // Add share functionality
    newImageItem.querySelector('.share-btn').addEventListener('click', (e) => {
       e.stopPropagation();
       shareTile(tileData);
    });
 
+   // Add delete functionality
    newImageItem.querySelector('.delete-btn').addEventListener('click', (e) => {
       e.stopPropagation();
       deleteTile(tileData, newImageItem);
    });
 
+   // Add edit URL functionality
    newImageItem.querySelector('.edit-url-btn').addEventListener('click', (e) => {
       e.stopPropagation();
-      if (tileData.links && tileData.links.length > 1) {
-         showEditUrlPopup(tileData, newImageItem);
-      } else {
-         showEditUrlPopup(tileData, newImageItem);
-      }
+      showEditUrlPopup(tileData, newImageItem);
    });
-
+   // Add edit info functionality
    newImageItem.querySelector('.edit-info-btn').addEventListener('click', (e) => {
       e.stopPropagation();
       showEditInfoPopup(tileData, newImageItem);
@@ -2562,45 +2112,6 @@ function createImageTile(tileData) {
 }
 
 
-function showLinksPopup(links) {
-    document.getElementById('popup-overlay').style.display = 'block';
-    const popup = document.getElementById('links-popup');
-    const linksList = document.getElementById('links-list');
-    linksList.innerHTML = ''; // Clear the existing list
-
-    links.forEach(link => {
-        const listItem = document.createElement('li');
-        const buttonElement = document.createElement('button');
-
-        // Add a class to the button
-        buttonElement.classList.add('link-button');
-
-        // Extract domain name from URL
-        const domain = (new URL(link)).hostname;
-        const formattedDomain = domain
-            .split('.')
-            .slice(-2) // Get the last two parts (e.g., 'example.com')
-            .join('.')
-            .replace(/^\w/, c => c.toUpperCase()); // Capitalize first letter
-
-        buttonElement.textContent = formattedDomain;
-
-        buttonElement.addEventListener('click', () => {
-            window.open(link, '_blank');
-        });
-
-        listItem.appendChild(buttonElement);
-        linksList.appendChild(listItem);
-    });
-
-    popup.style.display = 'block';
-
-    // Close button functionality
-    document.getElementById('close-links-popup').addEventListener('click', () => {
-        popup.style.display = 'none';
-        document.getElementById('popup-overlay').style.display = 'none';
-    });
-}
 
 function updateTileOutline(tileElement, tags) {
    tileElement.classList.remove('nsfw-outline', 'star-outline', 'special-outline');
@@ -2832,28 +2343,18 @@ function updateTileTags(tileElement, tags) {
 function updateAllTags() {
    allTags.clear();
    tiles.forEach(tile => {
-      // Add regular tags
       tile.tags.forEach(tag => allTags.add(tag));
-
-      // Check if tile.platform exists
-      if (tile.platform) {
-         // Split the platform by commas, trim whitespace, and add each as a new tag
-         const platforms = tile.platform.split(',').map(p => p.trim()).filter(p => p !== '');
-         platforms.forEach(platform => allTags.add(platform));
-      }
+      if (tile.platform) allTags.add(tile.platform);
+      if (tile.age) allTags.add(tile.age);
    });
    updateTagFilter();
 }
-
 
 function updateTagFilter() {
     const currentFilter = tagFilter.value;
     tagFilter.innerHTML = '<option value="all">All Tags</option>';
     
     allTags.forEach(tag => {
-        // Truncate tag if longer than 12 characters
-        const displayTag = tag.length > 12 ? tag.slice(0, 12) + '...' : tag;
-
         // Add only the ⭐ option if any star-related tags exist
         if (starTags.includes(tag)) {
             if (!Array.from(tagFilter.options).some(option => option.value === '⭐')) {
@@ -2868,13 +2369,13 @@ function updateTagFilter() {
             if (!Array.from(tagFilter.options).some(option => option.value === tag)) {
                 const option = document.createElement('option');
                 option.value = tag;
-                option.textContent = displayTag;  // Apply truncation
+                option.textContent = tag;
                 tagFilter.appendChild(option);
             }
         } else {
             const option = document.createElement('option');
             option.value = tag;
-            option.textContent = displayTag;  // Apply truncation
+            option.textContent = tag;
             tagFilter.appendChild(option);
         }
     });
@@ -2887,7 +2388,6 @@ function updateTagFilter() {
 }
 
 
-
 // Filter tiles based on selected tag for desktop
 function filterTiles() {
     const selectedTag = tagFilter.value;
@@ -2897,7 +2397,8 @@ function filterTiles() {
         // Check if the tile matches the selected tag or its equivalent
         const isMatchingTag = selectedTag === 'all' ||
             tile.tags.includes(selectedTag) ||
-            tile.platform === selectedTag
+            tile.platform === selectedTag ||
+            tile.age === selectedTag;
 
         // Treat ⭐ as matching all star-related tags
         const isStarEquivalent = (selectedTag === '⭐' && tile.tags.some(tag => starTags.includes(tag)));
@@ -3012,36 +2513,25 @@ importFileInput.addEventListener('change', (event) => {
    if (file) {
       const reader = new FileReader();
       reader.onload = (e) => {
-         const previousTiles = [...tiles]; // Save current tiles state before import
          try {
             const importedTiles = JSON.parse(e.target.result);
             tiles = importedTiles;
-            imageGrid.innerHTML = '';  // Clear the grid
-            imageGrid.appendChild(addImageButton);  // Re-append the 'add image' button
+            imageGrid.innerHTML = '';
+            imageGrid.appendChild(addImageButton);
             tiles.forEach(tile => {
                createImageTile(tile);
                tile.tags.forEach(tag => allTags.add(tag));
             });
-            saveTiles();  // Save the new imported tiles
-            updateTagFilter();  // Update tag filters
+            saveTiles();
+            updateTagFilter();
          } catch (error) {
             console.error('Error parsing imported data:', error);
             alert('Error importing data. Please make sure the file is in the correct format.');
-
-            // Restore the previous tiles if there's an error
-            tiles = previousTiles;
-            imageGrid.innerHTML = '';  // Clear the grid again
-            imageGrid.appendChild(addImageButton);  // Re-append the 'add image' button
-            tiles.forEach(tile => {
-               createImageTile(tile);
-               tile.tags.forEach(tag => allTags.add(tag));
-            });
          }
       };
       reader.readAsText(file);
    }
 });
-
 // Function to toggle blur on NSFW content
 function toggleBlurNSFW() {
    const nsfwTags = ['18+', 'NSFW', "Hentai", "Porn", "Yaoi", "🔞"]; // Tags considered NSFW
@@ -3070,18 +2560,12 @@ blurNSFWBtn.addEventListener('click', toggleBlurNSFW);
 // Load saved tiles on page load
 loadSavedTiles();
 const randomCharacterBtn = document.getElementById('random-character-btn');
-const settingsBtn = document.getElementById('settings-btn');
-const accessibilityBtn = document.getElementById('acccessibility-btn');
+const settingsBtn = document.getElementById('settings-btn')
 const characterPopup = document.getElementById('character-popup');
 const popupClose = document.getElementById('popup-close');
 const popupCloseBtn = document.getElementById('popup-close-btn');
 const popupImage = document.getElementById('popup-image');
 const popupTags = document.getElementById('popup-tags');
-
-accessibilityBtn.addEventListener('click', () => {
-    document.getElementById('accessibility-popup').style.display = 'flex';
-    document.getElementById('popup-overlay').style.display = 'block';
-});
 
 settingsBtn.addEventListener('click', () => {
       document.getElementById('settings-popup').style.display = 'flex';
@@ -3093,15 +2577,13 @@ popupClose.addEventListener('click', closePopup);
 popupCloseBtn.addEventListener('click', closePopup);
 
 // Function to pick a random character
-// Function to pick a random character
-// Function to pick a random character
 function selectRandomCharacter() {
+
    const characters = Array.from(document.querySelectorAll('.image-item:not(.add-image)'));
    if (characters.length === 0) {
       alert('No characters available.');
       return;
    }
-
    let availableCharacters = includeNSFW ? characters : characters.filter(char => {
       const tags = Array.from(char.querySelectorAll('.tag')).map(tag => tag.textContent);
       return !tags.some(tag => ['18+', 'NSFW', 'Porn', 'Hentai', 'Yaoi', '🔞'].includes(tag));
@@ -3109,107 +2591,40 @@ function selectRandomCharacter() {
 
    if (availableCharacters.length === 0) {
       document.getElementById('popup-overlay').style.display = 'none';
-      alert('No characters available with current NSFW settings. If you checked the box for it to remember which option you chose, click the "Reset Remembered State" to get the prompt back up.');
+      alert('No characters available with current NSFW settings. If you checked the box for it to remembner which option you chose, click the "Reset Remembered State" to get the prompt back up');
       return;
+
    }
 
    const randomIndex = Math.floor(Math.random() * availableCharacters.length);
    const selectedCharacter = availableCharacters[randomIndex];
    const tileData = tiles[characters.indexOf(selectedCharacter)];
 
-   // Populate the character popup with character data
    document.getElementById('popup-image').src = tileData.imageData;
    document.getElementById('popup-name').textContent = tileData.name || 'Unknown';
    document.getElementById('popup-platform').textContent = `Platform: ${tileData.platform || 'N/A'}`;
    document.getElementById('popup-age').textContent = `Age: ${tileData.age || 'N/A'}`;
    document.getElementById('popup-description').textContent = tileData.description || 'No description available.';
    document.getElementById('popup-tags').textContent = `Tags: ${tileData.tags.join(', ')}`;
+   document.getElementById('popup-button').addEventListener('click', function() {
+    const tileData = tiles[characters.indexOf(selectedCharacter)];
+    window.open(tileData.link, '_blank'); // Open link in new tab
+    });
+
 
    updateTileOutline(characterPopup, tileData.tags);
 
-   // Check if the tile contains multiple links
-   const viewProfileButton = document.getElementById('popup-button');
-   if (tileData.links && tileData.links.length > 1) {
-      // If multiple links, show the new multi-links popup on button click
-      viewProfileButton.addEventListener('click', function() {
-         showMultiLinksPopup(tileData.links); // Use the new multi-links popup
-      });
-   } else {
-      // If only one link, open it directly
-      viewProfileButton.addEventListener('click', function() {
-         window.open(tileData.links[0], '_blank'); // Open the single link in a new tab
-      });
-   }
-
-   // Handle blurred image for NSFW content
    if (isBlurred && (tileData.tags.includes('18+') || tileData.tags.includes('NSFW') || tileData.tags.includes('Hentai') || tileData.tags.includes('Porn') || tileData.tags.includes('Yaoi') || tileData.tags.includes('🔞'))) {
       popupImage.classList.add('blurred-image');
    } else {
       popupImage.classList.remove('blurred-image');
    }
 
-   // Display the character popup
    characterPopup.classList.remove('hidden');
    document.getElementById('character-popup').style.display = 'block';
    document.getElementById('popup-overlay').style.display = 'block';
+
 }
-
-function showMultiLinksPopup(links) {
-    document.getElementById('popup-overlay1').style.display = 'block'; // Ensure overlay is shown
-    const popup = document.getElementById('multi-links-popup');
-    const linksList = document.getElementById('multi-links-list');
-    linksList.innerHTML = ''; // Clear the existing list
-
-    const selectedButtonColor = getComputedStyle(document.documentElement).getPropertyValue('--button-bg-1'); // Use dynamic color
-    const selectedButtonHoverColor = getComputedStyle(document.documentElement).getPropertyValue('--button-bg-hover-1'); // Use dynamic hover color
-
-    links.forEach(link => {
-        const listItem = document.createElement('li');
-        const buttonElement = document.createElement('button');
-
-        // Add a class to the button
-        buttonElement.classList.add('link-button');
-
-        // Set inline style for background color
-        buttonElement.style.backgroundColor = selectedButtonColor;
-
-        // Set up hover effect for the button
-        buttonElement.addEventListener('mouseenter', () => {
-            buttonElement.style.backgroundColor = selectedButtonHoverColor;
-        });
-        buttonElement.addEventListener('mouseleave', () => {
-            buttonElement.style.backgroundColor = selectedButtonColor;
-        });
-
-        // Extract domain name from URL
-        const domain = (new URL(link)).hostname;
-        const formattedDomain = domain
-            .split('.')
-            .slice(-2) // Get the last two parts (e.g., 'example.com')
-            .join('.')
-            .replace(/^\w/, c => c.toUpperCase()); // Capitalize first letter
-
-        buttonElement.textContent = formattedDomain;
-
-        buttonElement.addEventListener('click', () => {
-            window.open(link, '_blank'); // Open the link in a new tab
-        });
-
-        listItem.appendChild(buttonElement);
-        linksList.appendChild(listItem);
-    });
-
-    popup.style.display = 'block'; // Show the new popup
-
-    // Close button functionality
-    document.getElementById('close-multi-links-popup').addEventListener('click', () => {
-        popup.style.display = 'none';
-        document.getElementById('popup-overlay1').style.display = 'none'; // Hide overlay
-    });
-}
-
-
-
 // Modify the closePopup function
 function closePopup() {
    document.getElementById('popup-overlay').style.display = 'none';
@@ -3311,76 +2726,6 @@ function applyBlurNSFWStatus() {
    blurNSFWBtn.textContent = isBlurred ? 'Unblur NSFW' : 'Blur NSFW'; // Set button text based on status
 }
 
-
-// Define font weight options
-const fontWeightOptions = [400, 500, 600, 700, 800, 900];
-let currentFontWeightIndex = 0;
-
-// Load font weight from localStorage when the page loads
-function loadFontWeight() {
-    const savedIndex = localStorage.getItem('fontweightindex');
-    if (savedIndex !== null) {
-        currentFontWeightIndex = parseInt(savedIndex);
-        applyFontWeight();
-    }
-}
-
-// Save the current font weight index in localStorage
-function saveFontWeight() {
-    localStorage.setItem('fontweightindex', currentFontWeightIndex.toString());
-}
-
-// Apply the current font weight to all relevant elements
-function applyFontWeight() {
-    const elements = document.querySelectorAll('#increase-weight, #tileSize, #tag-filter, #colorSelector, #theme-dropdown-accessibility, li, p, strong, h3, button, tags, span, tag, #font-dropdown');
-    const currentWeight = fontWeightOptions[currentFontWeightIndex];
-    elements.forEach((element) => {
-        element.style.fontWeight = currentWeight;
-    });
-}
-
-// Increase font weight
-function increaseFontWeight() {
-    if (currentFontWeightIndex < fontWeightOptions.length - 1) {
-        currentFontWeightIndex++;
-        applyFontWeight();
-        saveFontWeight();
-    }
-}
-
-// Decrease font weight
-function decreaseFontWeight() {
-    if (currentFontWeightIndex > 0) {
-        currentFontWeightIndex--;
-        applyFontWeight();
-        saveFontWeight();
-    }
-}
-
-// Set maximum font weight
-function setMaxFontWeight() {
-    currentFontWeightIndex = fontWeightOptions.length - 1;
-    applyFontWeight();
-    saveFontWeight();
-}
-
-// Remove custom font weight
-function removeFontWeight() {
-    const elements = document.querySelectorAll('#increase-weight, #tileSize, #tag-filter, #colorSelector, #theme-dropdown-accessibility, li, p, strong, h3, button, tags, span, tag, #font-dropdown');
-    elements.forEach((element) => {
-        element.style.removeProperty('font-weight');
-    });
-    localStorage.removeItem('fontweightindex');
-    currentFontWeightIndex = 0;
-}
-
-// Event listeners
-document.getElementById('increase-weight').addEventListener('click', increaseFontWeight);
-document.getElementById('decrease-weight').addEventListener('click', decreaseFontWeight);
-
-// Initialize
-loadFontWeight();
-
 // Add event listener to the button
 blurNSFWBtn.addEventListener('click', toggleBlurNSFW);
 
@@ -3444,214 +2789,6 @@ document.addEventListener('DOMContentLoaded', applyBlurNSFWStatus);
 
 // Run the check once on page load
 document.addEventListener('DOMContentLoaded', checkForSpecialTiles);
-
-
-let animationsEnabled = localStorage.getItem('animationsEnabled') === 'true'; // Retrieve saved state from local storage
-
-// Set the initial button text based on the saved state
-document.getElementById('toggle-animations').textContent = animationsEnabled ? 'Toggle Animations Off' : 'Toggle Animations On';
-
-// Function to apply or remove the 'no-animation' class based on the animation state
-function applyAnimationState() {
-    const popups = [
-        '.popup',
-        '.edit-popup',
-        '#image-popup',
-        '#image-source-popup',
-        '#url-input-popup',
-        '#url-popup',
-        '#new-image-confirmation-popup',
-        '#share-url-popup',
-        '#nsfw-inclusion-popup',
-        '#settings-popup',
-        '.links-popup',
-        '#accessibility-popup',
-        '#multi-links-popup'
-    ];
-
-    popups.forEach(selector => {
-        const elements = document.querySelectorAll(selector);
-        elements.forEach(el => {
-            if (animationsEnabled) {
-                el.classList.remove('no-animation');
-            } else {
-                el.classList.add('no-animation');
-            }
-        });
-    });
-}
-
-// Apply the saved animation state on page load
-applyAnimationState();
-
-document.getElementById('toggle-animations').addEventListener('click', function() {
-    // Toggle the animation state
-    animationsEnabled = !animationsEnabled;
-
-    // Save the new state to local storage
-    localStorage.setItem('animationsEnabled', animationsEnabled);
-
-    // Update the button text
-    this.textContent = animationsEnabled ? 'Toggle Animations Off' : 'Toggle Animations On';
-
-    // Apply the updated animation state
-    applyAnimationState();
-});
-
-
-
-
-
-// Function to apply the selected font
-function applyFont(font) {
-    const fonts = {
-        "Roboto": "https://fonts.googleapis.com/css2?family=Roboto&display=swap",
-        "Open Sans": "https://fonts.googleapis.com/css2?family=Open+Sans&display=swap",
-        "Lato": "https://fonts.googleapis.com/css2?family=Lato&display=swap",
-        "Montserrat": "https://fonts.googleapis.com/css2?family=Montserrat&display=swap",
-        "Poppins": "https://fonts.googleapis.com/css2?family=Poppins&display=swap",
-        "Arial": "https://fonts.googleapis.com/css2?family=Arial&display=swap", // Note: Arial is generally a system font
-        "Oswald": "https://fonts.googleapis.com/css2?family=Oswald&display=swap",
-        "Slabo 27px": "https://fonts.googleapis.com/css2?family=Slabo+27px&display=swap",
-        "Source Sans Pro": "https://fonts.googleapis.com/css2?family=Source+Sans+Pro&display=swap",
-        "Nunito": "https://fonts.googleapis.com/css2?family=Nunito&display=swap",
-        "Merriweather": "https://fonts.googleapis.com/css2?family=Merriweather&display=swap",
-        "Dancing Script": "https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap",
-        "Lora": "https://fonts.googleapis.com/css2?family=Lora&display=swap",
-        "Playfair Display": "https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap",
-        "Raleway": "https://fonts.googleapis.com/css2?family=Raleway&display=swap",
-        "Cabin": "https://fonts.googleapis.com/css2?family=Cabin&display=swap",
-        "Rubik": "https://fonts.googleapis.com/css2?family=Rubik&display=swap",
-        "Josefin Sans": "https://fonts.googleapis.com/css2?family=Josefin+Sans&display=swap",
-        "Titillium Web": "https://fonts.googleapis.com/css2?family=Titillium+Web&display=swap",
-        "Bebas Neue": "https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap",
-        "Cinzel": "https://fonts.googleapis.com/css2?family=Cinzel&display=swap",
-        "Anton": "https://fonts.googleapis.com/css2?family=Anton&display=swap",
-        "Fjalla One": "https://fonts.googleapis.com/css2?family=Fjalla+One&display=swap",
-        "Quicksand": "https://fonts.googleapis.com/css2?family=Quicksand&display=swap",
-        "Karla": "https://fonts.googleapis.com/css2?family=Karla&display=swap",
-        "Inconsolata": "https://fonts.googleapis.com/css2?family=Inconsolata&display=swap",
-        "Varela Round": "https://fonts.googleapis.com/css2?family=Varela+Round&display=swap",
-        "Coda": "https://fonts.googleapis.com/css2?family=Coda&display=swap",
-        "Zilla Slab": "https://fonts.googleapis.com/css2?family=Zilla+Slab&display=swap",
-        "Noto Sans": "https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap",
-        "Fira Sans": "https://fonts.googleapis.com/css2?family=Fira+Sans&display=swap",
-        "Roboto Condensed": "https://fonts.googleapis.com/css2?family=Roboto+Condensed&display=swap",
-        "Oxygen": "https://fonts.googleapis.com/css2?family=Oxygen&display=swap",
-        "Muli": "https://fonts.googleapis.com/css2?family=Muli&display=swap",
-        "Lobster": "https://fonts.googleapis.com/css2?family=Lobster&display=swap",
-        "Amatic SC": "https://fonts.googleapis.com/css2?family=Amatic+SC&display=swap",
-        "Permanent Marker": "https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap"
-    };
-
-    // Update the font link in the head
-    const fontLink = document.getElementById('font-link');
-    fontLink.href = fonts[font];
-
-    // Change the font of the body and specified elements
-    document.body.style.fontFamily = font;
-
-    const elementsToUpdate = [
-        '.theme-toggle button', 
-        '#tag-filter', 
-        '#tag-filter-mobile', 
-        '#export-btn', 
-        '#import-btn', 
-        '#tile-size', 
-        '#colorSelector', 
-        '#popup-button', 
-        '#reroll-btn', 
-        '#local-upload-btn', 
-        '#url-upload-btn',
-        '#url-popup-close', 
-        '#url-popup-close-url', 
-        '#local-image-btn', 
-        '#url-image-btn', 
-        '#urlURL-popup-close', 
-        '#url-popup-close-url1', 
-        '#popup-close', 
-        '.collapsible', 
-        '.edit-popup button',
-        '#submit-url-btn', 
-        '#submit-url-btn1', 
-        '#share-url-popup button', 
-        '#nsfw-inclusion-popup button', 
-        '#image-upload-choice-popup button', 
-        '#tile-creation-popup button', 
-        '#settings-popup button', 
-        '#tileSize', 
-        '#undo-delete-popup button', 
-        '#popup-close-btn', 
-        '#new-confirm-image-btn', 
-        '#confirm-image-btn', 
-        '#new-cancel-image-btn', 
-        '#cancel-image-btn', 
-        '#image-confirmation-popup button',
-        '#new-image-confirmation-popup button', 
-        '.link-button', 
-        '#close-links-popup', 
-        '#accessibility-popup button', 
-        '#theme-dropdown-accessibility', 
-        '#close-multi-links-popup', 
-        '#font-dropdown'
-    ];
-
-    elementsToUpdate.forEach(selector => {
-        const elements = document.querySelectorAll(selector);
-        elements.forEach(element => {
-            element.style.fontFamily = font;
-        });
-    });
-}
-
-// Event listener for font dropdown change
-document.getElementById('font-dropdown').addEventListener('change', function () {
-    const selectedFont = this.value;
-    console.log(`Selected font: ${selectedFont}`); // Debug log
-
-    // Save the selected font to local storage
-    localStorage.setItem('selectedFont', selectedFont);
-    console.log(`Font saved to local storage: ${localStorage.getItem('selectedFont')}`); // Debug log
-
-    // Apply the selected font
-    applyFont(selectedFont);
-});
-
-// Load the selected font from local storage on page load
-window.onload = function() {
-    const savedFont = localStorage.getItem('selectedFont');
-    console.log(`Loaded font from local storage: ${savedFont}`); // Debug log
-    if (savedFont) {
-        // Set the dropdown value to the saved font
-        document.getElementById('font-dropdown').value = savedFont;
-        // Apply the saved font
-        applyFont(savedFont);
-    }
-};
-
-window.onload = function() {
-    const keysToCheck = [
-        'isBlurred',
-        'theme',
-        'addImagePosition',
-        'selectedColorOption',
-        'tileSize',
-        'tagsVisible',
-        'fontSize',
-        'fontweightindex',
-        'accessTheme',
-        'selectedFont',
-        'animationsEnabled'
-    ];
-
-    keysToCheck.forEach(key => {
-        const value = localStorage.getItem(key);
-        if (value === "undefined" || value === "NaN") {
-            localStorage.removeItem(key);
-        }
-    });
-};
-
     </script>
 </body>
 </html>
