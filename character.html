@@ -1073,6 +1073,13 @@ img:hover {
     </div>
     <button class="collapsible">Update Log (2.0.1 to 3.0)</button>
     <div class="collapsible-content">
+        <h2>Update 2.0.2</h2>
+        <ul>
+            <li>Fixed problem where the platforms field would only appear in the tag filter list after editing the tags of the tile</li>
+            <li>Fixed problem where long inputs for either the tags or the platform would cause the tags dropdown to expand in size excessively</li>
+            <li>Removed Age from ever appearing on the tag dropdown</li>
+            <li>You can now add multiple platforms to the platform section (previously it would treat the entire input as 1 option)</li>
+        </ul>
         <h2>Update 2.0.1</h2>
         <ul>
             <li>Fixed error where <code>accessTheme</code> would sometimes be set to null (by first checking the value and deleting it if it is detected as null).</li>
@@ -2026,6 +2033,9 @@ function updateTagFilterMobile() {
     tagFilterMobile.innerHTML = '<option value="all">All Tags</option>';
 
     allTags.forEach(tag => {
+        // Truncate tag if longer than 12 characters
+        const displayTag = tag.length > 12 ? tag.slice(0, 12) + '...' : tag;
+
         // Add star-related tags as "⭐" if any exist
         if (starTags.includes(tag)) {
             if (!Array.from(tagFilterMobile.options).some(option => option.value === '⭐')) {
@@ -2040,13 +2050,13 @@ function updateTagFilterMobile() {
             if (!Array.from(tagFilterMobile.options).some(option => option.value === tag)) {
                 const option = document.createElement('option');
                 option.value = tag;
-                option.textContent = tag;
+                option.textContent = displayTag;  // Apply truncation
                 tagFilterMobile.appendChild(option);
             }
         } else {
             const option = document.createElement('option');
             option.value = tag;
-            option.textContent = tag;
+            option.textContent = displayTag;  // Apply truncation
             tagFilterMobile.appendChild(option);
         }
     });
@@ -2054,6 +2064,7 @@ function updateTagFilterMobile() {
     tagFilterMobile.value = currentFilter;
     filterTilesMobile();
 }
+
 
 function filterTilesMobile() {
     const selectedTag = tagFilterMobile.value;
@@ -2063,8 +2074,7 @@ function filterTilesMobile() {
         // Check if the tile matches the selected tag or its equivalent
         const isMatchingTag = selectedTag === 'all' ||
             tile.tags.includes(selectedTag) ||
-            tile.platform === selectedTag ||
-            tile.age === selectedTag;
+            tile.platform === selectedTag
 
         // Treat ⭐ as matching all star-related tags
         const isStarEquivalent = (selectedTag === '⭐' && tile.tags.some(tag => starTags.includes(tag)));
@@ -2289,7 +2299,7 @@ function showEditInfoPopup(tileData, tileElement) {
       }
 
       saveTiles(); // Save to local storage
-      updateTagFilter();
+      updateAllTags();
       popup.style.display = 'none';
       document.getElementById('popup-overlay').style.display = 'none';
    };
@@ -2451,7 +2461,7 @@ function loadSavedTiles() {
       createImageTile(tile);
       tile.tags.forEach(tag => allTags.add(tag));
    });
-   updateTagFilter();
+   updateAllTags();
 }
 
 // Save tiles
@@ -2822,18 +2832,28 @@ function updateTileTags(tileElement, tags) {
 function updateAllTags() {
    allTags.clear();
    tiles.forEach(tile => {
+      // Add regular tags
       tile.tags.forEach(tag => allTags.add(tag));
-      if (tile.platform) allTags.add(tile.platform);
-      if (tile.age) allTags.add(tile.age);
+
+      // Check if tile.platform exists
+      if (tile.platform) {
+         // Split the platform by commas, trim whitespace, and add each as a new tag
+         const platforms = tile.platform.split(',').map(p => p.trim()).filter(p => p !== '');
+         platforms.forEach(platform => allTags.add(platform));
+      }
    });
    updateTagFilter();
 }
+
 
 function updateTagFilter() {
     const currentFilter = tagFilter.value;
     tagFilter.innerHTML = '<option value="all">All Tags</option>';
     
     allTags.forEach(tag => {
+        // Truncate tag if longer than 12 characters
+        const displayTag = tag.length > 12 ? tag.slice(0, 12) + '...' : tag;
+
         // Add only the ⭐ option if any star-related tags exist
         if (starTags.includes(tag)) {
             if (!Array.from(tagFilter.options).some(option => option.value === '⭐')) {
@@ -2848,13 +2868,13 @@ function updateTagFilter() {
             if (!Array.from(tagFilter.options).some(option => option.value === tag)) {
                 const option = document.createElement('option');
                 option.value = tag;
-                option.textContent = tag;
+                option.textContent = displayTag;  // Apply truncation
                 tagFilter.appendChild(option);
             }
         } else {
             const option = document.createElement('option');
             option.value = tag;
-            option.textContent = tag;
+            option.textContent = displayTag;  // Apply truncation
             tagFilter.appendChild(option);
         }
     });
@@ -2867,6 +2887,7 @@ function updateTagFilter() {
 }
 
 
+
 // Filter tiles based on selected tag for desktop
 function filterTiles() {
     const selectedTag = tagFilter.value;
@@ -2876,8 +2897,7 @@ function filterTiles() {
         // Check if the tile matches the selected tag or its equivalent
         const isMatchingTag = selectedTag === 'all' ||
             tile.tags.includes(selectedTag) ||
-            tile.platform === selectedTag ||
-            tile.age === selectedTag;
+            tile.platform === selectedTag
 
         // Treat ⭐ as matching all star-related tags
         const isStarEquivalent = (selectedTag === '⭐' && tile.tags.some(tag => starTags.includes(tag)));
