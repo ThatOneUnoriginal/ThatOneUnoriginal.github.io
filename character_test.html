@@ -14,7 +14,7 @@
 #url-popup-close, #url-popup-close-url, #local-image-btn, #url-image-btn, #urlURL-popup-close, #url-popup-close-url1, #popup-close, .collapsible, .edit-popup button,
 #submit-url-btn, #submit-url-btn1, #share-url-popup button, #nsfw-inclusion-popup button, #image-upload-choice-popup button, #tile-creation-popup button, #settings-popup button, 
 #tileSize, #undo-delete-popup button, #popup-close-btn, #new-confirm-image-btn, #confirm-image-btn, #new-cancel-image-btn, #cancel-image-btn, #image-confirmation-popup button,
-#new-image-confirmation-popup button, .link-button, #close-links-popup, #accessibility-popup button, #theme-dropdown-accessibility, #close-multi-links-popup, #font-dropdown{
+#new-image-confirmation-popup button, .link-button, #close-links-popup, #accessibility-popup button, #theme-dropdown-accessibility, #close-multi-links-popup, #font-dropdown, #close-formatting{
 	background-color: var(--button-bg-1);
 }
 
@@ -569,7 +569,7 @@ img {
 	border-color: transparent;
 	width: 100%
 }
-#image-confirmation-popup, #new-image-confirmation-popup, #multi-links-popup{
+#image-confirmation-popup, #new-image-confirmation-popup, #multi-links-popup, #formatting-guide{
     z-index: 1002 !important;
 }
 #popup-close{
@@ -678,7 +678,7 @@ img {
 	margin-bottom: 10px;
 }
 
-.edit-popup, #image-popup, #image-source-popup, #url-input-popup, #url-popup, #new-image-confirmation-popup {
+.edit-popup, #image-popup, #image-source-popup, #url-input-popup, #url-popup, #new-image-confirmation-popup, #formatting-guide {
 	position: fixed;
 	top: 50%;
 	left: 50%;
@@ -698,6 +698,12 @@ img {
 	animation: float 5s ease-in-out infinite;
 }
 
+#formatting-guide, #edit-info-popup{
+    height: 80%;
+}
+#formatting-guide h1, #formatting-guide h2, #formatting-guide h3{
+    text-align: center;
+}
 .edit-popup input, .edit-popup textarea, #image-url-input1, #image-url-input{
 	width: 100%;
 	padding: 10px;
@@ -706,7 +712,7 @@ img {
 	border-radius: 4px;
 }
 
-.edit-popup button, .link-button, #close-links-popup, #close-multi-links-popup {
+.edit-popup button, .link-button, #close-links-popup, #close-multi-links-popup, #close-formatting {
 	padding: 10px 20px;
 	color: var(--button-color);
 	border: none;
@@ -830,7 +836,7 @@ img {
 	width: 80%;
 }
 
-#font-dropdown:hover, .theme-toggle button:hover, #tag-filter:hover, #tag-filter-mobile, #export-btn:hover, #import-btn:hover, #image-upload-choice-popup button:hover, #nsfw-inclusion-popup button:hover, #theme-dropdown-accessibility:hover,
+#close-formatting:hover, #font-dropdown:hover, .theme-toggle button:hover, #tag-filter:hover, #tag-filter-mobile, #export-btn:hover, #import-btn:hover, #image-upload-choice-popup button:hover, #nsfw-inclusion-popup button:hover, #theme-dropdown-accessibility:hover,
 #share-url-popup button:hover, .edit-popup button:hover, .active, .collapsible:hover, #popup-close-btn:hover ,#popup-close:hover, #settings-popup button:hover, #undo-delete-popup button:hover, #new-confirm-image-btn:hover, #confirm-image-btn:hover,
 #new-cancel-image-btn:hover, #cancel-image-btn:hover, #image-confirmation-popup button:hover, #new-image-confirmation-popup button:hover, .link-button:hover, #close-multi-links-popup:hover, #close-links-popup:hover, #accessibility-popup button:hover{
 	background-color: var(--button-bg-hover-1)
@@ -1154,6 +1160,76 @@ blockquote {
     </div>
     <button class="collapsible">Update Log (2.0.1 to 3.0)</button>
     <div class="collapsible-content">
+        <h2>Update 2.1</h2>
+        <ul>
+            <li>Fixed the problem where clicking the popup overlays would try to find elements from the multi-link feature that no longer exist, causing it to fail.</li>
+            <li>Fixed problem where if you were to delete multiple characters within quick succession, the undo delete feature would fail to work properly.</li>
+            <li>When editing an existing tile, you can now add custom values in addition to the preset options. These custom values will be included alongside the defaults when using the random character feature.</li>
+            <ul>
+                <li>A new formatting system has been curated that can be used when editing custom values.</li>
+                <ul>
+                    <li><code>(-)</code> Add this to the beginning of a line to make it a list</li>
+                    <li><code>(#)</code> Add this to the beginning to make it an ordered list
+                        <ul>
+                            <li>Pressing <code>Ctrl + Shift + #</code> will add this to the beginning of the line</li>
+                        </ul>
+                    </li>
+                    <li><code>(ind)</code> Add this to add an indent</li>
+                    <li><code>(b)(/b)</code> Wrap this around text to make it <strong>bold</strong>
+                        <ul>
+                            <li>Highlighting text and pressing <code>Ctrl + B</code> will wrap the text with this formatting</li>
+                        </ul>
+                    </li>
+                    <li><code>(i)(/i)</code> Wrap this around text to make it <em>italics</em>
+                        <ul>
+                            <li>Highlighting text and pressing <code>Ctrl + I</code> will wrap the text with this formatting</li>
+                        </ul>
+                    </li>
+                    <li><code>(u)(/u)</code> Wrap this around text to add an <u>underline</u>
+                        <ul>
+                            <li>Highlighting text and pressing <code>Ctrl + U</code> will wrap the text with this formatting</li>
+                        </ul>
+                    </li>
+                    <li><code>(s)(/s)</code> Wrap this around text to add <del>strikethrough</del>
+                        <ul>
+                            <li>Highlighting text and pressing <code>Ctrl + S</code> will wrap the text with this formatting</li>
+                        </ul>
+                    </li>
+                    <li><code>(c)(/c)</code> Wrap this around for <code>Inline Code</code>
+                        <ul>
+                            <li>Highlighting text and pressing <code>Ctrl + K</code> will wrap the text with this formatting</li>
+                        </ul>
+                    </li>
+                    <li><code>(q)(/q)</code> Wrap this around for blockquote
+                        <ul>
+                            <li>Highlighting text and pressing <code>Ctrl + Q</code> will wrap the text with this formatting</li>
+                        </ul>
+                    </li>
+                    <li><code>(sub)(/sub)</code> Wrap this around for subscript
+                        <ul>
+                            <li>Highlighting text and pressing <code>Ctrl + =</code> will wrap the text with this formatting</li>
+                        </ul>
+                    </li>
+                    <li><code>(sup)(/sup)</code> Wrap this around for superscript
+                        <ul>
+                            <li>Highlighting text and pressing <code>Ctrl + Shift + =</code> will wrap the text with this formatting</li>
+                        </ul>
+                    </li>
+                    <li><code>(blur)(/blur)</code> Wrap this around to blur the text</li>
+                    <li><code>(letterspace="")(/letterspace)</code> Wrap this around text to change the spacing between each letter within it (using {num}px)</li>
+                    <li><code>(color="{color}")(/color)</code> Wrap this around text to change its colour</li>
+                    <li><code>(bgcolor="{color}")(/bgcolor)</code> Wrap this around text to change its background color</li>
+                    <li><code>(link="{hyperlink}")(/link)</code> Wrap this around text to make it a hyperlink</li>
+                </ul>
+            </ul>
+            <li>When editing an image or adding a new tile and choosing the local image option, you will now be prompted to crop the image. This allows you to have more control of what the output image looks like (by default, it would just center to the image).</li>
+            <ul>
+                <li>You will now have the option to compress the image by multiple different levels. This will decrease the file size of the image though will sacrifice image quality. So use them in moderation alongside how much quality you're willing to lose.</li>
+                <li>You will also have the option to resize the image by different levels. This will decrease the dimensions of the image, making them smaller. Note that I wouldn't recommend playing with this too much if you're already using the compression option since a combination of both can SIGNIFICANTLY reduce image quality.</li>            
+            </ul>
+            <li>Animated image formats will no longer work fully. They will be converted to a WEBP file and be stuck on the first frame when uploading locally.</li>
+        </ul>
+        
         <h2>Update 2.0.2eu1</h2>
         <ul>
             <li>An issue with the multi-link functionality in update 2.0 caused multiple other functions of the website to not work as intended. The website was rolled back to 1.9.1 as I fixed the issues. All changes that were made in 2.0, 2.0.1 and 2.0.2 should now be back except for the multi-link functionality. If you had used this feature, simply edit the URL of the tile with just one URL.</li>
@@ -1425,11 +1501,71 @@ blockquote {
         <div id="custom-fields" style="margin-top: 10px"></div>
         <button id="add-custom-field-btn">Add Custom Field</button>
         <div style="width:100%">
+            <button id="show-formatting guide">Formatting Guide</button>
             <button id="save-info-btn">Save</button>
             <button id="cancel-info-btn">Cancel</button>
         </div>
     </div>
-     
+    <div id="formatting-guide" style="overflow-y: auto;  max-height: 80vh;">
+    <h2>Formatting Guide</h2>
+    <button id="close-formatting">Close</button>
+    <p>When editing custom values, you will have access to formatting tools which change the apperance of the text when it appears on the random character popup.</p>
+    <h3>Creating Unordered Lists</h3>
+    <p>You can create an ordered list by adding (-) to the beginning of a line</p>
+    <p>Note that nested lists aren't supported.</p>
+    <img src="https://raw.githubusercontent.com/ThatOneUnoriginal/ThatOneUnoriginal.github.io/refs/heads/main/Character%20Tools/Assets/CharacterFormatting_UnOrderedList.png" style="max-width: 100%; height: auto; min-height:0%; object-fit: contain">
+    <h3>Creating Ordered Lists</h3>
+    <p>You can create an unordered list by adding (#) to the beginning of a line or by pressing Ctrl + Shift + #</p>
+    <p>Note that nested lists aren't supported.</p>
+    <img src="https://raw.githubusercontent.com/ThatOneUnoriginal/ThatOneUnoriginal.github.io/refs/heads/main/Character%20Tools/Assets/CharacterFormatting_OrderedList.png" style="max-width: 100%; height: auto; min-height:0%; object-fit: contain">
+    <h3>Indents</h3>
+    <p>You can add indents to text by adding (ind) anywhere within the text. It will add a couple of lines between the text that surrounds it.</p>
+    <img src="https://raw.githubusercontent.com/ThatOneUnoriginal/ThatOneUnoriginal.github.io/refs/heads/main/Character%20Tools/Assets/CharacterFormatting_Indent.png" style="max-width: 100%; height: auto; min-height:0%; object-fit: contain">
+    <h3>Bold</h3>
+    <p>You can <b>bold text</b> by adding (b)(/b) or highlighting the text you want bolded and pressing Ctrl + B</p>
+    <img src="https://raw.githubusercontent.com/ThatOneUnoriginal/ThatOneUnoriginal.github.io/refs/heads/main/Character%20Tools/Assets/CharacterFormatting_Bold.png" style="max-width: 100%; height: auto; min-height:0%; object-fit: contain">
+    <h3>Italics</h3>
+    <p>You can add <i>italics</i> to text by adding (i)(/i) or highlighting the text you want italicized and pressing Ctrl + I</p>
+    <img src="https://raw.githubusercontent.com/ThatOneUnoriginal/ThatOneUnoriginal.github.io/refs/heads/main/Character%20Tools/Assets/CharacterFormatting_Italics.png" style="max-width: 100%; height: auto; min-height:0%; object-fit: contain">
+    <h3>Underline</h3>
+    <p>You can add <u>underlines</u> to text by adding (u)(/u) or highlighting the text you want underlined and pressing Ctrl + U</p>
+    <img src="https://raw.githubusercontent.com/ThatOneUnoriginal/ThatOneUnoriginal.github.io/refs/heads/main/Character%20Tools/Assets/CharacterFormatting_Underline.png" style="max-width: 100%; height: auto; min-height:0%; object-fit: contain">
+    <h3>Strikethrough</h3>
+    <p>You can add <s>strikethrough</s> to text by adding (s)(/s) or higlighting the text you want to have strikethrough and pressing Ctrl + S</p>
+    <img src="https://raw.githubusercontent.com/ThatOneUnoriginal/ThatOneUnoriginal.github.io/refs/heads/main/Character%20Tools/Assets/CharacterFormatting_StrikeThrough.png" style="max-width: 100%; height: auto; min-height:0%; object-fit: contain">
+    <h3>Inline Code</h3>
+    <p>You can add <code>inline code</code> to text by adding (c)(/c) or higlighting the text you want to be inline code and pressing Ctrl + K</p>
+    <img src="https://raw.githubusercontent.com/ThatOneUnoriginal/ThatOneUnoriginal.github.io/refs/heads/main/Character%20Tools/Assets/CharacterFormatting_InlineCode.png" style="max-width: 100%; height: auto; min-height:0%; object-fit: contain">
+    <h3>Blockquote</h3>
+    <p>You can make text a blockquote by adding (q)(/q) or higlighting the text you want to be a blockquote and pressing Ctrl + Q</p>
+    <img src="https://raw.githubusercontent.com/ThatOneUnoriginal/ThatOneUnoriginal.github.io/refs/heads/main/Character%20Tools/Assets/CharacterFormatting_Blockquote.png" style="max-width: 100%; height: auto; min-height:0%; object-fit: contain">
+    <h3>Subscript</h3>
+    <p>You can make text subscript by adding (sub)(/sub) or highlighting the text you want to be subscript and pressing Ctrl + =</p>
+    <img src="https://raw.githubusercontent.com/ThatOneUnoriginal/ThatOneUnoriginal.github.io/refs/heads/main/Character%20Tools/Assets/CharacterFormatting_Subscript.png" style="max-width: 100%; height: auto; min-height:0%; object-fit: contain">
+    <h3>Superscript</h3>
+    <p>You can make text superscript by adding (sup)(/sup) or higlighting the text you want to be superscript and pressing Ctrl + Shift + =</p>
+    <img src="https://raw.githubusercontent.com/ThatOneUnoriginal/ThatOneUnoriginal.github.io/refs/heads/main/Character%20Tools/Assets/CharacterFormatting_Supperscript.png" style="max-width: 100%; height: auto; min-height:0%; object-fit: contain">
+    <h3>Blur Text</h3>
+    <p>You can add a blur to text by adding (blur)(/blur). Hovering over the blurred text will unblur it untill its not hovered over</p>
+    <img src="https://raw.githubusercontent.com/ThatOneUnoriginal/ThatOneUnoriginal.github.io/refs/heads/main/Character%20Tools/Assets/CharacterFormatting_BlurredBlurred.png" style="max-width: 100%; height: auto; min-height:0%; object-fit: contain">
+    <img src="https://raw.githubusercontent.com/ThatOneUnoriginal/ThatOneUnoriginal.github.io/refs/heads/main/Character%20Tools/Assets/CharacterFormatting_BlurredUnBlurred.png" style="max-width: 100%; height: auto; min-height:0%; object-fit: contain">
+    <h3>Letterspace</h3>
+    <p>Letterspace increaes the space between the letters and can be added by using (letterspace="")(/letterspace) with the value being {num}px</p>
+    <img src="https://raw.githubusercontent.com/ThatOneUnoriginal/ThatOneUnoriginal.github.io/refs/heads/main/Character%20Tools/Assets/CharacterFormatting_Letterspacing.png" style="max-width: 100%; height: auto; min-height:0%; object-fit: contain">
+    <h3>Text Color</h3>
+    <p>This allows you to change the colour of the text that its surrounding and can be added by using (color="{color}")(/color)</p>
+    <p>The colour value can either be the colour name (red), the hex value (#FF0000), the rgb value (rgb(255,0,0)) or hsl value (hsl(0, 100%, 50%))</p>
+    <p>Note make sure you use 'color' and NOT 'colour' as the latter wont work (CSS doesn't accept 'colour' as an acceptable parameter)</p>
+    <img src="https://raw.githubusercontent.com/ThatOneUnoriginal/ThatOneUnoriginal.github.io/refs/heads/main/Character%20Tools/Assets/CharacterFormatting_TextColor.png" style="max-width: 100%; height: auto; min-height:0%; object-fit: contain">
+    <h3>Background Color</h3>
+    <p>This allows you to change the colour of the background behind the text</p>
+    <p>The colour value can either be the colour name (red), the hex value (#FF0000), the rgb value (rgb(255,0,0)) or hsl value (hsl(0, 100%, 50%))</p>
+    <p>Note make sure you use 'color' and NOT 'colour' as the latter wont work (CSS doesn't accept 'colour' as an acceptable parameter)</p>
+    <img src="https://raw.githubusercontent.com/ThatOneUnoriginal/ThatOneUnoriginal.github.io/refs/heads/main/Character%20Tools/Assets/CharacterFormatting_BackgroundColor.png" style="max-width: 100%; height: auto; min-height:0%; object-fit: contain">
+    <h3>Hyperlinks</h3>
+    <p>This allows you to turn the text into a hyperlink and can be added by using (link="{hyperlink}")(/link)</p>
+    <img src="https://raw.githubusercontent.com/ThatOneUnoriginal/ThatOneUnoriginal.github.io/refs/heads/main/Character%20Tools/Assets/CharacterFormatting_Hyperlink.png" style="max-width: 100%; height: auto; min-height:0%; object-fit: contain">
+    </div>
     <!--Edit Tags Popup-->
     <div id="edit-tags-popup" class="edit-popup">
        <h3>Edit Tags</h3>
@@ -1948,7 +2084,55 @@ function hideUndoPopup() {
   undoPopup.classList.remove('show');
   deletedTile = null;
 }
+function applyDynamicButtonColors(button) {
+   const selectedColorOption = localStorage.getItem('selectedColorOption') || 'original';
+   const buttonColors = [
+      'var(--button-bg-1)', 
+      'var(--button-bg-2)', 
+      'var(--button-bg-3)', 
+      'var(--button-bg-4)'
+   ];
+   const buttonHoverColors = [
+      'var(--button-bg-hover-1)', 
+      'var(--button-bg-hover-2)', 
+      'var(--button-bg-hover-3)', 
+      'var(--button-bg-hover-4)'
+   ];
+   
+   const selectedIndex = selectedColorOption === 'original' ? 0 : 
+                         (selectedColorOption === 'colour1' ? 1 : 
+                         (selectedColorOption === 'colour2' ? 2 : 3));
 
+   // Apply button background color
+   const selectedButtonColor = buttonColors[selectedIndex];
+   const selectedButtonHoverColor = buttonHoverColors[selectedIndex];
+
+   button.style.backgroundColor = selectedButtonColor;
+
+   button.addEventListener('mouseenter', () => {
+      button.style.backgroundColor = selectedButtonHoverColor;
+   });
+
+   button.addEventListener('mouseleave', () => {
+      button.style.backgroundColor = selectedButtonColor;
+   });
+}
+
+// Add event listener for the color selector
+document.getElementById('colorSelector').addEventListener('change', function() {
+   const selectedColorOption = this.value;
+   localStorage.setItem('selectedColorOption', selectedColorOption); // Save to local storage
+
+   // Update colors for existing buttons
+   const buttons = document.querySelectorAll(
+      '.theme-toggle button, #tag-filter, #tag-filter-mobile, #export-btn, #import-btn, #tile-size, #colorSelector, #popup-button, #reroll-btn, #local-upload-btn, #url-upload-btn, #url-popup-close, #url-popup-close-url, #local-image-btn, #urlimage-btn, #urlURL-popup-close, #url-popup-close-url1, #popup-close, .collapsible, .edit-popup button, #submit-url-btn, #submit-url-btn1, #share-url-popup button, #nsfw-inclusion-popup button, #image-upload-choice-popup button, #tile-creation-popup button, #settings-popup button,  #tileSize, #undo-delete-popup button, #popup-close-btn, #new-confirm-image-btn, #confirm-image-btn, #new-cancel-image-btn, #cancel-image-btn, #image-confirmation-popup button, #new-image-confirmation-popup button, .link-button, #close-links-popup, #accessibility-popup button, #theme-dropdown-accessibility, #close-multi-links-popup, #font-dropdown, #close-formatting, .remove-custom-field-btn'
+   );
+
+   // Update each button's color
+   buttons.forEach(button => {
+      applyDynamicButtonColors(button);
+   });
+});
 // Save the selected color option in localStorage
 // Save the selected color option in localStorage
 document.getElementById('colorSelector').addEventListener('change', function() {
@@ -1961,7 +2145,7 @@ document.getElementById('colorSelector').addEventListener('change', function() {
 
     // Select all specified buttons
     const buttons = document.querySelectorAll(
-       '#font-dropdown, .li button, .theme-toggle button, #tag-filter, #tag-filter-mobile, #export-btn, #import-btn, #tile-size, #colorSelector, #popup-button, #reroll-btn, #local-upload-btn, #url-upload-btn, #url-popup-close, #url-popup-close-url, #local-image-btn, #url-image-btn, #urlURL-popup-close, #url-popup-close-url1, #popup-close, .collapsible, .edit-popup button, #submit-url-btn, #submit-url-btn1, #share-url-popup button, #nsfw-inclusion-popup button, #image-upload-choice-popup button, #tile-creation-popup button, #settings-popup button, #tileSize, #undo-delete-popup button, #popup-close-btn, #new-confirm-image-btn, #confirm-image-btn, #new-cancel-image-btn, #cancel-image-btn, #image-confirmation-popup button, #new-image-confirmation-popup button, .link-button, #close-links-popup, #accessibility-popup button, #theme-dropdown-accessibility, #close-multi-links-popup'
+   '.theme-toggle button, #tag-filter, #tag-filter-mobile, #export-btn, #import-btn, #tile-size, #colorSelector, #popup-button, #reroll-btn, #local-upload-btn, #url-upload-btn, #url-popup-close, #url-popup-close-url, #local-image-btn, #urlimage-btn, #urlURL-popup-close, #url-popup-close-url1, #popup-close, .collapsible, .edit-popup button, #submit-url-btn, #submit-url-btn1, #share-url-popup button, #nsfw-inclusion-popup button, #image-upload-choice-popup button, #tile-creation-popup button, #settings-popup button,  #tileSize, #undo-delete-popup button, #popup-close-btn, #new-confirm-image-btn, #confirm-image-btn, #new-cancel-image-btn, #cancel-image-btn, #image-confirmation-popup button, #new-image-confirmation-popup button, .link-button, #close-links-popup, #accessibility-popup button, #theme-dropdown-accessibility, #close-multi-links-popup, #font-dropdown, #close-formatting, .remove-custom-field-btn' // Added .remove-custom-field-btn
     );
 
     // Define colors based on the selected option
@@ -2456,6 +2640,7 @@ function showEditInfoPopup(tileData, tileElement) {
    };
 }
 
+// Function to add custom fields
 function addCustomField(key = '', value = '') {
    const customFieldsContainer = document.getElementById('custom-fields');
    const fieldDiv = document.createElement('div');
@@ -2468,9 +2653,13 @@ function addCustomField(key = '', value = '') {
    customFieldsContainer.appendChild(fieldDiv);
 
    // Set the onclick event for removing the custom field
-   fieldDiv.querySelector('.remove-custom-field-btn').onclick = () => {
+   const removeBtn = fieldDiv.querySelector('.remove-custom-field-btn');
+   removeBtn.onclick = () => {
       customFieldsContainer.removeChild(fieldDiv);
    };
+
+   // Apply dynamic colors to the remove button
+   applyDynamicButtonColors(removeBtn);
 }
 
 // Function to show the edit tags popup
@@ -2728,9 +2917,13 @@ document.getElementById('popup-overlay1').addEventListener('click', () => {
     document.getElementById('popup-overlay1').style.display = 'none';
     document.getElementById('new-image-confirmation-popup').style.display = 'none';
     document.getElementById('image-confirmation-popup').style.display= 'none';
+    document.getElementById('formatting-guide').style.display = 'none';
 });
 
-
+document.getElementById('close-formatting').addEventListener('click', () => {
+    document.getElementById('popup-overlay1').style.display = 'none';
+    document.getElementById('formatting-guide').style.display = 'none';
+});
 function updateTileOutline(tileElement, tags) {
    tileElement.classList.remove('nsfw-outline', 'star-outline', 'special-outline');
    
@@ -3465,6 +3658,7 @@ const randomCharacterBtn = document.getElementById('random-character-btn');
 const settingsBtn = document.getElementById('settings-btn');
 const accessibilityBtn = document.getElementById('acccessibility-btn');
 const characterPopup = document.getElementById('character-popup');
+const formattingGuide = document.getElementById('show-formatting guide');
 const popupClose = document.getElementById('popup-close');
 const popupCloseBtn = document.getElementById('popup-close-btn');
 const popupImage = document.getElementById('popup-image');
@@ -3478,6 +3672,11 @@ accessibilityBtn.addEventListener('click', () => {
 settingsBtn.addEventListener('click', () => {
       document.getElementById('settings-popup').style.display = 'flex';
       document.getElementById('popup-overlay').style.display = 'block';
+});
+
+formattingGuide.addEventListener('click', () => {
+    document.getElementById('formatting-guide').style.display = 'flex';
+    document.getElementById('popup-overlay1').style.display= 'block';
 });
 
 // Event listeners for closing popup
@@ -3523,9 +3722,9 @@ function selectRandomCharacter() {
       .replace(/\(s\)(.*?)\(\/s\)/g, '<s>$1</s>')
       .replace(/\(link="(.*?)"\)(.*?)\(\/link\)/g, '<a href="$1" target="_blank" rel="noopener noreferrer">$2</a>')
       .replace(/\(color="(.*?)"\)(.*?)\(\/color\)/g, '<span style="color: $1;">$2</span>')
-      .replace(/\(bgcolor="(.*?)"\)(.*?)\(\/bgcolor\)/g, '<span style="background-color: $1;">$2</span>')
-      .replace(/\(code\)(.*?)\(\/code\)/g, '<code>$1</code>') // Inline code formatting
-      .replace(/\(quote\)(.*?)\(\/quote\)/g, '<blockquote>$1</blockquote>') // Block quote formatting
+      .replace(/\(bgcolor="(.*?)"\)(.*?)\(\/bgcolor\)/g, '<span style="background-color: $1; padding: 5px; border-radius: 4px">$2</span>')
+      .replace(/\(c\)(.*?)\(\/c\)/g, '<code>$1</code>') // Inline code formatting
+      .replace(/\(q\)(.*?)\(\/q\)/g, '<blockquote>$1</blockquote>') // Block quote formatting
       .replace(/\(sup\)(.*?)\(\/sup\)/g, '<sup>$1</sup>') // Superscript formatting
       .replace(/\(sub\)(.*?)\(\/sub\)/g, '<sub>$1</sub>')  // Subscript formatting
       .replace(/\(letterspace="(.*?)"\)(.*?)\(\/letterspace\)/g, '<span style="letter-spacing: $1;">$2</span>') // Letter spacing formatting
