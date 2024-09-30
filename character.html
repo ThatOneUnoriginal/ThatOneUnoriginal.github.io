@@ -26,7 +26,7 @@
 	overflow: scroll;
 }
 
-#edit-description-input, #tile-description {
+#edit-description-input, #tile-description, .custom-field-value {
     resize: vertical; /* Allow vertical resizing only */
     overflow: auto; /* Enable scrolling if content overflows */
 }
@@ -685,6 +685,7 @@ img:hover {
 	position: fixed;
 	top: 50%;
 	left: 50%;
+    overflow: scroll;
 	transform: translate(-50%, -50%);
 	background-color: var(--popup-color);
 	border: 2px solid #000;
@@ -989,6 +990,16 @@ img:hover {
     transition: none !important;
 }
 
+.remove-custom-field-btn{
+	margin-top: 0;
+	margin-bottom: 15px;
+}
+blockquote {
+    position: relative;
+    padding: 1em; /* Space for the line */
+    border-left: 4px solid var(--text-color); /* Optional: left border for styling */
+}
+
 .url-input-container {
    display: flex;
    flex-wrap: wrap;   /* Allows inputs to wrap within the container */
@@ -1005,7 +1016,12 @@ img:hover {
    box-sizing: border-box; /* Ensures padding and borders are included in the width calculation */
    padding: 8px;
 }
-
+.custom-field-key{
+    margin-top: 10px;
+}
+.custom-field-value{
+    margin-bottom: 0px !important;
+}
     </style>
 </head>
 <body>
@@ -1283,20 +1299,20 @@ img:hover {
     </div>
     <!-- Popup Structure -->
     <div id="character-popup" class="popup hidden">
-          <img id="popup-image" src="" alt="Character Image">
-          <span id="popup-close">&times;</span>
-          <div class="popup-info">
-             <h3 id="popup-name"></h3>
-             <p id="popup-platform"></p>
-             <p id="popup-age"></p>
-             <p id="popup-description"></p>
-             <p id="popup-tags"></p>
-          </div>
-          <button id="popup-button" type="button">View Profile</button>
-          <button id="reroll-btn">Reroll</button>
-          <button id="popup-close-btn">Close</button>
-    </div>
-    
+        <img id="popup-image" src="" alt="Character Image">
+        <span id="popup-close">&times;</span>
+        <div class="popup-info">
+            <h3 id="popup-name"></h3>
+            <p id="popup-platform"></p>
+            <p id="popup-age"></p>
+            <p id="popup-description"></p>
+            <div id="popup-custom-fields"></div>
+            <p id="popup-tags"></p>
+        </div>
+        <button id="popup-button" type="button">View Profile</button>
+        <button id="reroll-btn">Reroll</button>
+        <button id="popup-close-btn">Close</button>
+    </div>    
     <!--Tile Creation Popup-->
     <div id="tile-creation-popup">
        <h3>Create New Tile</h3>
@@ -1319,29 +1335,35 @@ img:hover {
     <!--Edit Info Popup-->
     <div id="edit-info-popup" class="edit-popup">
         <h3>Edit Info</h3>
-        <div style="width:100%">
-           <span class="input-label">Character Name:</span>
-           <input type="text" id="edit-name-input" placeholder="Enter character name">
+        <div id="default-fields" style="width:100%">
+            <div style="width:100%">
+                <span class="input-label">Character Name:</span>
+                <input type="text" id="edit-name-input" placeholder="Enter character name">
+            </div>
+            <div style="width:100%">
+                <span class="input-label">Platform:</span>
+                <input type="text" id="edit-platform-input" placeholder="Enter platform">
+            </div>
+            <div style="width:100%">
+                <span class="input-label">Age:</span>
+                <input type="text" id="edit-age-input" placeholder="Enter age">
+            </div>
+            <div style="width:100%">
+                <span class="input-label">Description:</span>
+                <textarea id="edit-description-input" placeholder="Enter description"></textarea>
+            </div>
+            <div style="width:100%">
+                <span class="input-label">Alt Text:</span>
+                <input type="text" id="edit-alt-input" placeholder="Enter alt text">
+            </div>
         </div>
+        <div id="custom-fields" style="margin-top: 10px"></div>
+        <button id="add-custom-field-btn">Add Custom Field</button>
         <div style="width:100%">
-           <span class="input-label">Platform:</span>
-           <input type="text" id="edit-platform-input" placeholder="Enter platform">
+            <button id="save-info-btn">Save</button>
+            <button id="cancel-info-btn">Cancel</button>
         </div>
-        <div style="width:100%">
-           <span class="input-label">Age:</span>
-           <input type="text" id="edit-age-input" placeholder="Enter age">
-        </div>
-        <div style="width:100%">
-           <span class="input-label">Description:</span>
-           <textarea id="edit-description-input" placeholder="Enter description"></textarea>
-        </div>
-        <div style="width:100%">
-           <span class="input-label">Alt Text:</span>
-           <input type="text" id="edit-alt-input" placeholder="Enter alt text">
-        </div>
-        <button id="save-info-btn">Save</button>
-        <button id="cancel-info-btn">Cancel</button>
-     </div>
+    </div>
      
     <!--Edit Tags Popup-->
     <div id="edit-tags-popup" class="edit-popup">
@@ -1588,6 +1610,8 @@ resetButton.addEventListener('click', function() {
         window.location.reload();
     }
 });
+
+
 
 // Reset counter when "settings-close" or "popup-overlay" are clicked
 settingsClose.addEventListener('click', resetClickCounter);
@@ -1838,6 +1862,11 @@ function showUndoPopup() {
   undoPopup.classList.add('show');
   let secondsLeft = 30;
   timerSpan.textContent = secondsLeft;
+
+  // Clear any existing timer before starting a new one
+  if (undoTimer) {
+    clearInterval(undoTimer);
+  }
 
   undoTimer = setInterval(() => {
     secondsLeft--;
@@ -2140,28 +2169,6 @@ document.getElementById('accessibility-settings-close').addEventListener('click'
     document.getElementById('accessibility-popup').style.display = 'none';
     document.getElementById('popup-overlay').style.display = 'none';
 });
-document.getElementById('popup-overlay').addEventListener('click', () => {
-   document.getElementById('image-source-popup').style.display = 'none';
-   document.getElementById('url-input-popup').style.display = 'none';
-   document.getElementById('popup-overlay').style.display = 'none';
-   document.getElementById('links-popup').style.display = 'none';
-   document.getElementById('settings-popup').style.display = 'none';
-   document.getElementById('accessibility-popup').style.display = 'none';
-   document.getElementById('edit-url-popup').style.display = 'none';
-   document.getElementById('tile-creation-popup').style.display = 'none';
-   document.getElementById('character-popup').style.display = 'none';
-   document.getElementById('edit-info-popup').style.display = 'none';
-   document.getElementById('edit-tags-popup').style.display = 'none';
-   document.getElementById('share-url-popup').style.display = 'none';
-   document.getElementById('nsfw-inclusion-popup').style.display = 'none';
-});
-
-document.getElementById('popup-overlay1').addEventListener('click', () => {
-    document.getElementById('popup-overlay1').style.display = 'none';
-    document.getElementById('multi-links-popup').style.display = 'none';
-    document.getElementById('new-image-confirmation-popup').style.display = 'none';
-    document.getElementById('image-confirmation-popup').style.display= 'none';
-});
 
 function showEditUrlPopup(tileData, tileElement) {
    const popup = document.getElementById('edit-url-popup');
@@ -2202,11 +2209,142 @@ function filterTilesByPlatform() {
 
 function showEditInfoPopup(tileData, tileElement) {
    const popup = document.getElementById('edit-info-popup');
+   const customFieldsContainer = document.getElementById('custom-fields');
+
+   // Set values for default fields
    document.getElementById('edit-name-input').value = tileData.name || '';
    document.getElementById('edit-platform-input').value = tileData.platform || '';
    document.getElementById('edit-age-input').value = tileData.age || '';
    document.getElementById('edit-description-input').value = tileData.description || '';
-   document.getElementById('edit-alt-input').value = tileData.alt || ''; // Set the alt text
+   document.getElementById('edit-alt-input').value = tileData.alt || '';
+
+   // Clear existing custom fields
+   customFieldsContainer.innerHTML = '';
+
+   // Add existing custom fields
+   if (tileData.customFields) {
+      for (const [key, value] of Object.entries(tileData.customFields)) {
+         addCustomField(key, value);
+      }
+   }
+
+   // Add Custom Field button functionality
+   document.getElementById('add-custom-field-btn').onclick = () => {
+      addCustomField();
+   };
+
+   // Add event listener for shortcuts
+   customFieldsContainer.addEventListener('keydown', (event) => {
+      const activeElement = document.activeElement;
+
+      // Check if the active element is a textarea for custom field values
+      if (activeElement.classList.contains('custom-field-value')) {
+         let wrappedText;
+         const start = activeElement.selectionStart;
+         const end = activeElement.selectionEnd;
+         const text = activeElement.value;
+
+         // Determine if the user is on macOS or not
+         const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+
+         // Handle formatting shortcuts
+         if (event.ctrlKey || (isMac && event.metaKey)) { // Use Command key for macOS
+            switch (event.key) {
+               case 'b':
+                  event.preventDefault();
+                  if (start !== end) {
+                     wrappedText = `(b)${text.substring(start, end)}(/b)`;
+                  }
+                  break;
+               case 'i':
+                  event.preventDefault();
+                  if (start !== end) {
+                     wrappedText = `(i)${text.substring(start, end)}(/i)`;
+                  }
+                  break;
+               case 'u':
+                  event.preventDefault();
+                  if (start !== end) {
+                     wrappedText = `(u)${text.substring(start, end)}(/u)`;
+                  }
+                  break;
+               case '=':
+                  event.preventDefault();
+                  if (start !== end) {
+                     wrappedText = `(sub)${text.substring(start, end)}(/sub)`;
+                  }
+                  break;
+               case '+':
+                  if (event.shiftKey) { // Check if Shift is also pressed
+                     event.preventDefault();
+                     if (start !== end) {
+                        wrappedText = `(sup)${text.substring(start, end)}(/sup)`;
+                     }
+                  }
+                  break;
+               case 'l':
+                  if (event.altKey) { // Check if Alt is also pressed
+                     event.preventDefault();
+                     if (start !== end) {
+                        wrappedText = `(letterspace="")${text.substring(start, end)}(/letterspace)`;
+                     }
+                  }
+                  break;
+               case '#':
+                  event.preventDefault();
+                  // Insert '(#)' at the beginning of the line
+                  const currentLineStart = text.lastIndexOf('\n', start - 1) + 1; // Find the start of the current line
+                  activeElement.value = text.substring(0, currentLineStart) + '(#)' + text.substring(currentLineStart);
+                  activeElement.selectionStart = currentLineStart + 3; // Move the cursor after '(#)'
+                  activeElement.selectionEnd = activeElement.selectionStart; // Set the selection end to the same position
+                  break;
+               case 's':
+                  event.preventDefault();
+                  if (start !== end) {
+                     wrappedText = `(s)${text.substring(start, end)}(/s)`;
+                  }
+                  break;
+               case 'k':
+                  event.preventDefault();
+                  if (start !== end) {
+                     wrappedText = `(c)${text.substring(start, end)}(/c)`;
+                  }
+                  break;
+               case 'q':
+                  event.preventDefault();
+                  if (start !== end) {
+                     wrappedText = `(q)${text.substring(start, end)}(/q)`;
+                  }
+                  break;
+               case 'I':
+                  if (event.altKey) {
+                     event.preventDefault();
+                     if (start !== end) {
+                        wrappedText = `(ind)${text.substring(start, end)}`;
+                     }
+                  }
+                  break;
+               case 'b':
+                  if (event.shiftKey) {
+                     event.preventDefault();
+                     if (start !== end) {
+                        wrappedText = `(blur)${text.substring(start, end)}(/blur)`;
+                     }
+                  }
+                  break;
+               default:
+                  return; // Do nothing if another key is pressed with Ctrl or Command
+            }
+
+            // Apply the wrapping if text was selected
+            if (wrappedText) {
+               activeElement.value = text.substring(0, start) + wrappedText + text.substring(end);
+               activeElement.selectionStart = start + wrappedText.length; // Move the cursor after the inserted text
+               activeElement.selectionEnd = activeElement.selectionStart; // Set the selection end to the same position
+            }
+         }
+      }
+   });
 
    popup.style.display = 'flex';
    document.getElementById('popup-overlay').style.display = 'block';
@@ -2216,12 +2354,22 @@ function showEditInfoPopup(tileData, tileElement) {
       tileData.platform = document.getElementById('edit-platform-input').value;
       tileData.age = document.getElementById('edit-age-input').value;
       tileData.description = document.getElementById('edit-description-input').value;
-      tileData.alt = document.getElementById('edit-alt-input').value; // Save the alt text
+      tileData.alt = document.getElementById('edit-alt-input').value;
+
+      // Save custom fields
+      tileData.customFields = {};
+      document.querySelectorAll('.custom-field').forEach(field => {
+         const key = field.querySelector('.custom-field-key').value;
+         const value = field.querySelector('.custom-field-value').value;
+         if (key && value) {
+            tileData.customFields[key] = value;
+         }
+      });
 
       // Update the alt text of the corresponding <img> element
-      const imgElement = tileElement.querySelector('img'); // Assuming the <img> is a child of the tileElement
+      const imgElement = tileElement.querySelector('img');
       if (imgElement) {
-         imgElement.alt = tileData.alt; // Change the alt text
+         imgElement.alt = tileData.alt;
       }
 
       saveTiles(); // Save to local storage
@@ -2233,6 +2381,23 @@ function showEditInfoPopup(tileData, tileElement) {
    document.getElementById('cancel-info-btn').onclick = () => {
       popup.style.display = 'none';
       document.getElementById('popup-overlay').style.display = 'none';
+   };
+}
+
+function addCustomField(key = '', value = '') {
+   const customFieldsContainer = document.getElementById('custom-fields');
+   const fieldDiv = document.createElement('div');
+   fieldDiv.className = 'custom-field';
+   fieldDiv.innerHTML = `
+      <input type="text" class="custom-field-key" placeholder="Field Name" value="${key}">
+      <textarea class="custom-field-value" placeholder="Field Value">${value}</textarea>
+      <button class="remove-custom-field-btn">Remove</button>
+   `;
+   customFieldsContainer.appendChild(fieldDiv);
+
+   // Set the onclick event for removing the custom field
+   fieldDiv.querySelector('.remove-custom-field-btn').onclick = () => {
+      customFieldsContainer.removeChild(fieldDiv);
    };
 }
 
@@ -2472,6 +2637,26 @@ function createImageTile(tileData) {
    });
 }
 
+document.getElementById('popup-overlay').addEventListener('click', () => {
+   document.getElementById('image-source-popup').style.display = 'none';
+   document.getElementById('url-input-popup').style.display = 'none';
+   document.getElementById('popup-overlay').style.display = 'none';
+   document.getElementById('settings-popup').style.display = 'none';
+   document.getElementById('accessibility-popup').style.display = 'none';
+   document.getElementById('edit-url-popup').style.display = 'none';
+   document.getElementById('tile-creation-popup').style.display = 'none';
+   document.getElementById('character-popup').style.display = 'none';
+   document.getElementById('edit-info-popup').style.display = 'none';
+   document.getElementById('edit-tags-popup').style.display = 'none';
+   document.getElementById('share-url-popup').style.display = 'none';
+   document.getElementById('nsfw-inclusion-popup').style.display = 'none';
+});
+
+document.getElementById('popup-overlay1').addEventListener('click', () => {
+    document.getElementById('popup-overlay1').style.display = 'none';
+    document.getElementById('new-image-confirmation-popup').style.display = 'none';
+    document.getElementById('image-confirmation-popup').style.display= 'none';
+});
 
 
 function updateTileOutline(tileElement, tags) {
@@ -2655,7 +2840,10 @@ function deleteTile(tileData, tileElement) {
   const addImagePosition = localStorage.getItem('addImagePosition');
   const adjustedIndex = (addImagePosition === 'beginning' && tileIndex >= 1) ? tileIndex + 1 : tileIndex;
 
-  // Store the deleted tile data, element, and its adjusted index
+  // Clear previous timer and store the new deleted tile data, element, and its adjusted index
+  if (undoTimer) {
+    clearInterval(undoTimer);
+  }
   deletedTile = { data: tileData, element: tileElement, index: adjustedIndex };
 
   // Remove the tile from the grid and update the tiles array
@@ -2965,56 +3153,143 @@ popupClose.addEventListener('click', closePopup);
 popupCloseBtn.addEventListener('click', closePopup);
 
 // Function to pick a random character
-// Function to pick a random character
-// Function to pick a random character
 function selectRandomCharacter() {
    const characters = Array.from(document.querySelectorAll('.image-item:not(.add-image)'));
    if (characters.length === 0) {
       alert('No characters available.');
       return;
    }
-
    let availableCharacters = includeNSFW ? characters : characters.filter(char => {
       const tags = Array.from(char.querySelectorAll('.tag')).map(tag => tag.textContent);
       return !tags.some(tag => ['18+', 'NSFW', 'Porn', 'Hentai', 'Yaoi', '🔞'].includes(tag));
    });
-
    if (availableCharacters.length === 0) {
       document.getElementById('popup-overlay').style.display = 'none';
       alert('No characters available with current NSFW settings. If you checked the box for it to remember which option you chose, click the "Reset Remembered State" to get the prompt back up.');
       return;
    }
-
    const randomIndex = Math.floor(Math.random() * availableCharacters.length);
    const selectedCharacter = availableCharacters[randomIndex];
    const tileData = tiles[characters.indexOf(selectedCharacter)];
-
+   
    // Populate the character popup with character data
    document.getElementById('popup-image').src = tileData.imageData;
-   document.getElementById('popup-name').textContent = tileData.name || 'Unknown';
-   document.getElementById('popup-platform').textContent = `Platform: ${tileData.platform || 'N/A'}`;
-   document.getElementById('popup-age').textContent = `Age: ${tileData.age || 'N/A'}`;
-   document.getElementById('popup-description').textContent = tileData.description || 'No description available.';
-   document.getElementById('popup-tags').textContent = `Tags: ${tileData.tags.join(', ')}`;
+   document.getElementById('popup-name').innerHTML = `<strong style="font-size: 1.2em;">${tileData.name || 'Unknown'}</strong>`;
+   document.getElementById('popup-platform').innerHTML = `<strong style="font-size: 1.2em;">Platform:</strong><br>${tileData.platform || 'N/A'}`;
+   document.getElementById('popup-age').innerHTML = `<strong style="font-size: 1.2em;">Age:</strong><br>${tileData.age || 'N/A'}`;
+   document.getElementById('popup-description').innerHTML = `<strong style="font-size: 1.2em;">Description:</strong><br>${tileData.description || 'No description available.'}`;
+   
+   // Populate custom fields
+   const customFieldsContainer = document.getElementById('popup-custom-fields');
+   customFieldsContainer.innerHTML = ''; // Clear existing custom fields
 
+   function formatText(text) {
+   return text
+      .replace(/\(b\)(.*?)\(\/b\)/g, '<strong>$1</strong>')
+      .replace(/\(i\)(.*?)\(\/i\)/g, '<em>$1</em>')
+      .replace(/\(u\)(.*?)\(\/u\)/g, '<u>$1</u>')
+      .replace(/\(s\)(.*?)\(\/s\)/g, '<s>$1</s>')
+      .replace(/\(link="(.*?)"\)(.*?)\(\/link\)/g, '<a href="$1" target="_blank" rel="noopener noreferrer">$2</a>')
+      .replace(/\(color="(.*?)"\)(.*?)\(\/color\)/g, '<span style="color: $1;">$2</span>')
+      .replace(/\(bgcolor="(.*?)"\)(.*?)\(\/bgcolor\)/g, '<span style="background-color: $1;">$2</span>')
+      .replace(/\(code\)(.*?)\(\/code\)/g, '<code>$1</code>') // Inline code formatting
+      .replace(/\(quote\)(.*?)\(\/quote\)/g, '<blockquote>$1</blockquote>') // Block quote formatting
+      .replace(/\(sup\)(.*?)\(\/sup\)/g, '<sup>$1</sup>') // Superscript formatting
+      .replace(/\(sub\)(.*?)\(\/sub\)/g, '<sub>$1</sub>')  // Subscript formatting
+      .replace(/\(letterspace="(.*?)"\)(.*?)\(\/letterspace\)/g, '<span style="letter-spacing: $1;">$2</span>') // Letter spacing formatting
+      .replace(/\(ind\)/g, '&nbsp;&nbsp;&nbsp;&nbsp;') // Indentation formatting
+      .replace(/\(blur\)(.*?)\(\/blur\)/g, '<span class="blur-text">$1</span>'); // Blur formatting
+}
+
+// CSS for blur functionality
+const style = document.createElement('style');
+style.textContent = `
+  .blur-text {
+    filter: blur(5px);
+    transition: filter 0.3s ease;
+  }
+  .blur-text:hover {
+    filter: none;
+  }
+`;
+document.head.appendChild(style);
+
+
+
+
+if (tileData.customFields) {
+  for (const [key, value] of Object.entries(tileData.customFields)) {
+    // Create a paragraph for the key
+    const fieldElement = document.createElement('p');
+    fieldElement.innerHTML = `<strong style="font-size: 1.2em;">${key}:</strong>`; // Set the key
+    customFieldsContainer.appendChild(fieldElement);
+
+    // Split the value by newline characters
+    const lines = value.split('\n');
+
+    // Initialize a counter for numbered lists
+    let numberedListCounter = 1; // Counter for numbered lists
+
+    // Process each line
+    lines.forEach(line => {
+      if (line.startsWith('(-)')) {
+        // Create a list item for lines starting with "(-)"
+        const listItem = document.createElement('li');
+        listItem.innerHTML = formatText(line.substring(3).trim()); // Remove '(-)' and trim
+        listItem.style.listStyleType = 'disc'; // Add bullet point
+        listItem.style.marginLeft = '20px'; // Add left padding
+        listItem.style.paddingLeft = '5px'; // Add padding between bullet and text
+        customFieldsContainer.appendChild(listItem);
+      } else if (line.startsWith('(#)')) {
+        // Create a numbered list item for lines starting with "(#)"
+        const listItem = document.createElement('li');
+        listItem.innerHTML = formatText(line.substring(3).trim()); // Remove '(#)' and trim
+        listItem.style.listStyleType = 'decimal'; // Set to decimal for numbered list
+
+        // Create a new <ol> for the numbered list if it's the first item
+        if (numberedListCounter === 1) {
+          const numberedList = document.createElement('ol');
+          numberedList.style.listStyleType = 'decimal'; // Ensure decimal style
+          numberedList.style.marginLeft = '20px'; // Adjust margin for ordered list
+          numberedList.style.paddingLeft = '0'; // Remove padding to avoid extra space
+          customFieldsContainer.appendChild(numberedList); // Append the ordered list to the container
+        }
+
+        // Append the list item to the numbered list
+        const numberedList = customFieldsContainer.lastChild; // Get the last child (the ordered list)
+        numberedList.appendChild(listItem); // Append the item to the ordered list
+        numberedListCounter++; // Increment the counter
+      } else {
+        // Create a regular paragraph for other lines
+        const textElement = document.createElement('p');
+        textElement.innerHTML = formatText(line.trim());
+        customFieldsContainer.appendChild(textElement);
+      }
+    });
+  }
+}
+
+
+   document.getElementById('popup-tags').innerHTML = `<strong style="font-size: 1.2em;">Tags:</strong><br>${tileData.tags.join(', ')}`;
+   
    // Remove any previous event listener for the popup button
    const popupButton = document.getElementById('popup-button');
    const newPopupButton = popupButton.cloneNode(true);
    popupButton.replaceWith(newPopupButton);
-
+   
    // Add a new event listener for the popup button
    newPopupButton.addEventListener('click', function() {
       window.open(tileData.link, '_blank'); // Open link in new tab
-      });
-
+   });
+   
    updateTileOutline(characterPopup, tileData.tags);
-
+   
    if (isBlurred && (tileData.tags.includes('18+') || tileData.tags.includes('NSFW') || tileData.tags.includes('Hentai') || tileData.tags.includes('Porn') || tileData.tags.includes('Yaoi') || tileData.tags.includes('🔞'))) {
       popupImage.classList.add('blurred-image');
    } else {
       popupImage.classList.remove('blurred-image');
    }
-
+   
    // Display the character popup
    characterPopup.classList.remove('hidden');
    document.getElementById('character-popup').style.display = 'block';
