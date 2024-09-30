@@ -2752,7 +2752,123 @@ function stripUrlParams(url) {
    }
 }
 // Edit image
-function createCroppingInterface(image, callback) {
+function editImage(tileData, tileElement) {
+    console.log('TEST');
+    const popup = document.getElementById('image-popup');
+    const localUploadBtn = document.getElementById('local-upload-btn');
+    const popupClose = document.getElementById('popup-close');
+    const urlPopup = document.getElementById('url-popup');
+    const urlInput = document.getElementById('image-url-input');
+    const urlInput1 = document.getElementById('image-url-input1');
+    const submitUrlBtn = document.getElementById('submit-url-btn');
+    const urlPopupClose = document.getElementById('url-popup-close');
+    const imageUploadClose = document.getElementById('urlURL-popup-close');
+    const urlURLPopupClose = document.getElementById('url-popup-close-url');
+
+    // Show the main popup
+    popup.classList.remove('hidden');
+    document.getElementById('image-popup').style.display = 'block';
+    document.getElementById('popup-overlay').style.display = 'block';
+
+    // Close main popup functionality
+    popupClose.onclick = () => {
+        popup.classList.add('hidden');
+        document.getElementById('popup-overlay').style.display = 'none';
+    };
+
+    localUploadBtn.onclick = () => {
+        console.log('TEST2');
+        const imageUploadInput = document.createElement('input');
+        imageUploadInput.type = 'file';
+        imageUploadInput.accept = 'image/*,.avif,.jxl,.cur,.jps,.jfif';
+
+        imageUploadInput.addEventListener('change', function (event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                    const newImageData = e.target.result;
+                    // Create a new image element for cropping
+                    const img = new Image();
+                    img.onload = function() {
+                        // Create cropping interface
+                        createCroppingInterface(img, (croppedImageData) => {
+                            tileData.imageData = croppedImageData;
+                            tileElement.querySelector('img').src = croppedImageData;
+                            saveTiles();
+                        });
+                    };
+                    img.src = newImageData;
+                };
+
+                reader.readAsDataURL(file);
+            }
+            popup.classList.add('hidden');
+            document.getElementById('popup-overlay').style.display = 'none';
+            document.getElementById('image-popup').style.display = 'none';
+        });
+
+        imageUploadInput.click();
+    };
+
+        urlUploadBtn.onclick = () => {
+
+            console.log('TEST3');
+            // Hide the main popup and show the URL input popup
+            document.getElementById('image-popup').style.display = 'none';
+            document.getElementById('url-popup').style.display = 'block';
+            popup.classList.add('hidden');
+            urlPopup.classList.remove('hidden');
+        };
+
+        // Submit URL functionality
+        document.getElementById('submit-url-btn1').onclick = () => {
+    let imageUrl = urlInput1.value.trim();
+    if (imageUrl) {
+        document.getElementById('popup-overlay1').style.display = 'block';
+        imageUrl = stripUrlParams(imageUrl); // Strip query parameters from URL
+        document.getElementById('preview-image').src = imageUrl; // Set preview image
+
+        // Show confirmation popup
+        document.getElementById('image-confirmation-popup').style.display = 'block';
+
+        // Confirm button click event
+        document.getElementById('confirm-image-btn').onclick = () => {
+            document.getElementById('image-confirmation-popup').style.display = 'none';
+            document.getElementById('popup-overlay').style.display = 'none';
+            document.getElementById('popup-overlay1').style.display = 'none';
+            document.getElementById('url-popup').style.display = 'none';
+            tileData.imageData = imageUrl; // Commit the changes
+            tileElement.querySelector('img').src = imageUrl; // Update the tile image
+            saveTiles(); // Save the changes
+            closePopups(); // Close all popups
+        };
+
+        // Cancel button click event
+        document.getElementById('cancel-image-btn').onclick = () => {
+            document.getElementById('image-confirmation-popup').style.display = 'none';
+            document.getElementById('popup-overlay1').style.display = 'none';
+        };
+    }
+};
+
+        // Close URL popup functionality
+        urlPopupClose.onclick = () => {
+            urlPopup.classList.add('hidden');
+            document.getElementById('image-popup').style.display = 'none';
+            document.getElementById('popup-overlay').style.display = 'none';
+        };
+
+        urlURLPopupClose.onclick = () => {
+            document.getElementById('url-popup').style.display = 'none';
+            document.getElementById('popup-overlay').style.display = 'none';
+        };
+
+        
+    }
+
+    function createCroppingInterface(image, callback) {
     const croppingPopup = document.createElement('div');
     croppingPopup.classList.add('popupQwErTy');
 
@@ -2784,21 +2900,61 @@ function createCroppingInterface(image, callback) {
     imageContainer.appendChild(cropBox);
     croppingPopup.appendChild(imageContainer);
 
+    // New container for buttons and dropdowns
+    const actionContainer = document.createElement('div');
+    actionContainer.style.display = 'flex';
+    actionContainer.style.gap = '10px';
+
+    // Confirm button
     const confirmButton = document.createElement('button');
     confirmButton.textContent = 'Confirm Crop';
     confirmButton.classList.add('buttonHgFdSa');
-    croppingPopup.appendChild(confirmButton);
+    actionContainer.appendChild(confirmButton);
 
+    // Compression dropdown
     const compressionButton = document.createElement('select');
     compressionButton.classList.add('compressionButtonQwErAs');
-    const compressionLevels = ['None', 'Low', 'Medium', 'High', 'Extreme', 'Extra Extreme', 'Yummers', 'Stupidly Low', 'What Are Pixels?'];
+    const compressionLevels = [
+        'None', 
+        'Low', 
+        'Medium', 
+        'High', 
+        'Extreme', 
+        'Extra Extreme', 
+        'Yummers', 
+        'Stupidly Low', 
+        'What Are Pixels?', 
+        'I Love Pixels'
+    ];
+
     compressionLevels.forEach(level => {
         const option = document.createElement('option');
         option.value = level.toLowerCase();
         option.textContent = level;
         compressionButton.appendChild(option);
     });
-    croppingPopup.appendChild(compressionButton);
+    actionContainer.appendChild(compressionButton);
+
+    // Resize dropdown
+    const resizeButton = document.createElement('select');
+    resizeButton.classList.add('resizeButtonRtYuIo');
+    const resizeOptions = [
+        'Image Size: 100%',
+        'Image Size: 75%',
+        'Image Size: 50%',
+        'Image Size: 25%',
+        'Image Size: 10%',
+    ];
+
+    resizeOptions.forEach(size => {
+        const option = document.createElement('option');
+        option.value = size.split(': ')[1].replace('%', ''); // Extracting percentage
+        option.textContent = size;
+        resizeButton.appendChild(option);
+    });
+    actionContainer.appendChild(resizeButton);
+
+    croppingPopup.appendChild(actionContainer);
 
     const cancelButton = document.createElement('button');
     cancelButton.textContent = 'Cancel';
@@ -2879,6 +3035,7 @@ function createCroppingInterface(image, callback) {
             canvas.height
         );
 
+        // Compression logic
         let quality = 1.0;
         switch (compressionButton.value) {
             case 'low': quality = 0.8; break;
@@ -2889,48 +3046,34 @@ function createCroppingInterface(image, callback) {
             case 'yummers': quality = 0.01; break;
             case 'stupidly low': quality = 0.001; break;
             case 'what are pixels?':
-                quality = 0.001;
-                break;
+            case 'i love pixels': quality = 0.001; break;
             default: quality = 1.0;
         }
 
-        // Compress the image once
         let dataUrl = canvas.toDataURL('image/webp', quality);
 
-        if (compressionButton.value === 'what are pixels?') {
-            // Create a new image from the first compression
-            const tempImage = new Image();
-            tempImage.src = dataUrl;
-
-            tempImage.onload = () => {
-                // Create a new canvas for the second compression
-                const secondCanvas = document.createElement('canvas');
-                const secondCtx = secondCanvas.getContext('2d');
-                secondCanvas.width = tempImage.width;
-                secondCanvas.height = tempImage.height;
-
-                // Draw the compressed image onto the second canvas
-                secondCtx.drawImage(tempImage, 0, 0);
-
-                // Compress the image again with quality 0.001
-                const secondDataUrl = secondCanvas.toDataURL('image/webp', 0.001);
-
-                // Return the doubly compressed image
-                callback(secondDataUrl);
-                document.body.removeChild(croppingPopup);
-            };
-        } else {
-            // Return the single compressed image
-            callback(dataUrl);
-            document.body.removeChild(croppingPopup);
+        // Resize logic based on the selected option
+        const resizePercentage = parseFloat(resizeButton.value) / 100;
+        if (resizePercentage !== 1) {
+            const resizedCanvas = document.createElement('canvas');
+            resizedCanvas.width = canvas.width * resizePercentage;
+            resizedCanvas.height = canvas.height * resizePercentage;
+            const resizedCtx = resizedCanvas.getContext('2d');
+            resizedCtx.drawImage(canvas, 0, 0, resizedCanvas.width, resizedCanvas.height);
+            dataUrl = resizedCanvas.toDataURL('image/webp', quality);
         }
+
+        // Handle additional compression logic (if needed) here...
+
+        // Return the resized and compressed image
+        callback(dataUrl);
+        document.body.removeChild(croppingPopup);
     };
 
     cancelButton.onclick = () => {
         document.body.removeChild(croppingPopup);
     };
 }
-
 
 
 
