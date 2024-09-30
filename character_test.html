@@ -7,7 +7,6 @@
     <meta name="pinterest" content="nopin" />
     <link id="font-link" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto&display=swap">
     <title>Character Bookmarking Tool</title>
-    
     <style>
     
 .theme-toggle button, #tag-filter, #tag-filter-mobile, #export-btn, #import-btn, #tile-size, #colorSelector, #popup-button, #reroll-btn, #local-upload-btn, #url-upload-btn,
@@ -366,6 +365,10 @@ img {
 	min-height: 100%;
 	object-fit: cover;
 	transition: transform 0.3s ease;
+}
+
+img:hover {
+	transform: scale(1.05);
 }
 
 .add-image {
@@ -2686,63 +2689,56 @@ function stripUrlParams(url) {
 // Edit image
 function editImage(tileData, tileElement) {
     console.log('TEST');
-    const popup = document.getElementById('image-popup');
-    const localUploadBtn = document.getElementById('local-upload-btn');
-    const popupClose = document.getElementById('popup-close');
-    const urlPopup = document.getElementById('url-popup');
-    const urlInput = document.getElementById('image-url-input');
-    const urlInput1 = document.getElementById('image-url-input1');
-    const submitUrlBtn = document.getElementById('submit-url-btn');
-    const urlPopupClose = document.getElementById('url-popup-close');
-    const imageUploadClose = document.getElementById('urlURL-popup-close');
-    const urlURLPopupClose = document.getElementById('url-popup-close-url');
+        const popup = document.getElementById('image-popup');
+        const localUploadBtn = document.getElementById('local-upload-btn');
+        const popupClose = document.getElementById('popup-close');
+        const urlPopup = document.getElementById('url-popup');
+        const urlInput = document.getElementById('image-url-input');
+        const urlInput1 = document.getElementById('image-url-input1');
+        const submitUrlBtn = document.getElementById('submit-url-btn');
+        const urlPopupClose = document.getElementById('url-popup-close');
+        const imageUploadClose = document.getElementById('urlURL-popup-close');
+        const urlURLPopupClose = document.getElementById('url-popup-close-url');
 
-    // Show the main popup
-    popup.classList.remove('hidden');
-    document.getElementById('image-popup').style.display = 'block';
-    document.getElementById('popup-overlay').style.display = 'block';
+        // Show the main popup
+        popup.classList.remove('hidden');
+        document.getElementById('image-popup').style.display = 'block';
+        document.getElementById('popup-overlay').style.display = 'block';
 
-    // Close main popup functionality
-    popupClose.onclick = () => {
-        popup.classList.add('hidden');
-        document.getElementById('popup-overlay').style.display = 'none';
-    };
-
-    localUploadBtn.onclick = () => {
-        console.log('TEST2');
-        const imageUploadInput = document.createElement('input');
-        imageUploadInput.type = 'file';
-        imageUploadInput.accept = 'image/*,.avif,.jxl,.cur,.jps,.jfif';
-
-        imageUploadInput.addEventListener('change', function (event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-
-                reader.onload = function (e) {
-                    const newImageData = e.target.result;
-                    // Create a new image element for cropping
-                    const img = new Image();
-                    img.onload = function() {
-                        // Create cropping interface
-                        createCroppingInterface(img, (croppedImageData) => {
-                            tileData.imageData = croppedImageData;
-                            tileElement.querySelector('img').src = croppedImageData;
-                            saveTiles();
-                        });
-                    };
-                    img.src = newImageData;
-                };
-
-                reader.readAsDataURL(file);
-            }
+        // Close main popup functionality
+        popupClose.onclick = () => {
             popup.classList.add('hidden');
             document.getElementById('popup-overlay').style.display = 'none';
-            document.getElementById('image-popup').style.display = 'none';
-        });
+        };
 
-        imageUploadInput.click();
-    };
+        localUploadBtn.onclick = () => {
+            console.log('TEST2');
+            const imageUploadInput = document.createElement('input');
+            imageUploadInput.type = 'file';
+            imageUploadInput.accept = 'image/*,.avif,.jxl,.cur,.jps,.jfif';
+
+            imageUploadInput.addEventListener('change', function (event) {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        const newImageData = e.target.result;
+                        tileData.imageData = newImageData;
+                        tileElement.querySelector('img').src = newImageData;
+
+                        saveTiles();
+                    };
+
+                    reader.readAsDataURL(file);
+                }
+                popup.classList.add('hidden');
+                document.getElementById('popup-overlay').style.display = 'none';
+                document.getElementById('image-popup').style.display = 'none';
+            });
+
+            imageUploadInput.click();
+        };
 
         urlUploadBtn.onclick = () => {
 
@@ -2796,195 +2792,7 @@ function editImage(tileData, tileElement) {
             document.getElementById('url-popup').style.display = 'none';
             document.getElementById('popup-overlay').style.display = 'none';
         };
-
-        
     }
-
-    function createCroppingInterface(image, callback) {
-    const croppingPopup = document.createElement('div');
-    croppingPopup.style.position = 'fixed';
-    croppingPopup.style.top = '0';
-    croppingPopup.style.left = '0';
-    croppingPopup.style.width = '100%';
-    croppingPopup.style.height = '100%';
-    croppingPopup.style.backgroundColor = 'rgba(0,0,0,0.8)';
-    croppingPopup.style.display = 'flex';
-    croppingPopup.style.flexDirection = 'column';
-    croppingPopup.style.alignItems = 'center';
-    croppingPopup.style.justifyContent = 'center';
-    croppingPopup.style.zIndex = '1000';
-
-    const imageContainer = document.createElement('div');
-    imageContainer.style.position = 'relative';
-    imageContainer.style.maxWidth = '80%';
-    imageContainer.style.maxHeight = '80%';
-    
-    // Get browser window dimensions
-    const windowWidth = window.innerWidth * 0.8;  // Use 80% of the window width
-    const windowHeight = window.innerHeight * 0.8; // Use 80% of the window height
-
-    // Calculate scaling factor to maintain aspect ratio
-    const aspectRatio = image.naturalWidth / image.naturalHeight;
-    let scaledWidth = windowWidth;
-    let scaledHeight = windowWidth / aspectRatio;
-
-    if (scaledHeight > windowHeight) {
-        scaledHeight = windowHeight;
-        scaledWidth = windowHeight * aspectRatio;
-    }
-
-    image.style.width = scaledWidth + 'px';
-    image.style.height = scaledHeight + 'px';
-
-    const cropBox = document.createElement('div');
-    cropBox.style.position = 'absolute';
-    cropBox.style.border = '2px solid white';
-    cropBox.style.boxShadow = '0 0 0 9999px rgba(0, 0, 0, 0.5)';
-    cropBox.style.cursor = 'move';
-
-    const resizeHandle = document.createElement('div');
-    resizeHandle.style.position = 'absolute';
-    resizeHandle.style.bottom = '-10px';
-    resizeHandle.style.right = '-10px';
-    resizeHandle.style.width = '20px';
-    resizeHandle.style.height = '20px';
-    resizeHandle.style.backgroundColor = 'white';
-    resizeHandle.style.border = '2px solid black';
-    resizeHandle.style.cursor = 'se-resize';
-
-    cropBox.appendChild(resizeHandle);
-    imageContainer.appendChild(image);
-    imageContainer.appendChild(cropBox);
-    croppingPopup.appendChild(imageContainer);
-
-    // Confirm button
-    const confirmButton = document.createElement('button');
-    confirmButton.textContent = 'Confirm Crop';
-    confirmButton.style.marginTop = '20px';
-    confirmButton.style.padding = '10px 20px';
-    confirmButton.style.backgroundColor = '#4CAF50';
-    confirmButton.style.color = 'white';
-    confirmButton.style.border = 'none';
-    confirmButton.style.cursor = 'pointer';
-    confirmButton.style.zIndex = '1'; // Set z-index to 1
-    croppingPopup.appendChild(confirmButton);
-
-    // Cancel button
-    const cancelButton = document.createElement('button');
-    cancelButton.textContent = 'Cancel';
-    cancelButton.style.marginTop = '20px';
-    cancelButton.style.padding = '10px 20px';
-    cancelButton.style.backgroundColor = '#f44336'; // Red color for cancel
-    cancelButton.style.color = 'white';
-    cancelButton.style.border = 'none';
-    cancelButton.style.cursor = 'pointer';
-    cancelButton.style.zIndex = '1'; // Set z-index to 1
-    croppingPopup.appendChild(cancelButton);
-
-    document.body.appendChild(croppingPopup);
-
-    // Set initial crop box size and position
-    const size = Math.min(scaledWidth, scaledHeight) / 2;
-    cropBox.style.width = size + 'px';
-    cropBox.style.height = size + 'px';
-    cropBox.style.left = (scaledWidth - size) / 2 + 'px';
-    cropBox.style.top = (scaledHeight - size) / 2 + 'px';
-
-    // Implement dragging and resizing logic
-    let isDragging = false;
-    let isResizing = false;
-    let startX, startY, startWidth, startHeight;
-
-    cropBox.addEventListener('mousedown', startDragging);
-    resizeHandle.addEventListener('mousedown', startResizing);
-    document.addEventListener('mousemove', drag);
-    document.addEventListener('mouseup', stopDragging);
-
-    function startDragging(e) {
-        if (e.target === resizeHandle) return;
-        isDragging = true;
-        startX = e.clientX - cropBox.offsetLeft;
-        startY = e.clientY - cropBox.offsetTop;
-    }
-
-    function startResizing(e) {
-        isResizing = true;
-        startX = e.clientX;
-        startY = e.clientY;
-        startWidth = parseInt(getComputedStyle(cropBox).width, 10);
-        startHeight = parseInt(getComputedStyle(cropBox).height, 10);
-        e.stopPropagation();
-    }
-
-    function drag(e) {
-        if (isDragging) {
-            const newLeft = e.clientX - startX;
-            const newTop = e.clientY - startY;
-
-            // Restrict dragging to the image boundaries
-            cropBox.style.left = Math.max(0, Math.min(newLeft, scaledWidth - cropBox.offsetWidth)) + 'px';
-            cropBox.style.top = Math.max(0, Math.min(newTop, scaledHeight - cropBox.offsetHeight)) + 'px';
-        } else if (isResizing) {
-            const newSize = Math.min(startWidth + e.clientX - startX, startHeight + e.clientY - startY);
-
-            // Ensure the crop box does not exceed the image boundaries
-            const maxSize = Math.min(scaledWidth - parseInt(cropBox.style.left, 10), scaledHeight - parseInt(cropBox.style.top, 10));
-            cropBox.style.width = Math.min(newSize, maxSize) + 'px';
-            cropBox.style.height = cropBox.style.width; // Maintain 1:1 aspect ratio
-        }
-    }
-
-    function stopDragging() {
-        isDragging = false;
-        isResizing = false;
-    }
-
-    confirmButton.onclick = () => {
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
-        const cropBoxRect = cropBox.getBoundingClientRect();
-        const imageRect = image.getBoundingClientRect();
-
-        const scaleX = image.naturalWidth / imageRect.width;
-        const scaleY = image.naturalHeight / imageRect.height;
-
-        canvas.width = cropBoxRect.width * scaleX;
-        canvas.height = cropBoxRect.height * scaleY;
-
-        ctx.drawImage(
-            image,
-            (cropBoxRect.left - imageRect.left) * scaleX,
-            (cropBoxRect.top - imageRect.top) * scaleY,
-            cropBoxRect.width * scaleX,
-            cropBoxRect.height * scaleY,
-            0,
-            0,
-            canvas.width,
-            canvas.height
-        );
-
-        // Try WebP first, fall back to PNG if not supported
-        if (canvas.toDataURL('image/webp').indexOf('data:image/webp') === 0) {
-            // WebP is supported
-            const webpDataUrl = canvas.toDataURL('image/webp');
-            callback(webpDataUrl);
-        } else {
-            // WebP is not supported, use PNG as fallback
-            const pngDataUrl = canvas.toDataURL('image/png');
-            callback(pngDataUrl);
-        }
-
-        document.body.removeChild(croppingPopup);
-    };
-
-    // Cancel button functionality
-    cancelButton.onclick = () => {
-        document.body.removeChild(croppingPopup);
-    };
-}
-
-
-
 
 document.getElementById('popup-overlay').onclick = () => {
    document.getElementById('url-popup').style.display = 'none';
@@ -3167,24 +2975,17 @@ function filterTiles() {
 
 // Handle file selection
 fileInput.addEventListener('change', (event) => {
-    const file = event.target.files[0];
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            const imageData = e.target.result;
-            const img = new Image();
-            img.src = imageData;
-
-            // Create cropping interface and pass the callback
-            createCroppingInterface(img, (croppedImageData) => {
-                showTileCreationPopup(croppedImageData);
-            });
-        };
-        reader.readAsDataURL(file);
-    }
-    document.getElementById('popup-overlay').style.display = 'none';
-});
-
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const imageData = e.target.result;
+                showTileCreationPopup(imageData);
+            };
+            reader.readAsDataURL(file);
+        }
+        document.getElementById('popup-overlay').style.display = 'none';
+    });
 
 function clearTileCreationPopupInputs() {
     document.getElementById('tile-link').value = '';
