@@ -2355,14 +2355,21 @@ function showEditInfoPopup(tileData, tileElement) {
                      }
                   }
                   break;
-               case '#':
-                  event.preventDefault();
-                  // Insert '(#)' at the beginning of the line
-                  const currentLineStart = text.lastIndexOf('\n', start - 1) + 1; // Find the start of the current line
-                  activeElement.value = text.substring(0, currentLineStart) + '(#)' + text.substring(currentLineStart);
-                  activeElement.selectionStart = currentLineStart + 3; // Move the cursor after '(#)'
-                  activeElement.selectionEnd = activeElement.selectionStart; // Set the selection end to the same position
-                  break;
+                  case '#':
+    event.preventDefault();
+    // Find the start of the current line
+    const currentLineStart = text.lastIndexOf('\n', start - 1) + 1; 
+    const currentLineText = text.substring(currentLineStart, text.indexOf('\n', currentLineStart));
+    
+    // Check if the line already starts with '(#)'
+    if (!currentLineText.trim().startsWith('(#[)')) {
+        // Insert '(#)' at the beginning of the line if it's not already there
+        activeElement.value = text.substring(0, currentLineStart) + '(#)' + text.substring(currentLineStart);
+        activeElement.selectionStart = currentLineStart + 3; // Move the cursor after '(#)'
+        activeElement.selectionEnd = activeElement.selectionStart; // Set the selection end to the same position
+    }
+    break;
+
                case 's':
                   event.preventDefault();
                   if (start !== end) {
