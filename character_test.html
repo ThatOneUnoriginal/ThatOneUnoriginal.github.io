@@ -1019,6 +1019,74 @@ blockquote {
 .custom-field-value{
     margin-bottom: 0px !important;
 }
+/* Random CSS Class Names */
+.popupQwErTy {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.imageContainerAsDfGh {
+    position: relative;
+    max-width: 80%;
+    max-height: 80%;
+}
+
+.cropBoxZxCvBn {
+    position: absolute;
+    border: 2px solid white;
+    box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.5);
+    cursor: move;
+}
+
+.resizeHandleUiOpLm {
+    position: absolute;
+    bottom: -10px;
+    right: -10px;
+    width: 20px;
+    height: 20px;
+    background-color: white;
+    border: 2px solid black;
+    cursor: se-resize;
+}
+
+.buttonHgFdSa {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    z-index: 1;
+}
+
+.cancelButtonXyZwv {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #f44336;
+    color: white;
+    border: none;
+    cursor: pointer;
+    z-index: 1;
+}
+
+.compressionButtonQwErAs {
+    margin-top: 20px;
+    margin-left: 10px;
+    padding: 10px 20px;
+    cursor: pointer;
+    z-index: 1;
+}
+
+
     </style>
 </head>
 <body>
@@ -2287,14 +2355,21 @@ function showEditInfoPopup(tileData, tileElement) {
                      }
                   }
                   break;
-               case '#':
-                  event.preventDefault();
-                  // Insert '(#)' at the beginning of the line
-                  const currentLineStart = text.lastIndexOf('\n', start - 1) + 1; // Find the start of the current line
-                  activeElement.value = text.substring(0, currentLineStart) + '(#)' + text.substring(currentLineStart);
-                  activeElement.selectionStart = currentLineStart + 3; // Move the cursor after '(#)'
-                  activeElement.selectionEnd = activeElement.selectionStart; // Set the selection end to the same position
-                  break;
+                  case '#':
+    event.preventDefault();
+    // Find the start of the current line
+    const currentLineStart = text.lastIndexOf('\n', start - 1) + 1; 
+    const currentLineText = text.substring(currentLineStart, text.indexOf('\n', currentLineStart));
+    
+    // Check if the line already starts with '(#)'
+    if (!currentLineText.trim().startsWith('(#[)')) {
+        // Insert '(#)' at the beginning of the line if it's not already there
+        activeElement.value = text.substring(0, currentLineStart) + '(#)' + text.substring(currentLineStart);
+        activeElement.selectionStart = currentLineStart + 3; // Move the cursor after '(#)'
+        activeElement.selectionEnd = activeElement.selectionStart; // Set the selection end to the same position
+    }
+    break;
+
                case 's':
                   event.preventDefault();
                   if (start !== end) {
@@ -2802,28 +2877,13 @@ function editImage(tileData, tileElement) {
 
     function createCroppingInterface(image, callback) {
     const croppingPopup = document.createElement('div');
-    croppingPopup.style.position = 'fixed';
-    croppingPopup.style.top = '0';
-    croppingPopup.style.left = '0';
-    croppingPopup.style.width = '100%';
-    croppingPopup.style.height = '100%';
-    croppingPopup.style.backgroundColor = 'rgba(0,0,0,0.8)';
-    croppingPopup.style.display = 'flex';
-    croppingPopup.style.flexDirection = 'column';
-    croppingPopup.style.alignItems = 'center';
-    croppingPopup.style.justifyContent = 'center';
-    croppingPopup.style.zIndex = '1000';
+    croppingPopup.classList.add('popupQwErTy');
 
     const imageContainer = document.createElement('div');
-    imageContainer.style.position = 'relative';
-    imageContainer.style.maxWidth = '80%';
-    imageContainer.style.maxHeight = '80%';
-    
-    // Get browser window dimensions
-    const windowWidth = window.innerWidth * 0.8;  // Use 80% of the window width
-    const windowHeight = window.innerHeight * 0.8; // Use 80% of the window height
+    imageContainer.classList.add('imageContainerAsDfGh');
 
-    // Calculate scaling factor to maintain aspect ratio
+    const windowWidth = window.innerWidth * 0.8;
+    const windowHeight = window.innerHeight * 0.8;
     const aspectRatio = image.naturalWidth / image.naturalHeight;
     let scaledWidth = windowWidth;
     let scaledHeight = windowWidth / aspectRatio;
@@ -2837,60 +2897,85 @@ function editImage(tileData, tileElement) {
     image.style.height = scaledHeight + 'px';
 
     const cropBox = document.createElement('div');
-    cropBox.style.position = 'absolute';
-    cropBox.style.border = '2px solid white';
-    cropBox.style.boxShadow = '0 0 0 9999px rgba(0, 0, 0, 0.5)';
-    cropBox.style.cursor = 'move';
+    cropBox.classList.add('cropBoxZxCvBn');
 
     const resizeHandle = document.createElement('div');
-    resizeHandle.style.position = 'absolute';
-    resizeHandle.style.bottom = '-10px';
-    resizeHandle.style.right = '-10px';
-    resizeHandle.style.width = '20px';
-    resizeHandle.style.height = '20px';
-    resizeHandle.style.backgroundColor = 'white';
-    resizeHandle.style.border = '2px solid black';
-    resizeHandle.style.cursor = 'se-resize';
+    resizeHandle.classList.add('resizeHandleUiOpLm');
 
     cropBox.appendChild(resizeHandle);
     imageContainer.appendChild(image);
     imageContainer.appendChild(cropBox);
     croppingPopup.appendChild(imageContainer);
 
+    // New container for buttons and dropdowns
+    const actionContainer = document.createElement('div');
+    actionContainer.style.display = 'flex';
+    actionContainer.style.gap = '10px';
+
     // Confirm button
     const confirmButton = document.createElement('button');
     confirmButton.textContent = 'Confirm Crop';
-    confirmButton.style.marginTop = '20px';
-    confirmButton.style.padding = '10px 20px';
-    confirmButton.style.backgroundColor = '#4CAF50';
-    confirmButton.style.color = 'white';
-    confirmButton.style.border = 'none';
-    confirmButton.style.cursor = 'pointer';
-    confirmButton.style.zIndex = '1'; // Set z-index to 1
-    croppingPopup.appendChild(confirmButton);
+    confirmButton.classList.add('buttonHgFdSa');
+    actionContainer.appendChild(confirmButton);
 
-    // Cancel button
+    // Compression dropdown
+    const compressionButton = document.createElement('select');
+    compressionButton.classList.add('compressionButtonQwErAs');
+    const compressionLevels = [
+        'None', 
+        'Low', 
+        'Medium', 
+        'High', 
+        'Extreme', 
+        'Extra Extreme', 
+        'Yummers', 
+        'Stupidly Low', 
+        'What Are Pixels?', 
+        'I Love Pixels'
+    ];
+
+    compressionLevels.forEach(level => {
+        const option = document.createElement('option');
+        option.value = level.toLowerCase();
+        option.textContent = level;
+        compressionButton.appendChild(option);
+    });
+    actionContainer.appendChild(compressionButton);
+
+    // Resize dropdown
+    const resizeButton = document.createElement('select');
+    resizeButton.classList.add('resizeButtonRtYuIo');
+    const resizeOptions = [
+        'Image Size: 100%',
+        'Image Size: 75%',
+        'Image Size: 50%',
+        'Image Size: 25%',
+        'Image Size: 10%',
+    ];
+
+    resizeOptions.forEach(size => {
+        const option = document.createElement('option');
+        option.value = size.split(': ')[1].replace('%', ''); // Extracting percentage
+        option.textContent = size;
+        resizeButton.appendChild(option);
+    });
+    actionContainer.appendChild(resizeButton);
+
+    croppingPopup.appendChild(actionContainer);
+
     const cancelButton = document.createElement('button');
     cancelButton.textContent = 'Cancel';
-    cancelButton.style.marginTop = '20px';
-    cancelButton.style.padding = '10px 20px';
-    cancelButton.style.backgroundColor = '#f44336'; // Red color for cancel
-    cancelButton.style.color = 'white';
-    cancelButton.style.border = 'none';
-    cancelButton.style.cursor = 'pointer';
-    cancelButton.style.zIndex = '1'; // Set z-index to 1
+    cancelButton.classList.add('cancelButtonXyZwv');
     croppingPopup.appendChild(cancelButton);
 
     document.body.appendChild(croppingPopup);
 
-    // Set initial crop box size and position
     const size = Math.min(scaledWidth, scaledHeight) / 2;
     cropBox.style.width = size + 'px';
     cropBox.style.height = size + 'px';
     cropBox.style.left = (scaledWidth - size) / 2 + 'px';
     cropBox.style.top = (scaledHeight - size) / 2 + 'px';
 
-    // Implement dragging and resizing logic
     let isDragging = false;
     let isResizing = false;
     let startX, startY, startWidth, startHeight;
@@ -2920,17 +3005,13 @@ function editImage(tileData, tileElement) {
         if (isDragging) {
             const newLeft = e.clientX - startX;
             const newTop = e.clientY - startY;
-
-            // Restrict dragging to the image boundaries
             cropBox.style.left = Math.max(0, Math.min(newLeft, scaledWidth - cropBox.offsetWidth)) + 'px';
             cropBox.style.top = Math.max(0, Math.min(newTop, scaledHeight - cropBox.offsetHeight)) + 'px';
         } else if (isResizing) {
             const newSize = Math.min(startWidth + e.clientX - startX, startHeight + e.clientY - startY);
-
-            // Ensure the crop box does not exceed the image boundaries
             const maxSize = Math.min(scaledWidth - parseInt(cropBox.style.left, 10), scaledHeight - parseInt(cropBox.style.top, 10));
             cropBox.style.width = Math.min(newSize, maxSize) + 'px';
-            cropBox.style.height = cropBox.style.width; // Maintain 1:1 aspect ratio
+            cropBox.style.height = cropBox.style.width;
         }
     }
 
@@ -2944,10 +3025,8 @@ function editImage(tileData, tileElement) {
         const ctx = canvas.getContext('2d');
         const cropBoxRect = cropBox.getBoundingClientRect();
         const imageRect = image.getBoundingClientRect();
-
         const scaleX = image.naturalWidth / imageRect.width;
         const scaleY = image.naturalHeight / imageRect.height;
-
         canvas.width = cropBoxRect.width * scaleX;
         canvas.height = cropBoxRect.height * scaleY;
 
@@ -2963,25 +3042,47 @@ function editImage(tileData, tileElement) {
             canvas.height
         );
 
-        // Try WebP first, fall back to PNG if not supported
-        if (canvas.toDataURL('image/webp').indexOf('data:image/webp') === 0) {
-            // WebP is supported
-            const webpDataUrl = canvas.toDataURL('image/webp');
-            callback(webpDataUrl);
-        } else {
-            // WebP is not supported, use PNG as fallback
-            const pngDataUrl = canvas.toDataURL('image/png');
-            callback(pngDataUrl);
+        // Compression logic
+        let quality = 1.0;
+        switch (compressionButton.value) {
+            case 'low': quality = 0.8; break;
+            case 'medium': quality = 0.6; break;
+            case 'high': quality = 0.4; break;
+            case 'extreme': quality = 0.2; break;
+            case 'extra extreme': quality = 0.1; break;
+            case 'yummers': quality = 0.01; break;
+            case 'stupidly low': quality = 0.001; break;
+            case 'what are pixels?':
+            case 'i love pixels': quality = 0.001; break;
+            default: quality = 1.0;
         }
 
+        let dataUrl = canvas.toDataURL('image/webp', quality);
+
+        // Resize logic based on the selected option
+        const resizePercentage = parseFloat(resizeButton.value) / 100;
+        if (resizePercentage !== 1) {
+            const resizedCanvas = document.createElement('canvas');
+            resizedCanvas.width = canvas.width * resizePercentage;
+            resizedCanvas.height = canvas.height * resizePercentage;
+            const resizedCtx = resizedCanvas.getContext('2d');
+            resizedCtx.drawImage(canvas, 0, 0, resizedCanvas.width, resizedCanvas.height);
+            dataUrl = resizedCanvas.toDataURL('image/webp', quality);
+        }
+
+        // Handle additional compression logic (if needed) here...
+
+        // Return the resized and compressed image
+        callback(dataUrl);
         document.body.removeChild(croppingPopup);
     };
 
-    // Cancel button functionality
     cancelButton.onclick = () => {
         document.body.removeChild(croppingPopup);
     };
 }
+
+
 
 
 
@@ -3170,20 +3271,52 @@ fileInput.addEventListener('change', (event) => {
     const file = event.target.files[0];
     if (file) {
         const reader = new FileReader();
+
         reader.onload = (e) => {
             const imageData = e.target.result;
             const img = new Image();
-            img.src = imageData;
 
-            // Create cropping interface and pass the callback
-            createCroppingInterface(img, (croppedImageData) => {
-                showTileCreationPopup(croppedImageData);
-            });
+            // Set a one-time `onload` handler
+            img.onload = () => {
+                // Create a canvas to convert the image to WebP
+                const canvas = document.createElement('canvas');
+                canvas.width = img.width;
+                canvas.height = img.height;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0);
+
+                // Convert canvas to WebP format and pass WebP to cropping interface
+                canvas.toBlob((blob) => {
+                    const webpUrl = URL.createObjectURL(blob);
+
+                    // Create a temporary image element for WebP image
+                    const webpImage = new Image();
+                    webpImage.src = webpUrl;
+
+                    webpImage.onload = () => {
+                        // Once the WebP image is ready, pass it to the cropping interface
+                        createCroppingInterface(webpImage, (croppedImageData) => {
+                            showTileCreationPopup(croppedImageData);
+                        });
+                    };
+
+                    // Clean up: release the blob URL after use
+                    webpImage.onloadend = () => {
+                        URL.revokeObjectURL(webpUrl);
+                    };
+                }, 'image/webp', 0.8); // Set WebP format with 80% quality
+            };
+
+            // Set the image source to trigger the `onload`
+            img.src = imageData;
         };
+
         reader.readAsDataURL(file);
     }
     document.getElementById('popup-overlay').style.display = 'none';
 });
+
+
 
 
 function clearTileCreationPopupInputs() {
