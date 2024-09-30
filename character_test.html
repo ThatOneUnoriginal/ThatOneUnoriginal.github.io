@@ -7,6 +7,7 @@
     <meta name="pinterest" content="nopin" />
     <link id="font-link" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto&display=swap">
     <title>Character Bookmarking Tool</title>
+    
     <style>
     
 .theme-toggle button, #tag-filter, #tag-filter-mobile, #export-btn, #import-btn, #tile-size, #colorSelector, #popup-button, #reroll-btn, #local-upload-btn, #url-upload-btn,
@@ -365,10 +366,6 @@ img {
 	min-height: 100%;
 	object-fit: cover;
 	transition: transform 0.3s ease;
-}
-
-img:hover {
-	transform: scale(1.05);
 }
 
 .add-image {
@@ -1022,6 +1019,74 @@ blockquote {
 .custom-field-value{
     margin-bottom: 0px !important;
 }
+/* Random CSS Class Names */
+.popupQwErTy {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.imageContainerAsDfGh {
+    position: relative;
+    max-width: 80%;
+    max-height: 80%;
+}
+
+.cropBoxZxCvBn {
+    position: absolute;
+    border: 2px solid white;
+    box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.5);
+    cursor: move;
+}
+
+.resizeHandleUiOpLm {
+    position: absolute;
+    bottom: -10px;
+    right: -10px;
+    width: 20px;
+    height: 20px;
+    background-color: white;
+    border: 2px solid black;
+    cursor: se-resize;
+}
+
+.buttonHgFdSa {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    z-index: 1;
+}
+
+.cancelButtonXyZwv {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #f44336;
+    color: white;
+    border: none;
+    cursor: pointer;
+    z-index: 1;
+}
+
+.compressionButtonQwErAs {
+    margin-top: 20px;
+    margin-left: 10px;
+    padding: 10px 20px;
+    cursor: pointer;
+    z-index: 1;
+}
+
+
     </style>
 </head>
 <body>
@@ -2687,112 +2752,190 @@ function stripUrlParams(url) {
    }
 }
 // Edit image
-function editImage(tileData, tileElement) {
-    console.log('TEST');
-        const popup = document.getElementById('image-popup');
-        const localUploadBtn = document.getElementById('local-upload-btn');
-        const popupClose = document.getElementById('popup-close');
-        const urlPopup = document.getElementById('url-popup');
-        const urlInput = document.getElementById('image-url-input');
-        const urlInput1 = document.getElementById('image-url-input1');
-        const submitUrlBtn = document.getElementById('submit-url-btn');
-        const urlPopupClose = document.getElementById('url-popup-close');
-        const imageUploadClose = document.getElementById('urlURL-popup-close');
-        const urlURLPopupClose = document.getElementById('url-popup-close-url');
+function createCroppingInterface(image, callback) {
+    const croppingPopup = document.createElement('div');
+    croppingPopup.classList.add('popupQwErTy');
 
-        // Show the main popup
-        popup.classList.remove('hidden');
-        document.getElementById('image-popup').style.display = 'block';
-        document.getElementById('popup-overlay').style.display = 'block';
+    const imageContainer = document.createElement('div');
+    imageContainer.classList.add('imageContainerAsDfGh');
 
-        // Close main popup functionality
-        popupClose.onclick = () => {
-            popup.classList.add('hidden');
-            document.getElementById('popup-overlay').style.display = 'none';
-        };
+    const windowWidth = window.innerWidth * 0.8;
+    const windowHeight = window.innerHeight * 0.8;
+    const aspectRatio = image.naturalWidth / image.naturalHeight;
+    let scaledWidth = windowWidth;
+    let scaledHeight = windowWidth / aspectRatio;
 
-        localUploadBtn.onclick = () => {
-            console.log('TEST2');
-            const imageUploadInput = document.createElement('input');
-            imageUploadInput.type = 'file';
-            imageUploadInput.accept = 'image/*,.avif,.jxl,.cur,.jps,.jfif';
-
-            imageUploadInput.addEventListener('change', function (event) {
-                const file = event.target.files[0];
-                if (file) {
-                    const reader = new FileReader();
-
-                    reader.onload = function (e) {
-                        const newImageData = e.target.result;
-                        tileData.imageData = newImageData;
-                        tileElement.querySelector('img').src = newImageData;
-
-                        saveTiles();
-                    };
-
-                    reader.readAsDataURL(file);
-                }
-                popup.classList.add('hidden');
-                document.getElementById('popup-overlay').style.display = 'none';
-                document.getElementById('image-popup').style.display = 'none';
-            });
-
-            imageUploadInput.click();
-        };
-
-        urlUploadBtn.onclick = () => {
-
-            console.log('TEST3');
-            // Hide the main popup and show the URL input popup
-            document.getElementById('image-popup').style.display = 'none';
-            document.getElementById('url-popup').style.display = 'block';
-            popup.classList.add('hidden');
-            urlPopup.classList.remove('hidden');
-        };
-
-        // Submit URL functionality
-        document.getElementById('submit-url-btn1').onclick = () => {
-    let imageUrl = urlInput1.value.trim();
-    if (imageUrl) {
-        document.getElementById('popup-overlay1').style.display = 'block';
-        imageUrl = stripUrlParams(imageUrl); // Strip query parameters from URL
-        document.getElementById('preview-image').src = imageUrl; // Set preview image
-
-        // Show confirmation popup
-        document.getElementById('image-confirmation-popup').style.display = 'block';
-
-        // Confirm button click event
-        document.getElementById('confirm-image-btn').onclick = () => {
-            document.getElementById('image-confirmation-popup').style.display = 'none';
-            document.getElementById('popup-overlay').style.display = 'none';
-            document.getElementById('popup-overlay1').style.display = 'none';
-            document.getElementById('url-popup').style.display = 'none';
-            tileData.imageData = imageUrl; // Commit the changes
-            tileElement.querySelector('img').src = imageUrl; // Update the tile image
-            saveTiles(); // Save the changes
-            closePopups(); // Close all popups
-        };
-
-        // Cancel button click event
-        document.getElementById('cancel-image-btn').onclick = () => {
-            document.getElementById('image-confirmation-popup').style.display = 'none';
-            document.getElementById('popup-overlay1').style.display = 'none';
-        };
+    if (scaledHeight > windowHeight) {
+        scaledHeight = windowHeight;
+        scaledWidth = windowHeight * aspectRatio;
     }
-};
 
-        // Close URL popup functionality
-        urlPopupClose.onclick = () => {
-            urlPopup.classList.add('hidden');
-            document.getElementById('image-popup').style.display = 'none';
-            document.getElementById('popup-overlay').style.display = 'none';
-        };
+    image.style.width = scaledWidth + 'px';
+    image.style.height = scaledHeight + 'px';
 
-        urlURLPopupClose.onclick = () => {
-            document.getElementById('url-popup').style.display = 'none';
-            document.getElementById('popup-overlay').style.display = 'none';
-        };
+    const cropBox = document.createElement('div');
+    cropBox.classList.add('cropBoxZxCvBn');
+
+    const resizeHandle = document.createElement('div');
+    resizeHandle.classList.add('resizeHandleUiOpLm');
+
+    cropBox.appendChild(resizeHandle);
+    imageContainer.appendChild(image);
+    imageContainer.appendChild(cropBox);
+    croppingPopup.appendChild(imageContainer);
+
+    const confirmButton = document.createElement('button');
+    confirmButton.textContent = 'Confirm Crop';
+    confirmButton.classList.add('buttonHgFdSa');
+    croppingPopup.appendChild(confirmButton);
+
+    const compressionButton = document.createElement('select');
+    compressionButton.classList.add('compressionButtonQwErAs');
+    const compressionLevels = ['None', 'Low', 'Medium', 'High', 'Extreme', 'Extra Extreme', 'Yummers', 'Stupidly Low', 'What Are Pixels?'];
+    compressionLevels.forEach(level => {
+        const option = document.createElement('option');
+        option.value = level.toLowerCase();
+        option.textContent = level;
+        compressionButton.appendChild(option);
+    });
+    croppingPopup.appendChild(compressionButton);
+
+    const cancelButton = document.createElement('button');
+    cancelButton.textContent = 'Cancel';
+    cancelButton.classList.add('cancelButtonXyZwv');
+    croppingPopup.appendChild(cancelButton);
+
+    document.body.appendChild(croppingPopup);
+
+    const size = Math.min(scaledWidth, scaledHeight) / 2;
+    cropBox.style.width = size + 'px';
+    cropBox.style.height = size + 'px';
+    cropBox.style.left = (scaledWidth - size) / 2 + 'px';
+    cropBox.style.top = (scaledHeight - size) / 2 + 'px';
+
+    let isDragging = false;
+    let isResizing = false;
+    let startX, startY, startWidth, startHeight;
+
+    cropBox.addEventListener('mousedown', startDragging);
+    resizeHandle.addEventListener('mousedown', startResizing);
+    document.addEventListener('mousemove', drag);
+    document.addEventListener('mouseup', stopDragging);
+
+    function startDragging(e) {
+        if (e.target === resizeHandle) return;
+        isDragging = true;
+        startX = e.clientX - cropBox.offsetLeft;
+        startY = e.clientY - cropBox.offsetTop;
     }
+
+    function startResizing(e) {
+        isResizing = true;
+        startX = e.clientX;
+        startY = e.clientY;
+        startWidth = parseInt(getComputedStyle(cropBox).width, 10);
+        startHeight = parseInt(getComputedStyle(cropBox).height, 10);
+        e.stopPropagation();
+    }
+
+    function drag(e) {
+        if (isDragging) {
+            const newLeft = e.clientX - startX;
+            const newTop = e.clientY - startY;
+            cropBox.style.left = Math.max(0, Math.min(newLeft, scaledWidth - cropBox.offsetWidth)) + 'px';
+            cropBox.style.top = Math.max(0, Math.min(newTop, scaledHeight - cropBox.offsetHeight)) + 'px';
+        } else if (isResizing) {
+            const newSize = Math.min(startWidth + e.clientX - startX, startHeight + e.clientY - startY);
+            const maxSize = Math.min(scaledWidth - parseInt(cropBox.style.left, 10), scaledHeight - parseInt(cropBox.style.top, 10));
+            cropBox.style.width = Math.min(newSize, maxSize) + 'px';
+            cropBox.style.height = cropBox.style.width;
+        }
+    }
+
+    function stopDragging() {
+        isDragging = false;
+        isResizing = false;
+    }
+
+    confirmButton.onclick = () => {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        const cropBoxRect = cropBox.getBoundingClientRect();
+        const imageRect = image.getBoundingClientRect();
+        const scaleX = image.naturalWidth / imageRect.width;
+        const scaleY = image.naturalHeight / imageRect.height;
+        canvas.width = cropBoxRect.width * scaleX;
+        canvas.height = cropBoxRect.height * scaleY;
+
+        ctx.drawImage(
+            image,
+            (cropBoxRect.left - imageRect.left) * scaleX,
+            (cropBoxRect.top - imageRect.top) * scaleY,
+            cropBoxRect.width * scaleX,
+            cropBoxRect.height * scaleY,
+            0,
+            0,
+            canvas.width,
+            canvas.height
+        );
+
+        let quality = 1.0;
+        switch (compressionButton.value) {
+            case 'low': quality = 0.8; break;
+            case 'medium': quality = 0.6; break;
+            case 'high': quality = 0.4; break;
+            case 'extreme': quality = 0.2; break;
+            case 'extra extreme': quality = 0.1; break;
+            case 'yummers': quality = 0.01; break;
+            case 'stupidly low': quality = 0.001; break;
+            case 'what are pixels?':
+                quality = 0.001;
+                break;
+            default: quality = 1.0;
+        }
+
+        // Compress the image once
+        let dataUrl = canvas.toDataURL('image/webp', quality);
+
+        if (compressionButton.value === 'what are pixels?') {
+            // Create a new image from the first compression
+            const tempImage = new Image();
+            tempImage.src = dataUrl;
+
+            tempImage.onload = () => {
+                // Create a new canvas for the second compression
+                const secondCanvas = document.createElement('canvas');
+                const secondCtx = secondCanvas.getContext('2d');
+                secondCanvas.width = tempImage.width;
+                secondCanvas.height = tempImage.height;
+
+                // Draw the compressed image onto the second canvas
+                secondCtx.drawImage(tempImage, 0, 0);
+
+                // Compress the image again with quality 0.001
+                const secondDataUrl = secondCanvas.toDataURL('image/webp', 0.001);
+
+                // Return the doubly compressed image
+                callback(secondDataUrl);
+                document.body.removeChild(croppingPopup);
+            };
+        } else {
+            // Return the single compressed image
+            callback(dataUrl);
+            document.body.removeChild(croppingPopup);
+        }
+    };
+
+    cancelButton.onclick = () => {
+        document.body.removeChild(croppingPopup);
+    };
+}
+
+
+
+
+
+
 
 document.getElementById('popup-overlay').onclick = () => {
    document.getElementById('url-popup').style.display = 'none';
@@ -2975,17 +3118,56 @@ function filterTiles() {
 
 // Handle file selection
 fileInput.addEventListener('change', (event) => {
-        const file = event.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                const imageData = e.target.result;
-                showTileCreationPopup(imageData);
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+
+        reader.onload = (e) => {
+            const imageData = e.target.result;
+            const img = new Image();
+
+            // Set a one-time `onload` handler
+            img.onload = () => {
+                // Create a canvas to convert the image to WebP
+                const canvas = document.createElement('canvas');
+                canvas.width = img.width;
+                canvas.height = img.height;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0);
+
+                // Convert canvas to WebP format and pass WebP to cropping interface
+                canvas.toBlob((blob) => {
+                    const webpUrl = URL.createObjectURL(blob);
+
+                    // Create a temporary image element for WebP image
+                    const webpImage = new Image();
+                    webpImage.src = webpUrl;
+
+                    webpImage.onload = () => {
+                        // Once the WebP image is ready, pass it to the cropping interface
+                        createCroppingInterface(webpImage, (croppedImageData) => {
+                            showTileCreationPopup(croppedImageData);
+                        });
+                    };
+
+                    // Clean up: release the blob URL after use
+                    webpImage.onloadend = () => {
+                        URL.revokeObjectURL(webpUrl);
+                    };
+                }, 'image/webp', 0.8); // Set WebP format with 80% quality
             };
-            reader.readAsDataURL(file);
-        }
-        document.getElementById('popup-overlay').style.display = 'none';
-    });
+
+            // Set the image source to trigger the `onload`
+            img.src = imageData;
+        };
+
+        reader.readAsDataURL(file);
+    }
+    document.getElementById('popup-overlay').style.display = 'none';
+});
+
+
+
 
 function clearTileCreationPopupInputs() {
     document.getElementById('tile-link').value = '';
