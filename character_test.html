@@ -10,7 +10,7 @@
     
     <style>
     
-.theme-toggle button, #tag-filter, #tag-filter-mobile, #export-btn, #import-btn, #tile-size, #colorSelector, #popup-button, #reroll-btn, #local-upload-btn, #url-upload-btn,
+.cancelButtonXyZwv, .compressionButtonQwErAs, .resizeButtonRtYuIo, .buttonHgFdSa, .theme-toggle button, #tag-filter, #tag-filter-mobile, #export-btn, #import-btn, #tile-size, #colorSelector, #popup-button, #reroll-btn, #local-upload-btn, #url-upload-btn,
 #url-popup-close, #url-popup-close-url, #local-image-btn, #url-image-btn, #urlURL-popup-close, #url-popup-close-url1, #popup-close, .collapsible, .edit-popup button,
 #submit-url-btn, #submit-url-btn1, #share-url-popup button, #nsfw-inclusion-popup button, #image-upload-choice-popup button, #tile-creation-popup button, #settings-popup button, 
 #tileSize, #undo-delete-popup button, #popup-close-btn, #new-confirm-image-btn, #confirm-image-btn, #new-cancel-image-btn, #cancel-image-btn, #image-confirmation-popup button,
@@ -331,8 +331,8 @@ p {
 #tag-filter-mobile {
 	width: 100%;
 	display: none;
+    text-align: center;
 }
-
 
 .image-grid {
 	display: grid;
@@ -630,6 +630,11 @@ img {
 .star-outline {
 	border: 5px solid var(--star-outline-color-1);
 }
+.full-width {
+    width: 100%; 
+    padding: 15px; 
+}
+
 
 .special-outline {
 	border: 5px solid var(--special-outline-color-1);
@@ -652,6 +657,7 @@ img {
 	width: 100%;
 	border: none;
 	text-align: left;
+    border-radius: 4px;
 	outline: none;
 	font-size: 15px;
 	margin-bottom: 10px;
@@ -673,6 +679,7 @@ img {
 	padding: 0 18px;
 	max-height: 0;
 	overflow: hidden;
+    border-radius: 4px;
 	transition: max-height 0.2s ease-out, padding 0.2s ease-out;
 	background-color: var(--tile-bg);
 	margin-bottom: 10px;
@@ -699,9 +706,9 @@ img {
 }
 
 #formatting-guide, #edit-info-popup{
-    height: 80%;
+    max-height: 80%;
 }
-#formatting-guide h1, #formatting-guide h2, #formatting-guide h3{
+#formatting-guide h1, #formatting-guide h2, #formatting-guide p, #formatting-guide h3{
     text-align: center;
 }
 .edit-popup input, .edit-popup textarea, #image-url-input1, #image-url-input{
@@ -795,6 +802,8 @@ img {
 	align-items: center;
 	max-width: 400px;
 	width: 100%;
+    max-height: 80%;
+    overflow-y: scroll;
 	animation: float 5s ease-in-out infinite
 }
 
@@ -836,7 +845,7 @@ img {
 	width: 80%;
 }
 
-#close-formatting:hover, #font-dropdown:hover, .theme-toggle button:hover, #tag-filter:hover, #tag-filter-mobile, #export-btn:hover, #import-btn:hover, #image-upload-choice-popup button:hover, #nsfw-inclusion-popup button:hover, #theme-dropdown-accessibility:hover,
+#popup-button:hover, .cancelButtonXyZwv:hover, .compressionButtonQwErAs:hover, .resizeButtonRtYuIo:hover, .buttonHgFdSa:hover, #close-formatting:hover, #font-dropdown:hover, .theme-toggle button:hover, #tag-filter:hover, #tag-filter-mobile:hover, #export-btn:hover, #import-btn:hover, #image-upload-choice-popup button:hover, #nsfw-inclusion-popup button:hover, #theme-dropdown-accessibility:hover,
 #share-url-popup button:hover, .edit-popup button:hover, .active, .collapsible:hover, #popup-close-btn:hover ,#popup-close:hover, #settings-popup button:hover, #undo-delete-popup button:hover, #new-confirm-image-btn:hover, #confirm-image-btn:hover,
 #new-cancel-image-btn:hover, #cancel-image-btn:hover, #image-confirmation-popup button:hover, #new-image-confirmation-popup button:hover, .link-button:hover, #close-multi-links-popup:hover, #close-links-popup:hover, #accessibility-popup button:hover{
 	background-color: var(--button-bg-hover-1)
@@ -977,7 +986,7 @@ img {
 	}
 
 	#tag-filter-mobile {
-		display: block;
+		display: block !important;
 	}
 
 	.tag {
@@ -985,7 +994,7 @@ img {
 	}
 
 	#tag-filter {
-		display: none;
+		display: none !important;
     }
 }
 .no-animation {
@@ -1067,27 +1076,31 @@ blockquote {
 .buttonHgFdSa {
     margin-top: 20px;
     padding: 10px 20px;
-    background-color: #4CAF50;
-    color: white;
+    color: var(--bg-color);
     border: none;
     cursor: pointer;
+    font-size: 16px !important; /* Adjust the size as needed */    
+    border-radius: 4px;
     z-index: 1;
 }
 
 .cancelButtonXyZwv {
     margin-top: 20px;
     padding: 10px 20px;
-    background-color: #f44336;
-    color: white;
+    color: var(--bg-color);
     border: none;
     cursor: pointer;
+    border-radius: 4px;
     z-index: 1;
 }
 
-.compressionButtonQwErAs {
+.compressionButtonQwErAs, .resizeButtonRtYuIo {
     margin-top: 20px;
     margin-left: 10px;
     padding: 10px 20px;
+    color: var(--bg-color);
+    border-radius: 4px;
+    border: 0px;
     cursor: pointer;
     z-index: 1;
 }
@@ -1160,6 +1173,27 @@ blockquote {
     </div>
     <button class="collapsible">Update Log (2.0.1 to 3.0)</button>
     <div class="collapsible-content">
+        <h2>Update 2.2</h2>
+        <ul>
+            <li>Fixed problem where if the cropper was cancelled the overlay would not appear again covering over the image source.</li>
+            <li>Fixed issue where font-size and font weight wouldn't apply to all buttons.</li>
+            <li>Fixed problem where leftover "I Love Pixels" option was presented as an available compression option.</li>
+            <li>Changed the styling of the cropping buttons to better match the theme of the website and ensured they comply with the colour blindness dropdown.</li>
+            <li>Fixed problem where the remove custom value(s) buttons weren't complying with the colour blindness dropdown.</li>
+            <li>If it has been 30 days since you last exported your data, you will be given a prompt reminding you to export your data to protect against data loss. Note that this is saved LOCALLY and isn't sent to any central server.</li>
+            <li>Fixed problem where there would be white space on the Edit Info popup by switching <code>height: 80%</code> to <code>max-height: 80%</code>.</li>
+            <li>Fixed problem where the Provide URL button when adding a new tile wouldn't comply with the colour blindness dropdown.</li>
+            <li>Fixed problem where All Tags wouldn't respect the font weight selection.</li>
+            <li>Fixed problem where the animation option wouldn't affect the formatting guide popup.</li>
+            <li>Fixed another problem related to the export feature, which caused the feature to break the website.</li>
+            <li>Fixed problem where <code>h2</code> wouldn't resize respective to the font size option.</li>
+            <li>When editing the URL, tags, or info of a character, pressing the cancel button while there are unsaved changes will prompt the user to confirm if they want to reverse the changes.</li>
+            <li>Compression level and Image Size are now saved to local storage, persisting across refreshes and when adding multiple images.</li>
+            <li>You can now reorder custom values by pressing either the "Move Up" or "Move Down" buttons.</li>
+            <li>Added a new accessibility option that allows you to change the vertical margins of all the buttons (minimum is 15px/10px).</li>
+            <li>A new keybind for <code>(-)</code> has been added: <strong>Ctrl -</strong>.</li>
+            <li>A new keybind for <code>(ind)</code> has been added: <strong>Ctrl + Shift + |</strong>.</li>
+          </ul>          
         <h2>Update 2.1</h2>
         <ul>
             <li>Fixed the problem where clicking the popup overlays would try to find elements from the multi-link feature that no longer exist, causing it to fail.</li>
@@ -1420,8 +1454,8 @@ blockquote {
     </div>
     <div class="controls">
        <div class="theme-toggle">
-          <button id="export-btn">Export</button>
-          <button id="import-btn">Import</button>
+          <button id="export-btn">Export Tiles</button>
+          <button id="import-btn">Import Tiles</button>
           <button id="settings-btn">Theme Settings</button>
           <button id="acccessibility-btn">Accessibility Settings</button>
           <button id="random-character-btn">Select Random Character</button>
@@ -1511,7 +1545,7 @@ blockquote {
     <button id="close-formatting">Close</button>
     <p>When editing custom values, you will have access to formatting tools which change the apperance of the text when it appears on the random character popup.</p>
     <h3>Creating Unordered Lists</h3>
-    <p>You can create an ordered list by adding (-) to the beginning of a line</p>
+    <p>You can create an ordered list by adding (-) to the beginning of a line or by pressing Ctrl + -</p>
     <p>Note that nested lists aren't supported.</p>
     <img src="https://raw.githubusercontent.com/ThatOneUnoriginal/ThatOneUnoriginal.github.io/refs/heads/main/Character%20Tools/Assets/CharacterFormatting_UnOrderedList.png" style="max-width: 100%; height: auto; min-height:0%; object-fit: contain">
     <h3>Creating Ordered Lists</h3>
@@ -1519,7 +1553,7 @@ blockquote {
     <p>Note that nested lists aren't supported.</p>
     <img src="https://raw.githubusercontent.com/ThatOneUnoriginal/ThatOneUnoriginal.github.io/refs/heads/main/Character%20Tools/Assets/CharacterFormatting_OrderedList.png" style="max-width: 100%; height: auto; min-height:0%; object-fit: contain">
     <h3>Indents</h3>
-    <p>You can add indents to text by adding (ind) anywhere within the text. It will add a couple of lines between the text that surrounds it.</p>
+    <p>You can add indents to text by adding (ind) anywhere within the text. It will add a couple of lines between the text that surrounds it. Placement doesn't matter and can also be added by pressing Ctrl + Shift + | (the button with \|)</p>
     <img src="https://raw.githubusercontent.com/ThatOneUnoriginal/ThatOneUnoriginal.github.io/refs/heads/main/Character%20Tools/Assets/CharacterFormatting_Indent.png" style="max-width: 100%; height: auto; min-height:0%; object-fit: contain">
     <h3>Bold</h3>
     <p>You can <b>bold text</b> by adding (b)(/b) or highlighting the text you want bolded and pressing Ctrl + B</p>
@@ -1624,6 +1658,11 @@ blockquote {
             <button id="increase-font-btn">Increase Font Size</button>
             <button id="decrease-font-btn">Decrease Font Size</button>
         </div>
+        <div class="button-container">
+            <button id="increase-margin">Increase Veritical Margin</button>
+            <button id="decrease-margin">Decrease Veritical Margin</button>
+        </div>        
+        <button id="force-mobile-buttons">Force Mobile Buttons</button>
         <select id="font-dropdown">
             <option value="" disabled selected>Select a font</option>
             <option value="Roboto">Roboto</option>
@@ -1804,9 +1843,11 @@ resetButton.addEventListener('click', function() {
         localStorage.removeItem('accessTheme');
         localStorage.removeItem('selectedColorOption');
         localStorage.removeItem('animationsEnabled');
+        localStorage.removeItem('forceMobileButtons')
 
         // Set fontSize to 16
         localStorage.setItem('fontSize', 16);
+        localStorage.setItem('marginValue', 10)
 
         window.location.reload();
     }
@@ -1850,13 +1891,119 @@ updateTagVisibility(tagsVisible);
 
 let tiles = [];
 let allTags = new Set();
-let isBlurred = JSON.parse(localStorage.getItem('isBlurred')) || false; // Load blur status from localStorage
+let isBlurred = false; // Load blur status from localStorage
 let rememberNSFWChoice = JSON.parse(localStorage.getItem('rememberNSFWChoice')) || false;
 let includeNSFW = JSON.parse(localStorage.getItem('includeNSFW')) || false;
-let deletedTile = null;
+let deletedTilesQueue = [];
 let undoTimer = null;
 
 let isAtEnd =  true;  // Initially, the add-image tile is at the end
+let marginValue = parseInt(localStorage.getItem('marginValue')) || 10; // Get margin from local storage or set default
+
+// Function to update margin-bottom for specified elements
+function updateMargin() {
+    const elements = document.querySelectorAll(`
+        .cancelButtonXyZwv,
+        .compressionButtonQwErAs,
+        .resizeButtonRtYuIo,
+        .buttonHgFdSa,
+        .theme-toggle button,
+        #tag-filter,
+        #tag-filter-mobile,
+        #export-btn,
+        #import-btn,
+        #tile-size,
+        #colorSelector,
+        #popup-button,
+        #reroll-btn,
+        #local-upload-btn,
+        #url-upload-btn,
+        #url-popup-close,
+        #url-popup-close-url,
+        #local-image-btn,
+        #url-image-btn,
+        #urlURL-popup-close,
+        #url-popup-close-url1,
+        #popup-close,
+        .collapsible,
+        .edit-popup button,
+        #submit-url-btn,
+        #submit-url-btn1,
+        #share-url-popup button,
+        #nsfw-inclusion-popup button,
+        #image-upload-choice-popup button,
+        #tile-creation-popup button,
+        #settings-popup button,
+        #tileSize,
+        #undo-delete-popup button,
+        #popup-close-btn,
+        #new-confirm-image-btn,
+        #confirm-image-btn,
+        #new-cancel-image-btn,
+        #cancel-image-btn,
+        #image-confirmation-popup button,
+        #new-image-confirmation-popup button,
+        .link-button,
+        #close-links-popup,
+        #accessibility-popup button,
+        #theme-dropdown-accessibility,
+        #close-multi-links-popup,
+        #font-dropdown,
+        #close-formatting
+    `); // Select all specified elements
+    
+    elements.forEach(element => {
+        element.style.marginBottom = `${marginValue}px`;
+    });
+    
+    // Save the current margin value to local storage
+    localStorage.setItem('marginValue', marginValue);
+}
+
+document.getElementById('increase-margin').addEventListener('click', () => {
+    marginValue += 5; // Increase margin by 5 pixels
+    updateMargin();
+});
+
+// Assuming marginValue is defined somewhere in your code
+// Assuming marginValue is defined somewhere in your code
+document.getElementById('decrease-margin').addEventListener('click', () => {
+    // Define minimum padding values
+    const minimumPaddingGeneral = 15; // General minimum padding value
+    const minimumPaddingExceptions = 10; // Minimum for specific exceptions
+
+    // Define the elements with exceptions
+    const exceptionSelectors = [
+        '#nsfw-inclusion-popup button',
+        '#settings-popup button',
+        '#colorSelector',
+        '#tileSize',
+        '#accessibility-popup button',
+        '#theme-dropdown-accessibility',
+        '#font-dropdown'
+    ];
+
+    // Determine if the marginValue belongs to an exception
+    const isException = exceptionSelectors.some(selector => {
+        const elements = document.querySelectorAll(selector);
+        return Array.from(elements).some(element => element.contains(event.target));
+    });
+
+    // Adjust marginValue based on whether it's an exception or not
+    if (isException) {
+        marginValue = Math.max(minimumPaddingExceptions, marginValue - 5); // Prevent margin from going below 10
+    } else {
+        marginValue = Math.max(minimumPaddingGeneral, marginValue - 5); // Prevent margin from going below 15
+    }
+
+    updateMargin();
+});
+
+
+
+// Initialize margin on page load
+updateMargin();
+
 
 // Function to check and clear accessTheme if it's "null"
 function checkAndClearAccessTheme() {
@@ -1896,7 +2043,9 @@ document.getElementById('openReorderToolButton').addEventListener('click', funct
         fontweightindex: localStorage.getItem('fontweightindex') || "", // Corrected from 'font-weight-index'
         accessTheme: localStorage.getItem('accessTheme') || "",
         selectedFont: localStorage.getItem('selectedFont') || "",
-        animationsEnabled: localStorage.getItem('animationsEnabled') || ""
+        animationsEnabled: localStorage.getItem('animationsEnabled') || "",
+        marginValue: localStorage.getItem('marginValue') || "",
+        forceMobileButtons: localStorage.getItem('forceMobileButtons') || "",
     };
 
     // Convert settings to a JSON string
@@ -1920,7 +2069,7 @@ document.getElementById('openReorderToolButton').addEventListener('click', funct
 
 
 const elementsToAdjust = document.querySelectorAll(
-    'li, p, .theme-toggle button, #tag-filter, #tag-filter-mobile, #export-btn, #import-btn, #tile-size, #colorSelector, #popup-button, #reroll-btn, #local-upload-btn, #url-upload-btn, #url-popup-close, #url-popup-close-url, #local-image-btn, #url-image-btn, #urlURL-popup-close, #url-popup-close-url1, #popup-close, .collapsible, .edit-popup button, #submit-url-btn, #submit-url-btn1, #share-url-popup button, #nsfw-inclusion-popup button, #image-upload-choice-popup button, #tile-creation-popup button, #settings-popup button, #tileSize, #undo-delete-popup button, #popup-close-btn, #new-confirm-image-btn, #confirm-image-btn, #new-cancel-image-btn, #cancel-image-btn, #image-confirmation-popup button, #new-image-confirmation-popup button, .link-button, #close-links-popup, #accessibility-popup button, #theme-dropdown-accessibility, #close-multi-links-popup, #font-dropdown'
+    'h2, li, p, .theme-toggle button, #tag-filter, #tag-filter-mobile, #export-btn, #import-btn, #tile-size, #colorSelector, #popup-button, #reroll-btn, #local-upload-btn, #url-upload-btn, #url-popup-close, #url-popup-close-url, #local-image-btn, #url-image-btn, #urlURL-popup-close, #url-popup-close-url1, #popup-close, .collapsible, .edit-popup button, #submit-url-btn, #submit-url-btn1, #share-url-popup button, #nsfw-inclusion-popup button, #image-upload-choice-popup button, #tile-creation-popup button, #settings-popup button, #tileSize, #undo-delete-popup button, #popup-close-btn, #new-confirm-image-btn, #confirm-image-btn, #new-cancel-image-btn, #cancel-image-btn, #image-confirmation-popup button, #new-image-confirmation-popup button, .link-button, #close-links-popup, #accessibility-popup button, #theme-dropdown-accessibility, #close-multi-links-popup, #font-dropdown'
 );
 
 let currentFontSize = localStorage.getItem('fontSize') ? parseInt(localStorage.getItem('fontSize')) : 16; // Load from local storage or default to 16
@@ -1941,11 +2090,23 @@ document.getElementById('decrease-font-btn').addEventListener('click', () => {
 });
 
 function adjustFontSize(size) {
+    // Adjust font size for all elements
     elementsToAdjust.forEach(element => {
         element.style.fontSize = size + 'px';
     });
+
+    // Dynamically update the CSS for the "test" class with !important
+    const styleElement = document.getElementById('dynamic-style') || document.createElement('style');
+    styleElement.id = 'dynamic-style';
+    styleElement.innerHTML = `.test { font-size: ${size}px !important; }`;
+
+    document.head.appendChild(styleElement); // Ensure it is added to the document
+
     localStorage.setItem('fontSize', size); // Save the current font size to local storage
 }
+
+
+
 
 
 
@@ -1975,7 +2136,8 @@ document.getElementById('importButton').addEventListener('click', () => {
                     localStorage.setItem('accessTheme', settings.accessTheme || "");
                     localStorage.setItem('selectedFont', settings.selectedFont || "");
                     localStorage.setItem('animationsEnabled', settings.animationsEnabled || "");
-
+                    localStorage.setItem('marginValue', settings.marginValue || "");
+                    localStorage.setItem('forceMobileButtons', settings.forceMobileButtons || "");
                     window.location.reload(); // Reload page after applying settings
                 } catch (error) {
                     alert('Failed to import settings: ' + error.message);
@@ -2145,7 +2307,7 @@ document.getElementById('colorSelector').addEventListener('change', function() {
 
     // Select all specified buttons
     const buttons = document.querySelectorAll(
-   '.theme-toggle button, #tag-filter, #tag-filter-mobile, #export-btn, #import-btn, #tile-size, #colorSelector, #popup-button, #reroll-btn, #local-upload-btn, #url-upload-btn, #url-popup-close, #url-popup-close-url, #local-image-btn, #urlimage-btn, #urlURL-popup-close, #url-popup-close-url1, #popup-close, .collapsible, .edit-popup button, #submit-url-btn, #submit-url-btn1, #share-url-popup button, #nsfw-inclusion-popup button, #image-upload-choice-popup button, #tile-creation-popup button, #settings-popup button,  #tileSize, #undo-delete-popup button, #popup-close-btn, #new-confirm-image-btn, #confirm-image-btn, #new-cancel-image-btn, #cancel-image-btn, #image-confirmation-popup button, #new-image-confirmation-popup button, .link-button, #close-links-popup, #accessibility-popup button, #theme-dropdown-accessibility, #close-multi-links-popup, #font-dropdown, #close-formatting, .remove-custom-field-btn' // Added .remove-custom-field-btn
+   '#url-image-btn, theme-toggle button, #tag-filter, #tag-filter-mobile, #export-btn, #import-btn, #tile-size, #colorSelector, #popup-button, #reroll-btn, #local-upload-btn, #url-upload-btn, #url-popup-close, #url-popup-close-url, #local-image-btn, #urlimage-btn, #urlURL-popup-close, #url-popup-close-url1, #popup-close, .collapsible, .edit-popup button, #submit-url-btn, #submit-url-btn1, #share-url-popup button, #nsfw-inclusion-popup button, #image-upload-choice-popup button, #tile-creation-popup button, #settings-popup button,  #tileSize, #undo-delete-popup button, #popup-close-btn, #new-confirm-image-btn, #confirm-image-btn, #new-cancel-image-btn, #cancel-image-btn, #image-confirmation-popup button, #new-image-confirmation-popup button, .link-button, #close-links-popup, #accessibility-popup button, #theme-dropdown-accessibility, #close-multi-links-popup, #font-dropdown, #close-formatting, .remove-custom-field-btn' // Added .remove-custom-field-btn
     );
 
     // Define colors based on the selected option
@@ -2422,23 +2584,117 @@ document.getElementById('accessibility-settings-close').addEventListener('click'
 function showEditUrlPopup(tileData, tileElement) {
    const popup = document.getElementById('edit-url-popup');
    const urlInput = document.getElementById('edit-url-input');
-   urlInput.value = tileData.link;
+   const originalUrl = tileData.link; // Store the original URL
+   urlInput.value = originalUrl; // Set the input value to the original URL
    popup.style.display = 'flex';
    document.getElementById('popup-overlay').style.display = 'block';
+
    document.getElementById('save-url-btn').onclick = () => {
-      tileData.link = urlInput.value;
-      tileElement.querySelector('a').href = tileData.link;
-      saveTiles();
-      popup.style.display = 'none';
+      tileData.link = urlInput.value; // Update the tile data
+      tileElement.querySelector('a').href = tileData.link; // Update the link in the tile element
+      saveTiles(); // Save to local storage
+      popup.style.display = 'none'; // Close the popup
       document.getElementById('popup-overlay').style.display = 'none';
    };
 
-   // Handle cancel button
+   // Handle cancel button with unsaved changes prompt
    document.getElementById('cancel-url-btn').onclick = () => {
+      const currentUrl = urlInput.value; // Get the current URL input value
+
+      // Check if there are unsaved changes
+      if (currentUrl !== originalUrl) {
+         const confirmCancel = confirm("You have unsaved changes. Are you sure you want to cancel?");
+         if (!confirmCancel) {
+            return; // If the user does not confirm, do nothing
+         }
+      }
+
+      // If no unsaved changes or the user confirmed, close the popup
       popup.style.display = 'none';
       document.getElementById('popup-overlay').style.display = 'none';
    };
 }
+
+const forceMobileButtonsBtn = document.getElementById('force-mobile-buttons');
+
+function applyMobileButtonState(isForced) {
+    const buttons = [
+        '.edit-popup textarea',
+        '#nsfw-inclusion-popup button',
+        '#local-upload-btn',
+        '.edit-popup button',
+        '#share-url-popup button',
+        '#export-btn',
+        '#import-btn',
+        '#tile-size',
+        '#url-upload-btn',
+        '#url-popup-close',
+        '#colorSelector',
+        '#settings-popup button',
+        '#tileSize',
+        '#accessibility-popup button',
+        '#settings-btn',
+        '#acccessibility-btn',
+        '#random-character-btn',
+        '#flush-button',
+        '#openReorderToolButton',
+        '#openBackupMergeButton',
+        '.theme-toggle' // Keep this here but handle separately
+    ];
+
+    // Apply full-width class and set padding for buttons
+    buttons.forEach(selector => {
+        const elements = document.querySelectorAll(selector);
+        elements.forEach(element => {
+            if (selector !== '.theme-toggle') {
+                element.classList.toggle('full-width', isForced);
+                element.style.padding = '15px'; // Apply 15px padding
+            }
+        });
+    });
+
+    // Set .theme-toggle to 100% width and no padding
+    const themeToggleElements = document.querySelectorAll('.theme-toggle');
+    themeToggleElements.forEach(element => {
+        element.style.width = '100%'; // Explicitly set width to 100%
+        element.style.padding = '0'; // Ensure no padding
+    });
+
+    // Set padding for #tag-filter-mobile
+    const tagFilterMobile = document.getElementById('tag-filter-mobile');
+    if (tagFilterMobile) {
+        tagFilterMobile.style.padding = '15px'; // Apply 15px padding
+    }
+
+    // Set visibility of tag filter elements
+    const tagFilter = document.getElementById('tag-filter');
+    
+    if (tagFilter) {
+        tagFilter.style.display = isForced ? 'none' : 'block';
+    }
+    
+    if (tagFilterMobile) {
+        tagFilterMobile.style.display = isForced ? 'block' : 'none';
+    }
+
+    // Update button text
+    forceMobileButtonsBtn.textContent = isForced ? 'Undo Force Mobile Buttons' : 'Force Mobile Buttons';
+}
+
+forceMobileButtonsBtn.addEventListener('click', function() {
+    const isForced = localStorage.getItem('forceMobileButtons') !== 'true';
+    localStorage.setItem('forceMobileButtons', isForced.toString());
+    applyMobileButtonState(isForced);
+});
+
+// Apply saved settings on page load
+document.addEventListener('DOMContentLoaded', function() {
+    const isForced = localStorage.getItem('forceMobileButtons') === 'true';
+    applyMobileButtonState(isForced);
+});
+
+
+
 
 function filterTilesByPlatform() {
    const selectedPlatform = document.getElementById('platform-filter').value;
@@ -2488,118 +2744,141 @@ function showEditInfoPopup(tileData, tileElement) {
 
       // Check if the active element is a textarea for custom field values
       if (activeElement.classList.contains('custom-field-value')) {
-         let wrappedText;
-         const start = activeElement.selectionStart;
-         const end = activeElement.selectionEnd;
-         const text = activeElement.value;
+    let wrappedText;
+    const start = activeElement.selectionStart;
+    const end = activeElement.selectionEnd;
+    const text = activeElement.value;
 
-         // Determine if the user is on macOS or not
-         const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+    // Determine if the user is on macOS or not
+    const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
 
-         // Handle formatting shortcuts
-         if (event.ctrlKey || (isMac && event.metaKey)) { // Use Command key for macOS
-            switch (event.key) {
-               case 'b':
-                  event.preventDefault();
-                  if (start !== end) {
-                     wrappedText = `(b)${text.substring(start, end)}(/b)`;
-                  }
-                  break;
-               case 'i':
-                  event.preventDefault();
-                  if (start !== end) {
-                     wrappedText = `(i)${text.substring(start, end)}(/i)`;
-                  }
-                  break;
-               case 'u':
-                  event.preventDefault();
-                  if (start !== end) {
-                     wrappedText = `(u)${text.substring(start, end)}(/u)`;
-                  }
-                  break;
-               case '=':
-                  event.preventDefault();
-                  if (start !== end) {
-                     wrappedText = `(sub)${text.substring(start, end)}(/sub)`;
-                  }
-                  break;
-               case '+':
-                  if (event.shiftKey) { // Check if Shift is also pressed
-                     event.preventDefault();
-                     if (start !== end) {
-                        wrappedText = `(sup)${text.substring(start, end)}(/sup)`;
-                     }
-                  }
-                  break;
-               case 'l':
-                  if (event.altKey) { // Check if Alt is also pressed
-                     event.preventDefault();
-                     if (start !== end) {
-                        wrappedText = `(letterspace="")${text.substring(start, end)}(/letterspace)`;
-                     }
-                  }
-                  break;
-                  case '#':
-    event.preventDefault();
-    // Find the start of the current line
-    const currentLineStart = text.lastIndexOf('\n', start - 1) + 1; 
-    const currentLineText = text.substring(currentLineStart, text.indexOf('\n', currentLineStart));
-    
-    // Check if the line already starts with '(#)'
-    if (!currentLineText.trim().startsWith('(#[)')) {
-        // Insert '(#)' at the beginning of the line if it's not already there
-        activeElement.value = text.substring(0, currentLineStart) + '(#)' + text.substring(currentLineStart);
-        activeElement.selectionStart = currentLineStart + 3; // Move the cursor after '(#)'
-        activeElement.selectionEnd = activeElement.selectionStart; // Set the selection end to the same position
+    // Handle formatting shortcuts
+    if (event.ctrlKey || (isMac && event.metaKey)) { // Use Command key for macOS
+    switch (event.key) {
+        case 'b':
+            event.preventDefault();
+            if (start !== end) {
+                wrappedText = `(b)${text.substring(start, end)}(/b)`;
+            }
+            break;
+        case 'i':
+            event.preventDefault();
+            if (start !== end) {
+                wrappedText = `(i)${text.substring(start, end)}(/i)`;
+            }
+            break;
+        case 'u':
+            event.preventDefault();
+            if (start !== end) {
+                wrappedText = `(u)${text.substring(start, end)}(/u)`;
+            }
+            break;
+        case '=':
+            event.preventDefault();
+            if (start !== end) {
+                wrappedText = `(sub)${text.substring(start, end)}(/sub)`;
+            }
+            break;
+        case '+':
+            if (event.shiftKey) { // Check if Shift is also pressed
+                event.preventDefault();
+                if (start !== end) {
+                    wrappedText = `(sup)${text.substring(start, end)}(/sup)`;
+                }
+            }
+            break;
+        case 'l':
+            if (event.altKey) { // Check if Alt is also pressed
+                event.preventDefault();
+                if (start !== end) {
+                    wrappedText = `(letterspace="")${text.substring(start, end)}(/letterspace)`;
+                }
+            }
+            break;
+        case 'L':
+            event.preventDefault(); // Prevent default action for Ctrl + L
+            if (start !== end) {
+                wrappedText = `(letterspace="")${text.substring(start, end)}(/letterspace)`;
+            }
+            break; 
+        case '#':
+            event.preventDefault();
+            // Find the start of the current line
+            const currentLineStartHash = text.lastIndexOf('\n', start - 1) + 1; 
+            const currentLineTextHash = text.substring(currentLineStartHash, text.indexOf('\n', currentLineStartHash));
+            
+            // Check if the line already starts with '(#)'
+            if (!currentLineTextHash.trim().startsWith('(#[)')) {
+                // Insert '(#)' at the beginning of the line if it's not already there
+                activeElement.value = text.substring(0, currentLineStartHash) + '(#)' + text.substring(currentLineStartHash);
+                activeElement.selectionStart = currentLineStartHash + 3; // Move the cursor after '(#)'
+                activeElement.selectionEnd = activeElement.selectionStart; // Set the selection end to the same position
+            }
+            break;
+
+        case '-':
+            event.preventDefault();
+            // Find the start of the current line
+            const currentLineStartDash = text.lastIndexOf('\n', start - 1) + 1; 
+            const currentLineTextDash = text.substring(currentLineStartDash, text.indexOf('\n', currentLineStartDash));
+            
+            // Check if the line already starts with '(-)'
+            if (!currentLineTextDash.trim().startsWith('(-)')) {
+                // Insert '(-)' at the beginning of the line if it's not already there
+                activeElement.value = text.substring(0, currentLineStartDash) + '(-)' + text.substring(currentLineStartDash);
+                activeElement.selectionStart = currentLineStartDash + 3; // Move the cursor after '(-)'
+                activeElement.selectionEnd = activeElement.selectionStart; // Set the selection end to the same position
+            }
+            break;
+
+        case '|':
+            event.preventDefault();
+            // Insert '(ind)' at the current cursor position
+            activeElement.value = text.substring(0, start) + '(ind)' + text.substring(end);
+            activeElement.selectionStart = start + 5; // Move the cursor after '(ind)'
+            activeElement.selectionEnd = activeElement.selectionStart; // Set the selection end to the same position
+            break;
+
+        case 's':
+            event.preventDefault();
+            if (start !== end) {
+                wrappedText = `(s)${text.substring(start, end)}(/s)`;
+            }
+            break;
+        case 'k':
+            event.preventDefault();
+            if (start !== end) {
+                wrappedText = `(c)${text.substring(start, end)}(/c)`;
+            }
+            break;
+        case 'q':
+            event.preventDefault();
+            if (start !== end) {
+                wrappedText = `(q)${text.substring(start, end)}(/q)`;
+            }
+            break;
+        case 'I':
+            if (event.altKey) {
+                event.preventDefault();
+                if (start !== end) {
+                    wrappedText = `(ind)${text.substring(start, end)}`;
+                }
+            }
+            break;
+        case 'b':
+            if (event.shiftKey) {
+                event.preventDefault();
+                if (start !== end) {
+                    wrappedText = `(blur)${text.substring(start, end)}(/blur)`;
+                }
+            }
+            break;
+        default:
+            return; // Do nothing if another key is pressed with Ctrl or Command
     }
-    break;
-
-               case 's':
-                  event.preventDefault();
-                  if (start !== end) {
-                     wrappedText = `(s)${text.substring(start, end)}(/s)`;
-                  }
-                  break;
-               case 'k':
-                  event.preventDefault();
-                  if (start !== end) {
-                     wrappedText = `(c)${text.substring(start, end)}(/c)`;
-                  }
-                  break;
-               case 'q':
-                  event.preventDefault();
-                  if (start !== end) {
-                     wrappedText = `(q)${text.substring(start, end)}(/q)`;
-                  }
-                  break;
-               case 'I':
-                  if (event.altKey) {
-                     event.preventDefault();
-                     if (start !== end) {
-                        wrappedText = `(ind)${text.substring(start, end)}`;
-                     }
-                  }
-                  break;
-               case 'b':
-                  if (event.shiftKey) {
-                     event.preventDefault();
-                     if (start !== end) {
-                        wrappedText = `(blur)${text.substring(start, end)}(/blur)`;
-                     }
-                  }
-                  break;
-               default:
-                  return; // Do nothing if another key is pressed with Ctrl or Command
-            }
-
-            // Apply the wrapping if text was selected
-            if (wrappedText) {
-               activeElement.value = text.substring(0, start) + wrappedText + text.substring(end);
-               activeElement.selectionStart = start + wrappedText.length; // Move the cursor after the inserted text
-               activeElement.selectionEnd = activeElement.selectionStart; // Set the selection end to the same position
-            }
-         }
+}
       }
+
    });
 
    popup.style.display = 'flex';
@@ -2635,9 +2914,46 @@ function showEditInfoPopup(tileData, tileElement) {
    };
 
    document.getElementById('cancel-info-btn').onclick = () => {
-      popup.style.display = 'none';
-      document.getElementById('popup-overlay').style.display = 'none';
-   };
+   // Get the current values from the inputs
+   const currentName = document.getElementById('edit-name-input').value;
+   const currentPlatform = document.getElementById('edit-platform-input').value;
+   const currentAge = document.getElementById('edit-age-input').value;
+   const currentDescription = document.getElementById('edit-description-input').value;
+   const currentAlt = document.getElementById('edit-alt-input').value;
+
+   // Get the current custom fields
+   const currentCustomFields = {};
+   document.querySelectorAll('.custom-field').forEach(field => {
+      const key = field.querySelector('.custom-field-key').value;
+      const value = field.querySelector('.custom-field-value').value;
+      if (key && value) {
+         currentCustomFields[key] = value;
+      }
+   });
+
+   // Check if any changes were made
+   const hasUnsavedChanges = (
+      currentName !== (tileData.name || '') ||
+      currentPlatform !== (tileData.platform || '') ||
+      currentAge !== (tileData.age || '') ||
+      currentDescription !== (tileData.description || '') ||
+      currentAlt !== (tileData.alt || '') ||
+      JSON.stringify(currentCustomFields) !== JSON.stringify(tileData.customFields || {})
+   );
+
+   // If there are unsaved changes, prompt the user
+   if (hasUnsavedChanges) {
+      const confirmCancel = confirm("You have unsaved changes. Are you sure you want to cancel?");
+      if (!confirmCancel) {
+         return; // If the user does not confirm, do nothing
+      }
+   }
+
+   // If no unsaved changes or the user confirmed, close the popup
+   popup.style.display = 'none';
+   document.getElementById('popup-overlay').style.display = 'none';
+};
+
 }
 
 // Function to add custom fields
@@ -2646,26 +2962,55 @@ function addCustomField(key = '', value = '') {
    const fieldDiv = document.createElement('div');
    fieldDiv.className = 'custom-field';
    fieldDiv.innerHTML = `
-      <input type="text" class="custom-field-key" placeholder="Field Name" value="${key}">
-      <textarea class="custom-field-value" placeholder="Field Value">${value}</textarea>
-      <button class="remove-custom-field-btn">Remove</button>
-   `;
+    <input type="text" class="custom-field-key" placeholder="Field Name" value="${key}">
+    <textarea class="custom-field-value" placeholder="Field Value">${value}</textarea>
+    <button class="remove-custom-field-btn" style="margin-bottom:0px">Remove</button>
+    <div style="display: flex; gap: 5px;"> <!-- Flex container for buttons -->
+        <button class="move-up-btn" style="margin-bottom:10px">Move Up</button>
+        <button class="move-down-btn" style="margin-bottom:10px">Move Down</button>
+    </div>
+`;
+
    customFieldsContainer.appendChild(fieldDiv);
 
    // Set the onclick event for removing the custom field
    const removeBtn = fieldDiv.querySelector('.remove-custom-field-btn');
+   removeBtn.classList.add('test');
    removeBtn.onclick = () => {
       customFieldsContainer.removeChild(fieldDiv);
    };
 
-   // Apply dynamic colors to the remove button
+   // Set the onclick event for moving the custom field up
+   const moveUpBtn = fieldDiv.querySelector('.move-up-btn');
+   moveUpBtn.classList.add('test');
+   moveUpBtn.onclick = () => {
+      const prevSibling = fieldDiv.previousElementSibling;
+      if (prevSibling) {
+         customFieldsContainer.insertBefore(fieldDiv, prevSibling);
+      }
+   };
+
+   // Set the onclick event for moving the custom field down
+   const moveDownBtn = fieldDiv.querySelector('.move-down-btn');
+   moveDownBtn.classList.add('test');
+   moveDownBtn.onclick = () => {
+      const nextSibling = fieldDiv.nextElementSibling;
+      if (nextSibling) {
+         customFieldsContainer.insertBefore(nextSibling, fieldDiv);
+      }
+   };
+
+   // Apply dynamic colors to the buttons
    applyDynamicButtonColors(removeBtn);
+   applyDynamicButtonColors(moveUpBtn);
+   applyDynamicButtonColors(moveDownBtn);
 }
 
 // Function to show the edit tags popup
 function showEditTagsPopup(tileData, tileElement) {
    const popup = document.getElementById('edit-tags-popup');
-   document.getElementById('edit-tags-input').value = tileData.tags.join(', ');
+   const originalTags = tileData.tags.slice(); // Make a copy of the original tags
+   document.getElementById('edit-tags-input').value = originalTags.join(', ');
    popup.style.display = 'flex';
    document.getElementById('popup-overlay').style.display = 'block';
 
@@ -2674,7 +3019,6 @@ function showEditTagsPopup(tileData, tileElement) {
          .map(tag => tag.trim()) // Trim whitespace from each tag
          .filter(tag => tag) // Remove empty tags
          .filter((tag, index, self) => self.indexOf(tag) === index); // Remove duplicates
-
 
       tileData.tags = newTags;
       updateTileTags(tileElement, tileData.tags);
@@ -2686,10 +3030,31 @@ function showEditTagsPopup(tileData, tileElement) {
    };
 
    document.getElementById('cancel-tags-btn').onclick = () => {
+      // Get the current value of the input
+      const currentTags = document.getElementById('edit-tags-input').value.split(',')
+         .map(tag => tag.trim())
+         .filter(tag => tag);
+
+      // Check if any changes were made
+      const hasUnsavedChanges = (
+         currentTags.length !== originalTags.length || // Check if the number of tags is different
+         currentTags.some((tag, index) => tag !== originalTags[index]) // Check for any differing tags
+      );
+
+      // If there are unsaved changes, prompt the user
+      if (hasUnsavedChanges) {
+         const confirmCancel = confirm("You have unsaved changes. Are you sure you want to cancel?");
+         if (!confirmCancel) {
+            return; // If the user does not confirm, do nothing
+         }
+      }
+
+      // If no unsaved changes or the user confirmed, close the popup
       popup.style.display = 'none';
       document.getElementById('popup-overlay').style.display = 'none';
    };
 }
+
 
 // Theme management
 function setTheme(theme) {
@@ -3091,9 +3456,11 @@ function editImage(tileData, tileElement) {
 
     const cropBox = document.createElement('div');
     cropBox.classList.add('cropBoxZxCvBn');
+    cropBox.classList.add('test');
 
     const resizeHandle = document.createElement('div');
     resizeHandle.classList.add('resizeHandleUiOpLm');
+    resizeHandle.classList.add('test');
 
     cropBox.appendChild(resizeHandle);
     imageContainer.appendChild(image);
@@ -3109,11 +3476,13 @@ function editImage(tileData, tileElement) {
     const confirmButton = document.createElement('button');
     confirmButton.textContent = 'Confirm Crop';
     confirmButton.classList.add('buttonHgFdSa');
+    confirmButton.classList.add('test');
     actionContainer.appendChild(confirmButton);
 
     // Compression dropdown
     const compressionButton = document.createElement('select');
     compressionButton.classList.add('compressionButtonQwErAs');
+    compressionButton.classList.add('test');
     const compressionLevels = [
         'None', 
         'Low', 
@@ -3124,7 +3493,6 @@ function editImage(tileData, tileElement) {
         'Yummers', 
         'Stupidly Low', 
         'What Are Pixels?', 
-        'I Love Pixels'
     ];
 
     compressionLevels.forEach(level => {
@@ -3133,11 +3501,19 @@ function editImage(tileData, tileElement) {
         option.textContent = level;
         compressionButton.appendChild(option);
     });
+
+    // Load saved compression setting from local storage
+    const savedCompression = localStorage.getItem('compressionLevel');
+    if (savedCompression) {
+        compressionButton.value = savedCompression;
+    }
+
     actionContainer.appendChild(compressionButton);
 
     // Resize dropdown
     const resizeButton = document.createElement('select');
     resizeButton.classList.add('resizeButtonRtYuIo');
+    resizeButton.classList.add('test');
     const resizeOptions = [
         'Image Size: 100%',
         'Image Size: 75%',
@@ -3152,6 +3528,13 @@ function editImage(tileData, tileElement) {
         option.textContent = size;
         resizeButton.appendChild(option);
     });
+
+    // Load saved resize setting from local storage
+    const savedResize = localStorage.getItem('resizePercentage');
+    if (savedResize) {
+        resizeButton.value = savedResize;
+    }
+
     actionContainer.appendChild(resizeButton);
 
     croppingPopup.appendChild(actionContainer);
@@ -3159,8 +3542,13 @@ function editImage(tileData, tileElement) {
     const cancelButton = document.createElement('button');
     cancelButton.textContent = 'Cancel';
     cancelButton.classList.add('cancelButtonXyZwv');
+    cancelButton.classList.add('test');
     croppingPopup.appendChild(cancelButton);
 
+    applyDynamicButtonColors(confirmButton);
+    applyDynamicButtonColors(compressionButton);
+    applyDynamicButtonColors(resizeButton);
+    applyDynamicButtonColors(cancelButton);
     document.body.appendChild(croppingPopup);
 
     const size = Math.min(scaledWidth, scaledHeight) / 2;
@@ -3245,8 +3633,7 @@ function editImage(tileData, tileElement) {
             case 'extra extreme': quality = 0.1; break;
             case 'yummers': quality = 0.01; break;
             case 'stupidly low': quality = 0.001; break;
-            case 'what are pixels?':
-            case 'i love pixels': quality = 0.001; break;
+            case 'what are pixels?': break;
             default: quality = 1.0;
         }
 
@@ -3263,7 +3650,9 @@ function editImage(tileData, tileElement) {
             dataUrl = resizedCanvas.toDataURL('image/webp', quality);
         }
 
-        // Handle additional compression logic (if needed) here...
+        // Save selected options to local storage
+        localStorage.setItem('compressionLevel', compressionButton.value);
+        localStorage.setItem('resizePercentage', resizeButton.value);
 
         // Return the resized and compressed image
         callback(dataUrl);
@@ -3272,9 +3661,9 @@ function editImage(tileData, tileElement) {
 
     cancelButton.onclick = () => {
         document.body.removeChild(croppingPopup);
+        document.getElementById('popup-overlay').style.display = 'block';
     };
 }
-
 
 
 
@@ -3577,14 +3966,44 @@ tagFilter.addEventListener('change', filterTiles);
 
 // Export functionality
 exportBtn.addEventListener('click', () => {
-   const dataStr = JSON.stringify(tiles);
-   const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
-   const exportFileDefaultName = 'image_grid_data.json';
+    // Get the current date and time
+    const currentTime = new Date().toISOString();
+    
+    // Store the current time in local storage
+    localStorage.setItem('exportTimestamp', currentTime);
 
-   const linkElement = document.createElement('a');
-   linkElement.setAttribute('href', dataUri);
-   linkElement.setAttribute('download', exportFileDefaultName);
-   linkElement.click();
+    const dataStr = JSON.stringify(tiles);
+    const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
+    const exportFileDefaultName = 'image_grid_data.json';
+
+    const linkElement = document.createElement('a');
+    linkElement.setAttribute('href', dataUri);
+    linkElement.setAttribute('download', exportFileDefaultName);
+    linkElement.click();
+});
+
+window.addEventListener('load', () => {
+    const exportTimestamp = localStorage.getItem('exportTimestamp');
+    if (exportTimestamp) {
+        const previousTime = new Date(exportTimestamp);
+        const currentTime = new Date();
+        
+        // Calculate the time difference in milliseconds
+        const timeDifference = currentTime - previousTime;
+
+        // Convert the time difference to days
+        const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+
+        // Print the time difference in the console
+        console.log(`Time since export: ${days} days.`);
+
+        // Check if the time exceeds 30 days
+        if (days > 30) {
+            alert('Reminder: All the data associated with the website is stored LOCALLY which means that if for whatever reason the localStorage is wiped, there will be no retrival of your tiles. This reminder will popup every 30 days.');
+        }
+    } else {
+        console.log('No export timestamp found.');
+    }
 });
 
 // Import functionality
@@ -3949,11 +4368,19 @@ function saveFontWeight() {
 
 // Apply the current font weight to all relevant elements
 function applyFontWeight() {
-    const elements = document.querySelectorAll('#increase-weight, #tileSize, #tag-filter, #colorSelector, #theme-dropdown-accessibility, li, p, strong, h3, button, tags, span, tag, #font-dropdown');
+    const elements = document.querySelectorAll('#tag-filter-mobile, #increase-weight, #tileSize, #tag-filter, #colorSelector, #theme-dropdown-accessibility, li, p, strong, h2, h3, button, tags, span, tag, #font-dropdown');
     const currentWeight = fontWeightOptions[currentFontWeightIndex];
+
     elements.forEach((element) => {
-        element.style.fontWeight = currentWeight;
+        element.style.fontWeight = currentWeight; // Apply font weight directly
     });
+
+    // Dynamically update the CSS for the "test" class with !important
+    const styleElement = document.getElementById('dynamic-font-weight-style') || document.createElement('style');
+    styleElement.id = 'dynamic-font-weight-style';
+    styleElement.innerHTML = `.test { font-weight: ${currentWeight} !important; }`;
+
+    document.head.appendChild(styleElement); // Ensure it is added to the document
 }
 
 // Increase font weight
@@ -3987,9 +4414,17 @@ function removeFontWeight() {
     elements.forEach((element) => {
         element.style.removeProperty('font-weight');
     });
+
+    // Remove the font weight for the "test" class
+    const styleElement = document.getElementById('dynamic-font-weight-style');
+    if (styleElement) {
+        styleElement.innerHTML = `.test { font-weight: normal !important; }`; // Reset to normal weight
+    }
+
     localStorage.removeItem('fontweightindex');
     currentFontWeightIndex = 0;
 }
+
 
 // Event listeners
 document.getElementById('increase-weight').addEventListener('click', increaseFontWeight);
@@ -4083,7 +4518,8 @@ function applyAnimationState() {
         '#settings-popup',
         '.links-popup',
         '#accessibility-popup',
-        '#multi-links-popup'
+        '#multi-links-popup',
+        '#formatting-guide'
     ];
 
     popups.forEach(selector => {
