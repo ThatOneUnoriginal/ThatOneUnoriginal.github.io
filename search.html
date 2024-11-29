@@ -158,6 +158,47 @@
             color: #ffffff;
         }
 
+        #historyPopup {
+    display: none;
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 10px;
+    border-radius: 5px;
+    color: white;
+    margin-top: 10px;
+    width: 100%;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.history-title {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.history-item {
+    display: flex;
+    align-items: center;
+    padding: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.history-item:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.history-icon {
+    margin-right: 10px;
+    opacity: 0.7;
+}
+
+.history-query {
+    flex-grow: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
     </style>
 </head>
 <body>
@@ -171,27 +212,28 @@
                     <button class="clear-btn" id="clearBtn">&times;</button> <!-- X icon -->
                 </div>
                 <div id="platformPopup" style="display:none; background-color: rgba(0, 0, 0, 0.7); padding: 10px; border-radius: 5px; color: white; text-align: center; margin-top: 10px; width: 100%"></div>
+                <div id="historyPopup" style="display:none; background-color: rgba(0, 0, 0, 0.7); padding: 10px; border-radius: 5px; color: white; text-align: left; margin-top: 10px; width: 100%;"></div>
                 <div id="importantDatesPopup" style="display:none; background-color: rgba(0, 0, 0, 0.7); padding: 10px; border-radius: 5px; color: white; text-align: center; margin-top: 10px; width: 100%"></div>
             </div>
         </div>
         <div class="popup">
             <!-- 4x4 Grid for the right popup -->
-            <a href="https://example.com" class="grid-item no-underline" style="background: #0009 ; color: #fff; font-size: 40px">Twitter</a>
-            <a href="https://example.com" class="grid-item no-underline" style="background: #0009; color: #fff; font-size: 40px">Roblox</a>
-            <a href="https://example.com" class="grid-item no-underline" style="background: #0009; color: #fff; font-size: 40px">YouTube</a>
-            <a href="https://example.com" class="grid-item no-underline" style="background: #0009; color: #fff; font-size: 40px">Bluesky</a>
-            <a href="https://example.com" class="grid-item no-underline" style="background: #0009; color: #fff; font-size: 40px">Threads</a>
-            <a href="https://example.com" class="grid-item no-underline" style="background: #0009; color: #fff; font-size: 40px">Instagram</a>
-            <a href="https://example.com" class="grid-item no-underline" style="background: #0009; color: #fff; font-size: 40px">YT Music</a>
-            <a href="https://example.com" class="grid-item no-underline" style="background: #0009; color: #fff; font-size: 40px">ChatGPT</a>
-            <a href="https://example.com" class="grid-item no-underline" style="background: #0009; color: #fff; font-size: 40px">Gemini</a>
-            <a href="https://example.com" class="grid-item no-underline" style="background: #0009; color: #fff; font-size: 40px">Claude</a>
-            <a href="https://example.com" class="grid-item no-underline" style="background: #0009; color: #fff; font-size: 40px">Perplexity</a>
-            <a href="https://example.com" class="grid-item no-underline" style="background: #0009; color: #fff; font-size: 40px">GSheets</a>
-            <a href="https://example.com" class="grid-item no-underline" style="background: #0009; color: #fff; font-size: 40px">GForms</a>
-            <a href="https://example.com" class="grid-item no-underline" style="background: #0009; color: #fff; font-size: 40px">GDrive</a>
-            <a href="https://example.com" class="grid-item no-underline" style="background: #0009; color: #fff; font-size: 40px">Gmail</a>
-            <a href="https://example.com" class="grid-item no-underline" style="background: #0009; color: #fff; font-size: 40px">Proton</a>
+            <a href="https://x.com/home" class="grid-item no-underline" style="background: #0009 ; color: #fff; font-size: 40px">Twitter</a>
+            <a href="https://www.roblox.com/" class="grid-item no-underline" style="background: #0009; color: #fff; font-size: 40px">Roblox</a>
+            <a href="https://www.youtube.com/" class="grid-item no-underline" style="background: #0009; color: #fff; font-size: 40px">YouTube</a>
+            <a href="https://bsky.app/" class="grid-item no-underline" style="background: #0009; color: #fff; font-size: 40px">Bluesky</a>
+            <a href="https://www.threads.net/" class="grid-item no-underline" style="background: #0009; color: #fff; font-size: 40px">Threads</a>
+            <a href="https://www.instagram.com/" class="grid-item no-underline" style="background: #0009; color: #fff; font-size: 40px">Instagram</a>
+            <a href="https://music.youtube.com/" class="grid-item no-underline" style="background: #0009; color: #fff; font-size: 40px">YT Music</a>
+            <a href="https://chatgpt.com/" class="grid-item no-underline" style="background: #0009; color: #fff; font-size: 40px">ChatGPT</a>
+            <a href="https://gemini.google.com/" class="grid-item no-underline" style="background: #0009; color: #fff; font-size: 40px">Gemini</a>
+            <a href="https://claude.ai/" class="grid-item no-underline" style="background: #0009; color: #fff; font-size: 40px">Claude</a>
+            <a href="https://www.perplexity.ai/" class="grid-item no-underline" style="background: #0009; color: #fff; font-size: 40px">Perplexity</a>
+            <a href="https://docs.google.com/spreadsheets/u/0/" class="grid-item no-underline" style="background: #0009; color: #fff; font-size: 40px">GSheets</a>
+            <a href="https://docs.google.com/forms/u/0/" class="grid-item no-underline" style="background: #0009; color: #fff; font-size: 40px">GForms</a>
+            <a href="https://drive.google.com/" class="grid-item no-underline" style="background: #0009; color: #fff; font-size: 40px">GDrive</a>
+            <a href="https://mail.google.com/mail/u/0/" class="grid-item no-underline" style="background: #0009; color: #fff; font-size: 40px">Gmail</a>
+            <a href="https://mail.proton.me/" class="grid-item no-underline" style="background: #0009; color: #fff; font-size: 40px">Proton</a>
         </div>
         
     </div>
@@ -201,6 +243,245 @@
 const LOCAL_STORAGE_IMPORTANT_DATES = 'importantDates';
 const LOCAL_STORAGE_TIME_FORMAT = 'timeFormat';
 const LOCAL_STORAGE_SHOW_YEAR = 'showYearPreference';
+const LOCAL_STORAGE_WEBSITE_HISTORY = 'websiteSearchHistory';
+const LOCAL_STORAGE_PHRASE_HISTORY = 'phraseSearchHistory';
+const LOCAL_STORAGE_HISTORY_TRACKING = 'historyTrackingEnabled';
+const LOCAL_STORAGE_GRID_USAGE = 'gridItemUsage';
+
+
+
+document.addEventListener('click', function(e) {
+    if (e.target.closest('.history-item')) {
+        const query = e.target.closest('.history-item').getAttribute('data-query');
+        document.getElementById('searchInput').value = query;
+        document.getElementById('historyPopup').style.display = 'none';
+        document.getElementById('clearBtn').style.display = 'block';
+    }
+});
+
+// Function to add a search to history
+function addSearchToHistory(query, isWebsite = false) {
+    // Check if history tracking is enabled
+    const historyTrackingEnabled = localStorage.getItem(LOCAL_STORAGE_HISTORY_TRACKING) !== 'disabled';
+    
+    if (!historyTrackingEnabled) return;
+    
+    // Rest of the existing implementation remains the same
+    let websiteHistory = JSON.parse(localStorage.getItem(LOCAL_STORAGE_WEBSITE_HISTORY) || '[]');
+    let phraseHistory = JSON.parse(localStorage.getItem(LOCAL_STORAGE_PHRASE_HISTORY) || '[]');
+
+    const currentTime = Date.now();
+
+    if (isWebsite) {
+        websiteHistory = websiteHistory.filter(item => item.query !== query);
+        websiteHistory.unshift({ query, time: currentTime });
+        websiteHistory = websiteHistory.slice(0, 10);
+        
+        localStorage.setItem(LOCAL_STORAGE_WEBSITE_HISTORY, JSON.stringify(websiteHistory));
+    } else {
+        phraseHistory = phraseHistory.filter(item => item.query !== query);
+        phraseHistory.unshift({ query, time: currentTime });
+        phraseHistory = phraseHistory.slice(0, 10);
+        
+        localStorage.setItem(LOCAL_STORAGE_PHRASE_HISTORY, JSON.stringify(phraseHistory));
+    }
+}
+
+// Function to track grid item usage
+function trackGridItemUsage(url) {
+    let gridUsage = JSON.parse(localStorage.getItem(LOCAL_STORAGE_GRID_USAGE) || '{}');
+    
+    // Increment usage count for the specific URL
+    gridUsage[url] = (gridUsage[url] || 0) + 1;
+    
+    // Save updated usage statistics
+    localStorage.setItem(LOCAL_STORAGE_GRID_USAGE, JSON.stringify(gridUsage));
+    
+    // Reorder grid items based on usage
+    reorderGridItems();
+}
+
+// Function to reorder grid items based on usage
+function reorderGridItems() {
+    const gridContainer = document.querySelector('.popup:last-child');
+    const gridItems = Array.from(gridContainer.querySelectorAll('.grid-item'));
+    const gridUsage = JSON.parse(localStorage.getItem(LOCAL_STORAGE_GRID_USAGE) || '{}');
+    
+    // Sort grid items by usage (most used first)
+    gridItems.sort((a, b) => {
+        const usageA = gridUsage[a.getAttribute('href')] || 0;
+        const usageB = gridUsage[b.getAttribute('href')] || 0;
+        return usageB - usageA;
+    });
+    
+    // Clear the current grid container
+    gridContainer.innerHTML = '';
+    
+    // Reappend sorted grid items
+    gridItems.forEach(item => gridContainer.appendChild(item));
+}
+
+
+// Function to render history popup
+function renderHistoryPopup(historyType) {
+    const historyPopup = document.getElementById('historyPopup');
+    
+    // Retrieve histories
+    const websiteHistory = JSON.parse(localStorage.getItem(LOCAL_STORAGE_WEBSITE_HISTORY) || '[]');
+    const phraseHistory = JSON.parse(localStorage.getItem(LOCAL_STORAGE_PHRASE_HISTORY) || '[]');
+    
+    // Combine and sort histories
+    const combinedHistory = [...websiteHistory, ...phraseHistory]
+        .sort((a, b) => b.time - a.time)
+        .slice(0, 10);
+    
+    const websiteHistoryContent = websiteHistory.map(item => 
+        `<div class="history-item" data-query="${item.query}">
+            <span class="history-icon">🌐</span> 
+            <span class="history-query">${item.query}</span>
+        </div>`
+    ).join('');
+    
+    const phraseHistoryContent = phraseHistory.map(item => 
+        `<div class="history-item" data-query="${item.query}">
+            <span class="history-icon">🔍</span> 
+            <span class="history-query">${item.query}</span>
+        </div>`
+    ).join('');
+    
+    const combinedHistoryContent = combinedHistory.map(item => 
+        `<div class="history-item" data-query="${item.query}">
+            <span class="history-icon">${item.query.startsWith('http') ? '🌐' : '🔍'}</span> 
+            <span class="history-query">${item.query}</span>
+        </div>`
+    ).join('');
+    
+    let popupContent = '';
+    let popupTitle = '';
+    
+    switch(historyType) {
+        case '@history_links':
+            popupContent = websiteHistoryContent;
+            popupTitle = 'Website Search History';
+            break;
+        case '@history_phrase':
+            popupContent = phraseHistoryContent;
+            popupTitle = 'Phrase Search History';
+            break;
+        default: // '@history'
+            popupContent = combinedHistoryContent;
+            popupTitle = 'Recent Search History';
+    }
+    
+    if (popupContent) {
+        historyPopup.innerHTML = `
+            <div class="history-header">
+                <div class="history-title">${popupTitle}:</div>
+                <button id="exit-history-btn" style="background: none; border: none; color: white; cursor: pointer; font-size: 1.5rem;">✖</button>
+            </div>
+            ${popupContent}
+        `;
+        historyPopup.style.display = 'block';
+        
+        // Add event listener for exit button
+        document.getElementById('exit-history-btn').addEventListener('click', () => {
+            historyPopup.style.display = 'none';
+        });
+    } else {
+        historyPopup.style.display = 'none';
+    }
+}
+
+// Function to clear all search history
+// Function to clear all search history
+function clearSearchHistory() {
+    const historyTrackingEnabled = localStorage.getItem(LOCAL_STORAGE_HISTORY_TRACKING) !== 'disabled';
+    const platformPopup = document.getElementById('platformPopup');
+    const historyPopup = document.getElementById('historyPopup');
+    
+    // Check if history tracking is disabled
+    if (!historyTrackingEnabled) {
+        platformPopup.textContent = "No History; Tracking Disabled";
+        platformPopup.style.display = 'block';
+        
+        // Ensure history popup is hidden
+        historyPopup.style.display = 'none';
+        historyPopup.innerHTML = '';
+        
+        // Fade out the popup after 5 seconds
+        setTimeout(() => {
+            platformPopup.style.display = 'none';
+        }, 5000);
+        
+        return;
+    }
+    
+    // Check if there's any history to clear
+    const websiteHistory = JSON.parse(localStorage.getItem(LOCAL_STORAGE_WEBSITE_HISTORY) || '[]');
+    const phraseHistory = JSON.parse(localStorage.getItem(LOCAL_STORAGE_PHRASE_HISTORY) || '[]');
+    
+    if (websiteHistory.length === 0 && phraseHistory.length === 0) {
+        platformPopup.textContent = "No History";
+        platformPopup.style.display = 'block';
+        
+        // Ensure history popup is hidden
+        historyPopup.style.display = 'none';
+        historyPopup.innerHTML = '';
+        
+        // Fade out the popup after 5 seconds
+        setTimeout(() => {
+            platformPopup.style.display = 'none';
+        }, 5000);
+        
+        return;
+    }
+    
+    // Clear the histories
+    localStorage.removeItem(LOCAL_STORAGE_WEBSITE_HISTORY);
+    localStorage.removeItem(LOCAL_STORAGE_PHRASE_HISTORY);
+    
+    // Show "Clearing search history" popup
+    platformPopup.textContent = "Clearing search history";
+    platformPopup.style.display = 'block';
+    
+    // Ensure history popup is hidden
+    historyPopup.style.display = 'none';
+    historyPopup.innerHTML = '';
+    
+    // Fade out the popup after 5 seconds
+    setTimeout(() => {
+        platformPopup.style.display = 'none';
+    }, 5000);
+}
+
+
+// Function to toggle history tracking
+function toggleHistoryTracking(clearHistory = false) {
+    const currentSetting = localStorage.getItem(LOCAL_STORAGE_HISTORY_TRACKING);
+    const newSetting = currentSetting === 'disabled' ? 'enabled' : 'disabled';
+    
+    localStorage.setItem(LOCAL_STORAGE_HISTORY_TRACKING, newSetting);
+    
+    const platformPopup = document.getElementById('platformPopup');
+    const historyPopup = document.getElementById('historyPopup');
+    
+    // If clearing history when disabling tracking
+    if (clearHistory) {
+        clearSearchHistory();
+    }
+    
+    platformPopup.textContent = `History tracking is now ${newSetting}`;
+    platformPopup.style.display = 'block';
+    
+    // Ensure history popup is hidden
+    historyPopup.style.display = 'none';
+    historyPopup.innerHTML = '';
+
+    // Add timeout to hide the popup after 5 seconds
+    setTimeout(() => {
+        platformPopup.style.display = 'none';
+    }, 5000);
+}
 
 // Load important dates from local storage
 let importantDates = JSON.parse(localStorage.getItem(LOCAL_STORAGE_IMPORTANT_DATES) || '[]')
@@ -245,14 +526,50 @@ function isValidURL(url) {
 document.getElementById('searchInput').addEventListener('input', function() {
     const query = this.value.trim().toLowerCase();
     const platformPopup = document.getElementById('platformPopup');
-    const importantDatesPopup = document.getElementById('importantDatesPopup');
 
-    // Ensure that only the exact match "@y" is valid, not "@ye"
-    if (query.startsWith('@important') && (query.length > 10)) {
-        platformPopup.textContent = "Setting important date";
-        platformPopup.style.display = 'block';
+    // Special command emojis
+    const specialCommandEmojis = {
+        '@important': '📅', // Calendar emoji for important dates
+        '@24t': '🕰️',       // Clock emoji for 24-hour time format
+        '@12t': '⏰',        // Alarm clock for 12-hour time format
+        '@toggle_history': '🔄', // Refresh/cycle emoji for toggling history
+        '@clear_history': '🧹'   // Broom emoji for clearing history
+    };
+
+    // Check for special commands first
+    for (const [command, emoji] of Object.entries(specialCommandEmojis)) {
+        if (query.startsWith(command) && (query.length === command.length || query[command.length] === ' ')) {
+            let message = '';
+            switch(command) {
+                case '@important':
+                    message = "Setting important date";
+                    break;
+                case '@24t':
+                    message = "Using Function Convert to 24 Hour Display";
+                    break;
+                case '@12t':
+                    message = "Using Function Convert to 12 Hour Display";
+                    break;
+                case '@toggle_history':
+                    message = "Toggling search history tracking";
+                    break;
+                case '@clear_history':
+                    message = "Clearing search history";
+                    break;
+            }
+            platformPopup.innerHTML = `
+                <div style="display: flex; align-items: center;">
+                    <span style="margin-right: 10px; font-size: 1.5em;">${emoji}</span>
+                    <span>${message}</span>
+                </div>
+            `;
+            platformPopup.style.display = 'block';
+            return;
+        }
     }
-    else if (query.startsWith('@y') && (query.length === 2 || query[2] === ' ')) {
+
+    // Existing search prefix checks
+    if (query.startsWith('@y') && (query.length === 2 || query[2] === ' ')) {
         platformPopup.textContent = "Searching with YouTube";
         platformPopup.style.display = 'block';
     } 
@@ -264,33 +581,16 @@ document.getElementById('searchInput').addEventListener('input', function() {
         platformPopup.textContent = "Searching with Google (This is already the default)";
         platformPopup.style.display = 'block';
     } 
-    // Ensure that only the exact match "@rbx" is valid
     else if (query.startsWith('@rbx') && (query.length === 4 || query[4] === ' ')) {
         platformPopup.textContent = "Searching with Roblox";
         platformPopup.style.display = 'block';
     } 
-    // Ensure that only the exact match "@p" is valid
     else if (query.startsWith('@p') && (query.length === 2 || query[2] === ' ')) {
         platformPopup.textContent = "Searching with Perplexity";
         platformPopup.style.display = 'block';
     } 
-    // Ensure that only the exact match "@mu" is valid
     else if (query.startsWith('@mu') &&  (query.length === 3 || query[3] === ' ')) {
         platformPopup.textContent = "Searching with YouTube Music";
-        platformPopup.style.display = 'block';
-    } 
-    // Ensure that only the exact match "@24t" is valid
-    else if (query.startsWith('@24t') &&  (query.length === 4 || query[4] === ' ')) {
-        platformPopup.textContent = "Using Function Convert to 24 Hour Display";
-        platformPopup.style.display = 'block';
-    } 
-    // Ensure that only the exact match "@12t" is valid
-    else if (query.startsWith('@12t') && (query.length === 4 || query[4] === ' ')) {
-        platformPopup.textContent = "Using Function Convert to 12 Hour Display";
-        platformPopup.style.display = 'block';
-    } 
-    else if (query.startsWith('@important') && (query.length === 10 || query[10] === ' ')) {
-        platformPopup.textContent = "Setting important date";
         platformPopup.style.display = 'block';
     } 
     else if (query.startsWith('@year') && (query.length === 5 || query[5] === ' ')) {
@@ -298,29 +598,32 @@ document.getElementById('searchInput').addEventListener('input', function() {
         platformPopup.style.display = 'block';
     } 
     else if (query.startsWith('@help') && (query.length === 5 || query[5] === ' ')) {
-    platformPopup.innerHTML = `
-        <div style="padding: 10px; border-radius: 8px; background-color: rgba(0, 0, 0, 0.7);">
-            <h3 style="margin-bottom: 10px;">Command Help</h3>
-            <ul style="list-style: none; padding-left: 0; max-height: 100px; overflow-y: auto;">
-                <li><strong>@p</strong>: Searches with Perplexity</li>
-                <li><strong>@y</strong>: Searches with YouTube</li>
-                <li><strong>@g</strong>: Searches with Google (This is the default search engine)</li>
-                <li><strong>@w</strong>: Searches with Wikipedia</li>
-                <li><strong>@mu</strong>: Searches with YouTube Music</li>
-                <li><strong>@rbx</strong>: Searches Roblox experiences</li>
-                <li><strong>@24t</strong>: Changes time display to 24-hour format</li>
-                <li><strong>@12t</strong>: Changes time display to 12-hour format</li>
-                <li><strong>@year</strong>: Toggles displaying the year</li>
-                <li><strong>@important date name</strong>: Lets you set important dates and know how long until they happen</li>
-                <li><strong>@export</strong>: Exports time, year, and date info</li>
-                <li><strong>@import</strong>: Imports time, year, and date info</li>
-            </ul>
-        </div>
-    `;
-    platformPopup.style.display = 'block';
-}
-
-    // Hide the popup if the query doesn't match any valid prefix
+        platformPopup.innerHTML = `
+            <div style="padding: 10px; border-radius: 8px; background-color: rgba(0, 0, 0, 0.7);">
+                <h3 style="margin-bottom: 10px;">Command Help</h3>
+                <ul style="list-style: none; padding-left: 0; max-height: 100px; overflow-y: auto;">
+                    <li><strong>@p</strong>: Searches with Perplexity</li>
+                    <li><strong>@y</strong>: Searches with YouTube</li>
+                    <li><strong>@g</strong>: Searches with Google (This is the default search engine)</li>
+                    <li><strong>@w</strong>: Searches with Wikipedia</li>
+                    <li><strong>@mu</strong>: Searches with YouTube Music</li>
+                    <li><strong>@rbx</strong>: Searches Roblox experiences</li>
+                    <li><strong>@24t</strong>: Changes time display to 24-hour format</li>
+                    <li><strong>@12t</strong>: Changes time display to 12-hour format</li>
+                    <li><strong>@year</strong>: Toggles displaying the year</li>
+                    <li><strong>@important date name</strong>: Lets you set important dates and know how long until they happen</li>
+                    <li><strong>@history</strong>: Allows you to check your most reecent searches</li>
+                    <li><strong>@history_links</strong>: Allows you to check your most recent searches by websites</li>
+                    <li><strong>@history_phrases</strong>: Allows you to check your most recent searches by phrases</li>
+                    <li><strong>@clear_history</strong>: Allows you to clear the history</li>
+                    <li><strong>@toggle_history</strong>: Allows you to toggle the tracking feature (adding clear after also clears the history if you're disabling history)</li>
+                    <li><strong>@export</strong>: Exports time, year, and date info</li>
+                    <li><strong>@import</strong>: Imports time, year, and date info</li>
+                </ul>
+            </div>
+        `;
+        platformPopup.style.display = 'block';
+    }
     else {
         platformPopup.style.display = 'none';
     }
@@ -333,6 +636,52 @@ document.getElementById('searchInput').addEventListener('keypress', function (e)
         const platformPopup = document.getElementById('platformPopup');
         const importantDatesPopup = document.getElementById('importantDatesPopup');
 
+        // History-related commands
+        if (query === '@history' || query === '@history_links' || query === '@history_phrase') {
+            renderHistoryPopup(query);
+            this.value = '';
+            return;
+        }
+
+                
+        // New commands
+        if (query === '@clear_history') {
+            clearSearchHistory();
+            this.value = '';
+            return;
+        }
+        
+        if (query === '@toggle_history') {
+            toggleHistoryTracking();
+            this.value = '';
+            return;
+        }
+
+        if (query.toLowerCase() === '@toggle_history clear') {
+            toggleHistoryTracking(true);
+            this.value = '';
+            return;
+        }
+        
+        // Existing search logic with history tracking
+        let isWebsite = false;
+        
+        // Check if it's a website search
+        if (query.startsWith('http://') || query.startsWith('https://') || 
+            query.includes('.com') || query.includes('.org') || query.includes('.net')) {
+            isWebsite = true;
+        }
+        
+        // Existing search prefixes that are typically websites
+        const websitePrefixes = ['@y', '@mu', '@rbx', '@p', '@g', '@w'];
+        if (websitePrefixes.some(prefix => query.startsWith(prefix))) {
+            isWebsite = true;
+        }
+        
+        // Add to history before processing the search
+        if (query !== '') {
+            addSearchToHistory(query, isWebsite);
+        }        
 
         if (query === '@export') {
             exportLocalStorage();
@@ -545,31 +894,54 @@ function formatImportantDate(date, suppressYearIfCurrentYear = true) {
 }
 
 // Function to render important dates
+// Modify the existing renderImportantDates function
 function renderImportantDates() {
     const importantDatesPopup = document.getElementById('importantDatesPopup');
     
-    // Remove passed dates and sort chronologically
+    // Remove passed dates and track them separately
     const now = new Date();
-    importantDates = importantDates.filter(event => event.date > now);
-    importantDates.sort((a, b) => a.date - b.date);
+    const passedEvents = [];
+    importantDates = importantDates.filter(event => {
+        if (event.date <= now) {
+            // Store passed events
+            passedEvents.push(event);
+            return false;
+        }
+        return true;
+    });
     
     // Save filtered dates to local storage
     saveImportantDates();
     
-    // If no dates, hide the popup
+    // If no future dates, check for passed events
     if (importantDates.length === 0) {
-        importantDatesPopup.style.display = 'none';
+        if (passedEvents.length > 0) {
+            renderPassedEvents(passedEvents);
+        } else {
+            importantDatesPopup.style.display = 'none';
+        }
         return;
     }
     
-    // Create HTML for dates
+    // Sort future dates chronologically
+    importantDates.sort((a, b) => a.date - b.date);
+    
+    // Create HTML for dates with editable features
     const datesHTML = importantDates.map((event, index) => {
         const timeLeft = calculateTimeLeft(event.date);
         
         return `
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
-            <span>${formatImportantDate(event.date)}</span>
-            <span>${event.description}</span>
+            <span 
+                onclick="editEventDate(${index})" 
+                style="cursor: pointer;"
+                title="Click to edit date"
+            >${formatImportantDate(event.date)}</span>
+            <span 
+                onclick="editEventDescription(${index})" 
+                style="cursor: pointer;"
+                title="Click to edit description"
+            >${event.description}</span>
             <span style="color: #00ff00;">${timeLeft || 'Passed'}</span>
             <button onclick="removeImportantDate(${index})" style="background: none; border: none; color: white; cursor: pointer;">❌</button>
         </div>
@@ -581,6 +953,89 @@ function renderImportantDates() {
         ${datesHTML}
     `;
     importantDatesPopup.style.display = 'block';
+}
+
+
+// Function to render passed events
+function renderPassedEvents(passedEvents) {
+    const importantDatesPopup = document.getElementById('importantDatesPopup');
+    
+    // Create HTML for passed events
+    const passedEventsHTML = passedEvents.map((event, index) => `
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; color: #ff6347;">
+            <span>Event "${event.description}" on ${formatImportantDate(event.date)} has occurred!</span>
+            <button onclick="removePassedEvent(${index})" style="background: none; border: none; color: white; cursor: pointer;">❌</button>
+        </div>
+    `).join('');
+    
+    // Populate and show the popup
+    importantDatesPopup.innerHTML = `
+        <div style="font-weight: bold; margin-bottom: 10px; color: #ff6347;">Passed Events:</div>
+        ${passedEventsHTML}
+    `;
+    importantDatesPopup.style.display = 'block';
+    
+    // Auto-remove passed events after 20 seconds
+    setTimeout(() => {
+        importantDatesPopup.style.display = 'none';
+    }, 20000);
+}
+
+// Function to edit event date
+function editEventDate(index) {
+    const newDateStr = prompt('Enter new date (DD/MM/YYYY):', 
+        formatDateForEditing(importantDates[index].date));
+    
+    if (newDateStr) {
+        try {
+            // Validate date format
+            const [day, month, year] = newDateStr.split('/').map(Number);
+            const inputDate = new Date(year, month - 1, day);
+            
+            // Validate date is in the future
+            const now = new Date();
+            if (inputDate <= now) {
+                alert("Please enter a future date.");
+                return;
+            }
+            
+            // Update the date
+            importantDates[index].date = inputDate;
+            
+            // Save and re-render
+            saveImportantDates();
+            renderImportantDates();
+        } catch (error) {
+            alert("Invalid date format. Use DD/MM/YYYY");
+        }
+    }
+}
+
+// Function to edit event description
+function editEventDescription(index) {
+    const newDescription = prompt('Enter new description:', 
+        importantDates[index].description);
+    
+    if (newDescription !== null && newDescription.trim() !== '') {
+        importantDates[index].description = newDescription.trim();
+        
+        // Save and re-render
+        saveImportantDates();
+        renderImportantDates();
+    }
+}
+
+// Helper function to format date for editing
+function formatDateForEditing(date) {
+    return `${date.getDate().toString().padStart(2, '0')}/${
+        (date.getMonth() + 1).toString().padStart(2, '0')}/${
+        date.getFullYear()}`;
+}
+
+// Function to remove passed events
+function removePassedEvent(index) {
+    const importantDatesPopup = document.getElementById('importantDatesPopup');
+    importantDatesPopup.style.display = 'none';
 }
 
 // Function to remove a specific important date
