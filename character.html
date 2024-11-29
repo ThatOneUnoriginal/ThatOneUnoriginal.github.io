@@ -10,11 +10,11 @@
     
     <style>
     
-.cancelButtonXyZwv, .compressionButtonQwErAs, .resizeButtonRtYuIo, .buttonHgFdSa, .theme-toggle button, #tag-filter, #tag-filter-mobile, #export-btn, #import-btn, #tile-size, #colorSelector, #popup-button, #reroll-btn, #local-upload-btn, #url-upload-btn,
+.cancelButtonXyZwv, .compressionButtonQwErAs, .resizeButtonRtYuIo, #flush-button, .buttonHgFdSa, .theme-toggle button, #tag-filter, #tag-filter-mobile, #export-btn, #import-btn, #tile-size, #settings-btn1, #settings-btn2, #colorSelector, #popup-button, #reroll-btn, #local-upload-btn, #url-upload-btn,
 #url-popup-close, #url-popup-close-url, #local-image-btn, #url-image-btn, #urlURL-popup-close, #url-popup-close-url1, #popup-close, .collapsible, .edit-popup button,
 #submit-url-btn, #submit-url-btn1, #share-url-popup button, #nsfw-inclusion-popup button, #image-upload-choice-popup button, #tile-creation-popup button, #settings-popup button, 
 #tileSize, #undo-delete-popup button, #popup-close-btn, #new-confirm-image-btn, #confirm-image-btn, #new-cancel-image-btn, #cancel-image-btn, #image-confirmation-popup button,
-#new-image-confirmation-popup button, .link-button, #close-links-popup, #accessibility-popup button, #theme-dropdown-accessibility, #close-multi-links-popup, #font-dropdown, #close-formatting{
+#new-image-confirmation-popup button, #optToggleButton, .link-button, #close-links-popup, #accessibility-popup button, #theme-dropdown-accessibility, #close-multi-links-popup, #font-dropdown, #close-formatting, #acccessibility-btn1{
 	background-color: var(--button-bg-1);
 }
 
@@ -318,7 +318,7 @@ p {
 	margin-bottom: 10px;
 }
 
-.theme-toggle button, #tag-filter, #tag-filter-mobile, #export-btn, #import-btn, #tile-size {
+.theme-toggle button, #tag-filter, #tag-filter-mobile, #export-btn, #import-btn, #tile-size, #acccessibility-btn1, #settings-btn1, #settings-btn2, #flush-button, #optToggleButton {
 	padding: 5px 10px;
 	cursor: pointer;
 	color: var(--button-color);
@@ -786,7 +786,7 @@ img {
 	margin-top: 10px;
 }
 
-#nsfw-inclusion-popup, #settings-popup, .links-popup, #accessibility-popup, .multi-links-popup {
+#nsfw-inclusion-popup, #settings-popup, .links-popup, #accessibility-popup, .multi-links-popup, #settings-popout {
 	position: fixed;
 	top: 50%;
 	left: 50%;
@@ -800,6 +800,7 @@ img {
 	display: none;
 	flex-direction: column;
 	align-items: center;
+    text-align: center;
 	max-width: 400px;
 	width: 100%;
     max-height: 80%;
@@ -807,7 +808,7 @@ img {
 	animation: float 5s ease-in-out infinite
 }
 
-#nsfw-inclusion-popup button, #settings-popup button, #colorSelector, #tileSize, #accessibility-popup button, #theme-dropdown-accessibility, #font-dropdown{
+#nsfw-inclusion-popup button, #settings-popup button, #colorSelector, #tileSize, #accessibility-popup button, #theme-dropdown-accessibility, #font-dropdown, #settings-popout button{
 	width: 100%;
 	margin-top: 10px;
 	padding: 10px 20px;
@@ -847,7 +848,7 @@ img {
 
 #popup-button:hover, .cancelButtonXyZwv:hover, .compressionButtonQwErAs:hover, .resizeButtonRtYuIo:hover, .buttonHgFdSa:hover, #close-formatting:hover, #font-dropdown:hover, .theme-toggle button:hover, #tag-filter:hover, #tag-filter-mobile:hover, #export-btn:hover, #import-btn:hover, #image-upload-choice-popup button:hover, #nsfw-inclusion-popup button:hover, #theme-dropdown-accessibility:hover,
 #share-url-popup button:hover, .edit-popup button:hover, .active, .collapsible:hover, #popup-close-btn:hover ,#popup-close:hover, #settings-popup button:hover, #undo-delete-popup button:hover, #new-confirm-image-btn:hover, #confirm-image-btn:hover,
-#new-cancel-image-btn:hover, #cancel-image-btn:hover, #image-confirmation-popup button:hover, #new-image-confirmation-popup button:hover, .link-button:hover, #close-multi-links-popup:hover, #close-links-popup:hover, #accessibility-popup button:hover{
+#new-cancel-image-btn:hover, #cancel-image-btn:hover, #optToggleButton:hover, #image-confirmation-popup button:hover, #new-image-confirmation-popup button:hover, #settings-btn2:hover , #flush-button:hover, .link-button:hover, #close-multi-links-popup:hover, #close-links-popup:hover, #settings-btn1:hover, #accessibility-popup button:hover, #acccessibility-btn1:hover{
 	background-color: var(--button-bg-hover-1)
 }
 
@@ -946,8 +947,8 @@ img {
 		padding: 15px;
 	}
 
-	.edit-popup textarea, #nsfw-inclusion-popup button, #local-upload-btn, .edit-popup button, #share-url-popup button, #nsfw-inclusion-popup button, .theme-toggle button, 
-    #export-btn, #import-btn, #tile-size, #tag-filter-mobile, #local-upload-btn, #url-upload-btn, #url-popup-close, #colorSelector, #settings-popup button, #tileSize, #accessibility-popup button {
+	#accessibility-btn1, .edit-popup textarea, #nsfw-inclusion-popup button, #local-upload-btn, .edit-popup button, #share-url-popup button, #nsfw-inclusion-popup button, .theme-toggle button, 
+    #export-btn, #settings-btn1, #flush-button, #optToggleButton, #settings-btn, #settings-btn2, #import-btn, #tile-size, #tag-filter-mobile, #local-upload-btn, #url-upload-btn, #url-popup-close, #colorSelector, #settings-popup button, #tileSize, #accessibility-popup button {
 		width: 100%;
 		margin-bottom: 15px;
 		padding: 15px;
@@ -1454,12 +1455,10 @@ blockquote {
     </div>
     <div class="controls">
        <div class="theme-toggle">
-          <button id="export-btn">Export Tiles</button>
-          <button id="import-btn">Import Tiles</button>
+          <button id="settings-btn2" style="padding:15px">Settings</button>
           <button id="settings-btn">Theme Settings</button>
           <button id="acccessibility-btn">Accessibility Settings</button>
           <button id="random-character-btn">Select Random Character</button>
-          <button id="flush-button">Reset Remembered State</button>     
           <button id="openReorderToolButton">Open Reorder Tool</button>
           <button id="openBackupMergeButton">Open Backup Merge</button>
           <select id="tag-filter-mobile">
@@ -1487,6 +1486,17 @@ blockquote {
         <button id="popup-button" type="button">View Profile</button>
         <button id="reroll-btn">Reroll</button>
         <button id="popup-close-btn">Close</button>
+    </div>
+    <div id="settings-popout" class="popup">
+    <h3>Settings</h3>
+    <div class="button-container">
+        <button id="export-btn">Export Tiles</button>
+        <button id="import-btn">Import Tiles</button>
+    </div>
+    <button id="optToggleButton" style="padding:15px">Opt-Out of Reminders</button>
+    <button id="flush-button">Reset Remembered State</button>     
+    <button id="settings-btn1" style="padding:15px">Theme Settings</button>
+    <button id="acccessibility-btn1" style="padding:15px">Accessibility Settings</button>
     </div>    
     <!--Tile Creation Popup-->
     <div id="tile-creation-popup">
@@ -2069,7 +2079,7 @@ document.getElementById('openReorderToolButton').addEventListener('click', funct
 
 
 const elementsToAdjust = document.querySelectorAll(
-    'h2, li, p, .theme-toggle button, #tag-filter, #tag-filter-mobile, #export-btn, #import-btn, #tile-size, #colorSelector, #popup-button, #reroll-btn, #local-upload-btn, #url-upload-btn, #url-popup-close, #url-popup-close-url, #local-image-btn, #url-image-btn, #urlURL-popup-close, #url-popup-close-url1, #popup-close, .collapsible, .edit-popup button, #submit-url-btn, #submit-url-btn1, #share-url-popup button, #nsfw-inclusion-popup button, #image-upload-choice-popup button, #tile-creation-popup button, #settings-popup button, #tileSize, #undo-delete-popup button, #popup-close-btn, #new-confirm-image-btn, #confirm-image-btn, #new-cancel-image-btn, #cancel-image-btn, #image-confirmation-popup button, #new-image-confirmation-popup button, .link-button, #close-links-popup, #accessibility-popup button, #theme-dropdown-accessibility, #close-multi-links-popup, #font-dropdown'
+    'h2, li, p, .theme-toggle button, #tag-filter, #tag-filter-mobile, #export-btn, #settings-btn1, #flush-button, #optToggleButton, #settings-btn2, #acccessibility-btn1, #import-btn, #tile-size, #colorSelector, #popup-button, #reroll-btn, #local-upload-btn, #url-upload-btn, #url-popup-close, #url-popup-close-url, #local-image-btn, #url-image-btn, #urlURL-popup-close, #url-popup-close-url1, #popup-close, .collapsible, .edit-popup button, #submit-url-btn, #submit-url-btn1, #share-url-popup button, #nsfw-inclusion-popup button, #image-upload-choice-popup button, #tile-creation-popup button, #settings-popup button, #tileSize, #undo-delete-popup button, #popup-close-btn, #new-confirm-image-btn, #confirm-image-btn, #new-cancel-image-btn, #cancel-image-btn, #image-confirmation-popup button, #new-image-confirmation-popup button, .link-button, #close-links-popup, #accessibility-popup button, #theme-dropdown-accessibility, #close-multi-links-popup, #font-dropdown'
 );
 
 let currentFontSize = localStorage.getItem('fontSize') ? parseInt(localStorage.getItem('fontSize')) : 16; // Load from local storage or default to 16
@@ -2287,7 +2297,7 @@ document.getElementById('colorSelector').addEventListener('change', function() {
 
    // Update colors for existing buttons
    const buttons = document.querySelectorAll(
-      '.theme-toggle button, #tag-filter, #tag-filter-mobile, #export-btn, #import-btn, #tile-size, #colorSelector, #popup-button, #reroll-btn, #local-upload-btn, #url-upload-btn, #url-popup-close, #url-popup-close-url, #local-image-btn, #urlimage-btn, #urlURL-popup-close, #url-popup-close-url1, #popup-close, .collapsible, .edit-popup button, #submit-url-btn, #submit-url-btn1, #share-url-popup button, #nsfw-inclusion-popup button, #image-upload-choice-popup button, #tile-creation-popup button, #settings-popup button,  #tileSize, #undo-delete-popup button, #popup-close-btn, #new-confirm-image-btn, #confirm-image-btn, #new-cancel-image-btn, #cancel-image-btn, #image-confirmation-popup button, #new-image-confirmation-popup button, .link-button, #close-links-popup, #accessibility-popup button, #theme-dropdown-accessibility, #close-multi-links-popup, #font-dropdown, #close-formatting, .remove-custom-field-btn'
+      '.theme-toggle button, #tag-filter, #tag-filter-mobile, #export-btn, #settings-btn1, #flush-button, #optToggleButton, #settings-btn2, #acccessibility-btn1, #import-btn, #tile-size, #colorSelector, #popup-button, #reroll-btn, #local-upload-btn, #url-upload-btn, #url-popup-close, #url-popup-close-url, #local-image-btn, #urlimage-btn, #urlURL-popup-close, #url-popup-close-url1, #popup-close, .collapsible, .edit-popup button, #submit-url-btn, #submit-url-btn1, #share-url-popup button, #nsfw-inclusion-popup button, #image-upload-choice-popup button, #tile-creation-popup button, #settings-popup button,  #tileSize, #undo-delete-popup button, #popup-close-btn, #new-confirm-image-btn, #confirm-image-btn, #new-cancel-image-btn, #cancel-image-btn, #image-confirmation-popup button, #new-image-confirmation-popup button, .link-button, #close-links-popup, #accessibility-popup button, #theme-dropdown-accessibility, #close-multi-links-popup, #font-dropdown, #close-formatting, .remove-custom-field-btn'
    );
 
    // Update each button's color
@@ -2307,7 +2317,7 @@ document.getElementById('colorSelector').addEventListener('change', function() {
 
     // Select all specified buttons
     const buttons = document.querySelectorAll(
-   '#url-image-btn, theme-toggle button, #tag-filter, #tag-filter-mobile, #export-btn, #import-btn, #tile-size, #colorSelector, #popup-button, #reroll-btn, #local-upload-btn, #url-upload-btn, #url-popup-close, #url-popup-close-url, #local-image-btn, #urlimage-btn, #urlURL-popup-close, #url-popup-close-url1, #popup-close, .collapsible, .edit-popup button, #submit-url-btn, #submit-url-btn1, #share-url-popup button, #nsfw-inclusion-popup button, #image-upload-choice-popup button, #tile-creation-popup button, #settings-popup button,  #tileSize, #undo-delete-popup button, #popup-close-btn, #new-confirm-image-btn, #confirm-image-btn, #new-cancel-image-btn, #cancel-image-btn, #image-confirmation-popup button, #new-image-confirmation-popup button, .link-button, #close-links-popup, #accessibility-popup button, #theme-dropdown-accessibility, #close-multi-links-popup, #font-dropdown, #close-formatting, .remove-custom-field-btn' // Added .remove-custom-field-btn
+   '#url-image-btn, theme-toggle button, #tag-filter, #tag-filter-mobile, #export-btn, #settings-btn1, #flush-button, #optToggleButton, #settings-btn2, #acccessibility-btn1, #import-btn, #tile-size, #colorSelector, #popup-button, #reroll-btn, #local-upload-btn, #url-upload-btn, #url-popup-close, #url-popup-close-url, #local-image-btn, #urlimage-btn, #urlURL-popup-close, #url-popup-close-url1, #popup-close, .collapsible, .edit-popup button, #submit-url-btn, #submit-url-btn1, #share-url-popup button, #nsfw-inclusion-popup button, #image-upload-choice-popup button, #tile-creation-popup button, #settings-popup button,  #tileSize, #undo-delete-popup button, #popup-close-btn, #new-confirm-image-btn, #confirm-image-btn, #new-cancel-image-btn, #cancel-image-btn, #image-confirmation-popup button, #new-image-confirmation-popup button, .link-button, #close-links-popup, #accessibility-popup button, #theme-dropdown-accessibility, #close-multi-links-popup, #font-dropdown, #close-formatting, .remove-custom-field-btn' // Added .remove-custom-field-btn
     );
 
     // Define colors based on the selected option
@@ -2634,9 +2644,11 @@ function applyMobileButtonState(isForced) {
         '#tileSize',
         '#accessibility-popup button',
         '#settings-btn',
+        '#settings-btn2',
         '#acccessibility-btn',
         '#random-character-btn',
         '#flush-button',
+        'optToggleButton',
         '#openReorderToolButton',
         '#openBackupMergeButton',
         '.theme-toggle' // Keep this here but handle separately
@@ -3268,6 +3280,7 @@ document.getElementById('popup-overlay').addEventListener('click', () => {
    document.getElementById('url-input-popup').style.display = 'none';
    document.getElementById('popup-overlay').style.display = 'none';
    document.getElementById('settings-popup').style.display = 'none';
+   document.getElementById('settings-popout').style.display = 'none';
    document.getElementById('accessibility-popup').style.display = 'none';
    document.getElementById('edit-url-popup').style.display = 'none';
    document.getElementById('tile-creation-popup').style.display = 'none';
@@ -3310,12 +3323,13 @@ function updateTileOutline(tileElement, tags) {
 function stripUrlParams(url) {
    try {
       const urlObj = new URL(url); // Create a URL object
-      return urlObj.origin + urlObj.pathname; // Return the base URL without query parameters
+      return `${urlObj.origin}${urlObj.pathname}`; // Return the base URL without query parameters
    } catch (error) {
       console.error('Invalid URL:', error);
       return url; // Return the original URL if invalid
    }
 }
+
 // Edit image
 function editImage(tileData, tileElement) {
     console.log('TEST');
@@ -3965,29 +3979,96 @@ function showTileCreationPopup(imageSource) {
 tagFilter.addEventListener('change', filterTiles);
 
 // Export functionality
-exportBtn.addEventListener('click', () => {
-    // Get the current date and time
-    const currentTime = new Date().toISOString();
-    
-    // Store the current time in local storage
-    localStorage.setItem('exportTimestamp', currentTime);
-
-    const dataStr = JSON.stringify(tiles);
-    const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
-    const exportFileDefaultName = 'image_grid_data.json';
-
-    const linkElement = document.createElement('a');
-    linkElement.setAttribute('href', dataUri);
-    linkElement.setAttribute('download', exportFileDefaultName);
-    linkElement.click();
-});
-
 window.addEventListener('load', () => {
+    // Check the current opt-out status from local storage
+    let hasOptedOut = localStorage.getItem('optOutReminders') === 'true';
+
+    // Function to toggle between opt-in and opt-out
+    function toggleOptInOut() {
+        if (hasOptedOut) {
+            // User is opting back in
+            localStorage.setItem('optOutReminders', 'false');
+            alert('You have opted in to receive reminders.');
+
+            // Save the current date and time when opting back in
+            const currentDateTime = new Date().toISOString();
+            localStorage.setItem('pageAccessTimestamp', currentDateTime);
+            localStorage.setItem('exportTimestamp', ''); // Clear exportTimestamp if needed
+            console.log('Opted back in at: ', currentDateTime);
+
+            optToggleButton.textContent = 'Opt-Out of Reminders';
+            hasOptedOut = false;
+        } else {
+            // User is opting out
+            localStorage.setItem('optOutReminders', 'true');
+            alert('You have opted out of reminders.');
+
+            // Clear timestamps when opting out
+            localStorage.removeItem('pageAccessTimestamp');
+            localStorage.removeItem('exportTimestamp');
+            console.log('Cleared timestamps on opt-out.');
+
+            optToggleButton.textContent = 'Opt-In to Reminders';
+            hasOptedOut = true;
+        }
+    }
+
+    // Check if the opt-out button exists and add the event listener
+    const optToggleButton = document.getElementById('optToggleButton');
+    if (optToggleButton) {
+        // Set the initial button text based on the opt-out status
+        optToggleButton.textContent = hasOptedOut ? 'Opt-In to Reminders' : 'Opt-Out of Reminders';
+
+        // Add event listener to toggle opt-in/opt-out state
+        optToggleButton.addEventListener('click', toggleOptInOut);
+    }
+
+    // If the user has opted out, skip showing reminders
+    if (hasOptedOut) {
+        console.log('User has opted out of reminders.');
+        return; // Exit early if opted out
+    }
+
+    // Check if the page access timestamp already exists
+    const pageAccessTimestamp = localStorage.getItem('pageAccessTimestamp');
     const exportTimestamp = localStorage.getItem('exportTimestamp');
+
+    if (!pageAccessTimestamp) {
+        // If the page access timestamp doesn't exist, store the current date and time
+        const firstAccessTime = new Date().toISOString();
+        localStorage.setItem('pageAccessTimestamp', firstAccessTime);
+        console.log('First time accessing the page: ', firstAccessTime);
+    } else {
+        // If the export timestamp doesn't exist, check if 10 days have passed since first access
+        if (!exportTimestamp) {
+            const firstAccessTime = new Date(pageAccessTimestamp);
+            const currentTime = new Date();
+
+            // Calculate the time difference in milliseconds
+            const timeDifference = currentTime - firstAccessTime;
+
+            // Convert the time difference to days
+            const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+
+            if (days >= 10) {
+                console.log('It has been 10 or more days since first accessing the page.');
+                alert("Hey! It would appear that you haven't exported before. Remember all data associated with the website is stored LOCALLY which means that if for whatever reason the localStorage is wiped, there will be no retrieval of your tiles. This reminder will popup every 10 days and only if you haven't exported before.");
+                
+                // Update the pageAccessTimestamp to the current time when the alert is shown
+                const currentPageAccessTime = new Date().toISOString();
+                localStorage.setItem('pageAccessTimestamp', currentPageAccessTime);
+                console.log('Page access timestamp updated to: ', currentPageAccessTime);
+            } else {
+                console.log(`It has only been ${days} days since first accessing the page.`);
+            }
+        }
+    }
+
+    // Handle the export timestamp logic
     if (exportTimestamp) {
         const previousTime = new Date(exportTimestamp);
         const currentTime = new Date();
-        
+
         // Calculate the time difference in milliseconds
         const timeDifference = currentTime - previousTime;
 
@@ -3999,11 +4080,36 @@ window.addEventListener('load', () => {
 
         // Check if the time exceeds 30 days
         if (days > 30) {
-            alert('Reminder: All the data associated with the website is stored LOCALLY which means that if for whatever reason the localStorage is wiped, there will be no retrival of your tiles. This reminder will popup every 30 days.');
+            alert('Reminder: All the data associated with the website is stored LOCALLY which means that if for whatever reason the localStorage is wiped, there will be no retrieval of your tiles. This reminder will popup every 30 days.');
+
+            // Update the exportTimestamp to the current time when the alert is shown
+            const currentExportTime = new Date().toISOString();
+            localStorage.setItem('exportTimestamp', currentExportTime);
+            console.log('Export timestamp updated to: ', currentExportTime);
         }
     } else {
         console.log('No export timestamp found.');
     }
+});
+
+
+
+// Event listener for the export button
+exportBtn.addEventListener('click', () => {
+    // Get the current date and time
+    const currentTime = new Date().toISOString();
+
+    // Store the current time in local storage as the export timestamp
+    localStorage.setItem('exportTimestamp', currentTime);
+
+    const dataStr = JSON.stringify(tiles);
+    const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
+    const exportFileDefaultName = 'image_grid_data.json';
+
+    const linkElement = document.createElement('a');
+    linkElement.setAttribute('href', dataUri);
+    linkElement.setAttribute('download', exportFileDefaultName);
+    linkElement.click();
 });
 
 // Import functionality
@@ -4075,7 +4181,10 @@ blurNSFWBtn.addEventListener('click', toggleBlurNSFW);
 loadSavedTiles();
 const randomCharacterBtn = document.getElementById('random-character-btn');
 const settingsBtn = document.getElementById('settings-btn');
+const settingsBtn1 = document.getElementById('settings-btn1');
+const settingsBtn2 = document.getElementById('settings-btn2');
 const accessibilityBtn = document.getElementById('acccessibility-btn');
+const accessibilityBtn1 = document.getElementById('acccessibility-btn1');
 const characterPopup = document.getElementById('character-popup');
 const formattingGuide = document.getElementById('show-formatting guide');
 const popupClose = document.getElementById('popup-close');
@@ -4088,11 +4197,25 @@ accessibilityBtn.addEventListener('click', () => {
     document.getElementById('popup-overlay').style.display = 'block';
 });
 
+accessibilityBtn1.addEventListener('click', () => {
+    document.getElementById('accessibility-popup').style.display = 'flex';
+    document.getElementById('popup-overlay').style.display = 'block';
+    document.getElementById('settings-popout').style.display = 'none';
+});
+
 settingsBtn.addEventListener('click', () => {
       document.getElementById('settings-popup').style.display = 'flex';
       document.getElementById('popup-overlay').style.display = 'block';
 });
-
+settingsBtn1.addEventListener('click', () => {
+      document.getElementById('settings-popup').style.display = 'flex';
+      document.getElementById('popup-overlay').style.display = 'block';
+      document.getElementById('settings-popout').style.display = 'none';
+});
+settingsBtn2.addEventListener('click', () => {
+      document.getElementById('popup-overlay').style.display = 'block';
+      document.getElementById('settings-popout').style.display = 'block';
+});
 formattingGuide.addEventListener('click', () => {
     document.getElementById('formatting-guide').style.display = 'flex';
     document.getElementById('popup-overlay1').style.display= 'block';
@@ -4608,7 +4731,12 @@ function applyFont(font) {
         '.theme-toggle button', 
         '#tag-filter', 
         '#tag-filter-mobile', 
-        '#export-btn', 
+        '#export-btn',
+        '#acccessibility-btn1', 
+        '#settings-btn1',
+        '#flush-button',
+        '#optToggleButton',
+        '#settings-btn2',
         '#import-btn', 
         '#tile-size', 
         '#colorSelector', 
