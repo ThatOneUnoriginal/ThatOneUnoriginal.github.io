@@ -755,96 +755,96 @@ function calculateTimeLeft(targetDate) {
     return `${diffMinutes}m`;
 }
 
-        // Block search if input is empty or only spaces
-        if (query === '') {
-            alert("Please enter a search term.");
-            return; // Prevent search if input is empty or just spaces
-        }
+// Block search if input is empty or only spaces
+if (query === '') {
+    alert("Please enter a search term.");
+    return; // Prevent search if input is empty or just spaces
+}
 
-        if (query.toLowerCase().startsWith('@help')) {
-        alert("Help is not a valid search query. Look at the popup for the commands");
-        return; // Prevent search if @help is detected
-        }        
-        if (query.toLowerCase().startsWith('@important')) {
-        return; // Prevent search if @help is detected
-        }      
+if (query.toLowerCase().startsWith('@help')) {
+    alert("Help is not a valid search query. Look at the popup for the commands");
+    return; // Prevent search if @help is detected
+}        
+if (query.toLowerCase().startsWith('@important')) {
+    return; // Prevent search if @help is detected
+}      
 
-        if (query.toLowerCase() === '@24t') {
-            timeFormat = '24';
-            saveTimeFormat(); // Save to local storage
-            updateDateTime();
-            this.value = '';
-            platformPopup.style.display = 'none';
-            return;
-        } 
-        else if (query.toLowerCase() === '@12t') {
-            timeFormat = '12';
-            saveTimeFormat(); // Save to local storage
-            updateDateTime();
-            this.value = '';
-            platformPopup.style.display = 'none';
-            return;
-        }
+if (query.toLowerCase() === '@24t') {
+    timeFormat = '24';
+    saveTimeFormat(); // Save to local storage
+    updateDateTime();
+    this.value = '';
+    platformPopup.style.display = 'none';
+    return;
+} 
+else if (query.toLowerCase() === '@12t') {
+    timeFormat = '12';
+    saveTimeFormat(); // Save to local storage
+    updateDateTime();
+    this.value = '';
+    platformPopup.style.display = 'none';
+    return;
+}
 
-        // Toggle the display of the year with local storage
-        if (query.toLowerCase() === '@year') {
-            showYear = !showYear;
-            saveYearPreference(); // Save to local storage
-            updateDateTime();
-            this.value = '';
-            platformPopup.style.display = 'none';
-            return;
-        }
+// Toggle the display of the year with local storage
+if (query.toLowerCase() === '@year') {
+    showYear = !showYear;
+    saveYearPreference(); // Save to local storage
+    updateDateTime();
+    this.value = '';
+    platformPopup.style.display = 'none';
+    return;
+}
 
-
-        // Ensure that only the exact match "@y" is valid, not "@ye"
-        if (query.startsWith('@y') && (query.length === 2 || query[2] === ' ')) {
-            query = query.slice(2).trim(); // Remove "@y" and trim the query
-            window.location.href = `https://www.youtube.com/results?search_query=${encodeURIComponent(query)}`;
-        }
-        // Ensure that only the exact match "@mu" is valid
-        else if (query.startsWith('@mu') && (query.length === 3 || query[3] === ' ')) {
-            query = query.slice(3).trim(); // Remove "@mu" and trim the query
-            window.location.href = `https://music.youtube.com/search?q=${encodeURIComponent(query)}`;
-        }
-        // Ensure that only the exact match "@rbx" is valid
-        else if (query.startsWith('@rbx') && (query.length === 4 || query[4] === ' ')) {
-            query = query.slice(4).trim(); // Remove "@rbx" and trim the query
-            window.location.href = `https://www.roblox.com/discover/?Keyword=${encodeURIComponent(query)}`;
-        }
-        // Ensure that only the exact match "@p" is valid
-        else if (query.startsWith('@p') && (query.length === 2 || query[2] === ' ')) {
-            query = query.slice(2).trim(); // Remove "@p" and trim the query
-            window.location.href = `https://www.perplexity.ai/search?s=o&q=${encodeURIComponent(query)}`;
-        } 
-        else if (query.startsWith('@g') && (query.length === 2 || query[2] === ' ')) {
-            query = query.slice(2).trim();
-            window.location.href = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
-        }
-        else if (query.startsWith('@w') && (query.length === 2 || query[2] === ' ')) {
-            query = query.slice(2).trim();
-            window.location.href = `https://en.wikipedia.org/wiki/Special:Search?search=${encodeURIComponent(query)}`;
-        }
-        // If the input is empty after the tag prefix, block the attempt and alert the user
-        else if (query.toLowerCase().startsWith('@') && query.length <= 2) {
-            alert("Please enter a valid search term after the tag.");
-            return;
-        }
-        // If the input is a valid URL without the protocol, prepend "http://" automatically
-        else if (!query.match(/^https?:\/\//)) {
-            query = 'http://' + query; // Automatically add "http://" if not present
-            if (isValidURL(query)) {
-                window.location.href = query; // Navigate to the valid URL
-            } else {
-                window.location.href = `https://www.google.com/search?q=${encodeURIComponent(query)}`; // Perform Google search
-            }
-        } else if (isValidURL(query)) {
-            // If it's a valid URL, navigate to it
-            window.location.href = query;
-        } else {
-            // If it's not a URL, perform a Google search
-            window.location.href = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
-        }
+// Ensure that only the exact match "@y" is valid, not "@ye"
+if (query.startsWith('@y') && (query.length === 2 || query[2] === ' ')) {
+    query = query.slice(2).trim(); // Remove "@y" and trim the query
+    window.location.href = `https://www.youtube.com/results?search_query=${encodeURIComponent(query)}`;
+}
+// Ensure that only the exact match "@mu" is valid
+else if (query.startsWith('@mu') && (query.length === 3 || query[3] === ' ')) {
+    query = query.slice(3).trim(); // Remove "@mu" and trim the query
+    window.location.href = `https://music.youtube.com/search?q=${encodeURIComponent(query)}`;
+}
+// Ensure that only the exact match "@rbx" is valid
+else if (query.startsWith('@rbx') && (query.length === 4 || query[4] === ' ')) {
+    query = query.slice(4).trim(); // Remove "@rbx" and trim the query
+    window.location.href = `https://www.roblox.com/discover/?Keyword=${encodeURIComponent(query)}`;
+}
+// Ensure that only the exact match "@p" is valid
+else if (query.startsWith('@p') && (query.length === 2 || query[2] === ' ')) {
+    query = query.slice(2).trim(); // Remove "@p" and trim the query
+    window.location.href = `https://www.perplexity.ai/search?s=o&q=${encodeURIComponent(query)}`;
+} 
+else if (query.startsWith('@g') && (query.length === 2 || query[2] === ' ')) {
+    query = query.slice(2).trim();
+    window.location.href = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
+}
+else if (query.startsWith('@w') && (query.length === 2 || query[2] === ' ')) {
+    query = query.slice(2).trim();
+    window.location.href = `https://en.wikipedia.org/wiki/Special:Search?search=${encodeURIComponent(query)}`;
+}
+// If the input is empty after the tag prefix, block the attempt and alert the user
+else if (query.toLowerCase().startsWith('@') && query.length <= 2) {
+    alert("Please enter a valid search term after the tag.");
+    return;
+}
+// If the input looks like a domain (e.g., google.com, amazon.ca) but lacks a protocol
+else if (query.match(/^[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)) {
+    query = 'http://' + query; // Automatically add "http://" if it's a domain-like string
+    if (isValidURL(query)) {
+        window.location.href = query; // Navigate to the valid URL
+    } else {
+        window.location.href = `https://www.google.com/search?q=${encodeURIComponent(query)}`; // Perform Google search
+    }
+}
+// If it's a valid URL, navigate to it
+else if (isValidURL(query)) {
+    window.location.href = query;
+} else {
+    // If it's not a URL, perform a Google search
+    window.location.href = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
+}
     }
 });
 
