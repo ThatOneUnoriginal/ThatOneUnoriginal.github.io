@@ -248,7 +248,41 @@ const LOCAL_STORAGE_PHRASE_HISTORY = 'phraseSearchHistory';
 const LOCAL_STORAGE_HISTORY_TRACKING = 'historyTrackingEnabled';
 const LOCAL_STORAGE_GRID_USAGE = 'gridItemUsage';
 
+function parseDateWithImprovedFormatting(dateStr) {
+    // Split the input date string
+    const parts = dateStr.split('/');
+    
+    // Get current year
+    const currentYear = new Date().getFullYear();
+    const currentCentury = Math.floor(currentYear / 100);
 
+    // Pad day with leading zero if single digit
+    let day = parts[0].padStart(2, '0');
+    
+    // Pad month with leading zero if single digit
+    let month = parts[1].padStart(2, '0');
+    
+    // Handle year formatting
+    let year = parts[2];
+    if (year.length === 1 || year.length === 2) {
+        // If 1 or 2 digits, prepend current century
+        year = `${currentCentury}${year.padStart(2, '0')}`;
+    }
+
+    // Validate the date
+    try {
+        const parsedDate = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+        
+        // Additional validation to ensure the date is valid
+        if (parsedDate.getMonth() !== parseInt(month) - 1) {
+            throw new Error('Invalid date');
+        }
+        
+        return parsedDate;
+    } catch (error) {
+        throw new Error('Invalid date format');
+    }
+}
 
 document.addEventListener('click', function(e) {
     if (e.target.closest('.history-item')) {
@@ -698,15 +732,14 @@ document.getElementById('searchInput').addEventListener('keypress', function (e)
         // New @important date handling with local storage
         if (query.toLowerCase().startsWith('@important')) {
             // Extract the date from the query
-            const dateMatch = query.match(/^@important\s+(\d{2}\/\d{2}\/\d{4})(\s+(.+))?$/);
+            const dateMatch = query.match(/^@important\s+(\d{1,2}\/\d{1,2}\/\d{1,4})(\s+(.+))?$/);
             
             if (dateMatch) {
                 const [, dateStr, , description] = dateMatch;
                 
                 try {
-                    // Validate date format
-                    const [day, month, year] = dateStr.split('/').map(Number);
-                    const inputDate = new Date(year, month - 1, day);
+                    // Use the new parsing function
+                    const inputDate = parseDateWithImprovedFormatting(dateStr);
                     
                     // Validate date is in the future
                     const now = new Date();
@@ -754,6 +787,7 @@ function calculateTimeLeft(targetDate) {
     if (diffHours > 0) return `${diffHours}h`;
     return `${diffMinutes}m`;
 }
+
 
 // Block search if input is empty or only spaces
 if (query === '') {
@@ -931,7 +965,11 @@ function renderImportantDates() {
         const timeLeft = calculateTimeLeft(event.date);
         
         return `
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+        <div 
+            id="important-date-${index}" 
+            class="important-date-item" 
+            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; transition: opacity 0.5s ease-out;"
+        >
             <span 
                 onclick="editEventDate(${index})" 
                 style="cursor: pointer;"
@@ -942,7 +980,7 @@ function renderImportantDates() {
                 style="cursor: pointer;"
                 title="Click to edit description"
             >${event.description}</span>
-            <span style="color: #00ff00;">${timeLeft || 'Passed'}</span>
+            <span class="time-left" style="color: #00ff00;">${timeLeft || 'Passed'}</span>
             <button onclick="removeImportantDate(${index})" style="background: none; border: none; color: white; cursor: pointer;">❌</button>
         </div>
     `}).join('');
@@ -954,7 +992,6 @@ function renderImportantDates() {
     `;
     importantDatesPopup.style.display = 'block';
 }
-
 
 // Function to render passed events
 function renderPassedEvents(passedEvents) {
@@ -988,9 +1025,8 @@ function editEventDate(index) {
     
     if (newDateStr) {
         try {
-            // Validate date format
-            const [day, month, year] = newDateStr.split('/').map(Number);
-            const inputDate = new Date(year, month - 1, day);
+            // Use the new parsing function
+            const inputDate = parseDateWithImprovedFormatting(newDateStr);
             
             // Validate date is in the future
             const now = new Date();
@@ -1009,6 +1045,20 @@ function editEventDate(index) {
             alert("Invalid date format. Use DD/MM/YYYY");
         }
     }
+}
+
+// Function to update time left for each important date
+function updateImportantDatesTimeLeft() {
+    if (importantDates.length === 0) return;
+
+    const dateItems = document.querySelectorAll('.important-date-item .time-left');
+    
+    importantDates.forEach((event, index) => {
+        const timeLeft = calculateTimeLeft(event.date);
+        if (dateItems[index]) {
+            dateItems[index].textContent = timeLeft || 'Passed';
+        }
+    });
 }
 
 // Function to edit event description
@@ -1038,11 +1088,18 @@ function removePassedEvent(index) {
     importantDatesPopup.style.display = 'none';
 }
 
-// Function to remove a specific important date
+// Modify the existing removeImportantDate function
 function removeImportantDate(index) {
-    importantDates.splice(index, 1);
-    saveImportantDates(); // Save to local storage after removal
-    renderImportantDates();
+    const dateElement = document.getElementById(`important-date-${index}`);
+    
+    // Fade out the element before removing
+    dateElement.style.opacity = '0';
+    
+    setTimeout(() => {
+        importantDates.splice(index, 1);
+        saveImportantDates(); // Save to local storage after removal
+        renderImportantDates();
+    }, 500); // Match the CSS transition time
 }
 
 // Clear the input field when the page is refreshed
@@ -1051,7 +1108,11 @@ window.addEventListener('load', function() {
     document.getElementById('clearBtn').style.display = 'none';  // Hide the 'X' button initially
     updateDateTime();  // Display time and date immediately upon load
     renderImportantDates(); // Load and render important dates from local storage
+
+    // Update time left every 10 seconds
+    setInterval(updateImportantDatesTimeLeft, 10000);
 });
+
 
 // Show/hide the 'X' button based on the input field content
 const searchInput = document.getElementById('searchInput');
