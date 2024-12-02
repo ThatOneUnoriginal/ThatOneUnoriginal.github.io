@@ -6,270 +6,349 @@
     <title>Textured Gradient Background</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+* {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+}
 
-        html {
-            font-size: 16px;
-        }
+html {
+	font-size: 16px;
+}
 
-        body {
-            margin: 0;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: stretch;
-            background: linear-gradient(to top right, #FF2A49, #FFD60E);
-            position: relative;
-            overflow-x: hidden;
-            font-family: 'Poppins', sans-serif;
-        }
+body {
+	margin: 0;
+	min-height: 100vh;
+	display: flex;
+	justify-content: center;
+	align-items: stretch;
+	background: linear-gradient(to top right, #FF2A49, #FFD60E);
+	position: relative;
+	overflow-x: hidden;
+	font-family: 'Poppins', sans-serif;
+}
 
-        body.theme-1 {
-            background: linear-gradient(to top right, #FF2A49, #FFD60E);
-        }
+body.theme-1 {
+	background: linear-gradient(to top right, #FF2A49, #FFD60E);
+}
 
-        body.theme-2 {
-            background: linear-gradient(to top right, #4A90E2, #50C878);
-        }
+body.theme-2 {
+	background: linear-gradient(to top right, #4A90E2, #50C878);
+}
 
-        body.theme-3 {
-            background: linear-gradient(to top right, #8E44AD, #3498DB);
-        }
+body.theme-3 {
+	background: linear-gradient(to top right, #8E44AD, #3498DB);
+}
 
-        body.theme-4 {
-            background: linear-gradient(to top right, #F39C12, #2ECC71);
-        }
+body.theme-4 {
+	background: linear-gradient(to top right, #F39C12, #2ECC71);
+}
 
-        body.theme-5 {
-            background: linear-gradient(to top right, #E74C3C, #9B59B6);
-        }
-        body.theme-6 {
-        background: linear-gradient(to top right, #2980B9, #2C3E50);
-    }
-    body.theme-7 {
-        background: linear-gradient(to top right, #16A085, #F4D03F);
-    }
-    body.theme-8 {
-        background: linear-gradient(to top right, #D35400, #8E44AD);
-    }
-    body.theme-9 {
-        background: linear-gradient(to top right, #1ABC9C, #E67E22);
-    }
-    body.theme-10 {
-        background: linear-gradient(to top right, #34495E, #2ECC71);
-    }
-    body.theme-11 {
-        background: linear-gradient(to top right, #C0392B, #8E44AD);
-    }
-    body.theme-12 {
-        background: linear-gradient(to top right, #27AE60, #3498DB);
-    }
-    body.theme-13 {
-        background: linear-gradient(to top right, #F39C12, #D35400);
-    }
-    body.theme-14 {
-        background: linear-gradient(to top right, #2980B9, #3498DB);
-    }
-    body.theme-15 {
-        background: linear-gradient(to top right, #E74C3C, #8E44AD);
-    }
+body.theme-5 {
+	background: linear-gradient(to top right, #E74C3C, #9B59B6);
+}
 
+body.theme-6 {
+	background: linear-gradient(to top right, #2980B9, #2C3E50);
+}
 
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.25);
-            z-index: 1;
-            pointer-events: none;
-        }
+body.theme-7 {
+	background: linear-gradient(to top right, #16A085, #F4D03F);
+}
 
-        .popup-container {
-            display: flex;
-            flex-direction: column;
-            width: 100%;
-            min-height: 100vh;
-            position: relative;
-            z-index: 2;
-            padding: 15px;
-            gap: 15px;
-        }
+body.theme-8 {
+	background: linear-gradient(to top right, #D35400, #8E44AD);
+}
 
-        .popup {
-            flex: 1;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
-            border-radius: 15px;
-            background: #00000057;
-            padding: 20px;
-        }
+body.theme-9 {
+	background: linear-gradient(to top right, #1ABC9C, #E67E22);
+}
 
-        @media screen and (min-width: 1024px) {
-    .popup-container {
-        flex-direction: row;
-        gap: 20px;
-        padding-top: 30px; /* Add top padding to prevent content cutoff */
-        max-height: 100vh;
-        overflow: hidden;
-    }
+body.theme-10 {
+	background: linear-gradient(to top right, #34495E, #2ECC71);
+}
 
-    .popup:first-child {
-        flex: 0 0 40%;
-        height: auto;
-    }
+body.theme-11 {
+	background: linear-gradient(to top right, #C0392B, #8E44AD);
+}
 
-    .popup:last-child {
-        flex: 0 0 58%;
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        grid-template-rows: repeat(4, 1fr);
-        gap: 15px;
-        overflow-y: auto;
-    }
+body.theme-12 {
+	background: linear-gradient(to top right, #27AE60, #3498DB);
+}
 
-    .grid-item {
-        aspect-ratio: 1 / 1; /* Ensures perfect square tiles */
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 100%;
-        height: 100%;
-        padding: 10px;
-    }
+body.theme-13 {
+	background: linear-gradient(to top right, #F39C12, #D35400);
+}
+
+body.theme-14 {
+	background: linear-gradient(to top right, #2980B9, #3498DB);
+}
+
+body.theme-15 {
+	background: linear-gradient(to top right, #E74C3C, #8E44AD);
+}
+
+body.theme-16 {
+	background: linear-gradient(to top right, #FF2A49, #FF2A49);
+}
+body.theme-17 {
+	background: linear-gradient(to top right, #FFD60E, #FFD60E);
+}
+body.theme-18 {
+	background: linear-gradient(to top right, #4A90E2, #4A90E2);
+}
+body.theme-19 {
+	background: linear-gradient(to top right, #50C878, #50C878);
+}
+body.theme-20 {
+	background: linear-gradient(to top right, #8E44AD, #8E44AD);
+}
+body.theme-21 {
+	background: linear-gradient(to top right, #3498DB, #3498DB);
+}
+body.theme-22 {
+	background: linear-gradient(to top right, #F39C12, #F39C12);
+}
+body.theme-23 {
+	background: linear-gradient(to top right, #2ECC71, #2ECC71);
+}
+body.theme-24 {
+	background: linear-gradient(to top right, #E74C3C, #E74C3C);
+}
+body.theme-25 {
+	background: linear-gradient(to top right, #9B59B6, #9B59B6);
+}
+body.theme-26 {
+	background: linear-gradient(to top right, #2980B9, #2980B9);
+}
+body.theme-27 {
+	background: linear-gradient(to top right, #2C3E50, #2C3E50);
+}
+body.theme-28 {
+	background: linear-gradient(to top right, #16A085, #16A085);
+}
+body.theme-29 {
+	background: linear-gradient(to top right, #F4D03F, #F4D03F);
+}
+body.theme-30 {
+	background: linear-gradient(to top right, #D35400, #D35400);
+}
+body.theme-31 {
+	background: linear-gradient(to top right, #1ABC9C, #1ABC9C);
+}
+body.theme-32 {
+	background: linear-gradient(to top right, #E67E22, #E67E22);
+}
+body.theme-33 {
+	background: linear-gradient(to top right, #34495E, #34495E);
+}
+body.theme-34 {
+	background: linear-gradient(to top right, #27AE60, #27AE60);
+}
+body.theme-35 {
+	background: linear-gradient(to top right, #C0392B, #C0392B);
+}
+
+body::before {
+	content: '';
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.25);
+	z-index: 1;
+	pointer-events: none;
+}
+
+.popup-container {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	min-height: 100vh;
+	position: relative;
+	z-index: 2;
+	padding: 15px;
+	gap: 15px;
+}
+
+.popup {
+	flex: 1;
+	overflow-y: auto;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
+	border-radius: 15px;
+	background: #00000057;
+	padding: 20px;
+}
+
+@media screen and (min-width: 1024px) {
+	.popup-container {
+		flex-direction: row;
+		gap: 20px;
+		padding-top: 30px;
+		/* Add top padding to prevent content cutoff */
+		max-height: 100vh;
+		overflow: hidden;
+	}
+
+	.popup:first-child {
+		flex: 0 0 40%;
+		height: auto;
+	}
+
+	.popup:last-child {
+		flex: 0 0 58%;
+		display: grid;
+		grid-template-columns: repeat(4, 1fr);
+		grid-template-rows: repeat(4, 1fr);
+		gap: 15px;
+		overflow-y: auto;
+	}
+
+	.grid-item {
+		aspect-ratio: 1 / 1;
+		/* Ensures perfect square tiles */
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		width: 100%;
+		height: 100%;
+		padding: 10px;
+	}
 }
 
 
-        .grid-item, .list-item {
-            background-color: rgba(0, 0, 0, 0.55);
-            border-radius: 8px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: clamp(0.8rem, 3vw, 1.5rem);
-            color: #fff;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            min-height: 50px;
-            text-decoration: none;
-            transition: background-color 0.3s ease;
-            padding: 10px;
-            text-align: center;
-        }
+.grid-item,
+.list-item {
+	background-color: rgba(0, 0, 0, 0.55);
+	border-radius: 8px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-size: clamp(0.8rem, 3vw, 1.5rem);
+	color: #fff;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+	width: 100%;
+	min-height: 50px;
+	text-decoration: none;
+	transition: background-color 0.3s ease;
+	padding: 10px;
+	text-align: center;
+}
 
-        @media screen and (max-width: 1023px) {
-    .popup-container {
-        padding-top: 60px; /* Increased top padding to prevent content cutoff */
-    }
+@media screen and (max-width: 1023px) {
+	.popup-container {
+		padding-top: 60px;
+		/* Increased top padding to prevent content cutoff */
+	}
 
-    .popup:last-child {
-        order: 1; /* Ensure links popup appears below search popup */
-        margin-top: 15px;
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        justify-content: flex-start; /* Align items to the top/start */
-    }
+	.popup:last-child {
+		order: 1;
+		/* Ensure links popup appears below search popup */
+		margin-top: 15px;
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+		justify-content: flex-start;
+		/* Align items to the top/start */
+	}
 
-    .grid-item {
-        display: none;
-    }
+	.grid-item {
+		display: none;
+	}
 
-    .list-item {
-        display: flex;
-    }
+	.list-item {
+		display: flex;
+	}
 }
 
 
-        @media screen and (min-width: 1024px) {
-            .list-item {
-                display: none;
-            }
-        }
+@media screen and (min-width: 1024px) {
+	.list-item {
+		display: none;
+	}
+}
 
-        .grid-item:hover, .list-item:hover {
-            background-color: rgba(0, 0, 0, 0.75);
-        }
+.grid-item:hover,
+.list-item:hover {
+	background-color: rgba(0, 0, 0, 0.75);
+}
 
-        /* Rest of the previous CSS remains the same */
-        .search-bar-container {
-            width: 100%;
-            max-width: 600px;
-            margin: 0 auto;
-        }
+/* Rest of the previous CSS remains the same */
+.search-bar-container {
+	width: 100%;
+	max-width: 600px;
+	margin: 0 auto;
+}
 
-        .time-display {
-    text-align: left;
-    margin-bottom: 15px;
-    font-size: clamp(2.5rem, 8vw, 4.5rem); /* Dynamic font size */
-    color: #fff;
-    width: 100%;
-    background-color: transparent;
-    white-space: nowrap; /* Prevent wrapping of AM/PM */
+.time-display {
+	text-align: left;
+	margin-bottom: 15px;
+	font-size: clamp(2.5rem, 8vw, 4.5rem);
+	/* Dynamic font size */
+	color: #fff;
+	width: 100%;
+	background-color: transparent;
+	white-space: nowrap;
+	/* Prevent wrapping of AM/PM */
 }
 
 
-        .date-display {
-            text-align: left;
-            margin-bottom: 15px;
-            font-size: clamp(1.5rem, 5vw, 2.3rem);
-            color: #fff;
-            width: 100%;
-            background-color: transparent;
-        }
+.date-display {
+	text-align: left;
+	margin-bottom: 15px;
+	font-size: clamp(1.5rem, 5vw, 2.3rem);
+	color: #fff;
+	width: 100%;
+	background-color: transparent;
+}
 
-        .search-bar {
-            position: relative;
-            margin-bottom: 15px;
-        }
+.search-bar {
+	position: relative;
+	margin-bottom: 15px;
+}
 
-        .search-bar input {
-            width: 100%;
-            padding: 15px 10px;
-            font-size: clamp(0.8rem, 3vw, 1rem);
-            border: 1px solid #000000e4;
-            border-radius: 5px;
-            color: #fff;
-            outline: none;
-            background: #0009;
-        }
+.search-bar input {
+	width: 100%;
+	padding: 15px 10px;
+	font-size: clamp(0.8rem, 3vw, 1rem);
+	border: 1px solid #000000e4;
+	border-radius: 5px;
+	color: #fff;
+	outline: none;
+	background: #0009;
+}
 
-        .clear-btn {
-            position: absolute;
-            right: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: none;
-            border: none;
-            font-size: clamp(1rem, 4vw, 1.5rem);
-            color: #ffffff;
-            cursor: pointer;
-            display: none;
-        }
+.clear-btn {
+	position: absolute;
+	right: 10px;
+	top: 50%;
+	transform: translateY(-50%);
+	background: none;
+	border: none;
+	font-size: clamp(1rem, 4vw, 1.5rem);
+	color: #ffffff;
+	cursor: pointer;
+	display: none;
+}
 
-        #platformPopup, 
-        #historyPopup, 
-        #importantDatesPopup {
-            width: 100%;
-            max-width: 600px;
-            margin: 15px auto;
-            padding: 15px;
-            background-color: rgba(0, 0, 0, 0.7);
-            border-radius: 5px;
-            color: white;
-            text-align: center;
-            display: none;
-        }
+#platformPopup,
+#historyPopup,
+#importantDatesPopup {
+	width: 100%;
+	max-width: 600px;
+	margin: 15px auto;
+	padding: 15px;
+	background-color: rgba(0, 0, 0, 0.7);
+	border-radius: 5px;
+	color: white;
+	text-align: center;
+	display: none;
+}
     </style>
 </head>
 <body>
@@ -336,23 +415,23 @@ const LOCAL_STORAGE_PHRASE_HISTORY = 'phraseSearchHistory';
 const LOCAL_STORAGE_HISTORY_TRACKING = 'historyTrackingEnabled';
 const LOCAL_STORAGE_GRID_USAGE = 'gridItemUsage';
 
-       // Function to apply theme
-       function applyTheme(themeNumber) {
+// Function to apply theme
+function applyTheme(themeNumber) {
     const platformPopup = document.getElementById('platformPopup');
-    
+
     // Remove existing theme classes
     document.body.classList.remove(
-        ...[...Array(16).keys()].map(i => `theme-${i}`)
+        ...[...Array(36).keys()].map(i => `theme-${i}`)
     );
-    
+
     // Apply new theme if valid
-    if (themeNumber >= 1 && themeNumber <= 15) {
+    if (themeNumber >= 1 && themeNumber <= 35) {
         document.body.classList.add(`theme-${themeNumber}`);
         localStorage.setItem(LOCAL_STORAGE_THEME, themeNumber);
-        
+
         platformPopup.textContent = `Applied Theme ${themeNumber}`;
         platformPopup.style.display = 'block';
-        
+
         // Hide popup after 3 seconds
         setTimeout(() => {
             platformPopup.style.display = 'none';
@@ -363,17 +442,17 @@ const LOCAL_STORAGE_GRID_USAGE = 'gridItemUsage';
 function parseDateWithImprovedFormatting(dateStr) {
     // Split the input date string
     const parts = dateStr.split('/');
-    
+
     // Get current year
     const currentYear = new Date().getFullYear();
     const currentCentury = Math.floor(currentYear / 100);
 
     // Pad day with leading zero if single digit
     let day = parts[0].padStart(2, '0');
-    
+
     // Pad month with leading zero if single digit
     let month = parts[1].padStart(2, '0');
-    
+
     // Handle year formatting
     let year = parts[2];
     if (year.length === 1 || year.length === 2) {
@@ -384,12 +463,12 @@ function parseDateWithImprovedFormatting(dateStr) {
     // Validate the date
     try {
         const parsedDate = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
-        
+
         // Additional validation to ensure the date is valid
         if (parsedDate.getMonth() !== parseInt(month) - 1) {
             throw new Error('Invalid date');
         }
-        
+
         return parsedDate;
     } catch (error) {
         throw new Error('Invalid date format');
@@ -409,9 +488,9 @@ document.addEventListener('click', function(e) {
 function addSearchToHistory(query, isWebsite = false) {
     // Check if history tracking is enabled
     const historyTrackingEnabled = localStorage.getItem(LOCAL_STORAGE_HISTORY_TRACKING) !== 'disabled';
-    
+
     if (!historyTrackingEnabled) return;
-    
+
     // Rest of the existing implementation remains the same
     let websiteHistory = JSON.parse(localStorage.getItem(LOCAL_STORAGE_WEBSITE_HISTORY) || '[]');
     let phraseHistory = JSON.parse(localStorage.getItem(LOCAL_STORAGE_PHRASE_HISTORY) || '[]');
@@ -420,15 +499,21 @@ function addSearchToHistory(query, isWebsite = false) {
 
     if (isWebsite) {
         websiteHistory = websiteHistory.filter(item => item.query !== query);
-        websiteHistory.unshift({ query, time: currentTime });
+        websiteHistory.unshift({
+            query,
+            time: currentTime
+        });
         websiteHistory = websiteHistory.slice(0, 10);
-        
+
         localStorage.setItem(LOCAL_STORAGE_WEBSITE_HISTORY, JSON.stringify(websiteHistory));
     } else {
         phraseHistory = phraseHistory.filter(item => item.query !== query);
-        phraseHistory.unshift({ query, time: currentTime });
+        phraseHistory.unshift({
+            query,
+            time: currentTime
+        });
         phraseHistory = phraseHistory.slice(0, 10);
-        
+
         localStorage.setItem(LOCAL_STORAGE_PHRASE_HISTORY, JSON.stringify(phraseHistory));
     }
 }
@@ -436,13 +521,13 @@ function addSearchToHistory(query, isWebsite = false) {
 // Function to track grid item usage
 function trackGridItemUsage(url) {
     let gridUsage = JSON.parse(localStorage.getItem(LOCAL_STORAGE_GRID_USAGE) || '{}');
-    
+
     // Increment usage count for the specific URL
     gridUsage[url] = (gridUsage[url] || 0) + 1;
-    
+
     // Save updated usage statistics
     localStorage.setItem(LOCAL_STORAGE_GRID_USAGE, JSON.stringify(gridUsage));
-    
+
     // Reorder grid items based on usage
     reorderGridItems();
 }
@@ -452,17 +537,17 @@ function reorderGridItems() {
     const gridContainer = document.querySelector('.popup:last-child');
     const gridItems = Array.from(gridContainer.querySelectorAll('.grid-item'));
     const gridUsage = JSON.parse(localStorage.getItem(LOCAL_STORAGE_GRID_USAGE) || '{}');
-    
+
     // Sort grid items by usage (most used first)
     gridItems.sort((a, b) => {
         const usageA = gridUsage[a.getAttribute('href')] || 0;
         const usageB = gridUsage[b.getAttribute('href')] || 0;
         return usageB - usageA;
     });
-    
+
     // Clear the current grid container
     gridContainer.innerHTML = '';
-    
+
     // Reappend sorted grid items
     gridItems.forEach(item => gridContainer.appendChild(item));
 }
@@ -471,41 +556,41 @@ function reorderGridItems() {
 // Function to render history popup
 function renderHistoryPopup(historyType) {
     const historyPopup = document.getElementById('historyPopup');
-    
+
     // Retrieve histories
     const websiteHistory = JSON.parse(localStorage.getItem(LOCAL_STORAGE_WEBSITE_HISTORY) || '[]');
     const phraseHistory = JSON.parse(localStorage.getItem(LOCAL_STORAGE_PHRASE_HISTORY) || '[]');
-    
+
     // Combine and sort histories
     const combinedHistory = [...websiteHistory, ...phraseHistory]
         .sort((a, b) => b.time - a.time)
         .slice(0, 10);
-    
-    const websiteHistoryContent = websiteHistory.map(item => 
+
+    const websiteHistoryContent = websiteHistory.map(item =>
         `<div class="history-item" data-query="${item.query}">
             <span class="history-icon">🌐</span> 
             <span class="history-query">${item.query}</span>
         </div>`
     ).join('');
-    
-    const phraseHistoryContent = phraseHistory.map(item => 
+
+    const phraseHistoryContent = phraseHistory.map(item =>
         `<div class="history-item" data-query="${item.query}">
             <span class="history-icon">🔍</span> 
             <span class="history-query">${item.query}</span>
         </div>`
     ).join('');
-    
-    const combinedHistoryContent = combinedHistory.map(item => 
+
+    const combinedHistoryContent = combinedHistory.map(item =>
         `<div class="history-item" data-query="${item.query}">
             <span class="history-icon">${item.query.startsWith('http') ? '🌐' : '🔍'}</span> 
             <span class="history-query">${item.query}</span>
         </div>`
     ).join('');
-    
+
     let popupContent = '';
     let popupTitle = '';
-    
-    switch(historyType) {
+
+    switch (historyType) {
         case '@history_links':
             popupContent = websiteHistoryContent;
             popupTitle = 'Website Search History';
@@ -518,7 +603,7 @@ function renderHistoryPopup(historyType) {
             popupContent = combinedHistoryContent;
             popupTitle = 'Recent Search History';
     }
-    
+
     if (popupContent) {
         historyPopup.innerHTML = `
             <div class="history-header">
@@ -528,7 +613,7 @@ function renderHistoryPopup(historyType) {
             ${popupContent}
         `;
         historyPopup.style.display = 'block';
-        
+
         // Add event listener for exit button
         document.getElementById('exit-history-btn').addEventListener('click', () => {
             historyPopup.style.display = 'none';
@@ -544,56 +629,56 @@ function clearSearchHistory() {
     const historyTrackingEnabled = localStorage.getItem(LOCAL_STORAGE_HISTORY_TRACKING) !== 'disabled';
     const platformPopup = document.getElementById('platformPopup');
     const historyPopup = document.getElementById('historyPopup');
-    
+
     // Check if history tracking is disabled
     if (!historyTrackingEnabled) {
         platformPopup.textContent = "No History; Tracking Disabled";
         platformPopup.style.display = 'block';
-        
+
         // Ensure history popup is hidden
         historyPopup.style.display = 'none';
         historyPopup.innerHTML = '';
-        
+
         // Fade out the popup after 5 seconds
         setTimeout(() => {
             platformPopup.style.display = 'none';
         }, 5000);
-        
+
         return;
     }
-    
+
     // Check if there's any history to clear
     const websiteHistory = JSON.parse(localStorage.getItem(LOCAL_STORAGE_WEBSITE_HISTORY) || '[]');
     const phraseHistory = JSON.parse(localStorage.getItem(LOCAL_STORAGE_PHRASE_HISTORY) || '[]');
-    
+
     if (websiteHistory.length === 0 && phraseHistory.length === 0) {
         platformPopup.textContent = "No History";
         platformPopup.style.display = 'block';
-        
+
         // Ensure history popup is hidden
         historyPopup.style.display = 'none';
         historyPopup.innerHTML = '';
-        
+
         // Fade out the popup after 5 seconds
         setTimeout(() => {
             platformPopup.style.display = 'none';
         }, 5000);
-        
+
         return;
     }
-    
+
     // Clear the histories
     localStorage.removeItem(LOCAL_STORAGE_WEBSITE_HISTORY);
     localStorage.removeItem(LOCAL_STORAGE_PHRASE_HISTORY);
-    
+
     // Show "Clearing search history" popup
     platformPopup.textContent = "Clearing search history";
     platformPopup.style.display = 'block';
-    
+
     // Ensure history popup is hidden
     historyPopup.style.display = 'none';
     historyPopup.innerHTML = '';
-    
+
     // Fade out the popup after 5 seconds
     setTimeout(() => {
         platformPopup.style.display = 'none';
@@ -605,20 +690,20 @@ function clearSearchHistory() {
 function toggleHistoryTracking(clearHistory = false) {
     const currentSetting = localStorage.getItem(LOCAL_STORAGE_HISTORY_TRACKING);
     const newSetting = currentSetting === 'disabled' ? 'enabled' : 'disabled';
-    
+
     localStorage.setItem(LOCAL_STORAGE_HISTORY_TRACKING, newSetting);
-    
+
     const platformPopup = document.getElementById('platformPopup');
     const historyPopup = document.getElementById('historyPopup');
-    
+
     // If clearing history when disabling tracking
     if (clearHistory) {
         clearSearchHistory();
     }
-    
+
     platformPopup.textContent = `History tracking is now ${newSetting}`;
     platformPopup.style.display = 'block';
-    
+
     // Ensure history popup is hidden
     historyPopup.style.display = 'none';
     historyPopup.innerHTML = '';
@@ -636,7 +721,7 @@ let importantDates = JSON.parse(localStorage.getItem(LOCAL_STORAGE_IMPORTANT_DAT
         date: new Date(item.date) // Convert string back to Date object
     }));
 
-    // Load time format from local storage
+// Load time format from local storage
 let timeFormat = localStorage.getItem(LOCAL_STORAGE_TIME_FORMAT) || '12';
 
 // Load year display preference from local storage
@@ -645,7 +730,7 @@ let showYear = localStorage.getItem(LOCAL_STORAGE_SHOW_YEAR) === 'true';
 // Function to save important dates to local storage
 function saveImportantDates() {
     localStorage.setItem(
-        LOCAL_STORAGE_IMPORTANT_DATES, 
+        LOCAL_STORAGE_IMPORTANT_DATES,
         JSON.stringify(importantDates.map(event => ({
             ...event,
             date: event.date.toISOString() // Convert Date to ISO string for storage
@@ -676,17 +761,17 @@ document.getElementById('searchInput').addEventListener('input', function() {
     // Special command emojis
     const specialCommandEmojis = {
         '@important': '📅', // Calendar emoji for important dates
-        '@24t': '🕰️',       // Clock emoji for 24-hour time format
-        '@12t': '⏰',        // Alarm clock for 12-hour time format
+        '@24t': '🕰️', // Clock emoji for 24-hour time format
+        '@12t': '⏰', // Alarm clock for 12-hour time format
         '@toggle_history': '🔄', // Refresh/cycle emoji for toggling history
-        '@clear_history': '🧹'   // Broom emoji for clearing history
+        '@clear_history': '🧹' // Broom emoji for clearing history
     };
 
     // Check for special commands first
     for (const [command, emoji] of Object.entries(specialCommandEmojis)) {
         if (query.startsWith(command) && (query.length === command.length || query[command.length] === ' ')) {
             let message = '';
-            switch(command) {
+            switch (command) {
                 case '@important':
                     message = "Setting important date";
                     break;
@@ -720,32 +805,25 @@ document.getElementById('searchInput').addEventListener('input', function() {
     if (query.startsWith('@y') && (query.length === 2 || query[2] === ' ')) {
         platformPopup.textContent = "Searching with YouTube";
         platformPopup.style.display = 'block';
-    } 
-    else if (query.startsWith('@w') && (query.length === 2 || query[2] === ' ')) {
+    } else if (query.startsWith('@w') && (query.length === 2 || query[2] === ' ')) {
         platformPopup.textContent = "Searching with Wikipedia";
         platformPopup.style.display = 'block';
-    } 
-    else if (query.startsWith('@g') && (query.length === 2 || query[2] === ' ')) {
+    } else if (query.startsWith('@g') && (query.length === 2 || query[2] === ' ')) {
         platformPopup.textContent = "Searching with Google (This is already the default)";
         platformPopup.style.display = 'block';
-    } 
-    else if (query.startsWith('@rbx') && (query.length === 4 || query[4] === ' ')) {
+    } else if (query.startsWith('@rbx') && (query.length === 4 || query[4] === ' ')) {
         platformPopup.textContent = "Searching with Roblox";
         platformPopup.style.display = 'block';
-    } 
-    else if (query.startsWith('@p') && (query.length === 2 || query[2] === ' ')) {
+    } else if (query.startsWith('@p') && (query.length === 2 || query[2] === ' ')) {
         platformPopup.textContent = "Searching with Perplexity";
         platformPopup.style.display = 'block';
-    } 
-    else if (query.startsWith('@mu') &&  (query.length === 3 || query[3] === ' ')) {
+    } else if (query.startsWith('@mu') && (query.length === 3 || query[3] === ' ')) {
         platformPopup.textContent = "Searching with YouTube Music";
         platformPopup.style.display = 'block';
-    } 
-    else if (query.startsWith('@year') && (query.length === 5 || query[5] === ' ')) {
+    } else if (query.startsWith('@year') && (query.length === 5 || query[5] === ' ')) {
         platformPopup.textContent = "Using Display Year Function";
         platformPopup.style.display = 'block';
-    } 
-    else if (query.startsWith('@help') && (query.length === 5 || query[5] === ' ')) {
+    } else if (query.startsWith('@help') && (query.length === 5 || query[5] === ' ')) {
         platformPopup.innerHTML = `
             <div style="padding: 10px; border-radius: 8px; background-color: rgba(0, 0, 0, 0.7);">
                 <h3 style="margin-bottom: 10px;">Command Help</h3>
@@ -771,14 +849,275 @@ document.getElementById('searchInput').addEventListener('input', function() {
             </div>
         `;
         platformPopup.style.display = 'block';
-    }
-    else {
+    } else if (query.startsWith('@theme') && (query.length === 6 || query[6] === ' ')) {
+        platformPopup.innerHTML = `
+<div style="padding: 10px; border-radius: 8px; background-color: rgba(0, 0, 0, 0.7);">
+    <h3 style="margin-bottom: 10px; text-align: center;">Command Help</h3>
+    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+        <ul style="list-style: none; padding-left: 0; max-height: 100px; overflow-y: auto; width: 100%; text-align: center;">
+            <li style="display: flex; justify-content: center; align-items: center; margin-bottom: 5px;">
+                <strong>Theme 1</strong>: will look like 
+                <span style="background: linear-gradient(to top right, #FF2A49, #FFD60E); border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-left: 5px;">
+                    <span style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
+                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); border-radius: 12px;"></span>
+                </span>
+            </li>
+            <li style="display: flex; justify-content: center; align-items: center; margin-bottom: 5px;">
+                <strong>Theme 2</strong>: will look like 
+                <span style="background: linear-gradient(to top right, #4A90E2, #50C878); border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-left: 5px;">
+                    <span style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
+                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); border-radius: 12px;"></span>
+                </span>
+            </li>
+            <li style="display: flex; justify-content: center; align-items: center; margin-bottom: 5px;">
+                <strong>Theme 3</strong>: will look like 
+                <span style="background: linear-gradient(to top right, #8E44AD, #3498DB); border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-left: 5px;">
+                    <span style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
+                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); border-radius: 12px;"></span>
+                </span>
+            </li>
+            <li style="display: flex; justify-content: center; align-items: center; margin-bottom: 5px;">
+                <strong>Theme 4</strong>: will look like 
+                <span style="background: linear-gradient(to top right, #F39C12, #2ECC71); border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-left: 5px;">
+                    <span style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
+                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); border-radius: 12px;"></span>
+                </span>
+            </li>
+            <li style="display: flex; justify-content: center; align-items: center; margin-bottom: 5px;">
+                <strong>Theme 5</strong>: will look like 
+                <span style="background: linear-gradient(to top right, #E74C3C, #9B59B6); border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-left: 5px;">
+                    <span style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
+                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); border-radius: 12px;"></span>
+                </span>
+            </li>
+            <li style="display: flex; justify-content: center; align-items: center; margin-bottom: 5px;">
+                <strong>Theme 6</strong>: will look like 
+                <span style="background: linear-gradient(to top right, #2980B9, #2C3E50); border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-left: 5px;">
+                    <span style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
+                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); border-radius: 12px;"></span>
+                </span>
+            </li>
+            <li style="display: flex; justify-content: center; align-items: center; margin-bottom: 5px;">
+                <strong>Theme 7</strong>: will look like 
+                <span style="background: linear-gradient(to top right, #16A085, #F4D03F); border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-left: 5px;">
+                    <span style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
+                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); border-radius: 12px;"></span>
+                </span>
+            </li>
+            <li style="display: flex; justify-content: center; align-items: center; margin-bottom: 5px;">
+                <strong>Theme 8</strong>: will look like 
+                <span style="background: linear-gradient(to top right, #D35400, #8E44AD); border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-left: 5px;">
+                    <span style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
+                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); border-radius: 12px;"></span>
+                </span>
+            </li>
+            <li style="display: flex; justify-content: center; align-items: center; margin-bottom: 5px;">
+                <strong>Theme 9</strong>: will look like 
+                <span style="background: linear-gradient(to top right, #34495E, #16A085); border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-left: 5px;">
+                    <span style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
+                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); border-radius: 12px;"></span>
+                </span>
+            </li>
+            <li style="display: flex; justify-content: center; align-items: center; margin-bottom: 5px;">
+                <strong>Theme 10</strong>: will look like 
+                <span style="background: linear-gradient(to top right, #C0392B, #8E44AD); border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-left: 5px;">
+                    <span style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
+                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); border-radius: 12px;"></span>
+                </span>
+            </li>
+
+            <li style="display: flex; justify-content: center; align-items: center; margin-bottom: 5px;">
+                <strong>Theme 11</strong>: will look like 
+                <span style="background: linear-gradient(to top right, #C0392B, #8E44AD); border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-left: 5px;">
+                    <span style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
+                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); border-radius: 12px;"></span>
+                </span>
+            </li>
+            <li style="display: flex; justify-content: center; align-items: center; margin-bottom: 5px;">
+                <strong>Theme 12</strong>: will look like 
+                <span style="background: linear-gradient(to top right, #27AE60, #3498DB); border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-left: 5px;">
+                    <span style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
+                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); border-radius: 12px;"></span>
+                </span>
+            </li>
+            <li style="display: flex; justify-content: center; align-items: center; margin-bottom: 5px;">
+                <strong>Theme 13</strong>: will look like 
+                <span style="background: linear-gradient(to top right, #F39C12, #D35400); border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-left: 5px;">
+                    <span style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
+                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); border-radius: 12px;"></span>
+                </span>
+            </li>
+            <li style="display: flex; justify-content: center; align-items: center; margin-bottom: 5px;">
+                <strong>Theme 14</strong>: will look like 
+                <span style="background: linear-gradient(to top right, #2980B9, #3498DB); border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-left: 5px;">
+                    <span style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
+                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); border-radius: 12px;"></span>
+                </span>
+            </li>
+            <li style="display: flex; justify-content: center; align-items: center; margin-bottom: 5px;">
+                <strong>Theme 15</strong>: will look like 
+                <span style="background: linear-gradient(to top right, #E74C3C, #8E44AD); border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-left: 5px;">
+                    <span style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
+                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); border-radius: 12px;"></span>
+                </span>
+            </li>
+            <li style="display: flex; justify-content: center; align-items: center; margin-bottom: 5px;">
+                <strong>Theme 16</strong>: will look like 
+                <span style="background: linear-gradient(to top right, #FF2A49, #FF2A49); border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-left: 5px;">
+                    <span style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
+                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); border-radius: 12px;"></span>
+                </span>
+            </li>
+            <li style="display: flex; justify-content: center; align-items: center; margin-bottom: 5px;">
+                <strong>Theme 17</strong>: will look like 
+                <span style="background: linear-gradient(to top right, #FFD60E, #FFD60E); border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-left: 5px;">
+                    <span style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
+                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); border-radius: 12px;"></span>
+                </span>
+            </li>
+            <li style="display: flex; justify-content: center; align-items: center; margin-bottom: 5px;">
+                <strong>Theme 18</strong>: will look like 
+                <span style="background: linear-gradient(to top right, #4A90E2, #4A90E2); border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-left: 5px;">
+                    <span style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
+                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); border-radius: 12px;"></span>
+                </span>
+            </li>
+            <li style="display: flex; justify-content: center; align-items: center; margin-bottom: 5px;">
+                <strong>Theme 19</strong>: will look like 
+                <span style="background: linear-gradient(to top right, #50C878, #50C878); border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-left: 5px;">
+                    <span style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
+                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); border-radius: 12px;"></span>
+                </span>
+            </li>
+            <li style="display: flex; justify-content: center; align-items: center; margin-bottom: 5px;">
+                <strong>Theme 20</strong>: will look like 
+                <span style="background: linear-gradient(to top right, #8E44AD, #8E44AD); border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-left: 5px;">
+                    <span style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
+                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); border-radius: 12px;"></span>
+                </span>
+            </li>
+
+            <li style="display: flex; justify-content: center; align-items: center; margin-bottom: 5px;">
+                <strong>Theme 21</strong>: will look like 
+                <span style="background: linear-gradient(to top right, #3498DB, #3498DB); border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-left: 5px;">
+                    <span style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
+                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); border-radius: 12px;"></span>
+                </span>
+            </li>
+            <li style="display: flex; justify-content: center; align-items: center; margin-bottom: 5px;">
+                <strong>Theme 22</strong>: will look like 
+                <span style="background: linear-gradient(to top right, #F39C12, #F39C12); border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-left: 5px;">
+                    <span style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
+                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); border-radius: 12px;"></span>
+                </span>
+            </li>
+            <li style="display: flex; justify-content: center; align-items: center; margin-bottom: 5px;">
+                <strong>Theme 23</strong>: will look like 
+                <span style="background: linear-gradient(to top right, #2ECC71, #2ECC71); border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-left: 5px;">
+                    <span style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
+                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); border-radius: 12px;"></span>
+                </span>
+            </li>
+            <li style="display: flex; justify-content: center; align-items: center; margin-bottom: 5px;">
+                <strong>Theme 24</strong>: will look like 
+                <span style="background: linear-gradient(to top right, #E74C3C, #E74C3C); border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-left: 5px;">
+                    <span style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
+                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); border-radius: 12px;"></span>
+                </span>
+            </li>
+            <li style="display: flex; justify-content: center; align-items: center; margin-bottom: 5px;">
+                <strong>Theme 25</strong>: will look like 
+                <span style="background: linear-gradient(to top right, #9B59B6, #9B59B6); border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-left: 5px;">
+                    <span style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
+                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); border-radius: 12px;"></span>
+                </span>
+            </li>
+            <li style="display: flex; justify-content: center; align-items: center; margin-bottom: 5px;">
+                <strong>Theme 26</strong>: will look like 
+                <span style="background: linear-gradient(to top right, #2980B9, #2980B9); border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-left: 5px;">
+                    <span style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
+                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); border-radius: 12px;"></span>
+                </span>
+            </li>
+            <li style="display: flex; justify-content: center; align-items: center; margin-bottom: 5px;">
+                <strong>Theme 27</strong>: will look like 
+                <span style="background: linear-gradient(to top right, #2C3E50, #2C3E50); border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-left: 5px;">
+                    <span style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
+                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); border-radius: 12px;"></span>
+                </span>
+            </li>
+            <li style="display: flex; justify-content: center; align-items: center; margin-bottom: 5px;">
+                <strong>Theme 28</strong>: will look like 
+                <span style="background: linear-gradient(to top right, #16A085, #16A085); border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-left: 5px;">
+                    <span style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
+                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); border-radius: 12px;"></span>
+                </span>
+            </li>
+            <li style="display: flex; justify-content: center; align-items: center; margin-bottom: 5px;">
+                <strong>Theme 29</strong>: will look like 
+                <span style="background: linear-gradient(to top right, #F4D03F, #F4D03F); border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-left: 5px;">
+                    <span style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
+                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); border-radius: 12px;"></span>
+                </span>
+            </li>
+            <li style="display: flex; justify-content: center; align-items: center; margin-bottom: 5px;">
+                <strong>Theme 30</strong>: will look like 
+                <span style="background: linear-gradient(to top right, #D35400, #D35400); border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-left: 5px;">
+                    <span style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
+                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); border-radius: 12px;"></span>
+                </span>
+            </li>
+
+            <li style="display: flex; justify-content: center; align-items: center; margin-bottom: 5px;">
+                <strong>Theme 31</strong>: will look like 
+                <span style="background: linear-gradient(to top right, #1ABC9C, #1ABC9C); border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-left: 5px;">
+                    <span style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
+                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); border-radius: 12px;"></span>
+                </span>
+            </li>
+            <li style="display: flex; justify-content: center; align-items: center; margin-bottom: 5px;">
+                <strong>Theme 32</strong>: will look like 
+                <span style="background: linear-gradient(to top right, #E67E22, #E67E22); border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-left: 5px;">
+                    <span style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
+                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); border-radius: 12px;"></span>
+                </span>
+            </li>
+            <li style="display: flex; justify-content: center; align-items: center; margin-bottom: 5px;">
+                <strong>Theme 33</strong>: will look like 
+                <span style="background: linear-gradient(to top right, #34495E, #34495E); border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-left: 5px;">
+                    <span style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
+                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); border-radius: 12px;"></span>
+                </span>
+            </li>
+            <li style="display: flex; justify-content: center; align-items: center; margin-bottom: 5px;">
+                <strong>Theme 34</strong>: will look like 
+                <span style="background: linear-gradient(to top right, #27AE60, #27AE60); border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-left: 5px;">
+                    <span style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
+                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); border-radius: 12px;"></span>
+                </span>
+            </li>
+            <li style="display: flex; justify-content: center; align-items: center; margin-bottom: 5px;">
+                <strong>Theme 35</strong>: will look like 
+                <span style="background: linear-gradient(to top right, #C0392B, #C0392B); border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-left: 5px;">
+                    <span style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
+                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); border-radius: 12px;"></span>
+                </span>
+            </li>
+            <!-- Continue this pattern for the remaining themes -->
+        </ul>
+    </div>
+</div>
+
+
+        `;
+        platformPopup.style.display = 'block';
+    } else {
         platformPopup.style.display = 'none';
     }
 });
 
 
-document.getElementById('searchInput').addEventListener('keypress', function (e) {
+document.getElementById('searchInput').addEventListener('keypress', function(e) {
     if (e.key === 'Enter') {
         let query = this.value.trim();
         const platformPopup = document.getElementById('platformPopup');
@@ -791,22 +1130,22 @@ document.getElementById('searchInput').addEventListener('keypress', function (e)
             return;
         }
 
-            // Theme command detection
-            const themeMatch = query.match(/^@theme\s*(\d+)$/);
-            if (themeMatch) {
-                const themeNumber = parseInt(themeMatch[1]);
-                applyTheme(themeNumber);
-                return;
-            }
+        // Theme command detection
+        const themeMatch = query.match(/^@theme\s*(\d+)$/);
+        if (themeMatch) {
+            const themeNumber = parseInt(themeMatch[1]);
+            applyTheme(themeNumber);
+            return;
+        }
 
-                
+
         // New commands
         if (query === '@clear_history') {
             clearSearchHistory();
             this.value = '';
             return;
         }
-        
+
         if (query === '@toggle_history') {
             toggleHistoryTracking();
             this.value = '';
@@ -818,32 +1157,32 @@ document.getElementById('searchInput').addEventListener('keypress', function (e)
             this.value = '';
             return;
         }
-        
+
         // Existing search logic with history tracking
         let isWebsite = false;
-        
+
         // Check if it's a website search
-        if (query.startsWith('http://') || query.startsWith('https://') || 
+        if (query.startsWith('http://') || query.startsWith('https://') ||
             query.includes('.com') || query.includes('.org') || query.includes('.net')) {
             isWebsite = true;
         }
-        
+
         // Existing search prefixes that are typically websites
         const websitePrefixes = ['@y', '@mu', '@rbx', '@p', '@g', '@w'];
         if (websitePrefixes.some(prefix => query.startsWith(prefix))) {
             isWebsite = true;
         }
-        
+
         // Add to history before processing the search
         if (query !== '') {
             addSearchToHistory(query, isWebsite);
-        }        
+        }
 
         if (query === '@export') {
             exportLocalStorage();
             this.value = '';
             return;
-        } 
+        }
 
         if (query === '@import') {
             importLocalStorage();
@@ -855,33 +1194,33 @@ document.getElementById('searchInput').addEventListener('keypress', function (e)
         if (query.toLowerCase().startsWith('@important')) {
             // Extract the date from the query
             const dateMatch = query.match(/^@important\s+(\d{1,2}\/\d{1,2}\/\d{1,4})(\s+(.+))?$/);
-            
+
             if (dateMatch) {
                 const [, dateStr, , description] = dateMatch;
-                
+
                 try {
                     // Use the new parsing function
                     const inputDate = parseDateWithImprovedFormatting(dateStr);
-                    
+
                     // Validate date is in the future
                     const now = new Date();
                     if (inputDate <= now) {
                         alert("Please enter a future date.");
                         return;
                     }
-                    
+
                     // Store the important date
                     importantDates.push({
                         date: inputDate,
                         description: description || 'Untitled Event'
                     });
-                    
+
                     // Save to local storage
                     saveImportantDates();
-                    
+
                     // Render all important dates
                     renderImportantDates();
-                    
+
                     // Clear input
                     this.value = '';
                     platformPopup.style.display = 'none';
@@ -894,152 +1233,149 @@ document.getElementById('searchInput').addEventListener('keypress', function (e)
         }
         window.addEventListener('load', renderImportantDates);
         setInterval(renderImportantDates, 60000); // Check every minute
-// Function to calculate time left
-function calculateTimeLeft(targetDate) {
-    const now = new Date();
-    const diffMs = targetDate.getTime() - now.getTime();
-    
-    if (diffMs <= 0) return null; // Date has passed
-    
-    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-    const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
-    const diffMinutes = Math.floor(diffMs / (1000 * 60));
-    
-    if (diffDays > 0) return `${diffDays}d`;
-    if (diffHours > 0) return `${diffHours}h`;
-    return `${diffMinutes}m`;
-}
+        // Function to calculate time left
+        function calculateTimeLeft(targetDate) {
+            const now = new Date();
+            const diffMs = targetDate.getTime() - now.getTime();
+
+            if (diffMs <= 0) return null; // Date has passed
+
+            const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+            const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+            const diffMinutes = Math.floor(diffMs / (1000 * 60));
+
+            if (diffDays > 0) return `${diffDays}d`;
+            if (diffHours > 0) return `${diffHours}h`;
+            return `${diffMinutes}m`;
+        }
 
 
-// Block search if input is empty or only spaces
-if (query === '') {
-    alert("Please enter a search term.");
-    return; // Prevent search if input is empty or just spaces
-}
+        // Block search if input is empty or only spaces
+        if (query === '') {
+            alert("Please enter a search term.");
+            return; // Prevent search if input is empty or just spaces
+        }
 
-if (query.toLowerCase().startsWith('@help')) {
-    alert("Help is not a valid search query. Look at the popup for the commands");
-    return; // Prevent search if @help is detected
-}        
-if (query.toLowerCase().startsWith('@important')) {
-    return; // Prevent search if @help is detected
-}      
+        if (query.toLowerCase().startsWith('@help')) {
+            alert("Help is not a valid search query. Look at the popup for the commands");
+            return; // Prevent search if @help is detected
+        }
+        if (query.toLowerCase().startsWith('@important')) {
+            return; // Prevent search if @help is detected
+        }
 
-if (query.toLowerCase() === '@24t') {
-    timeFormat = '24';
-    saveTimeFormat(); // Save to local storage
-    updateDateTime();
-    this.value = '';
-    platformPopup.style.display = 'none';
-    return;
-} 
-else if (query.toLowerCase() === '@12t') {
-    timeFormat = '12';
-    saveTimeFormat(); // Save to local storage
-    updateDateTime();
-    this.value = '';
-    platformPopup.style.display = 'none';
-    return;
-}
+        if (query.toLowerCase() === '@24t') {
+            timeFormat = '24';
+            saveTimeFormat(); // Save to local storage
+            updateDateTime();
+            this.value = '';
+            platformPopup.style.display = 'none';
+            return;
+        } else if (query.toLowerCase() === '@12t') {
+            timeFormat = '12';
+            saveTimeFormat(); // Save to local storage
+            updateDateTime();
+            this.value = '';
+            platformPopup.style.display = 'none';
+            return;
+        }
 
-// Toggle the display of the year with local storage
-if (query.toLowerCase() === '@year') {
-    showYear = !showYear;
-    saveYearPreference(); // Save to local storage
-    updateDateTime();
-    this.value = '';
-    platformPopup.style.display = 'none';
-    return;
-}
+        // Toggle the display of the year with local storage
+        if (query.toLowerCase() === '@year') {
+            showYear = !showYear;
+            saveYearPreference(); // Save to local storage
+            updateDateTime();
+            this.value = '';
+            platformPopup.style.display = 'none';
+            return;
+        }
 
-// Ensure that only the exact match "@y" is valid, not "@ye"
-if (query.startsWith('@y') && (query.length === 2 || query[2] === ' ')) {
-    query = query.slice(2).trim(); // Remove "@y" and trim the query
-    window.location.href = `https://www.youtube.com/results?search_query=${encodeURIComponent(query)}`;
-}
-// Ensure that only the exact match "@mu" is valid
-else if (query.startsWith('@mu') && (query.length === 3 || query[3] === ' ')) {
-    query = query.slice(3).trim(); // Remove "@mu" and trim the query
-    window.location.href = `https://music.youtube.com/search?q=${encodeURIComponent(query)}`;
-}
-// Ensure that only the exact match "@rbx" is valid
-else if (query.startsWith('@rbx') && (query.length === 4 || query[4] === ' ')) {
-    query = query.slice(4).trim(); // Remove "@rbx" and trim the query
-    window.location.href = `https://www.roblox.com/discover/?Keyword=${encodeURIComponent(query)}`;
-}
-// Ensure that only the exact match "@p" is valid
-else if (query.startsWith('@p') && (query.length === 2 || query[2] === ' ')) {
-    query = query.slice(2).trim(); // Remove "@p" and trim the query
-    window.location.href = `https://www.perplexity.ai/search?s=o&q=${encodeURIComponent(query)}`;
-} 
-else if (query.startsWith('@g') && (query.length === 2 || query[2] === ' ')) {
-    query = query.slice(2).trim();
-    window.location.href = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
-}
-else if (query.startsWith('@w') && (query.length === 2 || query[2] === ' ')) {
-    query = query.slice(2).trim();
-    window.location.href = `https://en.wikipedia.org/wiki/Special:Search?search=${encodeURIComponent(query)}`;
-}
-// If the input is empty after the tag prefix, block the attempt and alert the user
-else if (query.toLowerCase().startsWith('@') && query.length <= 2) {
-    alert("Please enter a valid search term after the tag.");
-    return;
-}
-// If the input looks like a domain (e.g., google.com, amazon.ca) but lacks a protocol
-else if (query.match(/^[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)) {
-    query = 'http://' + query; // Automatically add "http://" if it's a domain-like string
-    if (isValidURL(query)) {
-        window.location.href = query; // Navigate to the valid URL
-    } else {
-        window.location.href = `https://www.google.com/search?q=${encodeURIComponent(query)}`; // Perform Google search
-    }
-}
-// If it's a valid URL, navigate to it
-else if (isValidURL(query)) {
-    window.location.href = query;
-} else {
-    // If it's not a URL, perform a Google search
-    window.location.href = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
-}
+        // Ensure that only the exact match "@y" is valid, not "@ye"
+        if (query.startsWith('@y') && (query.length === 2 || query[2] === ' ')) {
+            query = query.slice(2).trim(); // Remove "@y" and trim the query
+            window.location.href = `https://www.youtube.com/results?search_query=${encodeURIComponent(query)}`;
+        }
+        // Ensure that only the exact match "@mu" is valid
+        else if (query.startsWith('@mu') && (query.length === 3 || query[3] === ' ')) {
+            query = query.slice(3).trim(); // Remove "@mu" and trim the query
+            window.location.href = `https://music.youtube.com/search?q=${encodeURIComponent(query)}`;
+        }
+        // Ensure that only the exact match "@rbx" is valid
+        else if (query.startsWith('@rbx') && (query.length === 4 || query[4] === ' ')) {
+            query = query.slice(4).trim(); // Remove "@rbx" and trim the query
+            window.location.href = `https://www.roblox.com/discover/?Keyword=${encodeURIComponent(query)}`;
+        }
+        // Ensure that only the exact match "@p" is valid
+        else if (query.startsWith('@p') && (query.length === 2 || query[2] === ' ')) {
+            query = query.slice(2).trim(); // Remove "@p" and trim the query
+            window.location.href = `https://www.perplexity.ai/search?s=o&q=${encodeURIComponent(query)}`;
+        } else if (query.startsWith('@g') && (query.length === 2 || query[2] === ' ')) {
+            query = query.slice(2).trim();
+            window.location.href = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
+        } else if (query.startsWith('@w') && (query.length === 2 || query[2] === ' ')) {
+            query = query.slice(2).trim();
+            window.location.href = `https://en.wikipedia.org/wiki/Special:Search?search=${encodeURIComponent(query)}`;
+        }
+        // If the input is empty after the tag prefix, block the attempt and alert the user
+        else if (query.toLowerCase().startsWith('@') && query.length <= 2) {
+            alert("Please enter a valid search term after the tag.");
+            return;
+        }
+        // If the input looks like a domain (e.g., google.com, amazon.ca) but lacks a protocol
+        else if (query.match(/^[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)) {
+            query = 'http://' + query; // Automatically add "http://" if it's a domain-like string
+            if (isValidURL(query)) {
+                window.location.href = query; // Navigate to the valid URL
+            } else {
+                window.location.href = `https://www.google.com/search?q=${encodeURIComponent(query)}`; // Perform Google search
+            }
+        }
+        // If it's a valid URL, navigate to it
+        else if (isValidURL(query)) {
+            window.location.href = query;
+        } else {
+            // If it's not a URL, perform a Google search
+            window.location.href = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
+        }
     }
 });
 
 document.addEventListener('DOMContentLoaded', () => {
-            // Focus on search input
-            document.getElementById('searchInput').focus();
+    // Focus on search input
+    document.getElementById('searchInput').focus();
 
-            // Retrieve and apply saved theme
-            const savedTheme = localStorage.getItem(LOCAL_STORAGE_THEME);
-            if (savedTheme) {
-                applyTheme(parseInt(savedTheme));
-            }
+    // Retrieve and apply saved theme
+    const savedTheme = localStorage.getItem(LOCAL_STORAGE_THEME);
+    if (savedTheme) {
+        applyTheme(parseInt(savedTheme));
+    }
 
-            // Enable clear button functionality
-            const searchInput = document.getElementById('searchInput');
-            const clearBtn = document.getElementById('clearBtn');
+    // Enable clear button functionality
+    const searchInput = document.getElementById('searchInput');
+    const clearBtn = document.getElementById('clearBtn');
 
-            searchInput.addEventListener('input', () => {
-                clearBtn.style.display = searchInput.value ? 'block' : 'none';
-            });
+    searchInput.addEventListener('input', () => {
+        clearBtn.style.display = searchInput.value ? 'block' : 'none';
+    });
 
-            clearBtn.addEventListener('click', () => {
-                searchInput.value = '';
-                clearBtn.style.display = 'none';
-                searchInput.focus();
-            });
-        });
+    clearBtn.addEventListener('click', () => {
+        searchInput.value = '';
+        clearBtn.style.display = 'none';
+        searchInput.focus();
+    });
+});
 
 // Function to calculate time left
 function calculateTimeLeft(targetDate) {
     const now = new Date();
     const diffMs = targetDate.getTime() - now.getTime();
-    
+
     if (diffMs <= 0) return null; // Date has passed
-    
+
     const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
     const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
     const diffMinutes = Math.floor(diffMs / (1000 * 60));
-    
+
     if (diffDays > 0) return `${diffDays}d`;
     if (diffHours > 0) return `${diffHours}h`;
     return `${diffMinutes}m`;
@@ -1049,27 +1385,31 @@ function calculateTimeLeft(targetDate) {
 function formatImportantDate(date, suppressYearIfCurrentYear = true) {
     const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-    
+
     const dayName = days[date.getDay()];
     const monthName = months[date.getMonth()];
     const day = date.getDate();
     const year = date.getFullYear();
     const currentYear = new Date().getFullYear();
-    
+
     // Determine ordinal suffix
     const ordinalSuffix = (day) => {
         if (day > 3 && day < 21) return 'th';
         switch (day % 10) {
-            case 1: return 'st';
-            case 2: return 'nd';
-            case 3: return 'rd';
-            default: return 'th';
+            case 1:
+                return 'st';
+            case 2:
+                return 'nd';
+            case 3:
+                return 'rd';
+            default:
+                return 'th';
         }
     };
-    
+
     // Conditionally include year based on current year and suppressYearIfCurrentYear flag
     const yearPart = (suppressYearIfCurrentYear && year === currentYear) ? '' : `, ${year}`;
-    
+
     return `${monthName} ${day}${ordinalSuffix(day)}${yearPart}`;
 }
 
@@ -1077,7 +1417,7 @@ function formatImportantDate(date, suppressYearIfCurrentYear = true) {
 // Modify the existing renderImportantDates function
 function renderImportantDates() {
     const importantDatesPopup = document.getElementById('importantDatesPopup');
-    
+
     // Remove passed dates and track them separately
     const now = new Date();
     const passedEvents = [];
@@ -1089,10 +1429,10 @@ function renderImportantDates() {
         }
         return true;
     });
-    
+
     // Save filtered dates to local storage
     saveImportantDates();
-    
+
     // If no future dates, check for passed events
     if (importantDates.length === 0) {
         if (passedEvents.length > 0) {
@@ -1102,14 +1442,14 @@ function renderImportantDates() {
         }
         return;
     }
-    
+
     // Sort future dates chronologically
     importantDates.sort((a, b) => a.date - b.date);
-    
+
     // Create HTML for dates with editable features
     const datesHTML = importantDates.map((event, index) => {
         const timeLeft = calculateTimeLeft(event.date);
-        
+
         return `
         <div 
             id="important-date-${index}" 
@@ -1129,8 +1469,9 @@ function renderImportantDates() {
             <span class="time-left" style="color: #00ff00;">${timeLeft || 'Passed'}</span>
             <button onclick="removeImportantDate(${index})" style="background: none; border: none; color: white; cursor: pointer;">❌</button>
         </div>
-    `}).join('');
-    
+    `
+    }).join('');
+
     // Populate and show the popup
     importantDatesPopup.innerHTML = `
         <div style="font-weight: bold; margin-bottom: 10px;">Important Dates:</div>
@@ -1142,7 +1483,7 @@ function renderImportantDates() {
 // Function to render passed events
 function renderPassedEvents(passedEvents) {
     const importantDatesPopup = document.getElementById('importantDatesPopup');
-    
+
     // Create HTML for passed events
     const passedEventsHTML = passedEvents.map((event, index) => `
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; color: #ff6347;">
@@ -1150,14 +1491,14 @@ function renderPassedEvents(passedEvents) {
             <button onclick="removePassedEvent(${index})" style="background: none; border: none; color: white; cursor: pointer;">❌</button>
         </div>
     `).join('');
-    
+
     // Populate and show the popup
     importantDatesPopup.innerHTML = `
         <div style="font-weight: bold; margin-bottom: 10px; color: #ff6347;">Passed Events:</div>
         ${passedEventsHTML}
     `;
     importantDatesPopup.style.display = 'block';
-    
+
     // Auto-remove passed events after 20 seconds
     setTimeout(() => {
         importantDatesPopup.style.display = 'none';
@@ -1166,24 +1507,24 @@ function renderPassedEvents(passedEvents) {
 
 // Function to edit event date
 function editEventDate(index) {
-    const newDateStr = prompt('Enter new date (DD/MM/YYYY):', 
+    const newDateStr = prompt('Enter new date (DD/MM/YYYY):',
         formatDateForEditing(importantDates[index].date));
-    
+
     if (newDateStr) {
         try {
             // Use the new parsing function
             const inputDate = parseDateWithImprovedFormatting(newDateStr);
-            
+
             // Validate date is in the future
             const now = new Date();
             if (inputDate <= now) {
                 alert("Please enter a future date.");
                 return;
             }
-            
+
             // Update the date
             importantDates[index].date = inputDate;
-            
+
             // Save and re-render
             saveImportantDates();
             renderImportantDates();
@@ -1198,7 +1539,7 @@ function updateImportantDatesTimeLeft() {
     if (importantDates.length === 0) return;
 
     const dateItems = document.querySelectorAll('.important-date-item .time-left');
-    
+
     importantDates.forEach((event, index) => {
         const timeLeft = calculateTimeLeft(event.date);
         if (dateItems[index]) {
@@ -1209,12 +1550,12 @@ function updateImportantDatesTimeLeft() {
 
 // Function to edit event description
 function editEventDescription(index) {
-    const newDescription = prompt('Enter new description:', 
+    const newDescription = prompt('Enter new description:',
         importantDates[index].description);
-    
+
     if (newDescription !== null && newDescription.trim() !== '') {
         importantDates[index].description = newDescription.trim();
-        
+
         // Save and re-render
         saveImportantDates();
         renderImportantDates();
@@ -1237,10 +1578,10 @@ function removePassedEvent(index) {
 // Modify the existing removeImportantDate function
 function removeImportantDate(index) {
     const dateElement = document.getElementById(`important-date-${index}`);
-    
+
     // Fade out the element before removing
     dateElement.style.opacity = '0';
-    
+
     setTimeout(() => {
         importantDates.splice(index, 1);
         saveImportantDates(); // Save to local storage after removal
@@ -1250,9 +1591,9 @@ function removeImportantDate(index) {
 
 // Clear the input field when the page is refreshed
 window.addEventListener('load', function() {
-    document.getElementById('searchInput').value = '';  // Clear input
-    document.getElementById('clearBtn').style.display = 'none';  // Hide the 'X' button initially
-    updateDateTime();  // Display time and date immediately upon load
+    document.getElementById('searchInput').value = ''; // Clear input
+    document.getElementById('clearBtn').style.display = 'none'; // Hide the 'X' button initially
+    updateDateTime(); // Display time and date immediately upon load
     renderImportantDates(); // Load and render important dates from local storage
 
     // Update time left every 10 seconds
@@ -1274,8 +1615,8 @@ searchInput.addEventListener('input', function() {
 
 // Add functionality to clear the search input when the 'X' button is clicked
 clearBtn.addEventListener('click', function() {
-    searchInput.value = '';  // Clear the input field
-    clearBtn.style.display = 'none';  // Hide the 'X' button
+    searchInput.value = ''; // Clear the input field
+    clearBtn.style.display = 'none'; // Hide the 'X' button
     const platformPopup = document.getElementById('platformPopup');
     platformPopup.style.display = 'none';
 });
@@ -1297,22 +1638,30 @@ function updateDateTime() {
         hours = hours % 12 || 12; // Convert to 12-hour format
     }
 
-    const timeString = timeFormat === '12' 
-        ? `${hours} : ${minutes} : ${seconds} ${ampm}`
-        : `${hours.toString().padStart(2, '0')} : ${minutes} : ${seconds}`; // 24-hour format
+    const timeString = timeFormat === '12' ?
+        `${hours} : ${minutes} : ${seconds} ${ampm}` :
+        `${hours.toString().padStart(2, '0')} : ${minutes} : ${seconds}`; // 24-hour format
 
     // Date formatting
-    const day = now.toLocaleString('en', { weekday: 'long' });
-    const month = now.toLocaleString('en', { month: 'long' });
+    const day = now.toLocaleString('en', {
+        weekday: 'long'
+    });
+    const month = now.toLocaleString('en', {
+        month: 'long'
+    });
     const date = now.getDate();
 
     const ordinalSuffix = (date) => {
         if (date > 3 && date < 21) return 'th';
         switch (date % 10) {
-            case 1: return 'st';
-            case 2: return 'nd';
-            case 3: return 'rd';
-            default: return 'th';
+            case 1:
+                return 'st';
+            case 2:
+                return 'nd';
+            case 3:
+                return 'rd';
+            default:
+                return 'th';
         }
     };
 
@@ -1322,7 +1671,7 @@ function updateDateTime() {
     timeDisplay.textContent = timeString;
 }
 
-setInterval(updateDateTime, 1000);  // Update every second
+setInterval(updateDateTime, 1000); // Update every second
 
 // Enhanced export function
 function exportLocalStorage() {
@@ -1332,7 +1681,9 @@ function exportLocalStorage() {
         showYearPreference: localStorage.getItem(LOCAL_STORAGE_SHOW_YEAR),
         selectedTheme: localStorage.getItem(LOCAL_STORAGE_THEME)
     };
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const blob = new Blob([JSON.stringify(data, null, 2)], {
+        type: 'application/json'
+    });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
@@ -1346,11 +1697,11 @@ function importLocalStorage() {
     const input = document.createElement('input');
     input.type = 'file';
     input.accept = 'application/json';
-    input.addEventListener('change', function () {
+    input.addEventListener('change', function() {
         const file = input.files[0];
         if (file) {
             const reader = new FileReader();
-            reader.onload = function (e) {
+            reader.onload = function(e) {
                 try {
                     const importedData = JSON.parse(e.target.result);
                     // Update local storage with all previous items plus theme
