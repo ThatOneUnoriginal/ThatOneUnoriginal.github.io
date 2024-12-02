@@ -28,6 +28,57 @@
             font-family: 'Poppins', sans-serif;
         }
 
+        body.theme-1 {
+            background: linear-gradient(to top right, #FF2A49, #FFD60E);
+        }
+
+        body.theme-2 {
+            background: linear-gradient(to top right, #4A90E2, #50C878);
+        }
+
+        body.theme-3 {
+            background: linear-gradient(to top right, #8E44AD, #3498DB);
+        }
+
+        body.theme-4 {
+            background: linear-gradient(to top right, #F39C12, #2ECC71);
+        }
+
+        body.theme-5 {
+            background: linear-gradient(to top right, #E74C3C, #9B59B6);
+        }
+        body.theme-6 {
+        background: linear-gradient(to top right, #2980B9, #2C3E50);
+    }
+    body.theme-7 {
+        background: linear-gradient(to top right, #16A085, #F4D03F);
+    }
+    body.theme-8 {
+        background: linear-gradient(to top right, #D35400, #8E44AD);
+    }
+    body.theme-9 {
+        background: linear-gradient(to top right, #1ABC9C, #E67E22);
+    }
+    body.theme-10 {
+        background: linear-gradient(to top right, #34495E, #2ECC71);
+    }
+    body.theme-11 {
+        background: linear-gradient(to top right, #C0392B, #8E44AD);
+    }
+    body.theme-12 {
+        background: linear-gradient(to top right, #27AE60, #3498DB);
+    }
+    body.theme-13 {
+        background: linear-gradient(to top right, #F39C12, #D35400);
+    }
+    body.theme-14 {
+        background: linear-gradient(to top right, #2980B9, #3498DB);
+    }
+    body.theme-15 {
+        background: linear-gradient(to top right, #E74C3C, #8E44AD);
+    }
+
+
         body::before {
             content: '';
             position: fixed;
@@ -276,6 +327,7 @@
     </div>
     <script>
 // Local Storage Keys
+const LOCAL_STORAGE_THEME = 'selectedTheme';
 const LOCAL_STORAGE_IMPORTANT_DATES = 'importantDates';
 const LOCAL_STORAGE_TIME_FORMAT = 'timeFormat';
 const LOCAL_STORAGE_SHOW_YEAR = 'showYearPreference';
@@ -284,7 +336,29 @@ const LOCAL_STORAGE_PHRASE_HISTORY = 'phraseSearchHistory';
 const LOCAL_STORAGE_HISTORY_TRACKING = 'historyTrackingEnabled';
 const LOCAL_STORAGE_GRID_USAGE = 'gridItemUsage';
 
-
+       // Function to apply theme
+       function applyTheme(themeNumber) {
+    const platformPopup = document.getElementById('platformPopup');
+    
+    // Remove existing theme classes
+    document.body.classList.remove(
+        ...[...Array(16).keys()].map(i => `theme-${i}`)
+    );
+    
+    // Apply new theme if valid
+    if (themeNumber >= 1 && themeNumber <= 15) {
+        document.body.classList.add(`theme-${themeNumber}`);
+        localStorage.setItem(LOCAL_STORAGE_THEME, themeNumber);
+        
+        platformPopup.textContent = `Applied Theme ${themeNumber}`;
+        platformPopup.style.display = 'block';
+        
+        // Hide popup after 3 seconds
+        setTimeout(() => {
+            platformPopup.style.display = 'none';
+        }, 3000);
+    }
+}
 
 function parseDateWithImprovedFormatting(dateStr) {
     // Split the input date string
@@ -640,6 +714,8 @@ document.getElementById('searchInput').addEventListener('input', function() {
         }
     }
 
+
+
     // Existing search prefix checks
     if (query.startsWith('@y') && (query.length === 2 || query[2] === ' ')) {
         platformPopup.textContent = "Searching with YouTube";
@@ -714,6 +790,14 @@ document.getElementById('searchInput').addEventListener('keypress', function (e)
             this.value = '';
             return;
         }
+
+            // Theme command detection
+            const themeMatch = query.match(/^@theme\s*(\d+)$/);
+            if (themeMatch) {
+                const themeNumber = parseInt(themeMatch[1]);
+                applyTheme(themeNumber);
+                return;
+            }
 
                 
         // New commands
@@ -920,6 +1004,30 @@ else if (isValidURL(query)) {
     }
 });
 
+document.addEventListener('DOMContentLoaded', () => {
+            // Focus on search input
+            document.getElementById('searchInput').focus();
+
+            // Retrieve and apply saved theme
+            const savedTheme = localStorage.getItem(LOCAL_STORAGE_THEME);
+            if (savedTheme) {
+                applyTheme(parseInt(savedTheme));
+            }
+
+            // Enable clear button functionality
+            const searchInput = document.getElementById('searchInput');
+            const clearBtn = document.getElementById('clearBtn');
+
+            searchInput.addEventListener('input', () => {
+                clearBtn.style.display = searchInput.value ? 'block' : 'none';
+            });
+
+            clearBtn.addEventListener('click', () => {
+                searchInput.value = '';
+                clearBtn.style.display = 'none';
+                searchInput.focus();
+            });
+        });
 
 // Function to calculate time left
 function calculateTimeLeft(targetDate) {
@@ -1216,29 +1324,28 @@ function updateDateTime() {
 
 setInterval(updateDateTime, 1000);  // Update every second
 
+// Enhanced export function
 function exportLocalStorage() {
     const data = {
         importantDates: localStorage.getItem(LOCAL_STORAGE_IMPORTANT_DATES),
         timeFormat: localStorage.getItem(LOCAL_STORAGE_TIME_FORMAT),
-        showYearPreference: localStorage.getItem(LOCAL_STORAGE_SHOW_YEAR)
+        showYearPreference: localStorage.getItem(LOCAL_STORAGE_SHOW_YEAR),
+        selectedTheme: localStorage.getItem(LOCAL_STORAGE_THEME)
     };
-
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
-
     const link = document.createElement('a');
     link.href = url;
     link.download = 'localStorageBackup.json';
     link.click();
-
     URL.revokeObjectURL(url);
 }
 
+// Enhanced import function
 function importLocalStorage() {
     const input = document.createElement('input');
     input.type = 'file';
     input.accept = 'application/json';
-
     input.addEventListener('change', function () {
         const file = input.files[0];
         if (file) {
@@ -1246,8 +1353,7 @@ function importLocalStorage() {
             reader.onload = function (e) {
                 try {
                     const importedData = JSON.parse(e.target.result);
-
-                    // Update local storage
+                    // Update local storage with all previous items plus theme
                     if (importedData.importantDates) {
                         localStorage.setItem(LOCAL_STORAGE_IMPORTANT_DATES, importedData.importantDates);
                     }
@@ -1257,7 +1363,9 @@ function importLocalStorage() {
                     if (importedData.showYearPreference) {
                         localStorage.setItem(LOCAL_STORAGE_SHOW_YEAR, importedData.showYearPreference);
                     }
-
+                    if (importedData.selectedTheme) {
+                        localStorage.setItem(LOCAL_STORAGE_THEME, importedData.selectedTheme);
+                    }
                     alert('Import successful. Refreshing...');
                     location.reload();
                 } catch (error) {
@@ -1267,10 +1375,8 @@ function importLocalStorage() {
             reader.readAsText(file);
         }
     });
-
     input.click();
 }
-
 
     </script>
 </body>
