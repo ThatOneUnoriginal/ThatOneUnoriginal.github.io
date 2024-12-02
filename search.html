@@ -272,20 +272,22 @@ body::before {
 		display: none;
 	}
 }
-.popup:first-child{
+
+
+@media (max-width: 1000px) {
+  .time-display, .date-display {
+    text-align: center !important; /* Align right on smaller screens */
+  }
+
+  .popup:first-child{
     height: 200px !important;
     flex: 0.5;
 }
 
 .list-item{
     font-size: 20px;
+    min-height: 80px;
 }
-
-@media (max-width: 1200px) {
-  .time-display, .date-display {
-    text-align: center !important; /* Align right on smaller screens */
-  }
-
 }
 
 .grid-item:hover,
