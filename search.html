@@ -2,23 +2,32 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <title>Textured Gradient Background</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet"> <!-- Poppins font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            font-size: 16px;
+        }
+
         body {
             margin: 0;
-            height: 100vh;
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: stretch;
             background: linear-gradient(to top right, #FF2A49, #FFD60E);
             position: relative;
-            overflow: hidden;
-            font-family: 'Poppins', sans-serif; /* Apply Poppins font */
+            overflow-x: hidden;
+            font-family: 'Poppins', sans-serif;
         }
 
-        /* Dark overlay only for background */
         body::before {
             content: '';
             position: fixed;
@@ -33,14 +42,17 @@
 
         .popup-container {
             display: flex;
+            flex-direction: column;
             width: 100%;
-            height: 100%;
+            min-height: 100vh;
             position: relative;
             z-index: 2;
+            padding: 15px;
+            gap: 15px;
         }
 
         .popup {
-            box-sizing: border-box;
+            flex: 1;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
@@ -49,156 +61,164 @@
             box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
             border-radius: 15px;
             background: #00000057;
-            margin: 10px;
-            position: relative;
+            padding: 20px;
         }
 
-        /* Left popup takes 40% of the space */
-        .popup:first-child {
-            flex: 0 0 40%;
-            padding: 10px 40px 10px 10px;
-        }
+        @media screen and (min-width: 1024px) {
+    .popup-container {
+        flex-direction: row;
+        gap: 20px;
+        padding-top: 30px; /* Add top padding to prevent content cutoff */
+        max-height: 100vh;
+        overflow: hidden;
+    }
 
-        /* Right popup takes 60% of the space */
-        .popup:last-child {
-            flex: 0 0 58%;
-            padding: 40px;
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            grid-template-rows: repeat(4, 1fr);
-            gap: 10px;
-        }
+    .popup:first-child {
+        flex: 0 0 40%;
+        height: auto;
+    }
 
-        .grid-item {
-            background-color: #f0f0f0;
+    .popup:last-child {
+        flex: 0 0 58%;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        grid-template-rows: repeat(4, 1fr);
+        gap: 15px;
+        overflow-y: auto;
+    }
+
+    .grid-item {
+        aspect-ratio: 1 / 1; /* Ensures perfect square tiles */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+        padding: 10px;
+    }
+}
+
+
+        .grid-item, .list-item {
+            background-color: rgba(0, 0, 0, 0.55);
             border-radius: 8px;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 1.2rem;
-            color: #333;
+            font-size: clamp(0.8rem, 3vw, 1.5rem);
+            color: #fff;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             width: 100%;
-            height: 100%;
+            min-height: 50px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+            padding: 10px;
+            text-align: center;
         }
 
-        /* Search bar styling */
+        @media screen and (max-width: 1023px) {
+    .popup-container {
+        padding-top: 60px; /* Increased top padding to prevent content cutoff */
+    }
+
+    .popup:last-child {
+        order: 1; /* Ensure links popup appears below search popup */
+        margin-top: 15px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        justify-content: flex-start; /* Align items to the top/start */
+    }
+
+    .grid-item {
+        display: none;
+    }
+
+    .list-item {
+        display: flex;
+    }
+}
+
+
+        @media screen and (min-width: 1024px) {
+            .list-item {
+                display: none;
+            }
+        }
+
+        .grid-item:hover, .list-item:hover {
+            background-color: rgba(0, 0, 0, 0.75);
+        }
+
+        /* Rest of the previous CSS remains the same */
         .search-bar-container {
-            position: absolute;
-            right: 6%; /* Align to the right with offset */
-            top: 50%;
-            transform: translateY(-50%);
-            width: 68%; /* 60% of the popup's width */
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
         }
-        .no-underline {
-            text-decoration: none;  /* Removes the underline */
-        }
-
 
         .time-display {
-            text-align: left;
-            margin-bottom: 5px;
-            font-size: 4.5rem;
-            color: #fff;
-            width: 100%;
-            padding: 0;
-            box-sizing: border-box;
-            background-color: transparent;
-        }
-        .grid-item img {
-            width: 100%;   /* Make the image fill the width of the grid item */
-            height: 100%;  /* Make the image fill the height of the grid item */
-            object-fit: cover; /* Ensures the image covers the entire space of the grid item without distorting */
-            border-radius: 8px; /* Optional: Apply the same border radius to the image */
-        }       
+    text-align: left;
+    margin-bottom: 15px;
+    font-size: clamp(2.5rem, 8vw, 4.5rem); /* Dynamic font size */
+    color: #fff;
+    width: 100%;
+    background-color: transparent;
+    white-space: nowrap; /* Prevent wrapping of AM/PM */
+}
+
+
         .date-display {
             text-align: left;
-            margin-bottom: 5px;
-            font-size: 2.3rem;
+            margin-bottom: 15px;
+            font-size: clamp(1.5rem, 5vw, 2.3rem);
             color: #fff;
             width: 100%;
-            padding: 0;
-            box-sizing: border-box;
             background-color: transparent;
         }
 
         .search-bar {
             position: relative;
+            margin-bottom: 15px;
         }
 
         .search-bar input {
             width: 100%;
-            padding: 20px 10px;
-            font-size: 1rem;
+            padding: 15px 10px;
+            font-size: clamp(0.8rem, 3vw, 1rem);
             border: 1px solid #000000e4;
             border-radius: 5px;
             color: #fff;
             outline: none;
-            background: #0009
+            background: #0009;
         }
 
         .clear-btn {
             position: absolute;
             right: 10px;
-            top: 45%;
+            top: 50%;
             transform: translateY(-50%);
             background: none;
             border: none;
-            font-size: 1.5rem;
+            font-size: clamp(1rem, 4vw, 1.5rem);
             color: #ffffff;
             cursor: pointer;
             display: none;
         }
 
-        .search-bar input:not(:empty) + .clear-btn {
-            display: block;
+        #platformPopup, 
+        #historyPopup, 
+        #importantDatesPopup {
+            width: 100%;
+            max-width: 600px;
+            margin: 15px auto;
+            padding: 15px;
+            background-color: rgba(0, 0, 0, 0.7);
+            border-radius: 5px;
+            color: white;
+            text-align: center;
+            display: none;
         }
-
-        .search-bar input::placeholder {
-            color: #ffffff;
-        }
-
-        #historyPopup {
-    display: none;
-    background-color: rgba(0, 0, 0, 0.7);
-    padding: 10px;
-    border-radius: 5px;
-    color: white;
-    margin-top: 10px;
-    width: 100%;
-    max-height: 300px;
-    overflow-y: auto;
-}
-
-.history-title {
-    font-weight: bold;
-    margin-bottom: 10px;
-}
-
-.history-item {
-    display: flex;
-    align-items: center;
-    padding: 5px;
-    cursor: pointer;
-    transition: background-color 0.2s;
-}
-
-.history-item:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-}
-
-.history-icon {
-    margin-right: 10px;
-    opacity: 0.7;
-}
-
-.history-query {
-    flex-grow: 1;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
     </style>
 </head>
 <body>
@@ -209,35 +229,51 @@
                 <div class="date-display" id="dateDisplay"></div>
                 <div class="search-bar">
                     <input type="text" placeholder="Search here..." id="searchInput">
-                    <button class="clear-btn" id="clearBtn">&times;</button> <!-- X icon -->
+                    <button class="clear-btn" id="clearBtn">&times;</button>
                 </div>
-                <div id="platformPopup" style="display:none; background-color: rgba(0, 0, 0, 0.7); padding: 10px; border-radius: 5px; color: white; text-align: center; margin-top: 10px; width: 100%"></div>
-                <div id="historyPopup" style="display:none; background-color: rgba(0, 0, 0, 0.7); padding: 10px; border-radius: 5px; color: white; text-align: left; margin-top: 10px; width: 100%;"></div>
-                <div id="importantDatesPopup" style="display:none; background-color: rgba(0, 0, 0, 0.7); padding: 10px; border-radius: 5px; color: white; text-align: center; margin-top: 10px; width: 100%"></div>
+                <div id="platformPopup"></div>
+                <div id="historyPopup"></div>
+                <div id="importantDatesPopup"></div>
             </div>
         </div>
         <div class="popup">
-            <!-- 4x4 Grid for the right popup -->
-            <a href="https://x.com/home" class="grid-item no-underline" style="background: #0009 ; color: #fff; font-size: 40px">Twitter</a>
-            <a href="https://www.roblox.com/" class="grid-item no-underline" style="background: #0009; color: #fff; font-size: 40px">Roblox</a>
-            <a href="https://www.youtube.com/" class="grid-item no-underline" style="background: #0009; color: #fff; font-size: 40px">YouTube</a>
-            <a href="https://bsky.app/" class="grid-item no-underline" style="background: #0009; color: #fff; font-size: 40px">Bluesky</a>
-            <a href="https://www.threads.net/" class="grid-item no-underline" style="background: #0009; color: #fff; font-size: 40px">Threads</a>
-            <a href="https://www.instagram.com/" class="grid-item no-underline" style="background: #0009; color: #fff; font-size: 40px">Instagram</a>
-            <a href="https://music.youtube.com/" class="grid-item no-underline" style="background: #0009; color: #fff; font-size: 40px">YT Music</a>
-            <a href="https://chatgpt.com/" class="grid-item no-underline" style="background: #0009; color: #fff; font-size: 40px">ChatGPT</a>
-            <a href="https://gemini.google.com/" class="grid-item no-underline" style="background: #0009; color: #fff; font-size: 40px">Gemini</a>
-            <a href="https://claude.ai/" class="grid-item no-underline" style="background: #0009; color: #fff; font-size: 40px">Claude</a>
-            <a href="https://www.perplexity.ai/" class="grid-item no-underline" style="background: #0009; color: #fff; font-size: 40px">Perplexity</a>
-            <a href="https://docs.google.com/spreadsheets/u/0/" class="grid-item no-underline" style="background: #0009; color: #fff; font-size: 40px">GSheets</a>
-            <a href="https://docs.google.com/forms/u/0/" class="grid-item no-underline" style="background: #0009; color: #fff; font-size: 40px">GForms</a>
-            <a href="https://drive.google.com/" class="grid-item no-underline" style="background: #0009; color: #fff; font-size: 40px">GDrive</a>
-            <a href="https://mail.google.com/mail/u/0/" class="grid-item no-underline" style="background: #0009; color: #fff; font-size: 40px">Gmail</a>
-            <a href="https://mail.proton.me/" class="grid-item no-underline" style="background: #0009; color: #fff; font-size: 40px">Proton</a>
-        </div>
-        
-    </div>
+            <!-- Grid Items (for desktop) -->
+            <a href="https://x.com/home" class="grid-item">Twitter</a>
+            <a href="https://www.roblox.com/" class="grid-item">Roblox</a>
+            <a href="https://www.youtube.com/" class="grid-item">YouTube</a>
+            <a href="https://bsky.app/" class="grid-item">Bluesky</a>
+            <a href="https://www.threads.net/" class="grid-item">Threads</a>
+            <a href="https://www.instagram.com/" class="grid-item">Instagram</a>
+            <a href="https://music.youtube.com/" class="grid-item">YT Music</a>
+            <a href="https://chatgpt.com/" class="grid-item">ChatGPT</a>
+            <a href="https://gemini.google.com/" class="grid-item">Gemini</a>
+            <a href="https://claude.ai/" class="grid-item">Claude</a>
+            <a href="https://www.perplexity.ai/" class="grid-item">Perplexity</a>
+            <a href="https://docs.google.com/spreadsheets/u/0/" class="grid-item">GSheets</a>
+            <a href="https://docs.google.com/forms/u/0/" class="grid-item">GForms</a>
+            <a href="https://drive.google.com/" class="grid-item">GDrive</a>
+            <a href="https://mail.google.com/mail/u/0/" class="grid-item">Gmail</a>
+            <a href="https://mail.proton.me/" class="grid-item">Proton</a>
 
+            <!-- List Items (for mobile) -->
+            <a href="https://x.com/home" class="list-item">Twitter</a>
+            <a href="https://www.roblox.com/" class="list-item">Roblox</a>
+            <a href="https://www.youtube.com/" class="list-item">YouTube</a>
+            <a href="https://bsky.app/" class="list-item">Bluesky</a>
+            <a href="https://www.threads.net/" class="list-item">Threads</a>
+            <a href="https://www.instagram.com/" class="list-item">Instagram</a>
+            <a href="https://music.youtube.com/" class="list-item">YT Music</a>
+            <a href="https://chatgpt.com/" class="list-item">ChatGPT</a>
+            <a href="https://gemini.google.com/" class="list-item">Gemini</a>
+            <a href="https://claude.ai/" class="list-item">Claude</a>
+            <a href="https://www.perplexity.ai/" class="list-item">Perplexity</a>
+            <a href="https://docs.google.com/spreadsheets/u/0/" class="list-item">GSheets</a>
+            <a href="https://docs.google.com/forms/u/0/" class="list-item">GForms</a>
+            <a href="https://drive.google.com/" class="list-item">GDrive</a>
+            <a href="https://mail.google.com/mail/u/0/" class="list-item">Gmail</a>
+            <a href="https://mail.proton.me/" class="list-item">Proton</a>
+        </div>
+    </div>
     <script>
 // Local Storage Keys
 const LOCAL_STORAGE_IMPORTANT_DATES = 'importantDates';
@@ -247,6 +283,8 @@ const LOCAL_STORAGE_WEBSITE_HISTORY = 'websiteSearchHistory';
 const LOCAL_STORAGE_PHRASE_HISTORY = 'phraseSearchHistory';
 const LOCAL_STORAGE_HISTORY_TRACKING = 'historyTrackingEnabled';
 const LOCAL_STORAGE_GRID_USAGE = 'gridItemUsage';
+
+
 
 function parseDateWithImprovedFormatting(dateStr) {
     // Split the input date string
