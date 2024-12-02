@@ -188,8 +188,8 @@ body::before {
 @media screen and (min-width: 1024px) {
 	.popup-container {
 		flex-direction: row;
-		gap: 20px;
-		padding-top: 30px;
+		gap: 35px;
+		padding: 30px;
 		/* Add top padding to prevent content cutoff */
 		max-height: 100vh;
 		overflow: hidden;
@@ -271,6 +271,21 @@ body::before {
 	.list-item {
 		display: none;
 	}
+}
+.popup:first-child{
+    height: 200px !important;
+    flex: 0.5;
+}
+
+.list-item{
+    font-size: 20px;
+}
+
+@media (max-width: 1200px) {
+  .time-display, .date-display {
+    text-align: center !important; /* Align right on smaller screens */
+  }
+
 }
 
 .grid-item:hover,
