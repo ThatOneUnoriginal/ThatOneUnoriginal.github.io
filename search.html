@@ -148,6 +148,37 @@ body.theme-34 {
 body.theme-35 {
 	background: linear-gradient(to top right, #C0392B, #C0392B);
 }
+body.theme-36 {
+	background: linear-gradient(to top right, #ffffff, #ffffff);
+}
+body.theme-37 {
+	background: linear-gradient(to top right, #c4c4c4, #c4c4c4);
+}
+body.theme-38 {
+	background: linear-gradient(to top right, #F2F2F2, #F2F2F2);
+}
+body.theme-39 {
+	background: linear-gradient(to top right, #D9D9D9, #D9D9D9);
+}
+body.theme-40 {
+	background: linear-gradient(to top right, #A6A6A6, #A6A6A6);
+}
+body.theme-41 {
+	background: linear-gradient(to top right, #8C8C8C, #8C8C8C);
+}
+body.theme-42 {
+	background: linear-gradient(to top right, #737373, #737373);
+}
+body.theme-43 {
+	background: linear-gradient(to top right, #595959, #595959);
+}
+body.theme-44 {
+	background: linear-gradient(to top right, #404040, #404040);
+}
+body.theme-45 {
+	background: linear-gradient(to top right, #262626, #262626);
+}
+
 
 body::before {
 	content: '';
@@ -438,11 +469,11 @@ function applyTheme(themeNumber) {
 
     // Remove existing theme classes
     document.body.classList.remove(
-        ...[...Array(36).keys()].map(i => `theme-${i}`)
+        ...[...Array(46).keys()].map(i => `theme-${i}`)
     );
 
     // Apply new theme if valid
-    if (themeNumber >= 1 && themeNumber <= 35) {
+    if (themeNumber >= 1 && themeNumber <= 45) {
         document.body.classList.add(`theme-${themeNumber}`);
         localStorage.setItem(LOCAL_STORAGE_THEME, themeNumber);
 
@@ -875,249 +906,319 @@ document.getElementById('searchInput').addEventListener('input', function() {
             <li style="display: flex; justify-content: center; align-items: center; margin-bottom: 5px;">
                 <strong>Theme 1</strong>: will look like 
                 <span style="background: linear-gradient(to top right, #FF2A49, #FFD60E); border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-left: 5px;">
-                    <span style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
-                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); border-radius: 12px;"></span>
+                    <span style="   color: transparent; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
+                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;   border-radius: 12px;"></span>
                 </span>
             </li>
             <li style="display: flex; justify-content: center; align-items: center; margin-bottom: 5px;">
                 <strong>Theme 2</strong>: will look like 
                 <span style="background: linear-gradient(to top right, #4A90E2, #50C878); border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-left: 5px;">
-                    <span style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
-                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); border-radius: 12px;"></span>
+                    <span style="   color: transparent; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
+                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;   border-radius: 12px;"></span>
                 </span>
             </li>
             <li style="display: flex; justify-content: center; align-items: center; margin-bottom: 5px;">
                 <strong>Theme 3</strong>: will look like 
                 <span style="background: linear-gradient(to top right, #8E44AD, #3498DB); border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-left: 5px;">
-                    <span style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
-                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); border-radius: 12px;"></span>
+                    <span style="   color: transparent; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
+                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;   border-radius: 12px;"></span>
                 </span>
             </li>
             <li style="display: flex; justify-content: center; align-items: center; margin-bottom: 5px;">
                 <strong>Theme 4</strong>: will look like 
                 <span style="background: linear-gradient(to top right, #F39C12, #2ECC71); border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-left: 5px;">
-                    <span style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
-                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); border-radius: 12px;"></span>
+                    <span style="   color: transparent; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
+                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;   border-radius: 12px;"></span>
                 </span>
             </li>
             <li style="display: flex; justify-content: center; align-items: center; margin-bottom: 5px;">
                 <strong>Theme 5</strong>: will look like 
                 <span style="background: linear-gradient(to top right, #E74C3C, #9B59B6); border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-left: 5px;">
-                    <span style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
-                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); border-radius: 12px;"></span>
+                    <span style="   color: transparent; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
+                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;   border-radius: 12px;"></span>
                 </span>
             </li>
             <li style="display: flex; justify-content: center; align-items: center; margin-bottom: 5px;">
                 <strong>Theme 6</strong>: will look like 
                 <span style="background: linear-gradient(to top right, #2980B9, #2C3E50); border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-left: 5px;">
-                    <span style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
-                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); border-radius: 12px;"></span>
+                    <span style="   color: transparent; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
+                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;   border-radius: 12px;"></span>
                 </span>
             </li>
             <li style="display: flex; justify-content: center; align-items: center; margin-bottom: 5px;">
                 <strong>Theme 7</strong>: will look like 
                 <span style="background: linear-gradient(to top right, #16A085, #F4D03F); border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-left: 5px;">
-                    <span style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
-                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); border-radius: 12px;"></span>
+                    <span style="   color: transparent; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
+                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;   border-radius: 12px;"></span>
                 </span>
             </li>
             <li style="display: flex; justify-content: center; align-items: center; margin-bottom: 5px;">
                 <strong>Theme 8</strong>: will look like 
                 <span style="background: linear-gradient(to top right, #D35400, #8E44AD); border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-left: 5px;">
-                    <span style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
-                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); border-radius: 12px;"></span>
+                    <span style="   color: transparent; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
+                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;   border-radius: 12px;"></span>
                 </span>
             </li>
             <li style="display: flex; justify-content: center; align-items: center; margin-bottom: 5px;">
                 <strong>Theme 9</strong>: will look like 
                 <span style="background: linear-gradient(to top right, #34495E, #16A085); border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-left: 5px;">
-                    <span style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
-                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); border-radius: 12px;"></span>
+                    <span style="   color: transparent; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
+                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;   border-radius: 12px;"></span>
                 </span>
             </li>
             <li style="display: flex; justify-content: center; align-items: center; margin-bottom: 5px;">
                 <strong>Theme 10</strong>: will look like 
                 <span style="background: linear-gradient(to top right, #C0392B, #8E44AD); border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-left: 5px;">
-                    <span style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
-                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); border-radius: 12px;"></span>
+                    <span style="   color: transparent; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
+                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;   border-radius: 12px;"></span>
                 </span>
             </li>
 
             <li style="display: flex; justify-content: center; align-items: center; margin-bottom: 5px;">
                 <strong>Theme 11</strong>: will look like 
                 <span style="background: linear-gradient(to top right, #C0392B, #8E44AD); border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-left: 5px;">
-                    <span style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
-                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); border-radius: 12px;"></span>
+                    <span style="   color: transparent; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
+                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;   border-radius: 12px;"></span>
                 </span>
             </li>
             <li style="display: flex; justify-content: center; align-items: center; margin-bottom: 5px;">
                 <strong>Theme 12</strong>: will look like 
                 <span style="background: linear-gradient(to top right, #27AE60, #3498DB); border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-left: 5px;">
-                    <span style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
-                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); border-radius: 12px;"></span>
+                    <span style="   color: transparent; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
+                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;   border-radius: 12px;"></span>
                 </span>
             </li>
             <li style="display: flex; justify-content: center; align-items: center; margin-bottom: 5px;">
                 <strong>Theme 13</strong>: will look like 
                 <span style="background: linear-gradient(to top right, #F39C12, #D35400); border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-left: 5px;">
-                    <span style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
-                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); border-radius: 12px;"></span>
+                    <span style="   color: transparent; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
+                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;   border-radius: 12px;"></span>
                 </span>
             </li>
             <li style="display: flex; justify-content: center; align-items: center; margin-bottom: 5px;">
                 <strong>Theme 14</strong>: will look like 
                 <span style="background: linear-gradient(to top right, #2980B9, #3498DB); border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-left: 5px;">
-                    <span style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
-                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); border-radius: 12px;"></span>
+                    <span style="   color: transparent; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
+                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;   border-radius: 12px;"></span>
                 </span>
             </li>
             <li style="display: flex; justify-content: center; align-items: center; margin-bottom: 5px;">
                 <strong>Theme 15</strong>: will look like 
                 <span style="background: linear-gradient(to top right, #E74C3C, #8E44AD); border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-left: 5px;">
-                    <span style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
-                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); border-radius: 12px;"></span>
+                    <span style="   color: transparent; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
+                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;   border-radius: 12px;"></span>
                 </span>
             </li>
             <li style="display: flex; justify-content: center; align-items: center; margin-bottom: 5px;">
                 <strong>Theme 16</strong>: will look like 
                 <span style="background: linear-gradient(to top right, #FF2A49, #FF2A49); border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-left: 5px;">
-                    <span style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
-                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); border-radius: 12px;"></span>
+                    <span style="   color: transparent; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
+                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;   border-radius: 12px;"></span>
                 </span>
             </li>
             <li style="display: flex; justify-content: center; align-items: center; margin-bottom: 5px;">
                 <strong>Theme 17</strong>: will look like 
                 <span style="background: linear-gradient(to top right, #FFD60E, #FFD60E); border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-left: 5px;">
-                    <span style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
-                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); border-radius: 12px;"></span>
+                    <span style="   color: transparent; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
+                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;   border-radius: 12px;"></span>
                 </span>
             </li>
             <li style="display: flex; justify-content: center; align-items: center; margin-bottom: 5px;">
                 <strong>Theme 18</strong>: will look like 
                 <span style="background: linear-gradient(to top right, #4A90E2, #4A90E2); border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-left: 5px;">
-                    <span style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
-                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); border-radius: 12px;"></span>
+                    <span style="   color: transparent; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
+                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;   border-radius: 12px;"></span>
                 </span>
             </li>
             <li style="display: flex; justify-content: center; align-items: center; margin-bottom: 5px;">
                 <strong>Theme 19</strong>: will look like 
                 <span style="background: linear-gradient(to top right, #50C878, #50C878); border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-left: 5px;">
-                    <span style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
-                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); border-radius: 12px;"></span>
+                    <span style="   color: transparent; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
+                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;   border-radius: 12px;"></span>
                 </span>
             </li>
             <li style="display: flex; justify-content: center; align-items: center; margin-bottom: 5px;">
                 <strong>Theme 20</strong>: will look like 
                 <span style="background: linear-gradient(to top right, #8E44AD, #8E44AD); border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-left: 5px;">
-                    <span style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
-                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); border-radius: 12px;"></span>
+                    <span style="   color: transparent; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
+                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;   border-radius: 12px;"></span>
                 </span>
             </li>
 
             <li style="display: flex; justify-content: center; align-items: center; margin-bottom: 5px;">
                 <strong>Theme 21</strong>: will look like 
                 <span style="background: linear-gradient(to top right, #3498DB, #3498DB); border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-left: 5px;">
-                    <span style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
-                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); border-radius: 12px;"></span>
+                    <span style="   color: transparent; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
+                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;   border-radius: 12px;"></span>
                 </span>
             </li>
             <li style="display: flex; justify-content: center; align-items: center; margin-bottom: 5px;">
                 <strong>Theme 22</strong>: will look like 
                 <span style="background: linear-gradient(to top right, #F39C12, #F39C12); border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-left: 5px;">
-                    <span style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
-                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); border-radius: 12px;"></span>
+                    <span style="   color: transparent; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
+                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;   border-radius: 12px;"></span>
                 </span>
             </li>
             <li style="display: flex; justify-content: center; align-items: center; margin-bottom: 5px;">
                 <strong>Theme 23</strong>: will look like 
                 <span style="background: linear-gradient(to top right, #2ECC71, #2ECC71); border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-left: 5px;">
-                    <span style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
-                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); border-radius: 12px;"></span>
+                    <span style="   color: transparent; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
+                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;   border-radius: 12px;"></span>
                 </span>
             </li>
             <li style="display: flex; justify-content: center; align-items: center; margin-bottom: 5px;">
                 <strong>Theme 24</strong>: will look like 
                 <span style="background: linear-gradient(to top right, #E74C3C, #E74C3C); border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-left: 5px;">
-                    <span style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
-                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); border-radius: 12px;"></span>
+                    <span style="   color: transparent; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
+                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;   border-radius: 12px;"></span>
                 </span>
             </li>
             <li style="display: flex; justify-content: center; align-items: center; margin-bottom: 5px;">
                 <strong>Theme 25</strong>: will look like 
                 <span style="background: linear-gradient(to top right, #9B59B6, #9B59B6); border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-left: 5px;">
-                    <span style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
-                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); border-radius: 12px;"></span>
+                    <span style="   color: transparent; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
+                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;   border-radius: 12px;"></span>
                 </span>
             </li>
             <li style="display: flex; justify-content: center; align-items: center; margin-bottom: 5px;">
                 <strong>Theme 26</strong>: will look like 
                 <span style="background: linear-gradient(to top right, #2980B9, #2980B9); border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-left: 5px;">
-                    <span style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
-                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); border-radius: 12px;"></span>
+                    <span style="   color: transparent; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
+                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;   border-radius: 12px;"></span>
                 </span>
             </li>
             <li style="display: flex; justify-content: center; align-items: center; margin-bottom: 5px;">
                 <strong>Theme 27</strong>: will look like 
                 <span style="background: linear-gradient(to top right, #2C3E50, #2C3E50); border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-left: 5px;">
-                    <span style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
-                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); border-radius: 12px;"></span>
+                    <span style="   color: transparent; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
+                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;   border-radius: 12px;"></span>
                 </span>
             </li>
             <li style="display: flex; justify-content: center; align-items: center; margin-bottom: 5px;">
                 <strong>Theme 28</strong>: will look like 
                 <span style="background: linear-gradient(to top right, #16A085, #16A085); border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-left: 5px;">
-                    <span style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
-                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); border-radius: 12px;"></span>
+                    <span style="   color: transparent; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
+                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;   border-radius: 12px;"></span>
                 </span>
             </li>
             <li style="display: flex; justify-content: center; align-items: center; margin-bottom: 5px;">
                 <strong>Theme 29</strong>: will look like 
                 <span style="background: linear-gradient(to top right, #F4D03F, #F4D03F); border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-left: 5px;">
-                    <span style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
-                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); border-radius: 12px;"></span>
+                    <span style="   color: transparent; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
+                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;   border-radius: 12px;"></span>
                 </span>
             </li>
             <li style="display: flex; justify-content: center; align-items: center; margin-bottom: 5px;">
                 <strong>Theme 30</strong>: will look like 
                 <span style="background: linear-gradient(to top right, #D35400, #D35400); border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-left: 5px;">
-                    <span style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
-                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); border-radius: 12px;"></span>
+                    <span style="   color: transparent; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
+                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;   border-radius: 12px;"></span>
                 </span>
             </li>
 
             <li style="display: flex; justify-content: center; align-items: center; margin-bottom: 5px;">
                 <strong>Theme 31</strong>: will look like 
                 <span style="background: linear-gradient(to top right, #1ABC9C, #1ABC9C); border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-left: 5px;">
-                    <span style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
-                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); border-radius: 12px;"></span>
+                    <span style="   color: transparent; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
+                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;   border-radius: 12px;"></span>
                 </span>
             </li>
             <li style="display: flex; justify-content: center; align-items: center; margin-bottom: 5px;">
                 <strong>Theme 32</strong>: will look like 
                 <span style="background: linear-gradient(to top right, #E67E22, #E67E22); border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-left: 5px;">
-                    <span style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
-                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); border-radius: 12px;"></span>
+                    <span style="   color: transparent; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
+                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;   border-radius: 12px;"></span>
                 </span>
             </li>
             <li style="display: flex; justify-content: center; align-items: center; margin-bottom: 5px;">
                 <strong>Theme 33</strong>: will look like 
                 <span style="background: linear-gradient(to top right, #34495E, #34495E); border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-left: 5px;">
-                    <span style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
-                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); border-radius: 12px;"></span>
+                    <span style="   color: transparent; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
+                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;   border-radius: 12px;"></span>
                 </span>
             </li>
             <li style="display: flex; justify-content: center; align-items: center; margin-bottom: 5px;">
                 <strong>Theme 34</strong>: will look like 
                 <span style="background: linear-gradient(to top right, #27AE60, #27AE60); border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-left: 5px;">
-                    <span style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
-                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); border-radius: 12px;"></span>
+                    <span style="   color: transparent; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
+                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;   border-radius: 12px;"></span>
                 </span>
             </li>
             <li style="display: flex; justify-content: center; align-items: center; margin-bottom: 5px;">
                 <strong>Theme 35</strong>: will look like 
                 <span style="background: linear-gradient(to top right, #C0392B, #C0392B); border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-left: 5px;">
-                    <span style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
-                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); border-radius: 12px;"></span>
+                    <span style="   color: transparent; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
+                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;   border-radius: 12px;"></span>
+                </span>
+            </li>
+            <li style="display: flex; justify-content: center; align-items: center; margin-bottom: 5px;">
+                <strong>Theme 36</strong>: will look like 
+                <span style="background: linear-gradient(to top right, #ffffff, #ffffff); border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-left: 5px;">
+                    <span style="  color: transparent; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
+                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;   border-radius: 12px;"></span>
+                </span>
+            </li>
+            <li style="display: flex; justify-content: center; align-items: center; margin-bottom: 5px;">
+                <strong>Theme 37</strong>: will look like 
+                <span style="background: linear-gradient(to top right, #c4c4c4, #c4c4c4); border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-left: 5px;">
+                    <span style="  color: transparent; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
+                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;   border-radius: 12px;"></span>
+                </span>
+            </li>
+            <li style="display: flex; justify-content: center; align-items: center; margin-bottom: 5px;">
+                <strong>Theme 38</strong>: will look like 
+                <span style="background: linear-gradient(to top right, #F2F2F2, #F2F2F2); border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-left: 5px;">
+                    <span style="  color: transparent; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
+                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;   border-radius: 12px;"></span>
+                </span>
+            </li>
+            <li style="display: flex; justify-content: center; align-items: center; margin-bottom: 5px;">
+                <strong>Theme 39</strong>: will look like 
+                <span style="background: linear-gradient(to top right, #D9D9D9, #D9D9D9); border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-left: 5px;">
+                    <span style="  color: transparent; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
+                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;   border-radius: 12px;"></span>
+                </span>
+            </li>
+            <li style="display: flex; justify-content: center; align-items: center; margin-bottom: 5px;">
+                <strong>Theme 40</strong>: will look like 
+                <span style="background: linear-gradient(to top right, #A6A6A6, #A6A6A6); border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-left: 5px;">
+                    <span style="  color: transparent; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
+                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;   border-radius: 12px;"></span>
+                </span>
+            </li>
+            <li style="display: flex; justify-content: center; align-items: center; margin-bottom: 5px;">
+                <strong>Theme 41</strong>: will look like 
+                <span style="background: linear-gradient(to top right, #8C8C8C, #8C8C8C); border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-left: 5px;">
+                    <span style="   color: transparent; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
+                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;   border-radius: 12px;"></span>
+                </span>
+            </li>
+            <li style="display: flex; justify-content: center; align-items: center; margin-bottom: 5px;">
+                <strong>Theme 42</strong>: will look like 
+                <span style="background: linear-gradient(to top right, #737373, #737373); border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-left: 5px;">
+                    <span style="   color: transparent; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
+                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;   border-radius: 12px;"></span>
+                </span>
+            </li>
+            <li style="display: flex; justify-content: center; align-items: center; margin-bottom: 5px;">
+                <strong>Theme 43</strong>: will look like 
+                <span style="background: linear-gradient(to top right, #595959, #595959); border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-left: 5px;">
+                    <span style="   color: transparent; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
+                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;   border-radius: 12px;"></span>
+                </span>
+            </li>
+            <li style="display: flex; justify-content: center; align-items: center; margin-bottom: 5px;">
+                <strong>Theme 44</strong>: will look like 
+                <span style="background: linear-gradient(to top right, #404040, #404040); border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-left: 5px;">
+                    <span style="   color: transparent; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
+                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;   border-radius: 12px;"></span>
+                </span>
+            </li>
+            <li style="display: flex; justify-content: center; align-items: center; margin-bottom: 5px;">
+                <strong>Theme 45</strong>: will look like 
+                <span style="background: linear-gradient(to top right, #262626, #262626); border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-left: 5px;">
+                    <span style="   color: transparent; padding: 5px 10px; display: inline-block; border-radius: 12px; position: relative; z-index: 1;">this</span>
+                    <span style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;   border-radius: 12px;"></span>
                 </span>
             </li>
             <!-- Continue this pattern for the remaining themes -->
