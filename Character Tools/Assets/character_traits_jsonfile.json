@@ -1,0 +1,1007 @@
+[
+    {
+        "title": "Accessible",
+        "tag": "Positive",
+        "content": "Approachable and easy to talk to or connect with. Willing to listen and be present for others."
+    },
+    {
+        "title": "Active",
+        "tag": "Positive",
+        "content": "Engaged in continuous and energetic activity; always on the go and physically involved."
+    },  
+    {
+        "title": "Adaptable",
+        "tag": "Positive",
+        "content": "Able to adjust to new conditions or changes easily. Flexible and open to new ideas."
+    },
+    {
+        "title": "Amiable",
+        "tag": "Positive",
+        "content": "Friendly and pleasant in disposition. Easy to get along with and likeable."
+    },
+    {
+        "title": "Athletic",
+        "tag": "Positive",
+        "content": "Physically strong, fit, and active. Skilled in areas of sports or bodily coordination."
+    },
+    {
+        "title": "Attractive",
+        "tag": "Positive",
+        "content": "Pleasing in appearance or manner. Having qualities that draw people in."
+    },
+    {
+        "title": "Balanced",
+        "tag": "Positive",
+        "content": "Stable and well-proportioned emotionally and mentally. Able to juggle different aspects of life effectively."
+    },
+    {
+        "title": "Benevolent",
+        "tag": "Positive",
+        "content": "Kind and generous, wanting to help others. Having a desire to do good."
+    },
+    {
+        "title": "Brilliant",
+        "tag": "Positive",
+        "content": "Exceptionally intelligent or talented. Outstanding and impressive."
+    },
+    {
+        "title": "Calm",
+        "tag": "Positive",
+        "content": "Composed and tranquil, not easily agitated. Able to stay collected under pressure."
+    },
+    {
+        "title": "Capable",
+        "tag": "Positive",
+        "content": "Competent and able to achieve tasks effectively. Having the ability or capacity for something."
+    },
+    {
+        "title": "Caring",
+        "tag": "Positive",
+        "content": "Displaying kindness and concern for others. Willing to look after or help those in need."
+    },
+    {
+        "title": "Charismatic",
+        "tag": "Positive",
+        "content": "Charming and able to draw others in. Having a compelling and magnetic personality."
+    },
+    {
+        "title": "Charming",
+        "tag": "Positive",
+        "content": "Pleasant, attractive, and engaging. Able to draw others in with ease."
+    },
+    {
+        "title": "Cheerful",
+        "tag": "Positive",
+        "content": "Noticeably happy and optimistic. Having a positive and upbeat demeanor."
+    },
+    {
+        "title": "Clear-headed",
+        "tag": "Positive",
+        "content": "Able to think clearly and make sound judgments. Not confused or muddled."
+    },
+    {
+        "title": "Clever",
+        "tag": "Positive",
+        "content": "Quick to understand, learn, and devise solutions. Intelligent and skilled."
+    },
+    {
+        "title": "Compassionate",
+        "tag": "Positive",
+        "content": "Feeling or showing sympathy and concern for others. Having a desire to help and understand."
+    },
+    {
+        "title": "Confident",
+        "tag": "Positive",
+        "content": "Sure of oneself and one's abilities. Trusting in one's own capacities and judgments."
+    },
+    {
+        "title": "Conscientious",
+        "tag": "Positive",
+        "content": "Careful, thorough, and diligent. Having a strong sense of duty and responsibility."
+    },
+    {
+        "title": "Considerate",
+        "tag": "Positive",
+        "content": "Thoughtful and respectful of others' feelings. Kind and polite."
+    },
+    {
+        "title": "Cooperative: Willing",
+        "tag": "Positive",
+        "content": "Willing to work together with others. Helpful and collaborative."
+    },
+    {
+        "title": "Courageous",
+        "tag": "Positive",
+        "content": "Brave and able to face and deal with difficulties. Not easily intimidated or frightened."
+    },
+    {
+        "title": "Creative",
+        "tag": "Positive",
+        "content": "Able to use imagination and original ideas to create something. Innovative and artistically skilled."
+    },
+    {
+        "title": "Curious",
+        "tag": "Positive",
+        "content": "Eager to know or learn something. Inquisitive and open to new experiences."
+    },
+    {
+        "title": "Decisive",
+        "tag": "Positive",
+        "content": "Able to make decisions quickly and effectively. Resolute and determined."
+    },
+    {
+        "title": "Dedicated",
+        "tag": "Positive",
+        "content": "Devoted and committed to a task or purpose. Willing to put in considerable effort and time."
+    },
+    {
+        "title": "Disciplined",
+        "tag": "Positive",
+        "content": "Able to follow rules and maintain self-control. Committed to rigorous practice or training."
+    },
+    {
+        "title": "Dynamic",
+        "tag": "Positive",
+        "content": "Positive in attitude and full of energy. Lively and proactive."
+    },
+    {
+        "title": "Educated",
+        "tag": "Positive",
+        "content": "Well-informed and knowledgeable. Having received or pursued learning."
+    },
+    {
+        "title": "Efficient",
+        "tag": "Positive",
+        "content": "Achieving maximum productivity with minimum wasted effort. Well-organized and competent."
+    },
+    {
+        "title": "Elegant",
+        "tag": "Positive",
+        "content": "Graceful and stylish in appearance or manner. Tastefully fine or luxurious."
+    },
+    {
+        "title": "Empathetic",
+        "tag": "Positive",
+        "content": "Able to understand and share the feelings of another. Showing compassion and sensitivity."
+    },
+    {
+        "title": "Energetic",
+        "tag": "Positive",
+        "content": "Vigorous and enthusiastic. Having or showing great activity or vitality."
+    },
+    {
+        "title": "Enthusiastic",
+        "tag": "Positive",
+        "content": "Intensely eager and interested. Passionate and excited about something."
+    },
+    {
+        "title": "Friendly",
+        "tag": "Positive",
+        "content": "Kind, helpful, and pleasant. Easy to talk to and approachable."
+    },
+    {
+        "title": "Generous",
+        "tag": "Positive",
+        "content": "Ready to give more than is necessary or expected. Showing kindness and understanding."
+    },
+    {
+        "title": "Gentle",
+        "tag": "Positive",
+        "content": "Mild in temperament, kind, and tender. Not harsh or severe."
+    },
+    {
+        "title": "Genuine",
+        "tag": "Positive",
+        "content": "Truly what it is said to be; authentic. Sincere and honest."
+    },
+    {
+        "title": "Gracious",
+        "tag": "Positive",
+        "content": "Courteous, kind, and pleasant. Showing grace and goodwill."
+    },
+    {
+        "title": "Hardworking",
+        "tag": "Positive",
+        "content": "Industrious and diligent. Putting in a lot of time and effort."
+    },
+    {
+        "title": "Honest",
+        "tag": "Positive",
+        "content": "Truthful and trustworthy. Not deceitful or fraudulent."
+    },
+    {
+        "title": "Humble",
+        "tag": "Positive",
+        "content": "Having or showing a modest or low estimate of one's own importance. Not arrogant or proud."
+    },
+    {
+        "title": "Humorous",
+        "tag": "Positive",
+        "content": "Having or showing a sense of humor. Amusing and entertaining."
+    },
+    {
+        "title": "Imaginative",
+        "tag": "Positive",
+        "content": "Having or showing a creative or original approach. Able to think of new ideas."
+    },
+    {
+        "title": "Independent",
+        "tag": "Positive",
+        "content": "Free from outside control; not depending on another's authority. Self-governing."
+    },
+    {
+        "title": "Innovative",
+        "tag": "Positive",
+        "content": "Introducing new ideas; original and creative in thinking."
+    },
+    {
+        "title": "Intelligent",
+        "tag": "Positive",
+        "content": "Having strong intellectual abilities. Quick to understand and learn."
+    },
+    {
+        "title": "Kind",
+        "tag": "Positive",
+        "content": "Gentle, caring, and helpful. Benevolent and compassionate."
+    },
+    {
+        "title": "Logical",
+        "tag": "Positive",
+        "content": "Based on clear, sound reasoning. Reasonable and sensible."
+    },
+
+
+    {
+        "title": "Absentminded",
+        "tag": "Neutral",
+        "content": "Often forgetful or inattentive. Easily distracted and prone to daydreaming."
+    },
+    {
+        "title": "Aggressive",
+        "tag": "Neutral",
+        "content": "Ready to attack or confront. Pursuing one's aims and interests forcefully."
+    },
+    {
+        "title": "Ambitious",
+        "tag": "Neutral",
+        "content": "Having a strong desire and determination to succeed. Eagerly pursuing aspirations and goals."
+    },
+    {
+        "title": "Amusing",
+        "tag": "Neutral",
+        "content": "Entertaining and enjoyable. Able to make others laugh or smile."
+    },
+    {
+        "title": "Artful",
+        "tag": "Neutral",
+        "content": "Clever and skillful, often in a cunning or deceitful way. Crafty and sly."
+    },
+    {
+        "title": "Authoritarian",
+        "tag": "Neutral",
+        "content": "Favoring or enforcing strict obedience to authority. Expecting unquestioning obedience."
+    },
+    {
+        "title": "Big-thinking",
+        "tag": "Neutral",
+        "content": "Having grand, ambitious ideas. Thinking on a large scale."
+    },
+    {
+        "title": "Breezy",
+        "tag": "Neutral",
+        "content": "Casual and carefree. Lighthearted and cheerful."
+    },
+    {
+        "title": "Businesslike",
+        "tag": "Neutral",
+        "content": "Efficient and practical in approach. Focused on work and professional matters."
+    },
+    {
+        "title": "Busy",
+        "tag": "Neutral",
+        "content": "Having a lot to do; occupied. Constantly active or engaged."
+    },
+    {
+        "title": "Casual",
+        "tag": "Neutral",
+        "content": "Relaxed and informal. Not overly concerned or worried."
+    },
+    {
+        "title": "Cerebral",
+        "tag": "Neutral",
+        "content": "Intellectual and analytical. Focused on reasoning and thought processes."
+    },
+    {
+        "title": "Chummy",
+        "tag": "Neutral",
+        "content": "Friendly and informal. Pally and companionable."
+    },
+    {
+        "title": "Circumspect",
+        "tag": "Neutral",
+        "content": "Wary and cautious. Thinking carefully before taking action."
+    },
+    {
+        "title": "Competitive",
+        "tag": "Neutral",
+        "content": "Having a strong desire to win or be successful. Striving to outdo others."
+    },
+    {
+        "title": "Complex",
+        "tag": "Neutral",
+        "content": "Difficult to understand; complicated. Having many intricate parts."
+    },
+    {
+        "title": "Confidential",
+        "tag": "Neutral",
+        "content": "Meant to be kept secret. Private and entrusted only to a select few."
+    },
+    {
+        "title": "Conservative",
+        "tag": "Neutral",
+        "content": "Cautious and traditional. Resistant to change and preferring to conserve existing conditions."
+    },
+    {
+        "title": "Contradictory",
+        "tag": "Neutral",
+        "content": "Inconsistent or opposed to something. Giving or being opposite messages."
+    },
+    {
+        "title": "Crisp",
+        "tag": "Neutral",
+        "content": "Neat and well-defined. Fresh and lively in manner or appearance."
+    },
+    {
+        "title": "Cute",
+        "tag": "Neutral",
+        "content": "Attractive in a charming and endearing way. Appealing and delightful."
+    },
+    {
+        "title": "Deceptive",
+        "tag": "Neutral",
+        "content": "Giving a false impression. Deliberately misleading or untruthful."
+    },
+    {
+        "title": "Determined",
+        "tag": "Neutral",
+        "content": "Having or showing a firmness of purpose. Resolute and unyielding."
+    },
+    {
+        "title": "Dominating",
+        "tag": "Neutral",
+        "content": "Controlling and influential. Commanding and overpowering."
+    },
+    {
+        "title": "Dreamy",
+        "tag": "Neutral",
+        "content": "Pleasantly lost in thought. Having or showing a tendency to daydream or fantasize"
+    },
+    {
+        "title": "Driving",
+        "tag": "Neutral",
+        "content": "Ambitious and energetic. Forcefully pushing forward or pursuing goals."
+    },
+    {
+        "title": "Droll",
+        "tag": "Neutral",
+        "content": "Amusing in an odd or whimsical manner. Witty and humorous."
+    },
+    {
+        "title": "Dry",
+        "tag": "Neutral",
+        "content": "Lacking emotion or warmth. Subtly humorous in a sarcastic or matter-of-fact way."
+    },
+    {
+        "title": "Earthy",
+        "tag": "Neutral",
+        "content": "Natural and unpretentious. Direct and genuine, sometimes to the point of being coarse."
+    },
+    {
+        "title": "Effeminate",
+        "tag": "Neutral",
+        "content": "Having or showing characteristics associated with femininity. Soft or delicate in a way that might be considered untypical for a man."
+    },
+    {
+        "title": "Emotional",
+        "tag": "Neutral",
+        "content": "Easily affected by feelings. Expressing or displaying strong emotions."
+    },
+    {
+        "title": "Enigmatic",
+        "tag": "Neutral",
+        "content": "Difficult to interpret or understand. Mysterious and puzzling."
+    },
+    {
+        "title": "Experimental",
+        "tag": "Neutral",
+        "content": "Based on trial and error or testing. Innovative and exploratory."
+    },
+    {
+        "title": "Familial",
+        "tag": "Neutral",
+        "content": "Relating to or characteristic of a family. Warm, intimate, and supportive."
+    },
+    {
+        "title": "Folksy",
+        "tag": "Neutral",
+        "content": "Informal and simple in manner. Friendly and approachable, like a neighbor or friend."
+    },
+    {
+        "title": "Formal",
+        "tag": "Neutral",
+        "content": "Following established rules and conventions. Stiff or ceremonious in manner."
+    },
+    {
+        "title": "Freewheeling",
+        "tag": "Neutral",
+        "content": "Acting or functioning independently. Unrestrained and spontaneous."
+    },
+    {
+        "title": "Frugal",
+        "tag": "Neutral",
+        "content": "Careful with money or resources. Economical and thrifty."
+    },
+    {
+        "title": "Glamorous",
+        "tag": "Neutral",
+        "content": "Having a charming and exciting attraction. Elegant, stylish, and sophisticated."
+    },
+    {
+        "title": "Guileless",
+        "tag": "Neutral",
+        "content": "Lacking cunning or deceit. Innocent and sincere."
+    },
+    {
+        "title": "High-spirited",
+        "tag": "Neutral",
+        "content": "Lively and full of energy. Enthusiastic and cheerful."
+    },
+    {
+        "title": "Hurried",
+        "tag": "Neutral",
+        "content": "Done with urgency or speed. Rushed and hasty."
+    },
+    {
+        "title": "Hypnotic",
+        "tag": "Neutral",
+        "content": "Having a mesmerizing or spellbinding quality. Fascinating and captivating."
+    },
+    {
+        "title": "Iconoclastic",
+        "tag": "Neutral",
+        "content": "Challenging or criticizing established beliefs. Attacking or undermining traditional institutions or values."
+    },
+    {
+        "title": "Idiosyncratic",
+        "tag": "Neutral",
+        "content": "Having unusual or peculiar habits or behaviors. Eccentric and individualistic."
+    },
+    {
+        "title": "Impassive",
+        "tag": "Neutral",
+        "content": "Not showing or feeling emotion. Calm and unresponsive."
+    },
+    {
+        "title": "Impersonal",
+        "tag": "Neutral",
+        "content": "Not concerned with individuals or their feelings. Detached and aloof."
+    },
+    {
+        "title": "Impressionable",
+        "tag": "Neutral",
+        "content": "Easily influenced or affected. Quickly impressed or swayed."
+    },
+    {
+        "title": "Intense",
+        "tag": "Neutral",
+        "content": "Having or showing strong feelings or opinions. Extreme in degree or strength."
+    },
+    {
+        "title": "Invisible",
+        "tag": "Neutral",
+        "content": "Not seen or noticeable. Often overlooked or ignored."
+    },
+
+
+    {
+        "title": "Abrasive",
+        "tag": "Negative",
+        "content": "Harsh and rubbing the wrong way. Tending to annoy or irritate others."
+    },
+    {
+        "title": "Abrupt",
+        "tag": "Negative",
+        "content": "Sudden and unexpected. Quickly changing or ending."
+    },
+    {
+        "title": "Agonizing",
+        "tag": "Negative",
+        "content": "Causing great physical or mental pain. Extremely distressing and difficult to endure."
+    },
+    {
+        "title": "Aimless",
+        "tag": "Negative",
+        "content": "Without purpose or direction. Lacking clear goals or meaning."
+    },
+    {
+        "title": "Airy",
+        "tag": "Negative",
+        "content": "Light and insubstantial. Lacking depth or seriousness."
+    },
+    {
+        "title": "Aloof",
+        "tag": "Negative",
+        "content": "Distant and reserved. Not openly friendly or approachable."
+    },
+    {
+        "title": "Amoral",
+        "tag": "Negative",
+        "content": "Lacking a sense of morality. Not concerned with right or wrong."
+    },
+    {
+        "title": "Angry",
+        "tag": "Negative",
+        "content": "Feeling or showing strong annoyance or displeasure. Hostile and ready to attack."
+    },
+    {
+        "title": "Anxious",
+        "tag": "Negative",
+        "content": "Feeling or showing worry or nervousness. Eager to do or achieve something."
+    },
+    {
+        "title": "Apathetic",
+        "tag": "Negative",
+        "content": "Showing little emotion or enthusiasm. Indifferent or uninterested."
+    },
+    {
+        "title": "Arbitrary",
+        "tag": "Negative",
+        "content": "Based on random choice or personal whim. Not based on reason or system."
+    },
+    {
+        "title": "Argumentative",
+        "tag": "Negative",
+        "content": "Tending to argue or disagree. Easily provoked into debate."
+    },
+    {
+        "title": "Arrogant",
+        "tag": "Negative",
+        "content": "Having an exaggerated sense of one's own importance. Expecting to be admired or revered."
+    },
+    {
+        "title": "Artificial",
+        "tag": "Negative",
+        "content": "Made or produced by human beings rather than occurring naturally. Not genuine or authentic."
+    },
+    {
+        "title": "Asocial",
+        "tag": "Negative",
+        "content": "Avoiding social interaction. Not wanting to be with others."
+    },
+    {
+        "title": "Assertive",
+        "tag": "Negative",
+        "content": "Confident and direct in claiming one's rights or putting forward one's views. Not aggressive but firm."
+    },
+    {
+        "title": "Astigmatic",
+        "tag": "Negative",
+        "content": "Having a visual defect. Unable to see things clearly from a certain angle."
+    },
+    {
+        "title": "Barbaric",
+        "tag": "Negative",
+        "content": "Savagely cruel or brutal. Not civilized."
+    },
+    {
+        "title": "Bewildered",
+        "tag": "Negative",
+        "content": "Completely puzzled or confused. Unable to understand something."
+    },
+    {
+        "title": "Bizarre",
+        "tag": "Negative",
+        "content": "Very strange or unusual. Difficult to understand or explain."
+    },
+    {
+        "title": "Bland",
+        "tag": "Negative",
+        "content": "Lacking strong features or characteristics. Uninteresting and dull."
+    },
+    {
+        "title": "Blunt",
+        "tag": "Negative",
+        "content": "Abrupt and direct in speech or manner. Not concerned with being polite or delicate."
+    },
+    {
+        "title": "Boisterous",
+        "tag": "Negative",
+        "content": "Noisy and full of rough, high-spirited energy. Lively and enthusiastic."
+    },
+    {
+        "title": "Brittle",
+        "tag": "Negative",
+        "content": "Easily broken or damaged. Fragile and delicate."
+    },
+    {
+        "title": "Brutal",
+        "tag": "Negative",
+        "content": "Savagely violent. Cruel and harsh."
+    },
+    {
+        "title": "Calculating",
+        "tag": "Negative",
+        "content": "Acting in a cold, scheming way. Planning things carefully for selfish reasons."
+    },
+    {
+        "title": "Callous",
+        "tag": "Negative",
+        "content": "Showing no sympathy for others' feelings. Hardened and unfeeling."
+    },
+    {
+        "title": "Cantankerous",
+        "tag": "Negative",
+        "content": "Bad-tempered and argumentative. Difficult to get along with."
+    },
+    {
+        "title": "Careless",
+        "tag": "Negative",
+        "content": "Not giving sufficient attention or thought to what one is doing. Casual and unconcerned."
+    },
+    {
+        "title": "Cautious",
+        "tag": "Negative",
+        "content": "Careful to avoid problems or danger. Wary and prudent."
+    },
+    {
+        "title": "Charmless",
+        "tag": "Negative",
+        "content": "Lacking charm or appeal. Uninteresting and dull."
+    },
+    {
+        "title": "Childish",
+        "tag": "Negative",
+        "content": "Characteristic of a child; immature. Silly and foolish."
+    },
+    {
+        "title": "Clumsy",
+        "tag": "Negative",
+        "content": "Awkward in movement or action. Lacking skill or grace."
+    },
+    {
+        "title": "Coarse",
+        "tag": "Negative",
+        "content": "Rough or harsh in texture or manner. Vulgar or crude."
+    },
+    {
+        "title": "Cold",
+        "tag": "Negative",
+        "content": "Unfriendly or unenthusiastic. Not warm or affectionate."
+    },
+    {
+        "title": "Colorless",
+        "tag": "Negative",
+        "content": "Lacking color or vitality. Dull and uninteresting."
+    },
+    {
+        "title": "Complacent",
+        "tag": "Negative",
+        "content": "Showing smug or uncritical satisfaction with oneself. Complacently content with the status quo."
+    },
+    {
+        "title": "Complaintive",
+        "tag": "Negative",
+        "content": "Tending to complain or express dissatisfaction. Whining and grumbling."
+    },
+    {
+        "title": "Compulsive",
+        "tag": "Negative",
+        "content": "Resulting from or relating to an irresistible urge. Obsessive and driven."
+    },
+    {
+        "title": "Conceited",
+        "tag": "Negative",
+        "content": "Excessively proud of oneself. Having an exaggerated opinion of one's own abilities or worth."
+    },
+    {
+        "title": "Condemnatory",
+        "tag": "Negative",
+        "content": "Expressing strong disapproval. Critical and judgmental."
+    },
+    {
+        "title": "Conformist",
+        "tag": "Negative",
+        "content": "Following accepted conventions or norms. Not original or individualistic."
+    },
+    {
+        "title": "Confused",
+        "tag": "Negative",
+        "content": "Unable to think clearly. Muddled and bewildered."
+    },
+    {
+        "title": "Contemptible",
+        "tag": "Negative",
+        "content": "Deserving to be scorned; contemptuous. Worthy of disdain."
+    },
+    {
+        "title": "Conventional",
+        "tag": "Negative",
+        "content": "Following accepted customs and traditions. Ordinary and unoriginal."
+    },
+    {
+        "title": "Cowardly",
+        "tag": "Negative",
+        "content": "Lacking courage. Afraid and hesitant."
+    },
+    {
+        "title": "Crafty",
+        "tag": "Negative",
+        "content": "Clever at achieving one's aims, often by deceit. Sly and cunning."
+    },
+    {
+        "title": "Crass",
+        "tag": "Negative",
+        "content": "Lacking sensitivity, refinement, or intelligence. Grossly stupid or vulgar."
+    },
+    {
+        "title": "Crazy",
+        "tag": "Negative",
+        "content": "Mentally deranged. Extremely foolish or impractical."
+    },
+    {
+        "title": "Critical",
+        "tag": "Negative",
+        "content": "Expressing adverse judgment. Faultfinding and judgmental."
+    },
+
+    {
+        "title": "Crude",
+        "tag": "Negative",
+        "content": "Lacking tact or finesse. Rough and unrefined."
+    },
+    {
+        "title": "Cruel",
+        "tag": "Negative",
+        "content": "Willing to cause pain or suffering. Harsh and merciless."
+    },
+    {
+        "title": "Cynical",
+        "tag": "Negative",
+        "content": "Believing that people are motivated by self-interest. Distrustful of human sincerity or goodness."
+    },
+    {
+        "title": "Decadent",
+        "tag": "Negative",
+        "content": "Characterized by or reflecting a state of moral or cultural decline. Self-indulgent and immoral."
+    },
+    {
+        "title": "Deceitful",
+        "tag": "Negative",
+        "content": "Tending to deceive or mislead others. Dishonest and untruthful."
+    },
+    {
+        "title": "Delicate",
+        "tag": "Negative",
+        "content": "Easily broken or damaged. Fragile and fine."
+    },
+    {
+        "title": "Demanding",
+        "tag": "Negative",
+        "content": "Requiring a lot of effort or attention. Making others work hard."
+    },
+    {
+        "title": "Dependent",
+        "tag": "Negative",
+        "content": "Relying on someone or something else for support. Not able to function independently."
+    },
+    {
+        "title": "Desperate",
+        "tag": "Negative",
+        "content": "Feeling or showing a hopeless sense of urgency. Reckless or violent."
+    },
+    {
+        "title": "Destructive",
+        "tag": "Negative",
+        "content": "Tending to cause destruction. Damaging or harmful."
+    },
+    {
+        "title": "Devious",
+        "tag": "Negative",
+        "content": "Showing a skillful use of underhanded tactics to achieve goals. Sly and deceitful."
+    },
+    {
+        "title": "Difficult",
+        "tag": "Negative",
+        "content": "Not easy to do or to deal with. Challenging and demanding."
+    },
+    {
+        "title": "Dirty",
+        "tag": "Negative",
+        "content": "Covered or marked with an unclean substance. Morally unclean."
+    },
+    {
+        "title": "Disconcerting",
+        "tag": "Negative",
+        "content": "Causing uncertainty or unease. Confusing and disorienting."
+    },
+    {
+        "title": "Discontented",
+        "tag": "Negative",
+        "content": "Not satisfied or pleased. Restless and unhappy."
+    },
+    {
+        "title": "Discouraging",
+        "tag": "Negative",
+        "content": "Causing someone to lose confidence or enthusiasm. Depressing and demoralizing."
+    },
+    {
+        "title": "Discourteous",
+        "tag": "Negative",
+        "content": "Not polite or respectful. Rude and impolite."
+    },
+    {
+        "title": "Dishonest",
+        "tag": "Negative",
+        "content": "Not truthful or trustworthy. Deceptive and untruthful."
+    },
+    {
+        "title": "Disloyal",
+        "tag": "Negative",
+        "content": "Not loyal or faithful. Betraying trust or allegiance."
+    },
+    {
+        "title": "Disobedient",
+        "tag": "Negative",
+        "content": "Failing to obey rules or orders. Rebellious and defiant."
+    },
+    {
+        "title": "Disorderly",
+        "tag": "Negative",
+        "content": "Not neat or tidy. Rowdy and disruptive."
+    },
+    {
+        "title": "Disorganized",
+        "tag": "Negative",
+        "content": "Not organized or arranged in a structured way. Chaotic and messy."
+    },
+    {
+        "title": "Disputatious",
+        "tag": "Negative",
+        "content": "Inclined to dispute or argue. Contentious and quarrelsome."
+    },
+    {
+        "title": "Disrespectful",
+        "tag": "Negative",
+        "content": "Lacking respect or courtesy. Rude and impolite."
+    },
+    {
+        "title": "Disruptive",
+        "tag": "Negative",
+        "content": "Causing disorder or turmoil. Interfering with normal progress or activity."
+    },
+    {
+        "title": "Dissolute",
+        "tag": "Negative",
+        "content": "Lacking moral restraint. Indulging in sensual pleasures."
+    },
+    {
+        "title": "Dissonant",
+        "tag": "Negative",
+        "content": "Lacking harmony. Clashing and discordant."
+    },
+    {
+        "title": "Distractible",
+        "tag": "Negative",
+        "content": "Easily distracted. Unable to focus or concentrate."
+    },
+    {
+        "title": "Disturbing",
+        "tag": "Negative",
+        "content": "Causing anxiety or worry. Upsetting and unsettling."
+    },
+    {
+        "title": "Dogmatic",
+        "tag": "Negative",
+        "content": "Expressing opinions in a forceful and arrogant way. Intolerant of others' views."
+    },
+    {
+        "title": "Domineering",
+        "tag": "Negative",
+        "content": "Asserting control in an arrogant or overbearing way. Overpowering and dictatorial."
+    },
+    {
+        "title": "Dull",
+        "tag": "Negative",
+        "content": "Lacking interest or excitement. Boring and tedious."
+    },
+    {
+        "title": "Easily Discouraged",
+        "tag": "Negative",
+        "content": "Quickly losing confidence or hope. Giving up easily."
+    },
+    {
+        "title": "Egocentric",
+        "tag": "Negative",
+        "content": "Thinking only of oneself. Self-centered and selfish."
+    },
+    {
+        "title": "Enervated",
+        "tag": "Negative",
+        "content": "Feeling drained of energy. Weak and tired."
+    },
+    {
+        "title": "Envious",
+        "tag": "Negative",
+        "content": "Feeling or showing envy. Resentful of someone else's success."
+    },
+    {
+        "title": "Erratic",
+        "tag": "Negative",
+        "content": "Not consistent or predictable. Eccentric or irregular."
+    },
+    {
+        "title": "Escapist",
+        "tag": "Negative",
+        "content": "Avoiding reality by indulging in distractions. Seeking relief from the real world."
+    },
+    {
+        "title": "Excitable",
+        "tag": "Negative",
+        "content": "Easily excited or agitated. Quick to show emotion or enthusiasm."
+    },
+    {
+        "title": "Expedient",
+        "tag": "Negative",
+        "content": "Convenient and practical. Acting out of self-interest."
+    },
+    {
+        "title": "Extravagant",
+        "tag": "Negative",
+        "content": "Spending much more than is necessary. Lavish and wasteful."
+    },
+    {
+        "title": "Extreme",
+        "tag": "Negative",
+        "content": "Reaching a high or the highest degree. Very intense."
+    },
+    {
+        "title": "Faithless",
+        "tag": "Negative",
+        "content": "Not loyal or faithful. Disloyal and untrustworthy."
+    },
+    {
+        "title": "False",
+        "tag": "Negative",
+        "content": "Not true or accurate. Deceptive and untruthful."
+    },
+    {
+        "title": "Fanatical",
+        "tag": "Negative",
+        "content": "Filled with excessive and single-minded zeal. Extremely passionate or enthusiastic."
+    },
+    {
+        "title": "Fanciful",
+        "tag": "Negative",
+        "content": "Given to fancy or imagination. Whimsical and unrealistic."
+    },
+    {
+        "title": "Fatalistic",
+        "tag": "Negative",
+        "content": "Believing that all events are predetermined. Accepting of one's fate or destiny."
+    },
+    {
+        "title": "Fawning",
+        "tag": "Negative",
+        "content": "Displaying excessive flattery or servility. Obsequious and sycophantic."
+    },
+    {
+        "title": "Fearful",
+        "tag": "Negative",
+        "content": "Feeling or showing fear. Afraid and anxious."
+    },
+    {
+        "title": "Fickle",
+        "tag": "Negative",
+        "content": "Changing frequently. Lacking steadfastness or loyalty."
+    }
+]
