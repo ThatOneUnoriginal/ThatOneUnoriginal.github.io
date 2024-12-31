@@ -380,6 +380,10 @@ body {
     }
 }
 
+#file-input{
+    display:none
+}
+
 /* Extra-large screen adjustments */
 @media (min-width: 1200px) {
 
@@ -469,7 +473,7 @@ body {
     </style>
 </head>
 <body>
-    <h1>Dynamic Image Grid</h1>
+    <h1>Persona Bookmarking Tool</h1>
 
     <div class="filter-container">
         <select id="gender-filter">
@@ -649,6 +653,7 @@ body {
 
         let tempImageUrl = '';
         let tempPersonaData = {};
+        
 
         addImageButton.addEventListener('click', function() {
             hideAllPopups();
@@ -950,56 +955,76 @@ body {
 
         // Modify import functionality
         fileInput.addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = (event) => {
-                    try {
-                        const importedData = JSON.parse(event.target.result);
-                        if (Array.isArray(importedData)) {
-                            // Store original indices for invalid age personas
-                            invalidAgePersonas = importedData
-                                .map((p, index) => ({
-                                    ...p,
-                                    originalIndex: index
-                                }))
-                                .filter(p => p.age < 16);
+    const file = e.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            try {
+                const parsedData = JSON.parse(event.target.result);
+                if (Array.isArray(parsedData)) {
+                    // Store the imported data globally
+                    importedData = parsedData;
+                    
+                    // Find personas with invalid ages
+                    invalidAgePersonas = importedData
+                        .map((p, index) => ({
+                            ...p,
+                            originalIndex: index
+                        }))
+                        .filter(p => !p.age || p.age < 16);
 
-                            // Process age validation first
-                            if (invalidAgePersonas.length > 0) {
-                                currentInvalidIndex = 0;
-                                showAgeValidationPopup();
-                            } else {
-                                showMergeOptionsPopup();
-                            }
-                        } else {
-                            alert('Invalid JSON format. Please ensure the file contains valid persona data.');
-                        }
-                    } catch (error) {
-                        alert('Error reading file. Please ensure it is a valid JSON file.');
+                    if (invalidAgePersonas.length > 0) {
+                        currentInvalidIndex = 0;
+                        showAgeValidationPopup();
+                    } else {
+                        showMergeOptionsPopup();
                     }
-                };
-                reader.readAsText(file);
+                } else {
+                    alert('Invalid JSON format. Please ensure the file contains an array of persona data.');
+                }
+            } catch (error) {
+                alert('Error reading file. Please ensure it is a valid JSON file.');
+                console.error('Import error:', error);
             }
-        });
+        };
+        reader.readAsText(file);
+    }
+});
 
         function showMergeOptionsPopup() {
             document.getElementById('merge-popup').style.display = 'block';
+            document.getElementById('age-validation-popup').style.display = 'none';
+            document.getElementById('delete-confirmation-popup').style.display = 'none';
+            document.getElementById('persona-display-popup').style.display = 'none';
+            document.getElementById('image-popup').style.display = 'none';
             overlay.style.display = 'flex';
         }
 
         document.getElementById('merge-data').addEventListener('click', () => {
-            // Keep existing data and add new data
-            const validPersonas = getValidPersonasInOrder();
-            personas.push(...validPersonas);
-            finalizeImport();
-        });
+    const validPersonas = getValidPersonasInOrder();
+    // Validate each persona before merging
+    const validatedPersonas = validPersonas.filter(persona => validatePersonaData(persona));
+    
+    if (validatedPersonas.length !== validPersonas.length) {
+        alert('Some personas were skipped due to invalid or missing data.');
+    }
+    
+    personas.push(...validatedPersonas);
+    finalizeImport();
+});
 
-        document.getElementById('replace-data').addEventListener('click', () => {
-            // Replace all existing data with new data
-            personas = getValidPersonasInOrder();
-            finalizeImport();
-        });
+document.getElementById('replace-data').addEventListener('click', () => {
+    const validPersonas = getValidPersonasInOrder();
+    // Validate each persona before replacing
+    const validatedPersonas = validPersonas.filter(persona => validatePersonaData(persona));
+    
+    if (validatedPersonas.length !== validPersonas.length) {
+        alert('Some personas were skipped due to invalid or missing data.');
+    }
+    
+    personas = validatedPersonas;
+    finalizeImport();
+});
 
         document.getElementById('cancel-import').addEventListener('click', () => {
             document.getElementById('merge-popup').style.display = 'none';
@@ -1008,25 +1033,43 @@ body {
         });
 
         function getValidPersonasInOrder() {
-            // Create a new array with all valid personas in their original order
-            const validPersonas = importedData.map((p, index) => {
-                // Check if this persona was in invalidAgePersonas and was fixed
-                const fixedPersona = invalidAgePersonas.find(
-                    invalid => invalid.originalIndex === index && invalid.age >= 16
-                );
-                return fixedPersona || (p.age >= 16 ? p : null);
-            }).filter(p => p !== null);
-
-            return validPersonas;
+    return importedData.map((p, index) => {
+        // Check if this persona was in invalidAgePersonas and was fixed
+        const fixedPersona = invalidAgePersonas.find(
+            invalid => invalid.originalIndex === index && invalid.age >= 16
+        );
+        
+        // Use the fixed persona if available, otherwise use original if age is valid
+        const personaToUse = fixedPersona || (p.age >= 16 ? p : null);
+        
+        // Ensure all required fields are present and properly formatted
+        if (personaToUse) {
+            return {
+                name: escapeHTML(personaToUse.name || ''),
+                age: parseInt(personaToUse.age) || 16,
+                gender: escapeHTML(personaToUse.gender || ''),
+                pronouns: escapeHTML(personaToUse.pronouns || ''),
+                tldr: escapeHTML(personaToUse.tldr || ''),
+                personality: escapeHTML(personaToUse.personality || ''),
+                appearance: escapeHTML(personaToUse.appearance || ''),
+                imageUrl: sanitizeURL(personaToUse.imageUrl || '') || ''
+            };
         }
+        return null;
+    }).filter(p => p !== null);
+}
 
-        function finalizeImport() {
-            localStorage.setItem('gridPersonas', JSON.stringify(personas));
-            renderGrid();
-            document.getElementById('merge-popup').style.display = 'none';
-            overlay.style.display = 'none';
-            importedData = [];
-        }
+function finalizeImport() {
+    localStorage.setItem('gridPersonas', JSON.stringify(personas));
+    renderGrid();
+    hideAllPopups();
+    // Reset import-related variables
+    importedData = [];
+    invalidAgePersonas = [];
+    currentInvalidIndex = 0;
+    // Reset file input
+    fileInput.value = '';
+}
 
         function hideAllPopups() {
             const popups = [
@@ -1036,7 +1079,8 @@ body {
                 document.getElementById('delete-confirmation-popup'),
                 document.getElementById('edit-popup'),
                 document.getElementById('age-validation-popup'),
-                document.getElementById('merge-popup')
+                document.getElementById('merge-popup'),
+                document.getElementById('popup-overlay')
             ];
 
             popups.forEach(popup => {
@@ -1312,7 +1356,6 @@ body {
     });
 }
 
-document.getElementById('display-name').textContent = escapeHTML(persona.name);
 
     </script>
 </body>
