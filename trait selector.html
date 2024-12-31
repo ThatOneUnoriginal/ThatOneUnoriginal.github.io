@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trait Selector: T1U Tools</title>
+    <link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/ThatOneUnoriginal/ThatOneUnoriginal.github.io/refs/heads/main/Character%20Tools/Assets/Character%20Trait%20Viewer.ico">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .theme-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .theme-button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .theme-button.light {
+            background-color: #f0f0f0;
+            color: #333;
+        }
+
+        .theme-button.dark {
+            background-color: #333;
+            color: #fff;
+        }
+
+        .theme-button.amoled {
+            background-color: #000;
+            color: #fff;
+        }
+
+        .theme-button.active {
+            outline: 2px solid #007BFF;
+        }
+
+        /* Dark mode styles */
+        body.dark-mode {
+            background-color: #1a1a1a;
+            color: #fff;
+        }
+
+        body.dark-mode .box,
+        body.dark-mode .loading {
+            background-color: #2d2d2d;
+            color: #fff;
+        }
+
+        body.dark-mode .tag {
+            background-color: #404040;
+            color: #fff;
+        }
+
+        body.dark-mode .pagination-button {
+            background-color: #2d2d2d;
+            color: #fff;
+            border-color: #404040;
+        }
+
+        body.dark-mode .pagination-button:hover:not(:disabled) {
+            background-color: #404040;
+        }
+
+        body.dark-mode .pagination-button:disabled {
+            background-color: #1a1a1a;
+            color: #666;
+            border-color: #333;
+        }
+
+        body.dark-mode select,
+        body.dark-mode input {
+            background-color: #2d2d2d;
+            color: #fff;
+            border-color: #404040;
+        }
+
+        /* AMOLED mode styles */
+        body.amoled-mode {
+            background-color: #000;
+            color: #fff;
+        }
+
+        body.amoled-mode .box,
+        body.amoled-mode .loading {
+            background-color: #000;
+            color: #fff;
+            border: 1px solid #333;
+        }
+
+        body.amoled-mode .tag {
+            background-color: #1a1a1a;
+            color: #fff;
+        }
+
+        body.amoled-mode .pagination-button {
+            background-color: #000;
+            color: #fff;
+            border-color: #333;
+        }
+
+        body.amoled-mode .pagination-button:hover:not(:disabled) {
+            background-color: #1a1a1a;
+        }
+
+        body.amoled-mode .pagination-button:disabled {
+            background-color: #000;
+            color: #666;
+            border-color: #1a1a1a;
+        }
+
+        body.amoled-mode select,
+        body.amoled-mode input {
+            background-color: #000;
+            color: #fff;
+            border-color: #333;
+        }
+
+        .header {
+            width: 80%;
+            max-width: 800px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .header input {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .header button {
+            padding: 10px 20px;
+            margin-left: 10px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .header button:hover {
+            background-color: #0056b3;
+        }
+
+        .filter-bar {
+            width: 80%;
+            max-width: 800px;
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .filter-bar select, .filter-bar input {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1rem;
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .container {
+            width: 80%;
+            max-width: 800px;
+        }
+
+        .box {
+            background-color: #ffffff;
+            border-radius: 15px;
+            margin: 10px 0;
+            padding: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: box-shadow 0.3s ease;
+            overflow: hidden;
+        }
+
+        .box:hover {
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .box-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        .tag {
+            margin-left: 10px;
+            padding: 3px 8px;
+            font-size: 0.9rem;
+            border-radius: 5px;
+            background-color: #e0e0e0;
+            color: #333;
+        }
+
+        .arrow {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .content {
+            margin-top: 10px;
+            font-size: 1rem;
+            line-height: 1.5;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .box.expanded .content {
+            max-height: 500px;
+        }
+
+        .box.expanded .arrow {
+            transform: rotate(90deg);
+        }
+
+        .select-button {
+            display: none;
+            margin-top: 10px;
+            padding: 5px 15px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .box.expanded .select-button {
+            display: inline-block;
+        }
+
+        .box.selected .select-button {
+            background-color: #dc3545;
+        }
+
+        /* Enhanced pagination styles */
+        .pagination-container {
+            width: 80%;
+            max-width: 800px;
+            margin: 20px 0;
+        }
+
+        .pagination-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+            flex-wrap: wrap;
+            margin: 10px 0;
+        }
+
+        .pagination-button {
+            padding: 8px 12px;
+            border: 1px solid #007BFF;
+            background-color: white;
+            color: #007BFF;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 40px;
+            text-align: center;
+        }
+
+        .pagination-button:hover:not(:disabled) {
+            background-color: #007BFF;
+            color: white;
+        }
+
+        .pagination-button:disabled {
+            border-color: #ccc;
+            color: #ccc;
+            cursor: not-allowed;
+            background-color: #f9f9f9;
+        }
+
+        .pagination-button.active {
+            background-color: #007BFF;
+            color: white;
+        }
+
+        .pagination-settings {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 10px 0;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .items-per-page {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .items-per-page select {
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .page-jump {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .page-jump input {
+            width: 60px;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .pagination-info {
+            text-align: center;
+            color: #666;
+            margin-top: 10px;
+        }
+
+        /* Loading indicator */
+        .loading {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        /* Keyboard navigation tooltip */
+        .keyboard-tooltip {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #333;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .keyboard-tooltip.visible {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <input type="file" id="json-input" accept="application/JSON">
+        <button onclick="loadJsonData()">Load JSON</button>
+    </div>
+
+    <div class="filter-bar">
+        <select id="tag-filter" onchange="filterResults()">
+            <option value="all">All</option>
+            <option value="Positive">Positive</option>
+            <option value="Neutral">Neutral</option>
+            <option value="Negative">Negative</option>
+            <option value="selected">Selected</option>
+        </select>
+        <input type="text" id="search-bar" placeholder="Search titles..." oninput="filterResults()">
+        <div class="theme-buttons">
+            <button class="theme-button light active" onclick="setTheme('light')">Light</button>
+            <button class="theme-button dark" onclick="setTheme('dark')">Dark</button>
+            <button class="theme-button amoled" onclick="setTheme('amoled')">AMOLED</button>
+        </div>
+    </div>
+
+    <div class="container" id="box-container">
+        <!-- Boxes will be populated dynamically -->
+    </div>
+
+    <div class="pagination-container">
+        <div class="pagination-settings">
+            <div class="items-per-page">
+                <label for="items-per-page">Items per page:</label>
+                <select id="items-per-page" onchange="updateItemsPerPage()">
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="20">20</option>
+                    <option value="50">50</option>
+                </select>
+            </div>
+            <div class="page-jump">
+                <label for="page-number">Go to page:</label>
+                <input type="number" id="page-number" min="1" value="1">
+                <button class="pagination-button" onclick="jumpToPage()">Go</button>
+            </div>
+        </div>
+        <div class="pagination-controls" id="pagination-controls">
+            <!-- Pagination controls will be added dynamically -->
+        </div>
+        <div class="pagination-info" id="pagination-info">
+            <!-- Pagination info will be added dynamically -->
+        </div>
+    </div>
+
+    <div class="loading" id="loading">Loading...</div>
+    <div class="keyboard-tooltip" id="keyboard-tooltip">
+        Use arrow keys ← → to navigate pages
+    </div>
+
+    <script>
+        const container = document.getElementById('box-container');
+        const paginationControls = document.getElementById('pagination-controls');
+        const paginationInfo = document.getElementById('pagination-info');
+        const loadingIndicator = document.getElementById('loading');
+        const keyboardTooltip = document.getElementById('keyboard-tooltip');
+        let jsonData = [];
+        let selectedBoxes = new Map(); // Changed to Map to store full box data
+        let currentPage = 1;
+        let itemsPerPage = 5;
+        let isLoading = false;
+
+        // Show keyboard navigation tooltip
+        setTimeout(() => {
+            keyboardTooltip.classList.add('visible');
+            setTimeout(() => {
+                keyboardTooltip.classList.remove('visible');
+            }, 3000);
+        }, 1000);
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') {
+                navigatePage('prev');
+            } else if (e.key === 'ArrowRight') {
+                navigatePage('next');
+            }
+        });
+
+        function navigatePage(direction) {
+            const totalPages = Math.ceil(getFilteredData().length / itemsPerPage);
+            if (direction === 'prev' && currentPage > 1) {
+                currentPage--;
+                filterResults();
+            } else if (direction === 'next' && currentPage < totalPages) {
+                currentPage++;
+                filterResults();
+            }
+        }
+
+        function updateItemsPerPage() {
+            itemsPerPage = parseInt(document.getElementById('items-per-page').value);
+            currentPage = 1;
+            filterResults();
+        }
+
+        function jumpToPage() {
+            const input = document.getElementById('page-number');
+            const totalPages = Math.ceil(getFilteredData().length / itemsPerPage);
+            const pageNum = parseInt(input.value);
+            
+            if (pageNum >= 1 && pageNum <= totalPages) {
+                currentPage = pageNum;
+                filterResults();
+            } else {
+                alert(`Please enter a page number between 1 and ${totalPages}`);
+                input.value = currentPage;
+            }
+        }
+
+        async function loadJsonData() {
+            const input = document.getElementById('json-input');
+            const file = input.files[0];
+
+            if (!file) {
+                alert('Please select a JSON file.');
+                return;
+            }
+
+            showLoading();
+            
+            try {
+                const text = await file.text();
+                jsonData = JSON.parse(text);
+                
+                // Update existing selections with new data
+                const updatedSelections = new Map();
+                jsonData.forEach(item => {
+                    if (selectedBoxes.has(item.title)) {
+                        updatedSelections.set(item.title, item);
+                    }
+                });
+                selectedBoxes = updatedSelections;
+                saveSelections();
+                
+                currentPage = 1;
+                filterResults();
+            } catch (e) {
+                alert('Invalid JSON file.');
+            } finally {
+                hideLoading();
+            }
+        }
+
+        function showLoading() {
+            isLoading = true;
+            loadingIndicator.style.display = 'block';
+        }
+
+        function hideLoading() {
+            isLoading = false;
+            loadingIndicator.style.display = 'none';
+        }
+
+        function loadSavedSelections() {
+            try {
+                const savedSelections = localStorage.getItem('selectedBoxes');
+                if (savedSelections) {
+                    selectedBoxes = new Map(JSON.parse(savedSelections));
+                }
+            } catch (e) {
+                console.error('Error loading saved selections:', e);
+                selectedBoxes = new Map();
+            }
+        }
+
+        // Save selections to localStorage
+        function saveSelections() {
+            try {
+                localStorage.setItem('selectedBoxes', JSON.stringify([...selectedBoxes]));
+            } catch (e) {
+                console.error('Error saving selections:', e);
+                // If localStorage is full, clear it and try again
+                if (e.name === 'QuotaExceededError') {
+                    localStorage.clear();
+                    try {
+                        localStorage.setItem('selectedBoxes', JSON.stringify([...selectedBoxes]));
+                    } catch (retryError) {
+                        console.error('Error retrying save:', retryError);
+                    }
+                }
+            }
+        }
+
+        function toggleSelection(event, boxData) {
+            event.stopPropagation();
+            const boxDataObj = typeof boxData === 'string' ? JSON.parse(boxData) : boxData;
+            
+            if (selectedBoxes.has(boxDataObj.title)) {
+                selectedBoxes.delete(boxDataObj.title);
+            } else {
+                selectedBoxes.set(boxDataObj.title, boxDataObj);
+            }
+            
+            saveSelections();
+            filterResults();
+        }
+
+        function getFilteredData() {
+            const tagFilter = document.getElementById('tag-filter').value;
+            const searchQuery = document.getElementById('search-bar').value.toLowerCase();
+
+            return jsonData.filter(item => {
+                const matchesTag = tagFilter === 'all' ||
+                    (tagFilter === 'selected' ? selectedBoxes.has(item.title) : item.tag === tagFilter);
+                const matchesSearch = item.title.toLowerCase().includes(searchQuery);
+                return matchesTag && matchesSearch;
+            });
+        }
+
+        function createPageButtons(totalPages) {
+            const buttons = [];
+            const maxVisiblePages = 5;
+            let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+            let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+
+            if (endPage - startPage + 1 < maxVisiblePages) {
+                startPage = Math.max(1, endPage - maxVisiblePages + 1);
+            }
+
+            // First page
+            if (startPage > 1) {
+                buttons.push({ page: 1, text: '1' });
+                if (startPage > 2) buttons.push({ page: null, text: '...' });
+            }
+
+            // Visible pages
+            for (let i = startPage; i <= endPage; i++) {
+                buttons.push({ page: i, text: i.toString() });
+            }
+
+            // Last page
+            if (endPage < totalPages) {
+                if (endPage < totalPages - 1) buttons.push({ page: null, text: '...' });
+                buttons.push({ page: totalPages, text: totalPages.toString() });
+            }
+
+            return buttons;
+        }
+
+        function createPaginationControls(totalPages) {
+            paginationControls.innerHTML = '';
+            
+            // Previous button
+            const prevButton = document.createElement('button');
+            prevButton.className = 'pagination-button';
+            prevButton.textContent = '←';
+            prevButton.disabled = currentPage === 1;
+            prevButton.onclick = () => navigatePage('prev');
+            paginationControls.appendChild(prevButton);
+
+            // Page buttons
+            const pageButtons = createPageButtons(totalPages);
+            pageButtons.forEach(({ page, text }) => {
+                const button = document.createElement('button');
+                button.className = 'pagination-button';
+                if (page === currentPage) button.classList.add('active');
+                button.textContent = text;
+                if (page === null) {
+                    button.disabled = true;
+                } else {
+                    button.onclick = () => {
+                        currentPage = page;
+                        filterResults();
+                    };
+                }
+                paginationControls.appendChild(button);
+            });
+
+            // Previous code remains the same...
+
+            // Next button
+            const nextButton = document.createElement('button');
+            nextButton.className = 'pagination-button';
+            nextButton.textContent = '→';
+            nextButton.disabled = currentPage === totalPages;
+            nextButton.onclick = () => navigatePage('next');
+            paginationControls.appendChild(nextButton);
+
+            // Update page number input
+            document.getElementById('page-number').value = currentPage;
+        }
+
+        function updatePaginationInfo(totalItems) {
+            const startItem = (currentPage - 1) * itemsPerPage + 1;
+            const endItem = Math.min(currentPage * itemsPerPage, totalItems);
+            const totalPages = Math.ceil(totalItems / itemsPerPage);
+            paginationInfo.textContent = `Showing ${startItem}-${endItem} of ${totalItems} items (Page ${currentPage} of ${totalPages})`;
+        }
+
+        function populateBoxes(data) {
+            if (isLoading) return;
+            showLoading();
+
+            setTimeout(() => {
+                container.innerHTML = '';
+                
+                const startIndex = (currentPage - 1) * itemsPerPage;
+                const endIndex = startIndex + itemsPerPage;
+                const paginatedData = data.slice(startIndex, endIndex);
+
+                paginatedData.forEach(item => {
+                    const box = document.createElement('div');
+                    box.className = 'box';
+                    if (selectedBoxes.has(item.title)) {
+                        box.classList.add('selected');
+                    }
+
+                    const selectButtonText = selectedBoxes.has(item.title) ? '✕' : '+';
+                    const selectButtonClass = selectedBoxes.has(item.title) ? 'select-button selected' : 'select-button';
+
+                    // Escape HTML in the item data to prevent XSS
+                    const safeItemData = JSON.stringify(item)
+                        .replace(/"/g, '&quot;')
+                        .replace(/'/g, '&#39;');
+
+                    box.innerHTML = `
+                        <div class="box-header">
+                            <p class="title">${item.title} <span class="tag">${item.tag}</span></p>
+                            <span class="arrow">▶</span>
+                        </div>
+                        <div class="content">
+                            <p>${item.content}</p>
+                            <button class="${selectButtonClass}" onclick='toggleSelection(event, ${safeItemData})'>${selectButtonText}</button>
+                        </div>
+                    `;
+
+                    const arrow = box.querySelector('.arrow');
+                    arrow.addEventListener('click', (event) => {
+                        event.stopPropagation();
+                        box.classList.toggle('expanded');
+                    });
+
+                    container.appendChild(box);
+                });
+
+                const totalPages = Math.ceil(data.length / itemsPerPage);
+                createPaginationControls(totalPages);
+                updatePaginationInfo(data.length);
+
+                hideLoading();
+            }, 200);
+        }
+
+        function filterResults() {
+            const filteredData = getFilteredData();
+            const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+            
+            // Adjust current page if it exceeds the new total pages
+            if (currentPage > totalPages) {
+                currentPage = Math.max(1, totalPages);
+            }
+            
+            populateBoxes(filteredData);
+        }
+
+        // Initialize with empty state
+        createPaginationControls(1);
+        updatePaginationInfo(0);
+
+        function setTheme(theme) {
+            // Remove all theme classes
+            document.body.classList.remove('dark-mode', 'amoled-mode');
+            
+            // Add the selected theme class
+            if (theme === 'dark') {
+                document.body.classList.add('dark-mode');
+            } else if (theme === 'amoled') {
+                document.body.classList.add('amoled-mode');
+            }
+            
+            // Update button states
+            const buttons = document.querySelectorAll('.theme-button');
+            buttons.forEach(button => {
+                button.classList.remove('active');
+                if (button.classList.contains(theme)) {
+                    button.classList.add('active');
+                }
+            });
+
+            // Save theme preference
+            localStorage.setItem('preferred-theme', theme);
+        }
+
+        // Load saved theme preference
+        function loadSavedTheme() {
+            const savedTheme = localStorage.getItem('preferred-theme') || 'light';
+            setTheme(savedTheme);
+        }
+
+        // Initialize theme on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            loadSavedTheme();
+            loadSavedSelections();
+            createPaginationControls(1);
+            updatePaginationInfo(0);
+        });
+
+
+    </script>
+</body>
+</html>

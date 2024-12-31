@@ -1,0 +1,1319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Persona Bookmarking Tool: T1U Tools</title>
+    <link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/ThatOneUnoriginal/ThatOneUnoriginal.github.io/refs/heads/main/Character%20Tools/Assets/Persona_Website_Logo.ico">
+    <style>
+/* Base styles */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #f5f5f5;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+    width: 90%;
+    margin-top: 20px;
+    padding: 20px;
+}
+
+.grid-item {
+    position: relative;
+    background-color: white;
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+    aspect-ratio: 1 / 1;
+    width: 100%;
+}
+
+.grid-item:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.grid-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.add-image {
+    background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+    color: white;
+    font-size: 32px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.2s;
+}
+
+.add-image:hover {
+    opacity: 0.9;
+}
+
+/* Filter container styles */
+.filter-container {
+    width: 90%;
+    margin: 20px 0;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.filter-container select {
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: 2px solid #e2e8f0;
+    font-size: 14px;
+    background-color: white;
+    cursor: pointer;
+    transition: border-color 0.2s;
+}
+
+.filter-container select:hover {
+    border-color: #6366f1;
+}
+
+.filter-container button {
+    padding: 8px 16px;
+    background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: opacity 0.2s;
+}
+
+.filter-container button:hover {
+    opacity: 0.9;
+}
+
+/* Overlay and popup styles */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.popup {
+    background: white;
+    padding: 32px;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 500px;
+    max-height: 80vh;
+    overflow-y: auto;
+    position: relative;
+    animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.popup h2 {
+    margin: 0 0 24px 0;
+    color: #1f2937;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.popup input,
+.popup textarea,
+.popup select {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 16px;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: border-color 0.2s;
+    box-sizing: border-box;
+}
+
+.popup input:focus,
+.popup textarea:focus,
+.popup select:focus {
+    outline: none;
+    border-color: #6366f1;
+}
+
+.popup textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.popup button {
+    padding: 12px 24px;
+    background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    margin: 8px;
+    transition: opacity 0.2s;
+}
+
+.popup button:hover {
+    opacity: 0.9;
+}
+
+.popup button.secondary {
+    background: #e2e8f0;
+    color: #4a5568;
+}
+
+/* Scrollbar styling */
+.popup::-webkit-scrollbar {
+    width: 8px;
+}
+
+.popup::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.popup::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 4px;
+}
+
+.popup::-webkit-scrollbar-thumb:hover {
+    background: #a1a1a1;
+}
+
+/* Form field labels */
+.field-label {
+    display: block;
+    margin-bottom: 8px;
+    color: #4a5568;
+    font-weight: 500;
+    font-size: 14px;
+}
+
+/* Error state for inputs */
+.popup input:invalid,
+.popup select:invalid {
+    border-color: #ef4444;
+}
+
+/* Delete Popup Styles */
+.delete-popup {
+    background-color: #f8d7da; /* Light red background for warning */
+    border: 2px solid #f5c6cb; /* Red border to reinforce the warning */
+    color: #721c24; /* Dark red text color for strong contrast */
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 80%;
+    max-height: 70vh;
+    overflow-y: auto;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    animation: shake 0.5s ease-in-out, fade-in 0.5s ease-in-out;
+}
+
+.delete-popup h2 {
+    font-size: 24px;
+    font-weight: bold;
+    color: #721c24;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.delete-popup p {
+    font-size: 18px;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.delete-popup .popup-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.delete-popup button {
+    background-color: #dc3545; /* Red background for delete button */
+    color: #fff;
+    border: none;
+    padding: 15px 30px;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.delete-popup button:hover {
+    background-color: #c82333; /* Darker red on hover */
+    transform: scale(1.05);
+}
+
+.delete-popup button.cancel {
+    background-color: #28a745; /* Green cancel button */
+}
+
+.delete-popup button.cancel:hover {
+    background-color: #218838;
+}
+
+/* Animation to shake the popup to grab attention */
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-10px); }
+    50% { transform: translateX(10px); }
+    75% { transform: translateX(-10px); }
+    100% { transform: translateX(0); }
+}
+
+/* Fade-in animation */
+@keyframes fade-in {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+/* Mobile responsive styles */
+@media (max-width: 768px) {
+
+    /* Grid item adjustments */
+    .grid {
+        width: 100%;
+        padding: 10px;
+    }
+
+    .grid-item {
+        max-width: 100%;
+    }
+
+    .filter-container {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .filter-container select,
+    .filter-container button {
+        width: 100%;
+    }
+
+    .popup {
+        padding: 16px;
+        max-width: 100%;
+    }
+
+    .popup h2 {
+        font-size: 20px;
+        margin-bottom: 16px;
+    }
+
+    .popup input,
+    .popup textarea,
+    .popup select {
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    .popup button {
+        padding: 10px 20px;
+    }
+
+    /* Adjust text sizes and margins for smaller screens */
+    .field-label {
+        font-size: 12px;
+    }
+
+    .age-validation-popup,
+    .merge-popup,
+    .delete-popup,
+    .edit-popup {
+        padding: 16px;
+        width: 90%;
+    }
+
+    .action-buttons {
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .age-validation-buttons,
+    .merge-buttons,
+    .delete-buttons {
+        flex-direction: column;
+        gap: 8px;
+    }
+}
+
+/* Extra-large screen adjustments */
+@media (min-width: 1200px) {
+
+    /* Grid Layout */
+    .grid {
+        width: 80%; /* Reduced grid width for larger screens */
+        margin-top: 40px;
+        padding: 40px;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Larger grid item size */
+    }
+
+    .grid-item {
+        max-width: 300px; /* Limit the max-width of grid items */
+    }
+
+    /* Filter Container */
+    .filter-container {
+        width: 80%; /* Increased width for larger screens */
+        margin: 40px auto;
+        padding: 24px 40px;
+        gap: 16px;
+        font-size: 16px;
+    }
+
+    .filter-container select {
+        font-size: 16px; /* Increased font size for dropdowns */
+        padding: 12px 18px;
+    }
+
+    .filter-container button {
+        font-size: 16px;
+        padding: 12px 24px;
+    }
+
+    /* Popup Styles */
+    .popup {
+        padding: 40px;
+        max-width: 80%;
+        max-height: 80vh;
+        overflow-y: auto;
+    }
+
+    .popup h2 {
+        font-size: 28px; /* Larger title size */
+    }
+
+    .popup input,
+    .popup textarea,
+    .popup select {
+        font-size: 16px;
+        padding: 14px 20px;
+    }
+
+    .popup button {
+        font-size: 16px;
+        padding: 14px 28px;
+    }
+
+    /* Form Field Labels */
+    .field-label {
+        font-size: 16px;
+    }
+
+    /* Scrollbar styling (optional) */
+    .popup::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    .popup::-webkit-scrollbar-thumb {
+        background: #aaa;
+    }
+
+    /* Adjusting action buttons for extra-large screens */
+    .action-buttons {
+        flex-direction: row;
+        gap: 16px;
+        justify-content: flex-start;
+    }
+
+    .age-validation-buttons,
+    .merge-buttons,
+    .delete-buttons {
+        flex-direction: row;
+        gap: 16px;
+    }
+}
+    </style>
+</head>
+<body>
+    <h1>Dynamic Image Grid</h1>
+
+    <div class="filter-container">
+        <select id="gender-filter">
+            <option value="">All Genders</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Non-Binary">Non-Binary</option>
+            <option value="Agender">Agender</option>
+        </select>
+
+        <select id="age-filter">
+            <option value="">All Ages</option>
+        </select>
+
+        <button id="export-btn">Export Data</button>
+        <button id="import-btn">Import Data</button>
+        <input type="file" id="file-input" accept=".json">
+    </div>
+
+    <div class="grid" id="image-grid">
+        <!-- Grid items will be dynamically added here -->
+        <div class="grid-item add-image" id="add-image">+</div>
+    </div>
+
+    <div class="overlay" id="popup-overlay">
+        <div class="popup" id="image-popup">
+            <h2>Add Image</h2>
+            <input type="url" id="image-url" placeholder="Enter image URL...">
+            <br>
+            <button id="confirm-add">Next</button>
+            <button id="cancel-add">Cancel</button>
+        </div>
+
+        <div class="popup" id="persona-popup" style="display: none;">
+            <h2>Add Persona Details</h2>
+            
+            <label class="field-label" for="persona-name">Name</label>
+            <input type="text" id="persona-name" required>
+            
+            <label class="field-label" for="persona-age">Age (minimum 16)</label>
+            <input type="number" id="persona-age" min="16" required>
+            
+            <label class="field-label" for="persona-gender">Gender</label>
+            <select id="persona-gender" required>
+                <option value="">Select Gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Non-Binary">Non-Binary</option>
+                <option value="Agender">Agender</option>
+            </select>
+            
+            <label class="field-label" for="persona-pronouns">Pronouns</label>
+            <select id="persona-pronouns" required>
+                <option value="">Select Pronouns</option>
+                <option value="They/Them">They/Them</option>
+                <option value="He/Him">He/Him</option>
+                <option value="She/Her">She/Her</option>
+            </select>
+            
+            <label class="field-label" for="persona-tldr">Personality TL;DR (optional)</label>
+            <textarea id="persona-tldr" rows="2"></textarea>
+            
+            <label class="field-label" for="persona-personality">Personality</label>
+            <textarea id="persona-personality" rows="3" required></textarea>
+            
+            <label class="field-label" for="persona-appearance">Appearance</label>
+            <textarea id="persona-appearance" rows="3" required></textarea>
+            
+            <button id="submit-persona">Add Persona</button>
+            <button id="cancel-persona">Cancel</button>
+        </div>
+
+        <div class="popup" id="persona-display-popup" style="display: none;">
+            <h2>Persona Information</h2>
+            <p><strong>Name:</strong> <span id="display-name"></span></p>
+            <p><strong>Age:</strong> <span id="display-age"></span></p>
+            <p><strong>Gender:</strong> <span id="display-gender"></span></p>
+            <p><strong>Pronouns:</strong> <span id="display-pronouns"></span></p>
+            <p><strong>Personality TL;DR:</strong> <span id="display-tldr"></span></p>
+            <p><strong>Personality:</strong> <span id="display-personality"></span></p>
+            <p><strong>Appearance:</strong> <span id="display-appearance"></span></p>
+            <div class="action-buttons">
+                <button id="close-display">Close</button>
+                <button id="edit-persona" class="edit-button">Edit</button>
+                <button id="delete-persona" class="delete-button">Delete</button>
+            </div>
+        </div>
+
+        <div class="popup delete-popup" id="delete-confirmation-popup">
+            <h3>⚠️ Delete Persona</h3>
+            <p>Are you sure you want to delete this persona? This action cannot be undone.</p>
+            <div class="delete-countdown">Please wait <span id="countdown">5</span> seconds</div>
+            <div class="delete-buttons">
+                <button id="cancel-delete">Cancel</button>
+                <button id="confirm-delete" class="delete-confirm">Yes, Delete</button>
+            </div>
+        </div>
+
+
+        <div class="popup edit-popup" id="edit-popup">
+            <h2>Edit Persona</h2>
+            
+            <label class="field-label">Image URL</label>
+            <input type="url" id="edit-image-url" required>
+            
+            <label class="field-label">Name</label>
+            <input type="text" id="edit-name" required>
+            
+            <label class="field-label">Age (minimum 16)</label>
+            <input type="number" id="edit-age" min="16" required>
+            
+            <label class="field-label">Gender</label>
+            <select id="edit-gender" required>
+                <option value="">Select Gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Non-Binary">Non-Binary</option>
+                <option value="Agender">Agender</option>
+            </select>
+            
+            <label class="field-label">Pronouns</label>
+            <select id="edit-pronouns" required>
+                <option value="">Select Pronouns</option>
+                <option value="They/Them">They/Them</option>
+                <option value="He/Him">He/Him</option>
+                <option value="She/Her">She/Her</option>
+            </select>
+            
+            <label class="field-label">Personality TL;DR (optional)</label>
+            <textarea id="edit-tldr" rows="2"></textarea>
+            
+            <label class="field-label">Personality</label>
+            <textarea id="edit-personality" rows="3" required></textarea>
+            
+            <label class="field-label">Appearance</label>
+            <textarea id="edit-appearance" rows="3" required></textarea>
+            
+            <div class="button-group">
+                <button id="cancel-edit">Cancel</button>
+                <button id="save-edit">Save Changes</button>
+            </div>
+        </div>
+        
+        <div class="popup age-validation-popup" id="age-validation-popup">
+            <h3>Invalid Age Detected</h3>
+            <div class="persona-preview" id="invalid-persona-preview"></div>
+            <div class="age-validation-buttons">
+                <input type="number" id="corrected-age" min="16" placeholder="Enter new age (min 16)" style="width: 150px;">
+                <button id="update-age-btn">Update Age</button>
+                <button id="skip-persona-btn">Skip</button>
+            </div>
+        </div>
+
+        <div class="popup merge-popup" id="merge-popup">
+            <h3>Import Options</h3>
+            <p>How would you like to handle the imported data?</p>
+            <div class="merge-buttons">
+                <button id="merge-data">Add to Existing Grid</button>
+                <button id="replace-data">Replace Existing Grid</button>
+                <button id="cancel-import">Cancel Import</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentPersonaIndex = -1;
+        const overlay = document.getElementById('popup-overlay');
+        const imagePopup = document.getElementById('image-popup');
+        const personaPopup = document.getElementById('persona-popup');
+        const personaDisplayPopup = document.getElementById('persona-display-popup');
+        const grid = document.getElementById('image-grid');
+        const addImageButton = document.getElementById('add-image');
+        const deleteConfirm = document.getElementById('delete-confirmation-popup');
+        const editPersona = document.getElementById('edit-popup');
+        const ageValidator = document.getElementById('age-validation-popup');
+        const importPopup = document.getElementById('merge-popup');
+
+        let tempImageUrl = '';
+        let tempPersonaData = {};
+
+        addImageButton.addEventListener('click', function() {
+            hideAllPopups();
+            imagePopup.style.display = 'block';
+            overlay.style.display = 'flex';
+        });
+
+        document.getElementById('cancel-add').addEventListener('click', function() {
+            hideAllPopups();
+            overlay.style.display = 'none';
+        });
+
+        document.getElementById('cancel-persona').addEventListener('click', () => {
+            hideAllPopups();
+            overlay.style.display = 'none';
+        });
+
+        const acceptedImageTypes = ['.jpg', '.jpeg', '.png', '.gif'];
+
+        document.getElementById('confirm-add').addEventListener('click', function() {
+            const imageUrl = document.getElementById('image-url').value.trim();
+
+            // Step 1: Validate URL
+            if (!isValidURL(imageUrl)) {
+                alert('Invalid URL. Please enter a valid URL.');
+                return;
+            }
+
+            // Step 2: Sanitize URL to ensure it's safe
+            const sanitizedUrl = sanitizeURL(imageUrl);
+            if (!sanitizedUrl) {
+                alert('Invalid URL. Please check the URL and try again.');
+                return;
+            }
+
+            // Step 3: Validate image file type
+            if (!isValidImageFileType(sanitizedUrl)) {
+                alert('Please enter a URL that points to a valid image file (e.g., .jpg, .png, .gif).');
+                return;
+            }
+
+            // Step 4: Attempt to load the image
+            const tempImage = new Image();
+            tempImage.src = sanitizedUrl;
+
+            tempImage.onload = function() {
+                tempImageUrl = sanitizedUrl; // Assign sanitized image URL
+                imagePopup.style.display = 'none';
+                personaPopup.style.display = 'block';
+            };
+
+            tempImage.onerror = function() {
+                alert('Failed to load image. Please check the URL.');
+            };
+        });
+
+        // Function to check if the URL is well-formed
+        function isValidURL(url) {
+            try {
+                const parsedUrl = new URL(url); // Throws if the URL is invalid
+                return parsedUrl.protocol === "http:" || parsedUrl.protocol === "https:";
+            } catch (e) {
+                return false;
+            }
+        }
+
+        // Function to sanitize the URL by ensuring it's a valid URL format and not harmful
+        function sanitizeURL(url) {
+    try {
+        const sanitizedUrl = new URL(url);
+        // Remove potentially harmful query parameters
+        sanitizedUrl.search = '';
+        return sanitizedUrl.href;
+    } catch (e) {
+        return null;
+    }
+}
+
+
+        // Function to validate if the URL points to an accepted image type
+        function isValidImageFileType(url) {
+            return acceptedImageTypes.some(type => url.toLowerCase().endsWith(type));
+        }
+
+
+        document.getElementById('submit-persona').addEventListener('click', function() {
+            const name = document.getElementById('persona-name').value;
+            const age = parseInt(document.getElementById('persona-age').value);
+            const gender = document.getElementById('persona-gender').value;
+            const pronouns = document.getElementById('persona-pronouns').value;
+            const tldr = document.getElementById('persona-tldr').value;
+            const personality = document.getElementById('persona-personality').value;
+            const appearance = document.getElementById('persona-appearance').value;
+
+            if (age < 16) {
+                alert('Age must be 16 or older.');
+                return;
+            }
+
+            if (name && age && gender && pronouns && personality && appearance) {
+                const personaData = {
+                    name,
+                    age,
+                    gender,
+                    pronouns,
+                    tldr,
+                    personality,
+                    appearance,
+                    imageUrl: tempImageUrl
+                };
+
+                personas.push(personaData);
+                localStorage.setItem('gridPersonas', JSON.stringify(personas));
+
+                const gridItem = createGridItem(personaData);
+                grid.insertBefore(gridItem, addImageButton);
+
+                // Reset form
+                document.getElementById('persona-name').value = '';
+                document.getElementById('persona-age').value = '';
+                document.getElementById('persona-gender').value = '';
+                document.getElementById('persona-pronouns').value = '';
+                document.getElementById('persona-tldr').value = '';
+                document.getElementById('persona-personality').value = '';
+                document.getElementById('persona-appearance').value = '';
+
+                overlay.style.display = 'none';
+                personaPopup.style.display = 'none';
+            } else {
+                alert('Please fill out all required fields.');
+            }
+        });
+
+        document.getElementById('close-display').addEventListener('click', function() {
+            hideAllPopups();
+            overlay.style.display = 'none';
+        });
+
+
+        const genderFilter = document.getElementById('gender-filter');
+        const ageFilter = document.getElementById('age-filter');
+        const exportBtn = document.getElementById('export-btn');
+        const importBtn = document.getElementById('import-btn');
+        const fileInput = document.getElementById('file-input');
+
+        let personas = [];
+
+        // Initialize age filter options (16-100)
+        for (let i = 16; i <= 100; i++) {
+            const option = document.createElement('option');
+            option.value = i;
+            option.textContent = i;
+            ageFilter.appendChild(option);
+        }
+
+        // Load data from localStorage on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedPersonas = localStorage.getItem('gridPersonas');
+            if (savedPersonas) {
+                personas = JSON.parse(savedPersonas);
+                renderGrid();
+            }
+        });
+
+        // Filter event listeners
+        genderFilter.addEventListener('change', renderGrid);
+        ageFilter.addEventListener('change', renderGrid);
+        const allAgesOption = document.createElement('option');
+        allAgesOption.value = ''; // Empty value signifies no age filter
+        allAgesOption.textContent = 'All Ages';
+        ageFilter.insertBefore(allAgesOption, ageFilter.firstChild);
+
+        function renderGrid() {
+            while (grid.firstChild) {
+                if (grid.firstChild === addImageButton) break;
+                grid.removeChild(grid.firstChild);
+            }
+
+            const filteredPersonas = personas.filter(persona => {
+                const genderMatch = !genderFilter.value || persona.gender === genderFilter.value;
+                const ageMatch = !ageFilter.value || persona.age === parseInt(ageFilter.value);
+                return genderMatch && ageMatch;
+            });
+
+            filteredPersonas.forEach((persona, index) => {
+                const actualIndex = personas.indexOf(persona); // Get the actual index from the full personas array
+                const gridItem = createGridItem(persona, actualIndex);
+                grid.insertBefore(gridItem, addImageButton);
+            });
+
+            updateAgeFilterOptions(filteredPersonas);
+        }
+
+
+        function updateAgeFilterOptions(filteredPersonas) {
+            const existingAges = new Set(personas.map(persona => persona.age)); // Get all unique ages
+            ageFilter.innerHTML = ''; // Clear the current dropdown options
+
+            // Add "All Ages" option
+            const allAgesOption = document.createElement('option');
+            allAgesOption.value = '';
+            allAgesOption.textContent = 'All Ages';
+            ageFilter.appendChild(allAgesOption);
+
+            // Add options for the existing ages in sorted order
+            [...existingAges].sort((a, b) => a - b).forEach(age => {
+                const option = document.createElement('option');
+                option.value = age;
+                option.textContent = age;
+                ageFilter.appendChild(option);
+            });
+
+            // Set the selected value to the current filter
+            ageFilter.value = ageFilter.value || '';
+        }
+
+
+        function createGridItem(persona, index) {
+            const gridItem = document.createElement('div');
+            gridItem.className = 'grid-item';
+            gridItem.dataset.index = index; // Store the index as a data attribute
+
+            const img = document.createElement('img');
+            img.src = persona.imageUrl;
+            img.alt = 'User added image';
+            gridItem.appendChild(img);
+
+            gridItem.addEventListener('click', () => {
+                showPersonaDisplay(persona, index);
+            });
+
+            return gridItem;
+        }
+
+        // Export functionality
+        exportBtn.addEventListener('click', () => {
+            const dataStr = JSON.stringify(personas, null, 2);
+            const blob = new Blob([dataStr], {
+                type: 'application/json'
+            });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'personas.json';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        });
+
+        // Import functionality
+        importBtn.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        let invalidAgePersonas = [];
+        let currentInvalidIndex = 0;
+
+        let importedData = [];
+        let originalPersonas = [];
+        let hasUnsavedChanges = false;
+
+        // Add beforeunload event listener for unsaved changes
+        window.addEventListener('beforeunload', (e) => {
+            if (hasUnsavedChanges) {
+                e.preventDefault();
+                e.returnValue = '';
+            }
+        });
+
+        // Modify persona form inputs to track changes
+        const personaFormInputs = [
+            'persona-name', 'persona-age', 'persona-gender',
+            'persona-pronouns', 'persona-tldr', 'persona-personality',
+            'persona-appearance'
+        ];
+
+        personaFormInputs.forEach(inputId => {
+            document.getElementById(inputId).addEventListener('input', () => {
+                hasUnsavedChanges = true;
+            });
+        });
+
+        // Reset unsaved changes flag when persona is submitted or cancelled
+        document.getElementById('submit-persona').addEventListener('click', () => {
+            hasUnsavedChanges = false;
+        });
+
+        document.getElementById('cancel-persona').addEventListener('click', () => {
+            if (hasUnsavedChanges) {
+                if (confirm('You have unsaved changes. Are you sure you want to cancel?')) {
+                    hasUnsavedChanges = false;
+                    overlay.style.display = 'none';
+                }
+            } else {
+                overlay.style.display = 'none';
+            }
+        });
+
+        // Modify import functionality
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    try {
+                        const importedData = JSON.parse(event.target.result);
+                        if (Array.isArray(importedData)) {
+                            // Store original indices for invalid age personas
+                            invalidAgePersonas = importedData
+                                .map((p, index) => ({
+                                    ...p,
+                                    originalIndex: index
+                                }))
+                                .filter(p => p.age < 16);
+
+                            // Process age validation first
+                            if (invalidAgePersonas.length > 0) {
+                                currentInvalidIndex = 0;
+                                showAgeValidationPopup();
+                            } else {
+                                showMergeOptionsPopup();
+                            }
+                        } else {
+                            alert('Invalid JSON format. Please ensure the file contains valid persona data.');
+                        }
+                    } catch (error) {
+                        alert('Error reading file. Please ensure it is a valid JSON file.');
+                    }
+                };
+                reader.readAsText(file);
+            }
+        });
+
+        function showMergeOptionsPopup() {
+            document.getElementById('merge-popup').style.display = 'block';
+            overlay.style.display = 'flex';
+        }
+
+        document.getElementById('merge-data').addEventListener('click', () => {
+            // Keep existing data and add new data
+            const validPersonas = getValidPersonasInOrder();
+            personas.push(...validPersonas);
+            finalizeImport();
+        });
+
+        document.getElementById('replace-data').addEventListener('click', () => {
+            // Replace all existing data with new data
+            personas = getValidPersonasInOrder();
+            finalizeImport();
+        });
+
+        document.getElementById('cancel-import').addEventListener('click', () => {
+            document.getElementById('merge-popup').style.display = 'none';
+            overlay.style.display = 'none';
+            importedData = [];
+        });
+
+        function getValidPersonasInOrder() {
+            // Create a new array with all valid personas in their original order
+            const validPersonas = importedData.map((p, index) => {
+                // Check if this persona was in invalidAgePersonas and was fixed
+                const fixedPersona = invalidAgePersonas.find(
+                    invalid => invalid.originalIndex === index && invalid.age >= 16
+                );
+                return fixedPersona || (p.age >= 16 ? p : null);
+            }).filter(p => p !== null);
+
+            return validPersonas;
+        }
+
+        function finalizeImport() {
+            localStorage.setItem('gridPersonas', JSON.stringify(personas));
+            renderGrid();
+            document.getElementById('merge-popup').style.display = 'none';
+            overlay.style.display = 'none';
+            importedData = [];
+        }
+
+        function hideAllPopups() {
+            const popups = [
+                imagePopup,
+                personaPopup,
+                personaDisplayPopup,
+                document.getElementById('delete-confirmation-popup'),
+                document.getElementById('edit-popup'),
+                document.getElementById('age-validation-popup'),
+                document.getElementById('merge-popup')
+            ];
+
+            popups.forEach(popup => {
+                if (popup) {
+                    popup.style.display = 'none';
+                }
+            });
+        }
+
+
+        function showAgeValidationPopup() {
+            const persona = invalidAgePersonas[currentInvalidIndex];
+            const previewDiv = document.getElementById('invalid-persona-preview');
+            previewDiv.innerHTML = `
+                <p><strong>Name:</strong> ${persona.name}</p>
+                <p><strong>Current Age:</strong> ${persona.age}</p>
+                <p><strong>Gender:</strong> ${persona.gender}</p>
+            `;
+
+            document.getElementById('age-validation-popup').style.display = 'block';
+            imagePopup.style.display = 'none';
+            overlay.style.display = 'flex';
+            document.getElementById('corrected-age').value = '';
+        }
+
+        document.getElementById('update-age-btn').addEventListener('click', () => {
+            const newAge = parseInt(document.getElementById('corrected-age').value);
+            if (newAge >= 16) {
+                invalidAgePersonas[currentInvalidIndex].age = newAge;
+                handleNextInvalidPersona();
+            } else {
+                alert('Please enter a valid age (16 or above)');
+            }
+        });
+
+
+        document.getElementById('skip-persona-btn').addEventListener('click', () => {
+            handleNextInvalidPersona();
+        });
+
+        function handleNextInvalidPersona() {
+            currentInvalidIndex++;
+            if (currentInvalidIndex < invalidAgePersonas.length) {
+                showAgeValidationPopup();
+            } else {
+                document.getElementById('age-validation-popup').style.display = 'none';
+                showMergeOptionsPopup();
+            }
+        }
+
+
+        function validatePersonaData(persona) {
+    return (
+        persona.name &&
+        persona.age &&
+        persona.gender &&
+        persona.pronouns &&
+        persona.personality &&
+        persona.appearance &&
+        persona.imageUrl &&
+        typeof persona.age === 'number' &&
+        persona.age >= 16 &&
+        !/[<>]/.test(persona.name) && // Example: Disallow angle brackets
+        !/[<>]/.test(persona.personality) &&
+        !/[<>]/.test(persona.appearance)
+    );
+}
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                overlay.style.display = 'none';
+                imagePopup.style.display = 'none';
+                personaPopup.style.display = 'none';
+                personaDisplayPopup.style.display = 'none';
+                document.getElementById('age-validation-popup').style.display = 'none';
+                document.getElementById('edit-popup').style.display = 'none';
+            }
+        });
+
+
+        function updateAgeFilter() {
+            const selectedValue = ageFilter.value || 'All Ages';
+            Array.from(ageFilter.options).forEach(option => {
+                option.selected = option.textContent === selectedValue;
+            });
+        }
+
+        function showPersonaDisplay(persona, index) {
+            hideAllPopups(); // Hide all popups before showing this one
+            currentPersonaIndex = index;
+
+            document.getElementById('display-name').textContent = persona.name;
+            document.getElementById('display-age').textContent = persona.age;
+            document.getElementById('display-gender').textContent = persona.gender;
+            document.getElementById('display-pronouns').textContent = persona.pronouns;
+            document.getElementById('display-tldr').textContent = persona.tldr || 'Not provided';
+            document.getElementById('display-personality').textContent = persona.personality;
+            document.getElementById('display-appearance').textContent = persona.appearance;
+
+            personaDisplayPopup.style.display = 'block';
+            overlay.style.display = 'flex';
+        }
+
+        // Modify the edit button click handler
+        document.getElementById('edit-persona').addEventListener('click', () => {
+            hideAllPopups(); // Hide all popups before showing edit popup
+            const persona = personas[currentPersonaIndex];
+            const editPopup = document.getElementById('edit-popup');
+
+            // Populate form with current values
+            document.getElementById('edit-image-url').value = persona.imageUrl;
+            document.getElementById('edit-name').value = persona.name;
+            document.getElementById('edit-age').value = persona.age;
+            document.getElementById('edit-gender').value = persona.gender;
+            document.getElementById('edit-pronouns').value = persona.pronouns;
+            document.getElementById('edit-tldr').value = persona.tldr || '';
+            document.getElementById('edit-personality').value = persona.personality;
+            document.getElementById('edit-appearance').value = persona.appearance;
+
+            editPopup.style.display = 'block';
+            overlay.style.display = 'flex';
+        });
+
+        // Add CSS to ensure edit popup is centered
+        document.querySelector('.edit-popup').style.position = 'relative';
+        document.querySelector('.edit-popup').style.margin = 'auto';
+
+        // Handle edit cancellation
+        document.getElementById('cancel-edit').addEventListener('click', () => {
+            hideAllPopups();
+            showPersonaDisplay(personas[currentPersonaIndex], currentPersonaIndex);
+        });
+
+        // Handle edit save
+        document.getElementById('save-edit').addEventListener('click', () => {
+            const updatedPersona = {
+                imageUrl: document.getElementById('edit-image-url').value,
+                name: document.getElementById('edit-name').value,
+                age: parseInt(document.getElementById('edit-age').value),
+                gender: document.getElementById('edit-gender').value,
+                pronouns: document.getElementById('edit-pronouns').value,
+                tldr: document.getElementById('edit-tldr').value,
+                personality: document.getElementById('edit-personality').value,
+                appearance: document.getElementById('edit-appearance').value
+            };
+
+            if (validateUpdatedPersona(updatedPersona)) {
+                personas[currentPersonaIndex] = updatedPersona;
+                localStorage.setItem('gridPersonas', JSON.stringify(personas));
+                renderGrid();
+
+                // Close edit popup and update display popup
+                document.getElementById('edit-popup').style.display = 'none';
+                showPersonaDisplay(updatedPersona, currentPersonaIndex);
+            }
+        });
+
+        function validateUpdatedPersona(persona) {
+            if (!persona.imageUrl || !persona.imageUrl.trim()) {
+                alert('Please provide an image URL');
+                return false;
+            }
+            if (!persona.name || !persona.name.trim()) {
+                alert('Please provide a name');
+                return false;
+            }
+            if (!persona.age || persona.age < 16) {
+                alert('Age must be 16 or older');
+                return false;
+            }
+            if (!persona.gender) {
+                alert('Please select a gender');
+                return false;
+            }
+            if (!persona.pronouns) {
+                alert('Please select pronouns');
+                return false;
+            }
+            if (!persona.personality || !persona.personality.trim()) {
+                alert('Please provide personality details');
+                return false;
+            }
+            if (!persona.appearance || !persona.appearance.trim()) {
+                alert('Please provide appearance details');
+                return false;
+            }
+            return true;
+        }
+
+        // Delete functionality
+        let deleteTimeout;
+        let countdownInterval;
+
+        document.getElementById('delete-persona').addEventListener('click', () => {
+            hideAllPopups();
+            const deletePopup = document.getElementById('delete-confirmation-popup');
+            const confirmButton = document.getElementById('confirm-delete');
+            const countdownSpan = document.getElementById('countdown');
+            let secondsLeft = 5;
+
+            deletePopup.style.display = 'block';
+            confirmButton.classList.remove('active');
+
+            // Reset countdown
+            clearTimeout(deleteTimeout);
+            clearInterval(countdownInterval);
+
+            countdownSpan.textContent = secondsLeft;
+            countdownInterval = setInterval(() => {
+                secondsLeft--;
+                countdownSpan.textContent = secondsLeft;
+                if (secondsLeft === 0) {
+                    clearInterval(countdownInterval);
+                    confirmButton.classList.add('active');
+                }
+            }, 1000);
+
+            deleteTimeout = setTimeout(() => {
+                confirmButton.classList.add('active');
+            }, 5000);
+
+        });
+
+        document.getElementById('confirm-delete').addEventListener('click', function() {
+            if (this.classList.contains('active')) {
+                personas.splice(currentPersonaIndex, 1);
+                localStorage.setItem('gridPersonas', JSON.stringify(personas));
+                renderGrid();
+                document.getElementById('delete-confirmation-popup').style.display = 'none';
+                overlay.style.display = 'none';
+            }
+        });
+
+        document.getElementById('cancel-delete').addEventListener('click', () => {
+            clearTimeout(deleteTimeout);
+            clearInterval(countdownInterval);
+            hideAllPopups();
+            showPersonaDisplay(personas[currentPersonaIndex], currentPersonaIndex);
+        });
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedPersonas = localStorage.getItem('gridPersonas');
+            if (savedPersonas) {
+                personas = JSON.parse(savedPersonas);
+
+                // Validate and update persona ages
+                personas.forEach(persona => {
+                    if (persona.age < 16) {
+                        persona.age = 16; // Update age to 16 if below the minimum threshold
+                    }
+                });
+
+                // Save updated personas back to localStorage
+                localStorage.setItem('gridPersonas', JSON.stringify(personas));
+
+                // Render the grid with updated personas
+                renderGrid();
+            }
+        });
+
+        function escapeHTML(str) {
+    return str.replace(/[&<>"'`=\/]/g, function(match) {
+        switch (match) {
+            case '&': return '&amp;';
+            case '<': return '&lt;';
+            case '>': return '&gt;';
+            case '"': return '&quot;';
+            case "'": return '&#039;';
+            case '`': return '&#96;';
+            case '=': return '&#61;';
+            case '/': return '&#47;';
+        }
+    });
+}
+
+document.getElementById('display-name').textContent = escapeHTML(persona.name);
+
+    </script>
+</body>
+</html>
