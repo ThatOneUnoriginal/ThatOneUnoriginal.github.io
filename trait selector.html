@@ -373,6 +373,9 @@
             <button class="theme-button dark" onclick="setTheme('dark')">Dark</button>
             <button class="theme-button amoled" onclick="setTheme('amoled')">AMOLED</button>
         </div>
+        <div id="sorting-controls">
+            <button id="reverse-sort-button">Sort Z-A</button>
+        </div>
     </div>
 
     <div class="container" id="box-container">
@@ -560,16 +563,20 @@
         }
 
         function getFilteredData() {
-            const tagFilter = document.getElementById('tag-filter').value;
-            const searchQuery = document.getElementById('search-bar').value.toLowerCase();
+    const tagFilter = document.getElementById('tag-filter').value;
+    const searchQuery = document.getElementById('search-bar').value.toLowerCase();
 
-            return jsonData.filter(item => {
-                const matchesTag = tagFilter === 'all' ||
-                    (tagFilter === 'selected' ? selectedBoxes.has(item.title) : item.tag === tagFilter);
-                const matchesSearch = item.title.toLowerCase().includes(searchQuery);
-                return matchesTag && matchesSearch;
-            });
-        }
+    const filteredData = jsonData.filter(item => {
+        const matchesTag = tagFilter === 'all' ||
+            (tagFilter === 'selected' ? selectedBoxes.has(item.title) : item.tag === tagFilter);
+        const matchesSearch = item.title.toLowerCase().includes(searchQuery);
+        return matchesTag && matchesSearch;
+    });
+
+    // Sort filtered data alphabetically by title
+    return filteredData.sort((a, b) => a.title.localeCompare(b.title));
+}
+
 
         function createPageButtons(totalPages) {
             const buttons = [];
@@ -770,6 +777,8 @@
         return item;
     });
 }
+
+
     </script>
 </body>
 </html>

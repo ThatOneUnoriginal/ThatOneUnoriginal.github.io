@@ -15,9 +15,49 @@
         "content": "Able to adjust to new conditions or changes easily. Flexible and open to new ideas."
     },
     {
+        "tile": "Admirable",
+        "tag": "Positive",
+        "content": "Worthy of admiration or respect. Having highly praiseworthy qualities or skills."
+    },
+    {
+        "tile": "Adventurous",
+        "tag": "Positive",
+        "content": "Eager to take risks or explore new things. Exciting and full of novel experiences. Additionally, an adventurous person may be willing to face uncertainty and challenges with enthusiasm and courage."
+    },
+    {
+        "tile": "Agreeable",
+        "tag": "Positive",
+        "content": "Pleasant and friendly in manner. Easily getting along with others and quick to concur with their views."
+    },
+    {
+        "tile": "Alert",
+        "tag": "Positive",
+        "content": "Quick to notice or respond to things. Vigilant and attentive to one's surroundings."
+    },
+    {
+        "tile": "Allocentric",
+        "tag": "Positive",
+        "content": "Focused on or concerned with others rather than oneself. Prioritizing the needs and feelings of others above one's own. This trait is often associated with empathy, selflessness, and a strong sense of community. An allocentric person may be deeply caring, generous, and dedicated to the well-being of others, often putting their needs first."
+    },    
+    {
         "title": "Amiable",
         "tag": "Positive",
         "content": "Friendly and pleasant in disposition. Easy to get along with and likeable."
+    },
+    {
+        "title": "Anticipative",
+        "tag": "Positive",
+        "content": "Expecting or preparing for something before it happens. Able to foresee and plan for future events or needs. An anticipative person may be proactive, forward-thinking, and well-prepared, often considering various outcomes and scenarios to ensure readiness."
+    },
+    {
+        "title": "Appreciative",
+        "tag": "Positive",
+        "content": "Grateful and thankful. Acknowledging and valuing the good qualities of someone or something."
+    },
+    {
+        "title": "Aspiring",
+        "tag": "Positive",
+        "content": "Having a strong desire to achieve something. Ambitious and eager to succeed."
     },
     {
         "title": "Athletic",
@@ -55,9 +95,19 @@
         "content": "Competent and able to achieve tasks effectively. Having the ability or capacity for something."
     },
     {
+        "title": "Captivating",
+        "tag": "Positive",
+        "content": "Charming and able to hold the attention. Fascinating and alluring."
+    },
+    {
         "title": "Caring",
         "tag": "Positive",
         "content": "Displaying kindness and concern for others. Willing to look after or help those in need."
+    },
+    {
+        "title": "Challenging",
+        "tag": "Positive",
+        "content": "Testing one's abilities and determination. Provoking and stimulating, often in a demanding way."
     },
     {
         "title": "Charismatic",
@@ -75,6 +125,11 @@
         "content": "Noticeably happy and optimistic. Having a positive and upbeat demeanor."
     },
     {
+        "title": "Clean",
+        "tag": "Positive",
+        "content": "Neat and tidy. Free from dirt or impurities, both physically and morally."
+    },
+    {
         "title": "Clear-headed",
         "tag": "Positive",
         "content": "Able to think clearly and make sound judgments. Not confused or muddled."
@@ -85,9 +140,24 @@
         "content": "Quick to understand, learn, and devise solutions. Intelligent and skilled."
     },
     {
+        "title": "Colorful",
+        "tag": "Positive",
+        "content": "Vivid and bright. Full of interest and variety."
+    },
+    {
+        "title": "Companionly",
+        "tag": "Positive",
+        "content": "Friendly and sociable. Providing pleasant and supportive company."
+    },
+    {
         "title": "Compassionate",
         "tag": "Positive",
         "content": "Feeling or showing sympathy and concern for others. Having a desire to help and understand."
+    },
+    {
+        "title": "Conciliatory",
+        "tag": "Positive",
+        "content": "Seeking to reconcile or pacify. Aiming to resolve disputes and promote harmony."
     },
     {
         "title": "Confident",
@@ -105,7 +175,17 @@
         "content": "Thoughtful and respectful of others' feelings. Kind and polite."
     },
     {
-        "title": "Cooperative: Willing",
+        "title": "Constant",
+        "tag": "Positive",
+        "content": "Steadfast and unchanging. Reliable and consistent over time."
+    },
+    {
+        "title": "Contemplative",
+        "tag": "Positive",
+        "content": "Thoughtful and reflective. Deeply or seriously thoughtful."
+    },
+    {
+        "title": "Cooperative",
         "tag": "Positive",
         "content": "Willing to work together with others. Helpful and collaborative."
     },
@@ -115,14 +195,39 @@
         "content": "Brave and able to face and deal with difficulties. Not easily intimidated or frightened."
     },
     {
+        "title": "Courteous",
+        "tag": "Positive",
+        "content": "Polite and respectful. Displaying good manners and consideration for others."
+    },
+    {
         "title": "Creative",
         "tag": "Positive",
         "content": "Able to use imagination and original ideas to create something. Innovative and artistically skilled."
     },
     {
+        "title": "Cultured",
+        "tag": "Positive",
+        "content": "Well-educated and refined. Having or showing an appreciation of artistic and intellectual pursuits."
+    },
+    {
         "title": "Curious",
         "tag": "Positive",
         "content": "Eager to know or learn something. Inquisitive and open to new experiences."
+    },
+    {
+        "title": "Daring",
+        "tag": "Positive",
+        "content": "Bold and adventurous. Willing to take risks and face challenges."
+    },
+    {
+        "title": "Debonair",
+        "tag": "Positive",
+        "content": "Confident, stylish, and charming. Suave and sophisticated in manner."
+    },
+    {
+        "title": "Decent",
+        "tag": "Positive",
+        "content": "Morally good and honorable. Kind, fair, and respectable."
     },
     {
         "title": "Decisive",
@@ -133,6 +238,16 @@
         "title": "Dedicated",
         "tag": "Positive",
         "content": "Devoted and committed to a task or purpose. Willing to put in considerable effort and time."
+    },
+    {
+        "title": "Deep",
+        "tag": "Positive",
+        "content": "Profound and thoughtful. Having or showing great knowledge or insight."
+    },
+    {
+        "title": "Dignified",
+        "tag": "Positive",
+        "content": "Having or showing a composed and serious manner. Worthy of respect and honor."
     },
     {
         "title": "Disciplined",
@@ -249,7 +364,106 @@
         "tag": "Positive",
         "content": "Based on clear, sound reasoning. Reasonable and sensible."
     },
-
+    {
+        "title": "Directed",
+        "tag": "Positive",
+        "content": "Having a clear aim or purpose. Focused and guided towards a specific goal."
+    },
+    {
+        "title": "Discreet",
+        "tag": "Positive",
+        "content": "Careful and circumspect in one's words or actions. Prudent and judicious in maintaining confidentiality."
+    },
+    {
+        "title": "Dramatic",
+        "tag": "Positive",
+        "content": "Exciting and full of emotion. Theatrical and expressive, often to an exaggerated degree."
+    },
+    {
+        "title": "Dutiful",
+        "tag": "Positive",
+        "content": "Fulfilling one's obligations and responsibilities. Conscientious and committed to one's duties."
+    },
+    {
+        "title": "Earnest",
+        "tag": "Positive",
+        "content": "Sincere and serious in intention. Displaying a deep and honest conviction."
+    },
+    {
+        "title": "Ebullient",
+        "tag": "Positive",
+        "content": "Cheerful and full of energy. Exuberant and enthusiastic."
+    },
+    {
+        "title": "Eloquent",
+        "tag": "Positive",
+        "content": "Clearly and expressively persuasive. Having or showing great skill in speaking or writing."
+    },
+    {
+        "title": "Esthetic",
+        "tag": "Positive",
+        "content": "Having a sense of beauty. Appreciative of art, nature, and elegant design."
+    },
+    {
+        "title": "Exciting",
+        "tag": "Positive",
+        "content": "Causing great enthusiasm and eagerness. Thrilling and full of energy."
+    },
+    {
+        "title": "Extraordinary",
+        "tag": "Positive",
+        "content": "Remarkable and exceptional. Beyond what is ordinary or usual."
+    },
+    {
+        "title": "Fair",
+        "tag": "Positive",
+        "content": "Just and unbiased. Treating people equally without favoritism or discrimination."
+    },
+    {
+        "title": "Faithful",
+        "tag": "Positive",
+        "content": "Loyal and constant in affection or allegiance. Steadfast and reliable."
+    },
+    {
+        "title": "Felicific",
+        "tag": "Positive",
+        "content": "Producing or tending to produce happiness. Conducive to well-being and contentment."
+    },
+    {
+        "title": "Firm",
+        "tag": "Positive",
+        "content": "Resolute and determined. Steadfast and unyielding in one's decisions or actions."
+    },
+    {
+        "title": "Flexible",
+        "tag": "Positive",
+        "content": "Able to be easily modified. Willing to change or adapt as necessary."
+    },
+    {
+        "title": "Forceful",
+        "tag": "Positive",
+        "content": "Strong and powerful. Having or showing a force of character that compels or dominates others."
+    },
+    {
+        "title": "Forthright",
+        "tag": "Positive",
+        "content": "Direct and outspoken. Honest and straightforward in manner."
+    },
+    {
+        "title": "Freethinking",
+        "tag": "Positive",
+        "content": "Forming opinions on the basis of reason. Independent and open-minded in thought."
+    },
+    {
+        "title": "Fun-loving",
+        "tag": "Positive",
+        "content": "Enjoys amusement and entertainment. Lively and enthusiastic about having a good time."
+    },
+    {
+        "title": "Gallant",
+        "tag": "Positive",
+        "content": "Brave and heroic. Courteous and chivalrous, especially towards women."
+    },
 
     {
         "title": "Absentminded",
