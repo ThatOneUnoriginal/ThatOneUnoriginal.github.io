@@ -373,6 +373,9 @@
             <button class="theme-button dark" onclick="setTheme('dark')">Dark</button>
             <button class="theme-button amoled" onclick="setTheme('amoled')">AMOLED</button>
         </div>
+        <div id="sorting-controls">
+            <button id="reverse-sort-button">Sort Z-A</button>
+        </div>
     </div>
 
     <div class="container" id="box-container">
@@ -440,32 +443,40 @@
 
         // Load JSON data from URL on page load
         async function loadJsonFromUrl() {
-            showLoading();
-            try {
-                const response = await fetch('https://raw.githubusercontent.com/ThatOneUnoriginal/ThatOneUnoriginal.github.io/refs/heads/main/Character%20Tools/Assets/character_traits_jsonfile.json');
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                jsonData = await response.json();
-                
-                // Update existing selections with new data
-                const updatedSelections = new Map();
-                jsonData.forEach(item => {
-                    if (selectedBoxes.has(item.title)) {
-                        updatedSelections.set(item.title, item);
-                    }
-                });
-                selectedBoxes = updatedSelections;
-                saveSelections();
-                
-                filterResults();
-            } catch (error) {
-                console.error('Error loading JSON:', error);
-                alert('Error loading trait data. Please try refreshing the page.');
-            } finally {
-                hideLoading();
-            }
+    showLoading();
+    try {
+        const response = await fetch('https://raw.githubusercontent.com/ThatOneUnoriginal/ThatOneUnoriginal.github.io/refs/heads/main/Character%20Tools/Assets/character_traits_jsonfile.json');
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
         }
+        const rawData = await response.json();
+        
+        // Validate the JSON data
+        jsonData = validateJsonData(rawData);
+        
+        // Update existing selections with new data
+        const updatedSelections = new Map();
+        jsonData.forEach(item => {
+            if (selectedBoxes.has(item.title)) {
+                updatedSelections.set(item.title, item);
+            }
+        });
+        selectedBoxes = updatedSelections;
+        saveSelections();
+        
+        // Immediately display results after loading
+        currentPage = 1; // Reset to first page
+        filterResults(); // This will populate the boxes
+    } catch (error) {
+        console.error('Error loading JSON:', error);
+        alert(`Error loading trait data: ${error.message}. Please check the JSON format and try refreshing the page.`);
+        jsonData = [];
+        // Still attempt to render UI even if empty
+        filterResults();
+    } finally {
+        hideLoading();
+    }
+}
 
         // Rest of the functions remain the same
         function navigatePage(direction) {
@@ -552,16 +563,20 @@
         }
 
         function getFilteredData() {
-            const tagFilter = document.getElementById('tag-filter').value;
-            const searchQuery = document.getElementById('search-bar').value.toLowerCase();
+    const tagFilter = document.getElementById('tag-filter').value;
+    const searchQuery = document.getElementById('search-bar').value.toLowerCase();
 
-            return jsonData.filter(item => {
-                const matchesTag = tagFilter === 'all' ||
-                    (tagFilter === 'selected' ? selectedBoxes.has(item.title) : item.tag === tagFilter);
-                const matchesSearch = item.title.toLowerCase().includes(searchQuery);
-                return matchesTag && matchesSearch;
-            });
-        }
+    const filteredData = jsonData.filter(item => {
+        const matchesTag = tagFilter === 'all' ||
+            (tagFilter === 'selected' ? selectedBoxes.has(item.title) : item.tag === tagFilter);
+        const matchesSearch = item.title.toLowerCase().includes(searchQuery);
+        return matchesTag && matchesSearch;
+    });
+
+    // Sort filtered data alphabetically by title
+    return filteredData.sort((a, b) => a.title.localeCompare(b.title));
+}
+
 
         function createPageButtons(totalPages) {
             const buttons = [];
@@ -723,13 +738,47 @@
             setTheme(savedTheme);
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            loadSavedTheme();
-            loadSavedSelections();
-            loadJsonFromUrl(); // Load JSON data immediately when page loads
-            createPaginationControls(1);
-            updatePaginationInfo(0);
-        });
+        document.addEventListener('DOMContentLoaded', async () => {
+    loadSavedTheme();
+    loadSavedSelections();
+    createPaginationControls(1);
+    updatePaginationInfo(0);
+    
+    // Wait for JSON data to load before displaying boxes
+    await loadJsonFromUrl();
+    // Immediately filter and display results after data is loaded
+    filterResults();
+});
+
+        function validateJsonData(data) {
+    // Ensure data is an array
+    if (!Array.isArray(data)) {
+        throw new Error('JSON data must be an array');
+    }
+
+    // Validate each item in the array
+    return data.map((item, index) => {
+        if (!item || typeof item !== 'object') {
+            throw new Error(`Item at index ${index} is not an object`);
+        }
+
+        if (!item.title || typeof item.title !== 'string') {
+            throw new Error(`Missing or invalid title at index ${index}`);
+        }
+
+        if (!item.tag || typeof item.tag !== 'string') {
+            throw new Error(`Missing or invalid tag at index ${index}`);
+        }
+
+        if (!item.content || typeof item.content !== 'string') {
+            throw new Error(`Missing or invalid content at index ${index}`);
+        }
+
+        return item;
+    });
+}
+
+
     </script>
 </body>
 </html>

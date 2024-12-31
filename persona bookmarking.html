@@ -653,7 +653,7 @@ body {
 
         let tempImageUrl = '';
         let tempPersonaData = {};
-        
+
 
         addImageButton.addEventListener('click', function() {
             hideAllPopups();
@@ -722,15 +722,15 @@ body {
 
         // Function to sanitize the URL by ensuring it's a valid URL format and not harmful
         function sanitizeURL(url) {
-    try {
-        const sanitizedUrl = new URL(url);
-        // Remove potentially harmful query parameters
-        sanitizedUrl.search = '';
-        return sanitizedUrl.href;
-    } catch (e) {
-        return null;
-    }
-}
+            try {
+                const sanitizedUrl = new URL(url);
+                // Remove potentially harmful query parameters
+                sanitizedUrl.search = '';
+                return sanitizedUrl.href;
+            } catch (e) {
+                return null;
+            }
+        }
 
 
         // Function to validate if the URL points to an accepted image type
@@ -826,26 +826,73 @@ body {
         allAgesOption.textContent = 'All Ages';
         ageFilter.insertBefore(allAgesOption, ageFilter.firstChild);
 
-        function renderGrid() {
-            while (grid.firstChild) {
-                if (grid.firstChild === addImageButton) break;
-                grid.removeChild(grid.firstChild);
-            }
 
-            const filteredPersonas = personas.filter(persona => {
-                const genderMatch = !genderFilter.value || persona.gender === genderFilter.value;
-                const ageMatch = !ageFilter.value || persona.age === parseInt(ageFilter.value);
-                return genderMatch && ageMatch;
+        function initializeAgeFilter() {
+    const ageFilter = document.getElementById('age-filter');
+    ageFilter.innerHTML = ''; // Clear existing options
+    
+    // Add the "All Ages" option
+    const allAgesOption = document.createElement('option');
+    allAgesOption.value = '';
+    allAgesOption.textContent = 'All Ages';
+    ageFilter.appendChild(allAgesOption);
+    
+    // Only add age options if there are personas
+    if (personas.length > 0) {
+        const existingAges = new Set(personas.map(persona => persona.age));
+        [...existingAges]
+            .sort((a, b) => a - b)
+            .forEach(age => {
+                const option = document.createElement('option');
+                option.value = age;
+                option.textContent = age;
+                ageFilter.appendChild(option);
             });
+    }
 
-            filteredPersonas.forEach((persona, index) => {
-                const actualIndex = personas.indexOf(persona); // Get the actual index from the full personas array
-                const gridItem = createGridItem(persona, actualIndex);
-                grid.insertBefore(gridItem, addImageButton);
-            });
+    // Maintain the current selection if it exists in the new options
+    const currentValue = ageFilter.value;
+    if (currentValue) {
+        const exists = Array.from(ageFilter.options).some(option => option.value === currentValue);
+        ageFilter.value = exists ? currentValue : '';
+    }
+}
 
-            updateAgeFilterOptions(filteredPersonas);
-        }
+function renderGrid() {
+    // Clear existing grid items
+    while (grid.firstChild) {
+        if (grid.firstChild === addImageButton) break;
+        grid.removeChild(grid.firstChild);
+    }
+
+    const filteredPersonas = personas.filter(persona => {
+        const genderMatch = !genderFilter.value || persona.gender === genderFilter.value;
+        const ageMatch = !ageFilter.value || persona.age === parseInt(ageFilter.value);
+        return genderMatch && ageMatch;
+    });
+
+    filteredPersonas.forEach((persona, index) => {
+        const actualIndex = personas.indexOf(persona);
+        const gridItem = createGridItem(persona, actualIndex);
+        grid.insertBefore(gridItem, addImageButton);
+    });
+
+    // Update age filter options while preserving selection
+    const selectedAge = ageFilter.value;
+    initializeAgeFilter();
+    ageFilter.value = selectedAge;
+}
+
+// Update the age filter event listener
+ageFilter.addEventListener('change', (event) => {
+    // Store the selected value
+    const selectedValue = event.target.value;
+    renderGrid();
+    // Restore the selected value after rendering
+    ageFilter.value = selectedValue;
+});
+
+
 
 
         function updateAgeFilterOptions(filteredPersonas) {
@@ -955,41 +1002,41 @@ body {
 
         // Modify import functionality
         fileInput.addEventListener('change', (e) => {
-    const file = e.target.files[0];
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = (event) => {
-            try {
-                const parsedData = JSON.parse(event.target.result);
-                if (Array.isArray(parsedData)) {
-                    // Store the imported data globally
-                    importedData = parsedData;
-                    
-                    // Find personas with invalid ages
-                    invalidAgePersonas = importedData
-                        .map((p, index) => ({
-                            ...p,
-                            originalIndex: index
-                        }))
-                        .filter(p => !p.age || p.age < 16);
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    try {
+                        const parsedData = JSON.parse(event.target.result);
+                        if (Array.isArray(parsedData)) {
+                            // Store the imported data globally
+                            importedData = parsedData;
 
-                    if (invalidAgePersonas.length > 0) {
-                        currentInvalidIndex = 0;
-                        showAgeValidationPopup();
-                    } else {
-                        showMergeOptionsPopup();
+                            // Find personas with invalid ages
+                            invalidAgePersonas = importedData
+                                .map((p, index) => ({
+                                    ...p,
+                                    originalIndex: index
+                                }))
+                                .filter(p => !p.age || p.age < 16);
+
+                            if (invalidAgePersonas.length > 0) {
+                                currentInvalidIndex = 0;
+                                showAgeValidationPopup();
+                            } else {
+                                showMergeOptionsPopup();
+                            }
+                        } else {
+                            alert('Invalid JSON format. Please ensure the file contains an array of persona data.');
+                        }
+                    } catch (error) {
+                        alert('Error reading file. Please ensure it is a valid JSON file.');
+                        console.error('Import error:', error);
                     }
-                } else {
-                    alert('Invalid JSON format. Please ensure the file contains an array of persona data.');
-                }
-            } catch (error) {
-                alert('Error reading file. Please ensure it is a valid JSON file.');
-                console.error('Import error:', error);
+                };
+                reader.readAsText(file);
             }
-        };
-        reader.readAsText(file);
-    }
-});
+        });
 
         function showMergeOptionsPopup() {
             document.getElementById('merge-popup').style.display = 'block';
@@ -1002,30 +1049,30 @@ body {
         }
 
         document.getElementById('merge-data').addEventListener('click', () => {
-    const validPersonas = getValidPersonasInOrder();
-    // Validate each persona before merging
-    const validatedPersonas = validPersonas.filter(persona => validatePersonaData(persona));
-    
-    if (validatedPersonas.length !== validPersonas.length) {
-        alert('Some personas were skipped due to invalid or missing data.');
-    }
-    
-    personas.push(...validatedPersonas);
-    finalizeImport();
-});
+            const validPersonas = getValidPersonasInOrder();
+            // Validate each persona before merging
+            const validatedPersonas = validPersonas.filter(persona => validatePersonaData(persona));
 
-document.getElementById('replace-data').addEventListener('click', () => {
-    const validPersonas = getValidPersonasInOrder();
-    // Validate each persona before replacing
-    const validatedPersonas = validPersonas.filter(persona => validatePersonaData(persona));
-    
-    if (validatedPersonas.length !== validPersonas.length) {
-        alert('Some personas were skipped due to invalid or missing data.');
-    }
-    
-    personas = validatedPersonas;
-    finalizeImport();
-});
+            if (validatedPersonas.length !== validPersonas.length) {
+                alert('Some personas were skipped due to invalid or missing data.');
+            }
+
+            personas.push(...validatedPersonas);
+            finalizeImport();
+        });
+
+        document.getElementById('replace-data').addEventListener('click', () => {
+            const validPersonas = getValidPersonasInOrder();
+            // Validate each persona before replacing
+            const validatedPersonas = validPersonas.filter(persona => validatePersonaData(persona));
+
+            if (validatedPersonas.length !== validPersonas.length) {
+                alert('Some personas were skipped due to invalid or missing data.');
+            }
+
+            personas = validatedPersonas;
+            finalizeImport();
+        });
 
         document.getElementById('cancel-import').addEventListener('click', () => {
             document.getElementById('merge-popup').style.display = 'none';
@@ -1046,13 +1093,13 @@ document.getElementById('replace-data').addEventListener('click', () => {
         // Ensure all required fields are present and properly formatted
         if (personaToUse) {
             return {
-                name: escapeHTML(personaToUse.name || ''),
+                name: personaToUse.name || '',
                 age: parseInt(personaToUse.age) || 16,
-                gender: escapeHTML(personaToUse.gender || ''),
-                pronouns: escapeHTML(personaToUse.pronouns || ''),
-                tldr: escapeHTML(personaToUse.tldr || ''),
-                personality: escapeHTML(personaToUse.personality || ''),
-                appearance: escapeHTML(personaToUse.appearance || ''),
+                gender: personaToUse.gender || '',
+                pronouns: personaToUse.pronouns || '',
+                tldr: personaToUse.tldr || '',
+                personality: personaToUse.personality || '',
+                appearance: personaToUse.appearance || '',
                 imageUrl: sanitizeURL(personaToUse.imageUrl || '') || ''
             };
         }
@@ -1060,17 +1107,18 @@ document.getElementById('replace-data').addEventListener('click', () => {
     }).filter(p => p !== null);
 }
 
-function finalizeImport() {
-    localStorage.setItem('gridPersonas', JSON.stringify(personas));
-    renderGrid();
-    hideAllPopups();
-    // Reset import-related variables
-    importedData = [];
-    invalidAgePersonas = [];
-    currentInvalidIndex = 0;
-    // Reset file input
-    fileInput.value = '';
-}
+
+        function finalizeImport() {
+            localStorage.setItem('gridPersonas', JSON.stringify(personas));
+            renderGrid();
+            hideAllPopups();
+            // Reset import-related variables
+            importedData = [];
+            invalidAgePersonas = [];
+            currentInvalidIndex = 0;
+            // Reset file input
+            fileInput.value = '';
+        }
 
         function hideAllPopups() {
             const popups = [
@@ -1149,6 +1197,8 @@ function finalizeImport() {
         !/[<>]/.test(persona.appearance)
     );
 }
+
+
 
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
@@ -1323,40 +1373,24 @@ function finalizeImport() {
         });
 
         window.addEventListener('DOMContentLoaded', () => {
-            const savedPersonas = localStorage.getItem('gridPersonas');
-            if (savedPersonas) {
-                personas = JSON.parse(savedPersonas);
-
-                // Validate and update persona ages
-                personas.forEach(persona => {
-                    if (persona.age < 16) {
-                        persona.age = 16; // Update age to 16 if below the minimum threshold
-                    }
-                });
-
-                // Save updated personas back to localStorage
-                localStorage.setItem('gridPersonas', JSON.stringify(personas));
-
-                // Render the grid with updated personas
-                renderGrid();
+    const savedPersonas = localStorage.getItem('gridPersonas');
+    if (savedPersonas) {
+        personas = JSON.parse(savedPersonas);
+        // Validate and update persona ages
+        personas.forEach(persona => {
+            if (persona.age < 16) {
+                persona.age = 16;
             }
         });
-
-        function escapeHTML(str) {
-    return str.replace(/[&<>"'`=\/]/g, function(match) {
-        switch (match) {
-            case '&': return '&amp;';
-            case '<': return '&lt;';
-            case '>': return '&gt;';
-            case '"': return '&quot;';
-            case "'": return '&#039;';
-            case '`': return '&#96;';
-            case '=': return '&#61;';
-            case '/': return '&#47;';
-        }
-    });
-}
-
+        localStorage.setItem('gridPersonas', JSON.stringify(personas));
+    }
+    
+    // Initialize the age filter
+    initializeAgeFilter();
+    
+    // Then render the grid
+    renderGrid();
+});
 
     </script>
 </body>
