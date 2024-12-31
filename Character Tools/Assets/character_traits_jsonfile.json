@@ -15,9 +15,49 @@
         "content": "Able to adjust to new conditions or changes easily. Flexible and open to new ideas."
     },
     {
+        "tile": "Admirable",
+        "tag": "Positive",
+        "content": "Worthy of admiration or respect. Having highly praiseworthy qualities or skills."
+    },
+    {
+        "tile": "Adventurous",
+        "tag": "Positive",
+        "content": "Eager to take risks or explore new things. Exciting and full of novel experiences. Additionally, an adventurous person may be willing to face uncertainty and challenges with enthusiasm and courage."
+    },
+    {
+        "tile": "Agreeable",
+        "tag": "Positive",
+        "content": "Pleasant and friendly in manner. Easily getting along with others and quick to concur with their views."
+    },
+    {
+        "tile": "Alert",
+        "tag": "Positive",
+        "content": "Quick to notice or respond to things. Vigilant and attentive to one's surroundings."
+    },
+    {
+        "tile": "Allocentric",
+        "tag": "Positive",
+        "content": "Focused on or concerned with others rather than oneself. Prioritizing the needs and feelings of others above one's own. This trait is often associated with empathy, selflessness, and a strong sense of community. An allocentric person may be deeply caring, generous, and dedicated to the well-being of others, often putting their needs first."
+    },    
+    {
         "title": "Amiable",
         "tag": "Positive",
         "content": "Friendly and pleasant in disposition. Easy to get along with and likeable."
+    },
+    {
+        "title": "Anticipative",
+        "tag": "Positive",
+        "content": "Expecting or preparing for something before it happens. Able to foresee and plan for future events or needs. An anticipative person may be proactive, forward-thinking, and well-prepared, often considering various outcomes and scenarios to ensure readiness."
+    },
+    {
+        "title": "Appreciative",
+        "tag": "Positive",
+        "content": "Grateful and thankful. Acknowledging and valuing the good qualities of someone or something."
+    },
+    {
+        "title": "Aspiring",
+        "tag": "Positive",
+        "content": "Having a strong desire to achieve something. Ambitious and eager to succeed."
     },
     {
         "title": "Athletic",
@@ -55,9 +95,19 @@
         "content": "Competent and able to achieve tasks effectively. Having the ability or capacity for something."
     },
     {
+        "title": "Captivating",
+        "tag": "Positive",
+        "content": "Charming and able to hold the attention. Fascinating and alluring."
+    },
+    {
         "title": "Caring",
         "tag": "Positive",
         "content": "Displaying kindness and concern for others. Willing to look after or help those in need."
+    },
+    {
+        "title": "Challenging",
+        "tag": "Positive",
+        "content": "Testing one's abilities and determination. Provoking and stimulating, often in a demanding way."
     },
     {
         "title": "Charismatic",
@@ -105,7 +155,7 @@
         "content": "Thoughtful and respectful of others' feelings. Kind and polite."
     },
     {
-        "title": "Cooperative: Willing",
+        "title": "Cooperative",
         "tag": "Positive",
         "content": "Willing to work together with others. Helpful and collaborative."
     },
