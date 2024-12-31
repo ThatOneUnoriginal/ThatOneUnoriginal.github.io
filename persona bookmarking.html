@@ -997,6 +997,7 @@ body {
             document.getElementById('delete-confirmation-popup').style.display = 'none';
             document.getElementById('persona-display-popup').style.display = 'none';
             document.getElementById('image-popup').style.display = 'none';
+            document.getElementById('edit-popup').style.display = 'none';
             overlay.style.display = 'flex';
         }
 
@@ -1280,7 +1281,7 @@ function finalizeImport() {
             const confirmButton = document.getElementById('confirm-delete');
             const countdownSpan = document.getElementById('countdown');
             let secondsLeft = 5;
-
+            document.getElementById('popup-overlay').style.display = 'flex';
             deletePopup.style.display = 'block';
             confirmButton.classList.remove('active');
 
