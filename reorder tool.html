@@ -329,250 +329,203 @@ body.dark-mode input[type="file"] {
   <!-- Importing SortableJS -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
   <script>
-    let jsonData = [];
+let jsonData = [];
 
-    const fileInput = document.getElementById('fileInput');
-    const jsonContainer = document.getElementById('jsonContainer');
-    const saveOrderButton = document.getElementById('saveOrder');
-    const sortAlphabeticallyButton = document.getElementById('sortAlphabetically');
-    const sortReverseAlphabeticallyButton = document.getElementById('sortReverseAlphabetically');
-    const sortByAgeButton = document.getElementById('sortByAge');
-    const sortByAgeReverseButton = document.getElementById('sortByAgeReverse');
-    const sortByPlatformButton = document.getElementById('sortByPlatform');
-    const sortByPlatformReverseButton = document.getElementById('sortByPlatformReverse');
-    // Dark mode toggle functionality
+const fileInput = document.getElementById('fileInput');
+const jsonContainer = document.getElementById('jsonContainer');
+const saveOrderButton = document.getElementById('saveOrder');
+const sortAlphabeticallyButton = document.getElementById('sortAlphabetically');
+const sortReverseAlphabeticallyButton = document.getElementById('sortReverseAlphabetically');
+const sortByAgeButton = document.getElementById('sortByAge');
+const sortByAgeReverseButton = document.getElementById('sortByAgeReverse');
+const sortByPlatformButton = document.getElementById('sortByPlatform');
+const sortByPlatformReverseButton = document.getElementById('sortByPlatformReverse');
 const darkModeToggle = document.getElementById('darkModeToggle');
-  // Enable sorting buttons after JSON is uploaded
-  fileInput.addEventListener('change', function(event) {
-    const file = event.target.files[0];
-    if (file && file.type === "application/json") {
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        try {
-          jsonData = JSON.parse(e.target.result);
-          if (Array.isArray(jsonData)) {
-            renderJson();
-            sortAlphabeticallyButton.disabled = false;  // Enable alphabetical sort button
-            sortReverseAlphabeticallyButton.disabled = false;  // Enable reverse alphabetical sort button
-            sortByAgeButton.disabled = false;  // Enable age sort button
-            sortByAgeReverseButton.disabled = false;  // Enable reverse age sort button
-            sortByPlatformButton.disabled = false;  // Enable platform sort button
-            sortByPlatformReverseButton.disabled = false;  // Enable reverse platform sort button
-          } else {
-            alert('Invalid JSON format. Expected an array of objects.');
-          }
-        } catch (error) {
-          alert('Invalid JSON file.');
+
+// Enable sorting buttons after JSON is uploaded
+fileInput.addEventListener('change', handleFileUpload);
+
+function handleFileUpload(event) {
+  const file = event.target.files[0];
+  if (file && file.type === "application/json") {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      try {
+        jsonData = JSON.parse(e.target.result);
+        if (Array.isArray(jsonData)) {
+          renderJson();
+          enableSortingButtons();  // Enable sorting buttons
+        } else {
+          alert('Invalid JSON format. Expected an array of objects.');
         }
-      };
-      reader.readAsText(file);
-    } else {
-      alert('Please upload a valid JSON file.');
-    }
-  });
-
-  // Sorting by age (Youngest to Oldest)
-  sortByAgeButton.addEventListener('click', () => {
-    jsonData.sort((a, b) => {
-      const ageA = a.age;
-      const ageB = b.age;
-
-      const parseAge = (age) => {
-        const parsed = parseInt(age, 10);
-        return isNaN(parsed) ? Infinity : parsed;  // Non-numeric ages become Infinity
-      };
-
-      return parseAge(ageA) - parseAge(ageB);  // Sort by age
-    });
-    renderJson();  // Re-render the JSON after sorting
-  });
-
-  // Sorting by age (Oldest to Youngest)
-  sortByAgeReverseButton.addEventListener('click', () => {
-    jsonData.sort((a, b) => {
-      const ageA = a.age;
-      const ageB = b.age;
-
-      const parseAge = (age) => {
-        const parsed = parseInt(age, 10);
-        return isNaN(parsed) ? Infinity : parsed;  // Non-numeric ages become Infinity
-      };
-
-      return parseAge(ageB) - parseAge(ageA);  // Reverse order
-    });
-    renderJson();  // Re-render the JSON after sorting
-  });
-
-  // Sorting by platform (A → Z)
-  sortByPlatformButton.addEventListener('click', () => {
-    jsonData.sort((a, b) => {
-      const platformA = a.platform ? a.platform.toLowerCase() : '';
-      const platformB = b.platform ? b.platform.toLowerCase() : '';
-      return platformA.localeCompare(platformB);
-    });
-    renderJson();  // Re-render the JSON after sorting
-  });
-
-  // Sorting by platform (Z → A)
-  sortByPlatformReverseButton.addEventListener('click', () => {
-    jsonData.sort((a, b) => {
-      const platformA = a.platform ? a.platform.toLowerCase() : '';
-      const platformB = b.platform ? b.platform.toLowerCase() : '';
-      return platformB.localeCompare(platformA);  // Reverse order
-    });
-    renderJson();  // Re-render the JSON after sorting
-  });
-  // Sorting alphabetically A -> Z
-  sortAlphabeticallyButton.addEventListener('click', () => {
-    jsonData.sort((a, b) => {
-      const nameA = a.name ? a.name.toLowerCase() : '';
-      const nameB = b.name ? b.name.toLowerCase() : '';
-      return nameA.localeCompare(nameB);
-    });
-    renderJson();  // Re-render the JSON after sorting
-  });
-
-  // Sorting alphabetically Z -> A
-  sortReverseAlphabeticallyButton.addEventListener('click', () => {
-    jsonData.sort((a, b) => {
-      const nameA = a.name ? a.name.toLowerCase() : '';
-      const nameB = b.name ? b.name.toLowerCase() : '';
-      return nameB.localeCompare(nameA);  // Reverse order
-    });
-    renderJson();  // Re-render the JSON after sorting
-  });
-
-if (localStorage.getItem('theme') === 'dark') {
-    document.body.classList.add('dark-mode');
-    darkModeToggle.textContent = 'Light Mode';
+      } catch (error) {
+        alert('Invalid JSON file.');
+      }
+    };
+    reader.readAsText(file);
+  } else {
+    alert('Please upload a valid JSON file.');
   }
+}
 
-  // Toggle dark mode and store preference in localStorage
-  darkModeToggle.addEventListener('click', () => {
-    document.body.classList.toggle('dark-mode');
-    const isDarkMode = document.body.classList.contains('dark-mode');
-    darkModeToggle.textContent = isDarkMode ? 'Light Mode' : 'Dark Mode';
-    localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+// Enable sorting buttons
+function enableSortingButtons() {
+  sortAlphabeticallyButton.disabled = false;
+  sortReverseAlphabeticallyButton.disabled = false;
+  sortByAgeButton.disabled = false;
+  sortByAgeReverseButton.disabled = false;
+  sortByPlatformButton.disabled = false;
+  sortByPlatformReverseButton.disabled = false;
+}
+
+// Sorting by age (Youngest to Oldest)
+sortByAgeButton.addEventListener('click', () => {
+  jsonData.sort((a, b) => parseAge(a.age) - parseAge(b.age));
+  renderJson(); // Re-render after sorting
+});
+
+// Sorting by age (Oldest to Youngest)
+sortByAgeReverseButton.addEventListener('click', () => {
+  jsonData.sort((a, b) => parseAge(b.age) - parseAge(a.age));
+  renderJson(); // Re-render after sorting
+});
+
+// Sorting by platform (A → Z)
+sortByPlatformButton.addEventListener('click', () => {
+  jsonData.sort((a, b) => (a.platform || '').localeCompare(b.platform || ''));
+  renderJson(); // Re-render after sorting
+});
+
+// Sorting by platform (Z → A)
+sortByPlatformReverseButton.addEventListener('click', () => {
+  jsonData.sort((a, b) => (b.platform || '').localeCompare(a.platform || ''));
+  renderJson(); // Re-render after sorting
+});
+
+// Sorting alphabetically A -> Z
+sortAlphabeticallyButton.addEventListener('click', () => {
+  jsonData.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+  renderJson(); // Re-render after sorting
+});
+
+// Sorting alphabetically Z -> A
+sortReverseAlphabeticallyButton.addEventListener('click', () => {
+  jsonData.sort((a, b) => (b.name || '').localeCompare(a.name || ''));
+  renderJson(); // Re-render after sorting
+});
+
+// Function to parse age values
+function parseAge(age) {
+  const parsed = parseInt(age, 10);
+  return isNaN(parsed) ? Infinity : parsed; // Non-numeric ages become Infinity
+}
+
+// Dark mode initialization and toggle
+if (localStorage.getItem('theme') === 'dark') {
+  document.body.classList.add('dark-mode');
+  darkModeToggle.textContent = 'Light Mode';
+}
+
+darkModeToggle.addEventListener('click', () => {
+  const isDarkMode = document.body.classList.toggle('dark-mode');
+  darkModeToggle.textContent = isDarkMode ? 'Light Mode' : 'Dark Mode';
+  localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+});
+
+// Render the JSON data into the container
+function renderJson() {
+  jsonContainer.innerHTML = '';  // Clear the container
+  jsonData.forEach((item, index) => {
+    if (item && typeof item === 'object') {
+      const jsonItem = document.createElement('div');
+      jsonItem.classList.add('json-item');
+      jsonItem.setAttribute('data-id', index);
+
+      jsonItem.innerHTML = `
+        <div class="json-item-content">
+          <div class="image-container">
+            <img class="image-preview" src="${item.imageData || 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA...'}" alt="Image Preview">
+          </div>
+          <div class="info">
+            <p class="name"><strong>${item.name || 'Unnamed'}</strong></p>
+            <p class="platform"><strong>Platform:</strong> ${item.platform || 'N/A'}</p>
+            <p class="age"><strong>Age:</strong> ${item.age || 'N/A'}</p>
+            <p class="description"><strong>Description:</strong> ${item.description || 'No description'}</p>
+            <p><strong>Link:</strong> <a href="${item.link || '#'}" target="_blank">${item.link || 'N/A'}</a></p>
+            <p><strong>Tags:</strong> ${item.tags ? item.tags.join(', ') : 'No tags'}</p>
+          </div>
+        </div>
+        <div class="move-buttons">
+          <button class="move-up" data-index="${index}">Up</button>
+          <button class="move-down" data-index="${index}">Down</button>
+        </div>
+      `;
+      jsonContainer.appendChild(jsonItem);
+    }
   });
+  saveOrderButton.disabled = false;
 
-    // Function to render the JSON data into the container
+  // Add event listeners to move buttons
+  document.querySelectorAll('.move-up').forEach(button => button.addEventListener('click', moveUp));
+  document.querySelectorAll('.move-down').forEach(button => button.addEventListener('click', moveDown));
+}
 
-    function renderJson() {
-      jsonContainer.innerHTML = '';  // Clear the container
-      jsonData.forEach((item, index) => {
-        if (typeof item === 'object' && item !== null) {
-          const jsonItem = document.createElement('div');
-          jsonItem.classList.add('json-item');
-          jsonItem.setAttribute('data-id', index);
+// Move item up in the list
+function moveUp(event) {
+  const index = parseInt(event.target.getAttribute('data-index'));
+  if (index > 0) {
+    const movedItem = jsonData.splice(index, 1)[0];
+    jsonData.splice(index - 1, 0, movedItem);
+    renderJson();
+  }
+}
 
-          jsonItem.innerHTML = `
-            <div class="json-item-content">
-              <div class="image-container">
-                <img class="image-preview" src="${item.imageData || 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA...'}" alt="Image Preview">
-              </div>
-              <div class="info">
-                <p class="name"><strong>${item.name || 'Unnamed'}</strong></p>
-                <p class="platform"><strong>Platform:</strong> ${item.platform || 'N/A'}</p>
-                <p class="age"><strong>Age:</strong> ${item.age || 'N/A'}</p>
-                <p class="description"><strong>Description:</strong> ${item.description || 'No description'}</p>
-                <p><strong>Link:</strong> <a href="${item.link || '#'}" target="_blank">${item.link || 'N/A'}</a></p>
-                <p><strong>Tags:</strong> ${item.tags ? item.tags.join(', ') : 'No tags'}</p>
-              </div>
-            </div>
-            <div class="move-buttons">
-              <button class="move-up" data-index="${index}">Up</button>
-              <button class="move-down" data-index="${index}">Down</button>
-            </div>
-          `;
-          jsonContainer.appendChild(jsonItem);
-        }
-      });
-      saveOrderButton.disabled = false;
+// Move item down in the list
+function moveDown(event) {
+  const index = parseInt(event.target.getAttribute('data-index'));
+  if (index < jsonData.length - 1) {
+    const movedItem = jsonData.splice(index, 1)[0];
+    jsonData.splice(index + 1, 0, movedItem);
+    renderJson();
+  }
+}
 
-      // Add event listeners to move buttons
-      document.querySelectorAll('.move-up').forEach(button => {
-        button.addEventListener('click', moveUp);
-      });
-      document.querySelectorAll('.move-down').forEach(button => {
-        button.addEventListener('click', moveDown);
-      });
-    }
+// Initialize SortableJS
+new Sortable(jsonContainer, {
+  animation: 150,
+  onEnd: function (evt) {
+    const oldIndex = evt.oldIndex;
+    const newIndex = evt.newIndex;
+    const movedItem = jsonData.splice(oldIndex, 1)[0];
+    jsonData.splice(newIndex, 0, movedItem);
+  }
+});
 
-    function moveUp(event) {
-      const index = parseInt(event.target.getAttribute('data-index'));
-      if (index > 0) {
-        const movedItem = jsonData.splice(index, 1)[0];
-        jsonData.splice(index - 1, 0, movedItem);
-        renderJson();
-      }
-    }
+// Save the reordered JSON
+saveOrderButton.addEventListener('click', () => {
+  downloadJson(jsonData, 'reordered-data.json');
+});
 
-    function moveDown(event) {
-      const index = parseInt(event.target.getAttribute('data-index'));
-      if (index < jsonData.length - 1) {
-        const movedItem = jsonData.splice(index, 1)[0];
-        jsonData.splice(index + 1, 0, movedItem);
-        renderJson();
-      }
-    }
+// Function to download JSON data as a file
+function downloadJson(data, filename) {
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(url);
+}
 
+// Navigation functions
+function goToGrid1() {
+  window.location.href = "https://thatoneunoriginal.github.io/backup merge.html";
+}
 
-    // Initialize SortableJS
-    new Sortable(jsonContainer, {
-      animation: 150,
-      onEnd: function (evt) {
-        const oldIndex = evt.oldIndex;
-        const newIndex = evt.newIndex;
-        const movedItem = jsonData.splice(oldIndex, 1)[0];  // Remove the item from old position
-        jsonData.splice(newIndex, 0, movedItem);            // Insert it at the new position
-      }
-    });
+function goToGrid2() {
+  window.location.href = "https://thatoneunoriginal.github.io/character.html";
+}
 
-    // Event handler for file upload
-    fileInput.addEventListener('change', function(event) {
-      const file = event.target.files[0];
-      if (file && file.type === "application/json") {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          try {
-            jsonData = JSON.parse(e.target.result);  // Parse the uploaded JSON
-            if (Array.isArray(jsonData)) {
-              renderJson();  // Render the tiles with the uploaded JSON data
-            } else {
-              alert('Invalid JSON format. Expected an array of objects.');
-            }
-          } catch (error) {
-            alert('Invalid JSON file.');
-          }
-        };
-        reader.readAsText(file);
-      } else {
-        alert('Please upload a valid JSON file.');
-      }
-    });
-
-    // Function to download JSON data as a file
-    function downloadJson(data, filename) {
-      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = filename;
-      a.click();
-      URL.revokeObjectURL(url);
-    }
-
-    // Save the reordered JSON
-    saveOrderButton.addEventListener('click', () => {
-      downloadJson(jsonData, 'reordered-data.json');
-    });
-
-    function goToGrid1() {
-            window.location.href = "https://thatoneunoriginal.github.io/backup merge.html";
-    }
-    function goToGrid2() {
-            window.location.href = "https://thatoneunoriginal.github.io/character.html";
-    }
   </script>
 </body>
 </html>
