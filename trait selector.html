@@ -361,56 +361,48 @@
 <body>
     <div class="filter-bar">
         <select id="tag-filter" onchange="filterResults()">
-            <option value="all">All</option>
-            <option value="Positive">Positive</option>
-            <option value="Neutral">Neutral</option>
-            <option value="Negative">Negative</option>
-            <option value="selected">Selected</option>
+          <option value="all">All</option>
+          <option value="Positive">Positive</option>
+          <option value="Neutral">Neutral</option>
+          <option value="Negative">Negative</option>
+          <option value="selected">Selected</option>
         </select>
         <input type="text" id="search-bar" placeholder="Search titles..." oninput="filterResults()">
         <div class="theme-buttons">
-            <button class="theme-button light active" onclick="setTheme('light')">Light</button>
-            <button class="theme-button dark" onclick="setTheme('dark')">Dark</button>
-            <button class="theme-button amoled" onclick="setTheme('amoled')">AMOLED</button>
+          <button class="theme-button light active" onclick="setTheme('light')">Light</button>
+          <button class="theme-button dark" onclick="setTheme('dark')">Dark</button>
+          <button class="theme-button amoled" onclick="setTheme('amoled')">AMOLED</button>
         </div>
-        <div id="sorting-controls">
-            <button id="reverse-sort-button">Sort Z-A</button>
-        </div>
-    </div>
-
-    <div class="container" id="box-container">
+      </div>
+      <div class="container" id="box-container">
         <!-- Boxes will be populated dynamically -->
-    </div>
-
-    <div class="pagination-container">
+      </div>
+      <div class="pagination-container">
         <div class="pagination-settings">
-            <div class="items-per-page">
-                <label for="items-per-page">Items per page:</label>
-                <select id="items-per-page" onchange="updateItemsPerPage()">
-                    <option value="5">5</option>
-                    <option value="10">10</option>
-                    <option value="20">20</option>
-                    <option value="50">50</option>
-                </select>
-            </div>
-            <div class="page-jump">
-                <label for="page-number">Go to page:</label>
-                <input type="number" id="page-number" min="1" value="1">
-                <button class="pagination-button" onclick="jumpToPage()">Go</button>
-            </div>
+          <div class="items-per-page">
+            <label for="items-per-page">Items per page:</label>
+            <select id="items-per-page" onchange="updateItemsPerPage()">
+              <option value="5">5</option>
+              <option value="10">10</option>
+              <option value="20">20</option>
+              <option value="50">50</option>
+            </select>
+          </div>
+          <div class="page-jump">
+            <label for="page-number">Go to page:</label>
+            <input type="number" id="page-number" min="1" value="1">
+            <button class="pagination-button" onclick="jumpToPage()">Go</button>
+          </div>
         </div>
         <div class="pagination-controls" id="pagination-controls">
-            <!-- Pagination controls will be added dynamically -->
+          <!-- Pagination controls will be added dynamically -->
         </div>
         <div class="pagination-info" id="pagination-info">
-            <!-- Pagination info will be added dynamically -->
+          <!-- Pagination info will be added dynamically -->
         </div>
-    </div>
-
-    <div class="loading" id="loading">Loading...</div>
-    <div class="keyboard-tooltip" id="keyboard-tooltip">
-        Use arrow keys ← → to navigate pages
-    </div>
+      </div>
+      <div class="loading" id="loading">Loading...</div>
+      <div class="keyboard-tooltip" id="keyboard-tooltip"> Use arrow keys ← → to navigate pages </div>
 
     <script>
         const container = document.getElementById('box-container');
@@ -442,107 +434,108 @@
         });
 
         async function loadJsonFromUrl() {
-    const maxRetries = 5;
-    const retryDelay = 20000; // 20 seconds
-    let attempt = 0;
-    let useLocalFile = false; // Flag to stop online fetch if local file is provided
+            const maxRetries = 5;
+            const retryDelay = 20000; // 20 seconds
+            let attempt = 0;
+            let useLocalFile = false; // Flag to stop online fetch if local file is provided
 
-    // Create a file input element
-    const fileInput = document.createElement('input');
-    fileInput.type = 'file';
-    fileInput.accept = '.json';
 
-    // Handle file input selection
-    fileInput.addEventListener('change', async (event) => {
-        const file = event.target.files[0];
-        if (file) {
-            useLocalFile = true; // Disable online fetch
-            try {
-                showLoading(); // Display loading indicator
-                const fileContent = await file.text();
-                const rawData = JSON.parse(fileContent);
-                
-                // Validate the JSON data
-                jsonData = validateJsonData(rawData);
+            // Create a file input element
+            const fileInput = document.createElement('input');
+            fileInput.type = 'file';
+            fileInput.accept = '.json';
 
-                // Update existing selections with new data
-                const updatedSelections = new Map();
-                jsonData.forEach(item => {
-                    if (selectedBoxes.has(item.title)) {
-                        updatedSelections.set(item.title, item);
+            // Handle file input selection
+            fileInput.addEventListener('change', async (event) => {
+                const file = event.target.files[0];
+                if (file) {
+                    useLocalFile = true; // Disable online fetch
+                    try {
+                        showLoading(); // Display loading indicator
+                        const fileContent = await file.text();
+                        const rawData = JSON.parse(fileContent);
+
+                        // Validate the JSON data
+                        jsonData = validateJsonData(rawData);
+
+                        // Update existing selections with new data
+                        const updatedSelections = new Map();
+                        jsonData.forEach(item => {
+                            if (selectedBoxes.has(item.title)) {
+                                updatedSelections.set(item.title, item);
+                            }
+                        });
+                        selectedBoxes = updatedSelections;
+                        saveSelections();
+
+                        // Immediately display results after loading
+                        currentPage = 1; // Reset to first page
+                        filterResults(); // Populate the UI with the loaded data
+                    } catch (error) {
+                        console.error('Error processing local file:', error);
+                        alert(`Error loading file: ${error.message}. Please check the file format.`);
+                        jsonData = [];
+                        filterResults(); // Still attempt to render UI even if empty
+                    } finally {
+                        hideLoading(); // Hide loading indicator
                     }
-                });
-                selectedBoxes = updatedSelections;
-                saveSelections();
-
-                // Immediately display results after loading
-                currentPage = 1; // Reset to first page
-                filterResults(); // Populate the UI with the loaded data
-            } catch (error) {
-                console.error('Error processing local file:', error);
-                alert(`Error loading file: ${error.message}. Please check the file format.`);
-                jsonData = [];
-                filterResults(); // Still attempt to render UI even if empty
-            } finally {
-                hideLoading(); // Hide loading indicator
-            }
-        }
-    });
-
-    // Listen for the '\' key to trigger file upload
-    document.addEventListener('keydown', (event) => {
-        if (event.key === '\\') {
-            fileInput.click();
-        }
-    });
-
-    async function fetchJson() {
-        if (useLocalFile) return; // Stop if the user provides a local file
-
-        try {
-            showLoading();
-            const response = await fetch('https://raw.githubusercontent.com/ThatOneUnoriginal/ThatOneUnoriginal.github.io/refs/heads/main/Character%20Tools/Assets/character_traits_jsonfile.json');
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            const rawData = await response.json();
-
-            // Validate the JSON data
-            jsonData = validateJsonData(rawData);
-
-            // Update existing selections with new data
-            const updatedSelections = new Map();
-            jsonData.forEach(item => {
-                if (selectedBoxes.has(item.title)) {
-                    updatedSelections.set(item.title, item);
                 }
             });
-            selectedBoxes = updatedSelections;
-            saveSelections();
 
-            // Immediately display results after loading
-            currentPage = 1; // Reset to first page
-            filterResults(); // Populate the UI with the loaded data
-        } catch (error) {
-            console.error(`Attempt ${attempt + 1}: Error loading JSON:`, error);
+            // Listen for the '\' key to trigger file upload
+            document.addEventListener('keydown', (event) => {
+                if (event.key === '\\') {
+                    fileInput.click();
+                }
+            });
 
-            if (attempt < maxRetries) {
-                attempt++;
-                console.log(`Retrying in ${retryDelay / 1000} seconds...`);
-                await new Promise(resolve => setTimeout(resolve, retryDelay));
-                return fetchJson();
-            } else {
-                alert(`Failed to load trait data after ${maxRetries + 1} attempts. Please check your connection or the JSON file.`);
-                jsonData = [];
-                filterResults(); // Still attempt to render UI even if empty
+            async function fetchJson() {
+                if (useLocalFile) return; // Stop if the user provides a local file
+
+                try {
+                    showLoading();
+                    const response = await fetch('https://raw.githubusercontent.com/ThatOneUnoriginal/ThatOneUnoriginal.github.io/refs/heads/main/Character%20Tools/Assets/character_traits_jsonfile.json');
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    const rawData = await response.json();
+
+                    // Validate the JSON data
+                    jsonData = validateJsonData(rawData);
+
+                    // Update existing selections with new data
+                    const updatedSelections = new Map();
+                    jsonData.forEach(item => {
+                        if (selectedBoxes.has(item.title)) {
+                            updatedSelections.set(item.title, item);
+                        }
+                    });
+                    selectedBoxes = updatedSelections;
+                    saveSelections();
+
+                    // Immediately display results after loading
+                    currentPage = 1; // Reset to first page
+                    filterResults(); // Populate the UI with the loaded data
+                } catch (error) {
+                    console.error(`Attempt ${attempt + 1}: Error loading JSON:`, error);
+
+                    if (attempt < maxRetries) {
+                        attempt++;
+                        console.log(`Retrying in ${retryDelay / 1000} seconds...`);
+                        await new Promise(resolve => setTimeout(resolve, retryDelay));
+                        return fetchJson();
+                    } else {
+                        alert(`Failed to load trait data after ${maxRetries + 1} attempts. Please check your connection or the JSON file.`);
+                        jsonData = [];
+                        filterResults(); // Still attempt to render UI even if empty
+                    }
+                } finally {
+                    hideLoading();
+                }
             }
-        } finally {
-            hideLoading();
-        }
-    }
 
-    await fetchJson();
-}
+            await fetchJson();
+        }
 
 
 
@@ -569,7 +562,7 @@
             const input = document.getElementById('page-number');
             const totalPages = Math.ceil(getFilteredData().length / itemsPerPage);
             const pageNum = parseInt(input.value);
-            
+
             if (pageNum >= 1 && pageNum <= totalPages) {
                 currentPage = pageNum;
                 filterResults();
@@ -620,31 +613,31 @@
         function toggleSelection(event, boxData) {
             event.stopPropagation();
             const boxDataObj = typeof boxData === 'string' ? JSON.parse(boxData) : boxData;
-            
+
             if (selectedBoxes.has(boxDataObj.title)) {
                 selectedBoxes.delete(boxDataObj.title);
             } else {
                 selectedBoxes.set(boxDataObj.title, boxDataObj);
             }
-            
+
             saveSelections();
             filterResults();
         }
 
         function getFilteredData() {
-    const tagFilter = document.getElementById('tag-filter').value;
-    const searchQuery = document.getElementById('search-bar').value.toLowerCase();
+            const tagFilter = document.getElementById('tag-filter').value;
+            const searchQuery = document.getElementById('search-bar').value.toLowerCase();
 
-    const filteredData = jsonData.filter(item => {
-        const matchesTag = tagFilter === 'all' ||
-            (tagFilter === 'selected' ? selectedBoxes.has(item.title) : item.tag === tagFilter);
-        const matchesSearch = item.title.toLowerCase().includes(searchQuery);
-        return matchesTag && matchesSearch;
-    });
+            const filteredData = jsonData.filter(item => {
+                const matchesTag = tagFilter === 'all' ||
+                    (tagFilter === 'selected' ? selectedBoxes.has(item.title) : item.tag === tagFilter);
+                const matchesSearch = item.title.toLowerCase().includes(searchQuery);
+                return matchesTag && matchesSearch;
+            });
 
-    // Sort filtered data alphabetically by title
-    return filteredData.sort((a, b) => a.title.localeCompare(b.title));
-}
+            // Sort filtered data alphabetically by title
+            return filteredData.sort((a, b) => a.title.localeCompare(b.title));
+        }
 
 
         function createPageButtons(totalPages) {
@@ -658,17 +651,32 @@
             }
 
             if (startPage > 1) {
-                buttons.push({ page: 1, text: '1' });
-                if (startPage > 2) buttons.push({ page: null, text: '...' });
+                buttons.push({
+                    page: 1,
+                    text: '1'
+                });
+                if (startPage > 2) buttons.push({
+                    page: null,
+                    text: '...'
+                });
             }
 
             for (let i = startPage; i <= endPage; i++) {
-                buttons.push({ page: i, text: i.toString() });
+                buttons.push({
+                    page: i,
+                    text: i.toString()
+                });
             }
 
             if (endPage < totalPages) {
-                if (endPage < totalPages - 1) buttons.push({ page: null, text: '...' });
-                buttons.push({ page: totalPages, text: totalPages.toString() });
+                if (endPage < totalPages - 1) buttons.push({
+                    page: null,
+                    text: '...'
+                });
+                buttons.push({
+                    page: totalPages,
+                    text: totalPages.toString()
+                });
             }
 
             return buttons;
@@ -676,7 +684,7 @@
 
         function createPaginationControls(totalPages) {
             paginationControls.innerHTML = '';
-            
+
             const prevButton = document.createElement('button');
             prevButton.className = 'pagination-button';
             prevButton.textContent = '←';
@@ -685,7 +693,10 @@
             paginationControls.appendChild(prevButton);
 
             const pageButtons = createPageButtons(totalPages);
-            pageButtons.forEach(({ page, text }) => {
+            pageButtons.forEach(({
+                page,
+                text
+            }) => {
                 const button = document.createElement('button');
                 button.className = 'pagination-button';
                 if (page === currentPage) button.classList.add('active');
@@ -724,7 +735,7 @@
 
             setTimeout(() => {
                 container.innerHTML = '';
-                
+
                 const startIndex = (currentPage - 1) * itemsPerPage;
                 const endIndex = startIndex + itemsPerPage;
                 const paginatedData = data.slice(startIndex, endIndex);
@@ -774,23 +785,23 @@
         function filterResults() {
             const filteredData = getFilteredData();
             const totalPages = Math.ceil(filteredData.length / itemsPerPage);
-            
+
             if (currentPage > totalPages) {
                 currentPage = Math.max(1, totalPages);
             }
-            
+
             populateBoxes(filteredData);
         }
 
         function setTheme(theme) {
             document.body.classList.remove('dark-mode', 'amoled-mode');
-            
+
             if (theme === 'dark') {
                 document.body.classList.add('dark-mode');
             } else if (theme === 'amoled') {
                 document.body.classList.add('amoled-mode');
             }
-            
+
             const buttons = document.querySelectorAll('.theme-button');
             buttons.forEach(button => {
                 button.classList.remove('active');
@@ -808,46 +819,44 @@
         }
 
         document.addEventListener('DOMContentLoaded', async () => {
-    loadSavedTheme();
-    loadSavedSelections();
-    createPaginationControls(1);
-    updatePaginationInfo(0);
-    
-    // Wait for JSON data to load before displaying boxes
-    await loadJsonFromUrl();
-    // Immediately filter and display results after data is loaded
-    filterResults();
-});
+            loadSavedTheme();
+            loadSavedSelections();
+            createPaginationControls(1);
+            updatePaginationInfo(0);
+
+            // Wait for JSON data to load before displaying boxes
+            await loadJsonFromUrl();
+            // Immediately filter and display results after data is loaded
+            filterResults();
+        });
 
         function validateJsonData(data) {
-    // Ensure data is an array
-    if (!Array.isArray(data)) {
-        throw new Error('JSON data must be an array');
-    }
+            // Ensure data is an array
+            if (!Array.isArray(data)) {
+                throw new Error('JSON data must be an array');
+            }
 
-    // Validate each item in the array
-    return data.map((item, index) => {
-        if (!item || typeof item !== 'object') {
-            throw new Error(`Item at index ${index} is not an object`);
+            // Validate each item in the array
+            return data.map((item, index) => {
+                if (!item || typeof item !== 'object') {
+                    throw new Error(`Item at index ${index} is not an object`);
+                }
+
+                if (!item.title || typeof item.title !== 'string') {
+                    throw new Error(`Missing or invalid title at index ${index}`);
+                }
+
+                if (!item.tag || typeof item.tag !== 'string') {
+                    throw new Error(`Missing or invalid tag at index ${index}`);
+                }
+
+                if (!item.content || typeof item.content !== 'string') {
+                    throw new Error(`Missing or invalid content at index ${index}`);
+                }
+
+                return item;
+            });
         }
-
-        if (!item.title || typeof item.title !== 'string') {
-            throw new Error(`Missing or invalid title at index ${index}`);
-        }
-
-        if (!item.tag || typeof item.tag !== 'string') {
-            throw new Error(`Missing or invalid tag at index ${index}`);
-        }
-
-        if (!item.content || typeof item.content !== 'string') {
-            throw new Error(`Missing or invalid content at index ${index}`);
-        }
-
-        return item;
-    });
-}
-
-
     </script>
 </body>
 </html>
