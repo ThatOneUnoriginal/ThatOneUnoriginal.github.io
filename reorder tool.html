@@ -8,27 +8,26 @@
   <style>
 body {
   font-family: "Arial", sans-serif;
-  background: linear-gradient(to right, #4facfe, #00f2fe);
-  background-size: 200% 100%; /* Extend the background size */
-  animation: gradientAnimation 10s ease infinite; /* Apply the animation */
-  --background: #fff;
+  background: linear-gradient(to right, #f0f0f0, #f9f9f9);
+  background-size: 200% 100%;
+  animation: gradientAnimation 10s ease infinite;
   margin: 0;
   padding: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  max-height: 100vh; /* Make sure it doesn’t overflow */
-  overflow: hidden; /* Prevent scrolling if unnecessary */
+  max-height: 100vh;
+  overflow: hidden;
   color: #333;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .popup {
-  background: #ffffff;
+  background: #fff;
   padding: 20px;
   border-radius: 8px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 20px rgba(255, 255, 255, 0.1);
   max-width: 90vw;
   max-height: 90vh;
   width: 100%;
@@ -36,23 +35,14 @@ body {
   box-sizing: border-box;
   overflow: auto;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  animation: floating 3s ease-in-out infinite;
-}
-
-.popup:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
 }
 
 @keyframes floating {
-  0% {
+  0%, 100% {
     transform: translateY(0);
   }
   50% {
     transform: translateY(-10px);
-  }
-  100% {
-    transform: translateY(0);
   }
 }
 
@@ -75,42 +65,42 @@ h1 {
   padding: 20px;
   border-radius: 12px;
   border: 1px solid #e0e0e0;
-  background-color: #ffffff;
+  background-color: #fff;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
   cursor: grab;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  position: relative; /* Keep this for absolute positioning of buttons */
-  margin: 0 20px; /* Add margin for mobile scrolling */
+  position: relative;
+  margin: 0 20px;
 }
 
-.move-buttons button:hover {
-  background-color: #f0f8ff;
+.json-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
 }
 
 .move-buttons {
-  position: absolute; /* Position it relative to the json-item */
-  top: 10px; /* Adjust the vertical position */
-  right: 10px; /* Adjust the horizontal position */
+  position: absolute;
+  top: 10px;
+  right: 10px;
   display: flex;
-  flex-direction: column; /* Stack buttons vertically */
+  flex-direction: column;
 }
 
 .move-buttons button {
   padding: 5px 10px;
   font-size: 14px;
   cursor: pointer;
-  border: 1px solid #4facfe;
+  border: 1px solid #007BFF;
   border-radius: 4px;
-  background-color: #ffffff;
-  color: #4facfe;
+  background-color: #fff;
+  color: #007BFF;
   transition: background-color 0.3s ease;
-  margin-bottom: 5px; /* Space between buttons */
+  margin-bottom: 5px;
   width: 80px;
 }
 
-.json-item:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+.move-buttons button:hover {
+  background-color: #f0f8ff;
 }
 
 .json-item-content {
@@ -180,7 +170,7 @@ h1 {
 input[type="file"] {
   margin: 15px 0;
   padding: 10px;
-  border: 2px solid #4facfe;
+  border: 2px solid #007BFF;
   border-radius: 6px;
   cursor: pointer;
   font-size: 16px;
@@ -197,13 +187,13 @@ button {
   cursor: pointer;
   border: none;
   border-radius: 4px;
-  background-color: #4facfe;
+  background-color: #007BFF;
   color: #ffffff;
   transition: background-color 0.3s ease;
 }
 
 button:hover {
-  background-color: #00c2fe;
+  background-color: #0056b3;
 }
 
 .info-grid-buttons {
@@ -226,12 +216,12 @@ button:hover {
 }
 
 body.dark-mode {
-  background: linear-gradient(to right, #141e30, #243b55);
-  color: #f8f9fa;
+  background: linear-gradient(to right, #1a1a1a, #2d2d2d);
+  color: #fff;
 }
 
 .dark-mode a {
-  color: #ffffff;
+  color: #fff;
 }
 
 a {
@@ -239,17 +229,17 @@ a {
 }
 
 .dark-mode .popup {
-  background: #2c3e50;
-  color: #f8f9fa;
+  background: #2d2d2d;
+  color: #fff;
 }
 
 .dark-mode .json-item {
-  background-color: #233240;
-  border-color: #283848;
+  background-color: #2d2d2d;
+  border-color: #404040;
 }
 
 .dark-mode .json-item-content .name {
-  color: #f8f9fa;
+  color: #fff;
 }
 
 .dark-mode .info p,
@@ -258,18 +248,18 @@ a {
 }
 
 .dark-mode button {
-  background-color: #00afe5;
-  color: #ffffff;
+  background-color: #007BFF;
+  color: #fff;
 }
 
 .dark-mode button:hover {
-  background-color: #009bcb;
+  background-color: #0056b3;
 }
 
 body.dark-mode input[type="file"] {
-  background-color: #2c3e50;
+  background-color: #2d2d2d;
   color: white;
-  border-color: #00c2fe;
+  border-color: #404040;
 }
 
 @media (max-width: 600px) {
@@ -287,9 +277,9 @@ body.dark-mode input[type="file"] {
   }
 
   .move-buttons {
-    flex-direction: column; /* Change to vertical layout */
-    width: 100%; /* Full width */
-    position: relative; /* Ensure positioning is correct */
+    flex-direction: column;
+    width: 100%;
+    position: relative;
   }
 
   .move-buttons button {
@@ -297,7 +287,7 @@ body.dark-mode input[type="file"] {
   }
 
   .json-item {
-    margin: 0 0 30px; /* Adjust margin for easier scrolling */
+    margin: 0 0 30px;
   }
 }
 
@@ -306,6 +296,7 @@ body.dark-mode input[type="file"] {
     padding: 10px 5px;
   }
 }
+
 
   </style>
 </head>
@@ -433,15 +424,17 @@ function parseAge(age) {
 }
 
 // Dark mode initialization and toggle
-if (localStorage.getItem('theme') === 'dark') {
+const preferredTheme = localStorage.getItem('preferred-theme');
+const isDarkMode = preferredTheme === 'dark' || preferredTheme === 'amoled';
+if (isDarkMode) {
     document.body.classList.add('dark-mode');
     darkModeToggle.textContent = 'Light Mode';
 }
 
 darkModeToggle.addEventListener('click', () => {
-    const isDarkMode = document.body.classList.toggle('dark-mode');
-    darkModeToggle.textContent = isDarkMode ? 'Light Mode' : 'Dark Mode';
-    localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+    const newTheme = document.body.classList.toggle('dark-mode') ? 'dark' : 'light';
+    darkModeToggle.textContent = newTheme === 'dark' ? 'Light Mode' : 'Dark Mode';
+    localStorage.setItem('preferred-theme', newTheme);
 });
 
 // Render the JSON data into the container
@@ -539,6 +532,7 @@ function goToGrid1() {
 function goToGrid2() {
     window.location.href = "https://thatoneunoriginal.github.io/character.html";
 }
+
   </script>
 </body>
 </html>

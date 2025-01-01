@@ -6,7 +6,6 @@
     <link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/ThatOneUnoriginal/ThatOneUnoriginal.github.io/refs/heads/main/Character%20Tools/Assets/Merger_Website_Logo.ico">
     <title>Merger Tool: T1U Tools</title>
     <style>
-
 .info-grid-buttons {
   display: flex;
   justify-content: center;
@@ -15,7 +14,7 @@
 }
 
 .info-grid-buttons button {
-  background-color: #4facfe;
+  background-color: #007BFF;
   color: white;
   border: none;
   border-radius: 6px;
@@ -26,56 +25,36 @@
 }
 
 .info-grid-buttons button:hover {
-  background-color: #00c2fe;
+  background-color: #0056b3;
 }
 
 body.dark-mode .info-grid-buttons button {
-  background-color: #00c2fe;
+  background-color: #007BFF;
 }
 
 .container {
-  background: white;
+  background: #f9f9f9;
   padding: 20px;
   border-radius: 12px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-  width: 100%; /* Ensure full width */
-  max-width: 600px; /* Limit the maximum width */
+  width: 100%;
+  max-width: 600px;
   text-align: center;
-  max-height: 100vh; /* Keep it within view */
-  overflow: auto; /* Allow scrolling if content overflows */
+  max-height: 100vh;
+  overflow: auto;
 }
 
 body.dark-mode {
-  background: linear-gradient(to right, #141e30, #243b55);
+  background: linear-gradient(to right, #1a1a1a, #2d2d2d);
   color: #f0f0f0;
-  --background: #141e30;
-}
-
-.container {
-  background: white;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-  width: 90%;
-  max-width: 600px;
-  text-align: center;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  animation: float 3s ease-in-out infinite;
 }
 
 body.dark-mode .container {
-  background: #2c3e50;
+  background: #2d2d2d;
   box-shadow: 0 8px 20px rgba(255, 255, 255, 0.1);
 }
 
-.container:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
-}
 
-body.dark-mode .container:hover {
-  box-shadow: 0 12px 24px rgba(255, 255, 255, 0.2);
-}
 
 @keyframes float {
   0% {
@@ -103,7 +82,7 @@ body.dark-mode h1 {
 input[type="file"] {
   margin: 15px 0;
   padding: 10px;
-  border: 2px solid #4facfe;
+  border: 2px solid #007BFF;
   border-radius: 6px;
   cursor: pointer;
   font-size: 16px;
@@ -113,13 +92,13 @@ input[type="file"] {
 }
 
 body.dark-mode input[type="file"] {
-  background-color: #2c3e50;
+  background-color: #2d2d2d;
   color: white;
-  border-color: #00c2fe;
+  border-color: #007BFF;
 }
 
 button {
-  background-color: #4facfe;
+  background-color: #007BFF;
   color: white;
   border: none;
   border-radius: 6px;
@@ -133,13 +112,15 @@ button {
 }
 
 button:hover {
-  background-color: #00c2fe;
+  background-color: #0056b3;
 }
+
 body.dark-mode button:hover {
-  background-color: #00afe5;
+  background-color: #0056b3;
 }
+
 body.dark-mode button {
-  background-color: #00c2fe;
+  background-color: #007BFF;
 }
 
 #saveButton {
@@ -161,12 +142,12 @@ pre {
 }
 
 body.dark-mode pre {
-  background-color: #2c3e50;
+  background-color: #2d2d2d;
   color: white;
 }
 
 .dark-mode-toggle {
-  background-color: #4facfe;
+  background-color: #007BFF;
   color: white;
   border: none;
   border-radius: 6px;
@@ -184,7 +165,7 @@ body.dark-mode pre {
 }
 
 .collapse-expand-button {
-  background-color: #4facfe;
+  background-color: #007BFF;
   color: white;
   border: none;
   border-radius: 6px;
@@ -194,11 +175,11 @@ body.dark-mode pre {
 }
 
 .collapse-expand-button:hover {
-  background-color: #00c2fe;
+  background-color: #0056b3;
 }
 
 body.dark-mode .collapse-expand-button {
-  background-color: #00c2fe;
+  background-color: #007BFF;
 }
 
 .collapsed {
@@ -221,13 +202,13 @@ body.dark-mode .collapse-expand-button {
 
 .modal-content {
   background-color: var(--background);
-  margin: 10% auto; /* Center the modal vertically */
+  margin: 10% auto;
   padding: 20px;
   border: 1px solid #888;
   width: 80%;
   max-width: 500px;
-  max-height: 80vh; /* Set a max height */
-  overflow-y: auto; /* Add scroll for overflowing content */
+  max-height: 80vh;
+  overflow-y: auto;
   border-radius: 12px;
   text-align: center;
 }
@@ -237,7 +218,7 @@ body.dark-mode .collapse-expand-button {
 }
 
 .modal button {
-  background-color: #4facfe;
+  background-color: #007BFF;
   border: none;
   color: white;
   padding: 10px;
@@ -249,26 +230,26 @@ body.dark-mode .collapse-expand-button {
 }
 
 .modal button:hover {
-  background-color: #00c2fe;
+  background-color: #0056b3;
 }
 
 @media (max-width: 600px) {
   body {
     padding: 10px;
-    max-height: 100vh; /* Ensure it doesn’t overflow on mobile */
-    overflow: auto; /* Allow scrolling if necessary */
+    max-height: 100vh;
+    overflow: auto;
   }
 
   .container {
     padding: 15px;
     max-width: 100%;
-    max-height: calc(100vh - 40px); /* Account for padding */
-    overflow: auto; /* Ensure scrolling if content is large */
+    max-height: calc(100vh - 40px);
+    overflow: auto;
   }
 
   .modal-content {
     max-width: 90%;
-    max-height: 90vh; /* Limit height on small screens */
+    max-height: 90vh;
     padding: 15px;
   }
 
@@ -285,16 +266,16 @@ body.dark-mode .collapse-expand-button {
 
 input[type="file"],
 button {
-  width: 100%; /* Full width of the container */
-  max-width: 100%; /* Prevent it from overflowing */
+  width: 100%;
+  max-width: 100%;
   font-size: 16px;
   padding: 10px;
   box-sizing: border-box;
-  margin: 10px 0; /* Ensure spacing */
+  margin: 10px 0;
 }
 
 pre {
-  max-height: 300px; /* Limit output height */
+  max-height: 300px;
   overflow-y: auto;
   word-wrap: break-word;
   font-size: 14px;
@@ -309,11 +290,12 @@ pre {
   font-size: 14px;
   padding: 8px;
 }
+
 body {
   font-family: "Arial", sans-serif;
-  background: linear-gradient(to right, #4facfe, #00f2fe);
-  background-size: 200% 100%; /* Extend the background size */
-  animation: gradientAnimation 10s ease infinite; /* Apply the animation */
+  background: linear-gradient(to right, #f0f0f0, #f9f9f9);
+  background-size: 200% 100%;
+  animation: gradientAnimation 10s ease infinite;
   --background: #fff;
   margin: 0;
   padding: 20px;
@@ -321,23 +303,27 @@ body {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  max-height: 100vh; /* Make sure it doesn’t overflow */
-  overflow: hidden; /* Prevent scrolling if unnecessary */
+  max-height: 100vh;
+  overflow: hidden;
   color: #333;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
+
 .mobile-button {
   display: none;
 }
+
 @media (max-width: 600px) {
   .mobile-button {
     display: flex;
     margin: 10px 0;
   }
+
   .desktop-button {
     display: none;
   }
 }
+
 
     </style>
 </head>
@@ -565,10 +551,9 @@ function clearData() {
 
 function toggleDarkMode() {
     const body = document.body;
-    body.classList.toggle('dark-mode');
-
-    const isDarkMode = body.classList.contains('dark-mode');
-    localStorage.setItem('darkMode', isDarkMode ? 'enabled' : 'disabled');
+    const isDarkMode = body.classList.toggle('dark-mode');
+    const newTheme = isDarkMode ? 'dark' : 'light';
+    localStorage.setItem('preferred-theme', newTheme);
 
     const toggleButton = document.querySelector('.dark-mode-toggle');
     if (toggleButton) {
@@ -577,16 +562,15 @@ function toggleDarkMode() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    const savedTheme = localStorage.getItem('darkMode');
-    if (savedTheme === 'enabled') {
+    const preferredTheme = localStorage.getItem('preferred-theme');
+    const isDarkMode = preferredTheme === 'dark' || preferredTheme === 'amoled';
+    if (isDarkMode) {
         document.body.classList.add('dark-mode');
     }
 
     const toggleButton = document.querySelector('.dark-mode-toggle');
     if (toggleButton) {
-        toggleButton.textContent = document.body.classList.contains('dark-mode') ?
-            'Toggle Light Mode' :
-            'Toggle Dark Mode';
+        toggleButton.textContent = isDarkMode ? 'Toggle Light Mode' : 'Toggle Dark Mode';
     }
 });
 
@@ -608,6 +592,7 @@ function closeInfoModal() {
 function goToGrid(url) {
     window.location.href = url;
 }
+
     </script>
 </body>
 </html>
