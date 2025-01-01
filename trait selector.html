@@ -69,13 +69,13 @@
             color: #fff;
         }
 
-        body.dark-mode .pagination-button {
+        body.dark-mode .pagination-button, body.dark-mode .sort-button, body.dark-mode .share-button, body.dark-mode .import-button {
             background-color: #2d2d2d;
             color: #fff;
             border-color: #404040;
         }
 
-        body.dark-mode .pagination-button:hover:not(:disabled) {
+        body.dark-mode .pagination-button:hover:not(:disabled), body.dark-mode .sort-button:hover, body.dark-mode .share-button:hover, body.dark-mode .import-button:hover{
             background-color: #404040;
         }
 
@@ -110,13 +110,13 @@
             color: #fff;
         }
 
-        body.amoled-mode .pagination-button {
+        body.amoled-mode .pagination-button, body.amoled-mode .sort-button, body.amoled-mode .share-button, body.amoled-mode .import-button {
             background-color: #000;
             color: #fff;
             border-color: #333;
         }
 
-        body.amoled-mode .pagination-button:hover:not(:disabled) {
+        body.amoled-mode .pagination-button:hover:not(:disabled), body.amoled-mode .sort-button:hover, body.amoled-mode .share-button:hover, body.amoled-mode .import-button:hover {
             background-color: #1a1a1a;
         }
 
@@ -173,6 +173,20 @@
             cursor: pointer;
             transition: box-shadow 0.3s ease;
             overflow: hidden;
+        }
+        
+
+        .share-button{
+            margin-top: 5px;
+            margin-bottom: 5px
+        }
+
+        .import-button{
+            margin-bottom: 15px;
+        }
+
+        .sort-button, .share-button, .import-button{
+            width: 20%
         }
 
         .box:hover {
@@ -234,6 +248,15 @@
             transition: background-color 0.3s ease;
         }
 
+        .copy-button, .copy-entirety-button, .snapshot-button{
+            margin-top: 10px;
+            padding: 5px 15px;
+            background-color: #007BFF;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+        }
+
         .box.expanded .select-button {
             display: inline-block;
         }
@@ -257,7 +280,7 @@
             margin: 10px 0;
         }
 
-        .pagination-button {
+        .pagination-button, .sort-button, .share-button, .import-button {
             padding: 8px 12px;
             border: 1px solid #007BFF;
             background-color: white;
@@ -269,7 +292,7 @@
             text-align: center;
         }
 
-        .pagination-button:hover:not(:disabled) {
+        .pagination-button:hover:not(:disabled), .sort-button:hover, .share-button:hover, .import-button:hover {
             background-color: #007BFF;
             color: white;
         }
@@ -281,7 +304,7 @@
             background-color: #f9f9f9;
         }
 
-        .pagination-button.active {
+        .pagination-button.active, .sort-button:active, .share-button:active, .import-button:active {
             background-color: #007BFF;
             color: white;
         }
@@ -404,459 +427,603 @@
       <div class="loading" id="loading">Loading...</div>
       <div class="keyboard-tooltip" id="keyboard-tooltip"> Use arrow keys ← → to navigate pages </div>
 
-    <script>
-        const container = document.getElementById('box-container');
-        const paginationControls = document.getElementById('pagination-controls');
-        const paginationInfo = document.getElementById('pagination-info');
-        const loadingIndicator = document.getElementById('loading');
-        const keyboardTooltip = document.getElementById('keyboard-tooltip');
-        let jsonData = [];
-        let selectedBoxes = new Map();
-        let currentPage = 1;
-        let itemsPerPage = 5;
-        let isLoading = false;
-
-        // Show keyboard navigation tooltip
-        setTimeout(() => {
-            keyboardTooltip.classList.add('visible');
-            setTimeout(() => {
-                keyboardTooltip.classList.remove('visible');
-            }, 3000);
-        }, 1000);
-
-        // Keyboard navigation
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowLeft') {
-                navigatePage('prev');
-            } else if (e.key === 'ArrowRight') {
-                navigatePage('next');
-            }
-        });
-
-        async function loadJsonFromUrl() {
-            const maxRetries = 5;
-            const retryDelay = 20000; // 20 seconds
-            let attempt = 0;
-            let useLocalFile = false; // Flag to stop online fetch if local file is provided
-
-
-            // Create a file input element
-            const fileInput = document.createElement('input');
-            fileInput.type = 'file';
-            fileInput.accept = '.json';
-
-            // Handle file input selection
-            fileInput.addEventListener('change', async (event) => {
-                const file = event.target.files[0];
-                if (file) {
-                    useLocalFile = true; // Disable online fetch
-                    try {
-                        showLoading(); // Display loading indicator
-                        const fileContent = await file.text();
-                        const rawData = JSON.parse(fileContent);
-
-                        // Validate the JSON data
-                        jsonData = validateJsonData(rawData);
-
-                        // Update existing selections with new data
-                        const updatedSelections = new Map();
-                        jsonData.forEach(item => {
-                            if (selectedBoxes.has(item.title)) {
-                                updatedSelections.set(item.title, item);
-                            }
-                        });
-                        selectedBoxes = updatedSelections;
-                        saveSelections();
-
-                        // Immediately display results after loading
-                        currentPage = 1; // Reset to first page
-                        filterResults(); // Populate the UI with the loaded data
-                    } catch (error) {
-                        console.error('Error processing local file:', error);
-                        alert(`Error loading file: ${error.message}. Please check the file format.`);
-                        jsonData = [];
-                        filterResults(); // Still attempt to render UI even if empty
-                    } finally {
-                        hideLoading(); // Hide loading indicator
-                    }
-                }
-            });
-
-            // Listen for the '\' key to trigger file upload
-            document.addEventListener('keydown', (event) => {
-                if (event.key === '\\') {
-                    fileInput.click();
-                }
-            });
-
-            async function fetchJson() {
-                if (useLocalFile) return; // Stop if the user provides a local file
-
-                try {
-                    showLoading();
-                    const response = await fetch('https://raw.githubusercontent.com/ThatOneUnoriginal/ThatOneUnoriginal.github.io/refs/heads/main/Character%20Tools/Assets/character_traits_jsonfile.json');
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    const rawData = await response.json();
-
-                    // Validate the JSON data
-                    jsonData = validateJsonData(rawData);
-
-                    // Update existing selections with new data
-                    const updatedSelections = new Map();
-                    jsonData.forEach(item => {
-                        if (selectedBoxes.has(item.title)) {
-                            updatedSelections.set(item.title, item);
-                        }
-                    });
-                    selectedBoxes = updatedSelections;
-                    saveSelections();
-
-                    // Immediately display results after loading
-                    currentPage = 1; // Reset to first page
-                    filterResults(); // Populate the UI with the loaded data
-                } catch (error) {
-                    console.error(`Attempt ${attempt + 1}: Error loading JSON:`, error);
-
-                    if (attempt < maxRetries) {
-                        attempt++;
-                        console.log(`Retrying in ${retryDelay / 1000} seconds...`);
-                        await new Promise(resolve => setTimeout(resolve, retryDelay));
-                        return fetchJson();
-                    } else {
-                        alert(`Failed to load trait data after ${maxRetries + 1} attempts. Please check your connection or the JSON file.`);
-                        jsonData = [];
-                        filterResults(); // Still attempt to render UI even if empty
-                    }
-                } finally {
-                    hideLoading();
-                }
-            }
-
-            await fetchJson();
-        }
-
-
-
-
-        // Rest of the functions remain the same
-        function navigatePage(direction) {
-            const totalPages = Math.ceil(getFilteredData().length / itemsPerPage);
-            if (direction === 'prev' && currentPage > 1) {
-                currentPage--;
-                filterResults();
-            } else if (direction === 'next' && currentPage < totalPages) {
-                currentPage++;
-                filterResults();
-            }
-        }
-
-        function updateItemsPerPage() {
-            itemsPerPage = parseInt(document.getElementById('items-per-page').value);
-            currentPage = 1;
-            filterResults();
-        }
-
-        function jumpToPage() {
-            const input = document.getElementById('page-number');
-            const totalPages = Math.ceil(getFilteredData().length / itemsPerPage);
-            const pageNum = parseInt(input.value);
-
-            if (pageNum >= 1 && pageNum <= totalPages) {
-                currentPage = pageNum;
-                filterResults();
-            } else {
-                alert(`Please enter a page number between 1 and ${totalPages}`);
-                input.value = currentPage;
-            }
-        }
-
-        function showLoading() {
-            isLoading = true;
-            loadingIndicator.style.display = 'block';
-        }
-
-        function hideLoading() {
-            isLoading = false;
-            loadingIndicator.style.display = 'none';
-        }
-
-        function loadSavedSelections() {
-            try {
-                const savedSelections = localStorage.getItem('selectedBoxes');
-                if (savedSelections) {
-                    selectedBoxes = new Map(JSON.parse(savedSelections));
-                }
-            } catch (e) {
-                console.error('Error loading saved selections:', e);
-                selectedBoxes = new Map();
-            }
-        }
-
-        function saveSelections() {
-            try {
-                localStorage.setItem('selectedBoxes', JSON.stringify([...selectedBoxes]));
-            } catch (e) {
-                console.error('Error saving selections:', e);
-                if (e.name === 'QuotaExceededError') {
-                    localStorage.clear();
-                    try {
-                        localStorage.setItem('selectedBoxes', JSON.stringify([...selectedBoxes]));
-                    } catch (retryError) {
-                        console.error('Error retrying save:', retryError);
-                    }
-                }
-            }
-        }
-
-        function toggleSelection(event, boxData) {
-            event.stopPropagation();
-            const boxDataObj = typeof boxData === 'string' ? JSON.parse(boxData) : boxData;
-
-            if (selectedBoxes.has(boxDataObj.title)) {
-                selectedBoxes.delete(boxDataObj.title);
-            } else {
-                selectedBoxes.set(boxDataObj.title, boxDataObj);
-            }
-
-            saveSelections();
-            filterResults();
-        }
-
-        function getFilteredData() {
-            const tagFilter = document.getElementById('tag-filter').value;
-            const searchQuery = document.getElementById('search-bar').value.toLowerCase();
-
-            const filteredData = jsonData.filter(item => {
-                const matchesTag = tagFilter === 'all' ||
-                    (tagFilter === 'selected' ? selectedBoxes.has(item.title) : item.tag === tagFilter);
-                const matchesSearch = item.title.toLowerCase().includes(searchQuery);
-                return matchesTag && matchesSearch;
-            });
-
-            // Sort filtered data alphabetically by title
-            return filteredData.sort((a, b) => a.title.localeCompare(b.title));
-        }
-
-
-        function createPageButtons(totalPages) {
-            const buttons = [];
-            const maxVisiblePages = 5;
-            let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
-            let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
-
-            if (endPage - startPage + 1 < maxVisiblePages) {
-                startPage = Math.max(1, endPage - maxVisiblePages + 1);
-            }
-
-            if (startPage > 1) {
-                buttons.push({
-                    page: 1,
-                    text: '1'
-                });
-                if (startPage > 2) buttons.push({
-                    page: null,
-                    text: '...'
-                });
-            }
-
-            for (let i = startPage; i <= endPage; i++) {
-                buttons.push({
-                    page: i,
-                    text: i.toString()
-                });
-            }
-
-            if (endPage < totalPages) {
-                if (endPage < totalPages - 1) buttons.push({
-                    page: null,
-                    text: '...'
-                });
-                buttons.push({
-                    page: totalPages,
-                    text: totalPages.toString()
-                });
-            }
-
-            return buttons;
-        }
-
-        function createPaginationControls(totalPages) {
-            paginationControls.innerHTML = '';
-
-            const prevButton = document.createElement('button');
-            prevButton.className = 'pagination-button';
-            prevButton.textContent = '←';
-            prevButton.disabled = currentPage === 1;
-            prevButton.onclick = () => navigatePage('prev');
-            paginationControls.appendChild(prevButton);
-
-            const pageButtons = createPageButtons(totalPages);
-            pageButtons.forEach(({
-                page,
-                text
-            }) => {
-                const button = document.createElement('button');
-                button.className = 'pagination-button';
-                if (page === currentPage) button.classList.add('active');
-                button.textContent = text;
-                if (page === null) {
-                    button.disabled = true;
-                } else {
-                    button.onclick = () => {
-                        currentPage = page;
-                        filterResults();
-                    };
-                }
-                paginationControls.appendChild(button);
-            });
-
-            const nextButton = document.createElement('button');
-            nextButton.className = 'pagination-button';
-            nextButton.textContent = '→';
-            nextButton.disabled = currentPage === totalPages;
-            nextButton.onclick = () => navigatePage('next');
-            paginationControls.appendChild(nextButton);
-
-            document.getElementById('page-number').value = currentPage;
-        }
-
-        function updatePaginationInfo(totalItems) {
-            const startItem = (currentPage - 1) * itemsPerPage + 1;
-            const endItem = Math.min(currentPage * itemsPerPage, totalItems);
-            const totalPages = Math.ceil(totalItems / itemsPerPage);
-            paginationInfo.textContent = `Showing ${startItem}-${endItem} of ${totalItems} items (Page ${currentPage} of ${totalPages})`;
-        }
-
-        function populateBoxes(data) {
-            if (isLoading) return;
-            showLoading();
-
-            setTimeout(() => {
-                container.innerHTML = '';
-
-                const startIndex = (currentPage - 1) * itemsPerPage;
-                const endIndex = startIndex + itemsPerPage;
-                const paginatedData = data.slice(startIndex, endIndex);
-
-                paginatedData.forEach(item => {
-                    const box = document.createElement('div');
-                    box.className = 'box';
-                    if (selectedBoxes.has(item.title)) {
-                        box.classList.add('selected');
-                    }
-
-                    const selectButtonText = selectedBoxes.has(item.title) ? '✕' : '+';
-                    const selectButtonClass = selectedBoxes.has(item.title) ? 'select-button selected' : 'select-button';
-
-                    const safeItemData = JSON.stringify(item)
-                        .replace(/"/g, '&quot;')
-                        .replace(/'/g, '&#39;');
-
-                    box.innerHTML = `
-                        <div class="box-header">
-                            <p class="title">${item.title} <span class="tag">${item.tag}</span></p>
-                            <span class="arrow">▶</span>
-                        </div>
-                        <div class="content">
-                            <p>${item.content}</p>
-                            <button class="${selectButtonClass}" onclick='toggleSelection(event, ${safeItemData})'>${selectButtonText}</button>
-                        </div>
-                    `;
-
-                    const arrow = box.querySelector('.arrow');
-                    arrow.addEventListener('click', (event) => {
-                        event.stopPropagation();
-                        box.classList.toggle('expanded');
-                    });
-
-                    container.appendChild(box);
-                });
-
-                const totalPages = Math.ceil(data.length / itemsPerPage);
-                createPaginationControls(totalPages);
-                updatePaginationInfo(data.length);
-
-                hideLoading();
-            }, 200);
-        }
-
-        function filterResults() {
-            const filteredData = getFilteredData();
-            const totalPages = Math.ceil(filteredData.length / itemsPerPage);
-
-            if (currentPage > totalPages) {
-                currentPage = Math.max(1, totalPages);
-            }
-
-            populateBoxes(filteredData);
-        }
-
-        function setTheme(theme) {
-            document.body.classList.remove('dark-mode', 'amoled-mode');
-
-            if (theme === 'dark') {
-                document.body.classList.add('dark-mode');
-            } else if (theme === 'amoled') {
-                document.body.classList.add('amoled-mode');
-            }
-
-            const buttons = document.querySelectorAll('.theme-button');
-            buttons.forEach(button => {
-                button.classList.remove('active');
-                if (button.classList.contains(theme)) {
-                    button.classList.add('active');
-                }
-            });
-
-            localStorage.setItem('preferred-theme', theme);
-        }
-
-        function loadSavedTheme() {
-            const savedTheme = localStorage.getItem('preferred-theme') || 'light';
-            setTheme(savedTheme);
-        }
-
-        document.addEventListener('DOMContentLoaded', async () => {
-            loadSavedTheme();
-            loadSavedSelections();
-            createPaginationControls(1);
-            updatePaginationInfo(0);
-
-            // Wait for JSON data to load before displaying boxes
-            await loadJsonFromUrl();
-            // Immediately filter and display results after data is loaded
-            filterResults();
-        });
-
-        function validateJsonData(data) {
-            // Ensure data is an array
-            if (!Array.isArray(data)) {
-                throw new Error('JSON data must be an array');
-            }
-
-            // Validate each item in the array
-            return data.map((item, index) => {
-                if (!item || typeof item !== 'object') {
-                    throw new Error(`Item at index ${index} is not an object`);
-                }
-
-                if (!item.title || typeof item.title !== 'string') {
-                    throw new Error(`Missing or invalid title at index ${index}`);
-                }
-
-                if (!item.tag || typeof item.tag !== 'string') {
-                    throw new Error(`Missing or invalid tag at index ${index}`);
-                }
-
-                if (!item.content || typeof item.content !== 'string') {
-                    throw new Error(`Missing or invalid content at index ${index}`);
-                }
-
-                return item;
-            });
-        }
-    </script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.3.2/html2canvas.min.js"></script>
+      <script>
+          const container = document.getElementById('box-container');
+          const paginationControls = document.getElementById('pagination-controls');
+          const paginationInfo = document.getElementById('pagination-info');
+          const loadingIndicator = document.getElementById('loading');
+          const keyboardTooltip = document.getElementById('keyboard-tooltip');
+          let jsonData = [];
+          let selectedBoxes = new Map();
+          let currentPage = 1;
+          let itemsPerPage = 5;
+          let isLoading = false;
+          let sortOrder = 'asc'; // Default sort order is ascending
+  
+          // Show keyboard navigation tooltip
+          setTimeout(() => {
+              keyboardTooltip.classList.add('visible');
+              setTimeout(() => {
+                  keyboardTooltip.classList.remove('visible');
+              }, 3000);
+          }, 1000);
+  
+          // Keyboard navigation
+          document.addEventListener('keydown', (e) => {
+              if (e.key === 'ArrowLeft') {
+                  navigatePage('prev');
+              } else if (e.key === 'ArrowRight') {
+                  navigatePage('next');
+              }
+          });
+  
+          async function loadJsonFromUrl() {
+              const maxRetries = 5;
+              const retryDelay = 20000; // 20 seconds
+              let attempt = 0;
+              let useLocalFile = false; // Flag to stop online fetch if local file is provided
+  
+              // Create a file input element
+              const fileInput = document.createElement('input');
+              fileInput.type = 'file';
+              fileInput.accept = '.json';
+  
+              // Handle file input selection
+              fileInput.addEventListener('change', async (event) => {
+                  const file = event.target.files[0];
+                  if (file) {
+                      useLocalFile = true; // Disable online fetch
+                      try {
+                          showLoading(); // Display loading indicator
+                          const fileContent = await file.text();
+                          const rawData = JSON.parse(fileContent);
+  
+                          // Validate the JSON data
+                          jsonData = validateJsonData(rawData);
+  
+                          // Update existing selections with new data
+                          const updatedSelections = new Map();
+                          jsonData.forEach(item => {
+                              if (selectedBoxes.has(item.title)) {
+                                  updatedSelections.set(item.title, item);
+                              }
+                          });
+                          selectedBoxes = updatedSelections;
+                          saveSelections();
+  
+                          // Immediately display results after loading
+                          currentPage = 1; // Reset to first page
+                          filterResults(); // Populate the UI with the loaded data
+                      } catch (error) {
+                          console.error('Error processing local file:', error);
+                          alert(`Error loading file: ${error.message}. Please check the file format.`);
+                          jsonData = [];
+                          filterResults(); // Still attempt to render UI even if empty
+                      } finally {
+                          hideLoading(); // Hide loading indicator
+                      }
+                  }
+              });
+  
+              // Listen for the '\' key to trigger file upload
+              document.addEventListener('keydown', (event) => {
+                  if (event.key === '\\') {
+                      fileInput.click();
+                  }
+              });
+  
+              async function fetchJson() {
+                  if (useLocalFile) return; // Stop if the user provides a local file
+  
+                  try {
+                      showLoading();
+                      const response = await fetch('https://raw.githubusercontent.com/ThatOneUnoriginal/ThatOneUnoriginal.github.io/refs/heads/main/Character%20Tools/Assets/character_traits_jsonfile.json');
+                      if (!response.ok) {
+                          throw new Error('Network response was not ok');
+                      }
+                      const rawData = await response.json();
+  
+                      // Validate the JSON data
+                      jsonData = validateJsonData(rawData);
+  
+                      // Update existing selections with new data
+                      const updatedSelections = new Map();
+                      jsonData.forEach(item => {
+                          if (selectedBoxes.has(item.title)) {
+                              updatedSelections.set(item.title, item);
+                          }
+                      });
+                      selectedBoxes = updatedSelections;
+                      saveSelections();
+  
+                      // Immediately display results after loading
+                      currentPage = 1; // Reset to first page
+                      filterResults(); // Populate the UI with the loaded data
+                  } catch (error) {
+                      console.error(`Attempt ${attempt + 1}: Error loading JSON:`, error);
+  
+                      if (attempt < maxRetries) {
+                          attempt++;
+                          console.log(`Retrying in ${retryDelay / 1000} seconds...`);
+                          await new Promise(resolve => setTimeout(resolve, retryDelay));
+                          return fetchJson();
+                      } else {
+                          alert(`Failed to load trait data after ${maxRetries + 1} attempts. Please check your connection or the JSON file.`);
+                          jsonData = [];
+                          filterResults(); // Still attempt to render UI even if empty
+                      }
+                  } finally {
+                      hideLoading();
+                  }
+              }
+  
+              await fetchJson();
+          }
+  
+          // Rest of the functions remain the same
+          function navigatePage(direction) {
+              const totalPages = Math.ceil(getFilteredData().length / itemsPerPage);
+              if (direction === 'prev' && currentPage > 1) {
+                  currentPage--;
+                  filterResults();
+              } else if (direction === 'next' && currentPage < totalPages) {
+                  currentPage++;
+                  filterResults();
+              }
+          }
+  
+          function updateItemsPerPage() {
+              itemsPerPage = parseInt(document.getElementById('items-per-page').value);
+              currentPage = 1;
+              filterResults();
+          }
+  
+          function jumpToPage() {
+              const input = document.getElementById('page-number');
+              const totalPages = Math.ceil(getFilteredData().length / itemsPerPage);
+              const pageNum = parseInt(input.value);
+  
+              if (pageNum >= 1 && pageNum <= totalPages) {
+                  currentPage = pageNum;
+                  filterResults();
+              } else {
+                  alert(`Please enter a page number between 1 and ${totalPages}`);
+                  input.value = currentPage;
+              }
+          }
+  
+          function showLoading() {
+              isLoading = true;
+              loadingIndicator.style.display = 'block';
+          }
+  
+          function hideLoading() {
+              isLoading = false;
+              loadingIndicator.style.display = 'none';
+          }
+  
+          function loadSavedSelections() {
+              try {
+                  const savedSelections = localStorage.getItem('selectedBoxes');
+                  if (savedSelections) {
+                      const titles = JSON.parse(savedSelections);
+                      titles.forEach(title => {
+                          selectedBoxes.set(title, null); // Initialize with null, will be updated later
+                      });
+                  }
+              } catch (e) {
+                  console.error('Error loading saved selections:', e);
+                  selectedBoxes = new Map();
+              }
+          }
+  
+          function saveSelections() {
+              try {
+                  const titles = Array.from(selectedBoxes.keys());
+                  localStorage.setItem('selectedBoxes', JSON.stringify(titles));
+              } catch (e) {
+                  console.error('Error saving selections:', e);
+                  if (e.name === 'QuotaExceededError') {
+                      localStorage.clear();
+                      try {
+                          const titles = Array.from(selectedBoxes.keys());
+                          localStorage.setItem('selectedBoxes', JSON.stringify(titles));
+                      } catch (retryError) {
+                          console.error('Error retrying save:', retryError);
+                      }
+                  }
+              }
+          }
+  
+          function toggleSelection(event, boxData) {
+              event.stopPropagation();
+              const boxDataObj = typeof boxData === 'string' ? JSON.parse(boxData) : boxData;
+  
+              if (selectedBoxes.has(boxDataObj.title)) {
+                  selectedBoxes.delete(boxDataObj.title);
+              } else {
+                  selectedBoxes.set(boxDataObj.title, boxDataObj);
+              }
+  
+              saveSelections();
+              filterResults();
+          }
+  
+          function getFilteredData() {
+              const tagFilter = document.getElementById('tag-filter').value;
+              const searchQuery = document.getElementById('search-bar').value.toLowerCase();
+  
+              const filteredData = jsonData.filter(item => {
+                  const matchesTag = tagFilter === 'all' ||
+                      (tagFilter === 'selected' ? selectedBoxes.has(item.title) : item.tag === tagFilter);
+                  const matchesSearch = item.title.toLowerCase().includes(searchQuery);
+                  return matchesTag && matchesSearch;
+              });
+  
+              // Sort filtered data alphabetically by title
+              return filteredData.sort((a, b) => {
+                  if (sortOrder === 'asc') {
+                      return a.title.localeCompare(b.title);
+                  } else {
+                      return b.title.localeCompare(a.title);
+                  }
+              });
+          }
+  
+          function createPageButtons(totalPages) {
+              const buttons = [];
+              const maxVisiblePages = 5;
+              let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+              let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+  
+              if (endPage - startPage + 1 < maxVisiblePages) {
+                  startPage = Math.max(1, endPage - maxVisiblePages + 1);
+              }
+  
+              if (startPage > 1) {
+                  buttons.push({
+                      page: 1,
+                      text: '1'
+                  });
+                  if (startPage > 2) buttons.push({
+                      page: null,
+                      text: '...'
+                  });
+              }
+  
+              for (let i = startPage; i <= endPage; i++) {
+                  buttons.push({
+                      page: i,
+                      text: i.toString()
+                  });
+              }
+  
+              if (endPage < totalPages) {
+                  if (endPage < totalPages - 1) buttons.push({
+                      page: null,
+                      text: '...'
+                  });
+                  buttons.push({
+                      page: totalPages,
+                      text: totalPages.toString()
+                  });
+              }
+  
+              return buttons;
+          }
+  
+          function createPaginationControls(totalPages) {
+              paginationControls.innerHTML = '';
+  
+              const prevButton = document.createElement('button');
+              prevButton.className = 'pagination-button';
+              prevButton.textContent = '←';
+              prevButton.disabled = currentPage === 1;
+              prevButton.onclick = () => navigatePage('prev');
+              paginationControls.appendChild(prevButton);
+  
+              const pageButtons = createPageButtons(totalPages);
+              pageButtons.forEach(({
+                  page,
+                  text
+              }) => {
+                  const button = document.createElement('button');
+                  button.className = 'pagination-button';
+                  if (page === currentPage) button.classList.add('active');
+                  button.textContent = text;
+                  if (page === null) {
+                      button.disabled = true;
+                  } else {
+                      button.onclick = () => {
+                          currentPage = page;
+                          filterResults();
+                      };
+                  }
+                  paginationControls.appendChild(button);
+              });
+  
+              const nextButton = document.createElement('button');
+              nextButton.className = 'pagination-button';
+              nextButton.textContent = '→';
+              nextButton.disabled = currentPage === totalPages;
+              nextButton.onclick = () => navigatePage('next');
+              paginationControls.appendChild(nextButton);
+  
+              document.getElementById('page-number').value = currentPage;
+          }
+  
+          function updatePaginationInfo(totalItems) {
+              const startItem = (currentPage - 1) * itemsPerPage + 1;
+              const endItem = Math.min(currentPage * itemsPerPage, totalItems);
+              const totalPages = Math.ceil(totalItems / itemsPerPage);
+              paginationInfo.textContent = `Showing ${startItem}-${endItem} of ${totalItems} items (Page ${currentPage} of ${totalPages})`;
+          }
+  
+          function populateBoxes(data) {
+              if (isLoading) return;
+              showLoading();
+  
+              setTimeout(() => {
+                  container.innerHTML = '';
+  
+                  const startIndex = (currentPage - 1) * itemsPerPage;
+                  const endIndex = startIndex + itemsPerPage;
+                  const paginatedData = data.slice(startIndex, endIndex);
+  
+                  paginatedData.forEach(item => {
+                      const box = document.createElement('div');
+                      box.className = 'box';
+                      if (selectedBoxes.has(item.title)) {
+                          box.classList.add('selected');
+                      }
+  
+                      const selectButtonText = selectedBoxes.has(item.title) ? '✕' : '+';
+                      const selectButtonClass = selectedBoxes.has(item.title) ? 'select-button selected' : 'select-button';
+  
+                      const safeItemData = JSON.stringify(item)
+                          .replace(/"/g, '&quot;')
+                          .replace(/'/g, '&#39;');
+  
+                      box.innerHTML = `
+                          <div class="box-header">
+                              <p class="title">${item.title} <span class="tag">${item.tag}</span></p>
+                              <span class="arrow">▶</span>
+                          </div>
+                          <div class="content">
+                              <p>${item.content}</p>
+                              <button class="${selectButtonClass}" onclick='toggleSelection(event, ${safeItemData})'>${selectButtonText}</button>
+                              <button class="copy-button" onclick='copyMeaning(event, "${item.content}")'>Copy Meaning</button>
+                              <button class="copy-entirety-button" onclick='copyEntirety(event, "${item.title}", "${item.tag}", "${item.content}")'>Copy Entirety</button>
+                              <button class="snapshot-button" onclick='takeSnapshot(event, "${item.title}")'>Snapshot</button>
+                          </div>
+                      `;
+  
+                      const arrow = box.querySelector('.arrow');
+                      arrow.addEventListener('click', (event) => {
+                          event.stopPropagation();
+                          box.classList.toggle('expanded');
+                      });
+  
+                      container.appendChild(box);
+                  });
+  
+                  const totalPages = Math.ceil(data.length / itemsPerPage);
+                  createPaginationControls(totalPages);
+                  updatePaginationInfo(data.length);
+  
+                  hideLoading();
+              }, 200);
+          }
+  
+          function filterResults() {
+              const filteredData = getFilteredData();
+              const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+  
+              if (currentPage > totalPages) {
+                  currentPage = Math.max(1, totalPages);
+              }
+  
+              populateBoxes(filteredData);
+          }
+  
+          function setTheme(theme) {
+              document.body.classList.remove('dark-mode', 'amoled-mode');
+  
+              if (theme === 'dark') {
+                  document.body.classList.add('dark-mode');
+              } else if (theme === 'amoled') {
+                  document.body.classList.add('amoled-mode');
+              }
+  
+              const buttons = document.querySelectorAll('.theme-button');
+              buttons.forEach(button => {
+                  button.classList.remove('active');
+                  if (button.classList.contains(theme)) {
+                      button.classList.add('active');
+                  }
+              });
+  
+              localStorage.setItem('preferred-theme', theme);
+          }
+  
+          function loadSavedTheme() {
+              const savedTheme = localStorage.getItem('preferred-theme') || 'light';
+              setTheme(savedTheme);
+          }
+  
+          function toggleSortOrder() {
+              sortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
+              filterResults();
+          }
+  
+          function shareSelectedBoxes() {
+              const selectedData = Array.from(selectedBoxes.values());
+              const jsonString = JSON.stringify(selectedData, null, 2);
+              const blob = new Blob([jsonString], { type: 'application/json' });
+              const url = URL.createObjectURL(blob);
+              const a = document.createElement('a');
+              a.href = url;
+              a.download = 'selected_boxes.json';
+              document.body.appendChild(a);
+              a.click();
+              document.body.removeChild(a);
+              URL.revokeObjectURL(url);
+          }
+  
+          function importSelectedBoxes() {
+              const fileInput = document.createElement('input');
+              fileInput.type = 'file';
+              fileInput.accept = '.json';
+              fileInput.addEventListener('change', (event) => {
+                  const file = event.target.files[0];
+                  if (file) {
+                      const reader = new FileReader();
+                      reader.onload = (e) => {
+                          try {
+                              const importedData = JSON.parse(e.target.result);
+                              if (Array.isArray(importedData)) {
+                                  importedData.forEach(item => {
+                                      if (item.title) {
+                                          selectedBoxes.set(item.title, item);
+                                      }
+                                  });
+                                  saveSelections();
+                                  filterResults();
+                              } else {
+                                  alert('Invalid file format. Please upload a valid JSON file.');
+                              }
+                          } catch (error) {
+                              console.error('Error importing file:', error);
+                              alert('Error importing file. Please check the file format.');
+                          }
+                      };
+                      reader.readAsText(file);
+                  }
+              });
+              fileInput.click();
+          }
+  
+          function copyMeaning(event, content) {
+              event.stopPropagation();
+              navigator.clipboard.writeText(content).then(() => {
+                  alert('Content copied to clipboard!');
+              }).catch(err => {
+                  console.error('Failed to copy content: ', err);
+              });
+          }
+  
+          function copyEntirety(event, title, tag, content) {
+              event.stopPropagation();
+              const formattedText = `${title} (${tag}) - ${content}`;
+              navigator.clipboard.writeText(formattedText).then(() => {
+                  alert('Entire content copied to clipboard!');
+              }).catch(err => {
+                  console.error('Failed to copy entire content: ', err);
+              });
+          }
+  
+          function takeSnapshot(event, title) {
+              event.stopPropagation();
+              const box = event.target.closest('.box');
+              if (box) {
+                  // Temporarily hide buttons and remove border-radius
+                  const originalStyles = {
+                      borderRadius: box.style.borderRadius,
+                      selectButtonDisplay: window.getComputedStyle(box.querySelector('.select-button')).display,
+                      otherButtonsDisplay: window.getComputedStyle(box.querySelectorAll('button:not(.select-button)')[0]).display
+                  };
+                  box.style.borderRadius = '0';
+                  const buttons = box.querySelectorAll('button');
+                  buttons.forEach(button => {
+                      if (button.classList.contains('select-button')) {
+                          button.style.display = 'none';
+                      } else {
+                          button.style.display = 'none';
+                      }
+                  });
+  
+                  html2canvas(box).then(canvas => {
+                      // Restore original styles
+                      box.style.borderRadius = originalStyles.borderRadius;
+                      buttons.forEach(button => {
+                          if (button.classList.contains('select-button')) {
+                              button.style.display = 'inline-block';
+                          } else {
+                              button.style.display = 'initial';
+                          }
+                      });
+  
+                      const link = document.createElement('a');
+                      link.download = `${title}_snapshot.png`;
+                      link.href = canvas.toDataURL();
+                      link.click();
+                  }).catch(err => {
+                      console.error('Failed to take snapshot: ', err);
+                  });
+              }
+          }
+  
+          document.addEventListener('DOMContentLoaded', async () => {
+              loadSavedTheme();
+              loadSavedSelections();
+              createPaginationControls(1);
+              updatePaginationInfo(0);
+  
+              // Create sort order toggle button
+              const sortButton = document.createElement('button');
+              sortButton.className = 'sort-button';
+              sortButton.textContent = 'Toggle Sort Order';
+              sortButton.onclick = toggleSortOrder;
+              document.body.appendChild(sortButton);
+  
+              // Create share button
+              const shareButton = document.createElement('button');
+              shareButton.className = 'share-button';
+              shareButton.textContent = 'Share';
+              shareButton.onclick = shareSelectedBoxes;
+              document.body.appendChild(shareButton);
+  
+              // Create import button
+              const importButton = document.createElement('button');
+              importButton.className = 'import-button';
+              importButton.textContent = 'Import';
+              importButton.onclick = importSelectedBoxes;
+              document.body.appendChild(importButton);
+  
+              // Wait for JSON data to load before displaying boxes
+              await loadJsonFromUrl();
+              // Immediately filter and display results after data is loaded
+              filterResults();
+          });
+  
+          function validateJsonData(data) {
+              // Ensure data is an array
+              if (!Array.isArray(data)) {
+                  throw new Error('JSON data must be an array');
+              }
+  
+              // Validate each item in the array
+              return data.map((item, index) => {
+                  if (!item || typeof item !== 'object') {
+                      throw new Error(`Item at index ${index} is not an object`);
+                  }
+  
+                  if (!item.title || typeof item.title !== 'string') {
+                      throw new Error(`Missing or invalid title at index ${index}`);
+                  }
+  
+                  if (!item.tag || typeof item.tag !== 'string') {
+                      throw new Error(`Missing or invalid tag at index ${index}`);
+                  }
+  
+                  if (!item.content || typeof item.content !== 'string') {
+                      throw new Error(`Missing or invalid content at index ${index}`);
+                  }
+  
+                  return item;
+              });
+          }
+      </script>  
 </body>
 </html>
