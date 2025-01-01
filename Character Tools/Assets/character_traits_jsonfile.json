@@ -1153,6 +1153,56 @@
         "tag": "Positive",
         "content": "Having or showing the qualities of youth. Young and lively."
     },
+    {
+        "title": "Altruistic",
+        "tag": "Positive",
+        "content": "Putting the needs and well-being of others above one's own. Generous and selfless in actions and intentions."
+    },
+    {
+        "title": "Committed",
+        "tag": "Positive",
+        "content": "Dedicated and devoted to a cause, task, or relationship. Loyal and steadfast in pursuit of goals."
+    },
+    {
+        "title": "Convivial",
+        "tag": "Positive",
+        "content": "Friendly and lively. Enjoying and fostering good company and sociability."
+    },
+    {
+        "title": "Discerning",
+        "tag": "Positive",
+        "content": "Having or showing good judgment and understanding. Able to recognize and appreciate quality or subtle differences."
+    },
+    {
+        "title": "Encouraging",
+        "tag": "Positive",
+        "content": "Providing support and confidence to others. Inspiring and motivating through positive reinforcement."
+    },
+    {
+        "title": "Grateful",
+        "tag": "Positive",
+        "content": "Feeling or showing an appreciation of kindness. Thankful and appreciative of the good things in life."
+    },
+    {
+        "title": "Inspirational",
+        "tag": "Positive",
+        "content": "Evoking a sense of possibility and enthusiasm. Motivating and uplifting others through example or encouragement."
+    },
+    {
+        "title": "Kind-hearted",
+        "tag": "Positive",
+        "content": "Having or showing a benevolent and compassionate nature. Gentle and caring towards others."
+    },
+    {
+        "title": "Open-minded",
+        "tag": "Positive",
+        "content": "Receptive to new ideas and perspectives. Willing to consider and respect the views of others."
+    },
+    {
+        "title": "Radiant",
+        "tag": "Positive",
+        "content": "Emitting or reflecting light. Glowing with joy, happiness, or positivity, often in a way that inspires others."
+    },
 
 
     {
