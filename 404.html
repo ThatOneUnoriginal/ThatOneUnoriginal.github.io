@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Page Not Found | T1U Tools</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: #f5f5f5;
+            text-align: center;
+        }
+
+        .error-container {
+            background-color: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            max-width: 90%;
+            width: 600px;
+            margin: 20px;
+            animation: slideUp 0.3s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        h1 {
+            font-size: 72px;
+            margin: 0;
+            background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        h2 {
+            color: #1f2937;
+            margin: 1rem 0;
+        }
+
+        p {
+            color: #4b5563;
+            margin-bottom: 2rem;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .nav-button {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            text-decoration: none;
+            transition: transform 0.2s, opacity 0.2s;
+            min-width: 100px;
+        }
+
+        .nav-button:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        .error-image {
+            width: 200px;
+            height: 200px;
+            margin: 2rem 0;
+            background: #e2e8f0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 100px;
+            color: #6366f1;
+            margin: 20px auto;
+        }
+
+        @media (max-width: 768px) {
+            .error-container {
+                padding: 1.5rem;
+            }
+
+            h1 {
+                font-size: 48px;
+            }
+
+            .error-image {
+                width: 150px;
+                height: 150px;
+                font-size: 75px;
+            }
+
+            .button-container {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .nav-button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <div class="error-image">?</div>
+        <h1>404</h1>
+        <h2>Page Not Found</h2>
+        <p>Oops! The page you're looking for seems to have vanished. Perhaps it's creating a new persona somewhere else?</p>
+        <div class="button-container">
+            <button class="nav-button">Home</button>
+            <button class="nav-button">Tools</button>
+            <button class="nav-button">About</button>
+            <button class="nav-button">Support</button>
+            <button class="nav-button">Contact</button>
+        </div>
+    </div>
+</body>
+</html>
