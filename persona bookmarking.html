@@ -4,640 +4,789 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Persona Bookmarking Tool: T1U Tools</title>
-    <link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/ThatOneUnoriginal/ThatOneUnoriginal.github.io/refs/heads/main/Character%20Tools/Assets/Persona_Website_Logo.ico">
+    <link rel="icon" type="image-x-icon" href="https://raw.githubusercontent.com/ThatOneUnoriginal/ThatOneUnoriginal.github.io/refs/heads/main/Character%20Tools/Assets/Persona_Website_Logo.ico">
     <style>
-/* Base styles */
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background-color: #f5f5f5;
-}
-
-.grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 16px;
-    width: 90%;
-    margin-top: 20px;
-    padding: 20px;
-}
-
-.grid-item {
-    position: relative;
-    background-color: white;
-    border-radius: 12px;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    cursor: pointer;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s, box-shadow 0.2s;
-    aspect-ratio: 1 / 1;
-    width: 100%;
-}
-
-.grid-item:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-}
-
-.grid-item img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.add-image {
-    background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
-    color: white;
-    font-size: 32px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: opacity 0.2s;
-}
-
-.add-image:hover {
-    opacity: 0.9;
-}
-
-/* Filter container styles */
-.filter-container {
-    width: 90%;
-    margin: 20px 0;
-    display: flex;
-    gap: 12px;
-    align-items: center;
-    justify-content: center;
-    padding: 16px;
-    background-color: white;
-    border-radius: 12px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.filter-container select {
-    padding: 8px 16px;
-    border-radius: 8px;
-    border: 2px solid #e2e8f0;
-    font-size: 14px;
-    background-color: white;
-    cursor: pointer;
-    transition: border-color 0.2s;
-}
-
-.filter-container select:hover {
-    border-color: #6366f1;
-}
-
-.filter-container button {
-    padding: 8px 16px;
-    background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: 500;
-    transition: opacity 0.2s;
-}
-
-.filter-container button:hover {
-    opacity: 0.9;
-}
-
-/* Overlay and popup styles */
-.overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(4px);
-    display: none;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-}
-
-.popup {
-    background: white;
-    padding: 32px;
-    border-radius: 16px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    width: 90%;
-    max-width: 500px;
-    max-height: 80vh;
-    overflow-y: auto;
-    position: relative;
-    animation: slideUp 0.3s ease-out;
-}
-
-@keyframes slideUp {
-    from {
-        transform: translateY(20px);
-        opacity: 0;
-    }
-    to {
-        transform: translateY(0);
-        opacity: 1;
-    }
-}
-
-.popup h2 {
-    margin: 0 0 24px 0;
-    color: #1f2937;
-    font-size: 24px;
-    font-weight: 600;
-}
-
-.popup input,
-.popup textarea,
-.popup select {
-    width: 100%;
-    padding: 12px;
-    margin-bottom: 16px;
-    border: 2px solid #e2e8f0;
-    border-radius: 8px;
-    font-size: 14px;
-    transition: border-color 0.2s;
-    box-sizing: border-box;
-}
-
-.popup input:focus,
-.popup textarea:focus,
-.popup select:focus {
-    outline: none;
-    border-color: #6366f1;
-}
-
-.popup textarea {
-    resize: vertical;
-    min-height: 80px;
-}
-
-.popup button {
-    padding: 12px 24px;
-    background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: 500;
-    margin: 8px;
-    transition: opacity 0.2s;
-}
-
-.popup button:hover {
-    opacity: 0.9;
-}
-
-.popup button.secondary {
-    background: #e2e8f0;
-    color: #4a5568;
-}
-
-/* Scrollbar styling */
-.popup::-webkit-scrollbar {
-    width: 8px;
-}
-
-.popup::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 4px;
-}
-
-.popup::-webkit-scrollbar-thumb {
-    background: #c1c1c1;
-    border-radius: 4px;
-}
-
-.popup::-webkit-scrollbar-thumb:hover {
-    background: #a1a1a1;
-}
-
-/* Form field labels */
-.field-label {
-    display: block;
-    margin-bottom: 8px;
-    color: #4a5568;
-    font-weight: 500;
-    font-size: 14px;
-}
-
-/* Error state for inputs */
-.popup input:invalid,
-.popup select:invalid {
-    border-color: #ef4444;
-}
-
-/* Delete Popup Styles */
-.delete-popup {
-    background-color: #f8d7da; /* Light red background for warning */
-    border: 2px solid #f5c6cb; /* Red border to reinforce the warning */
-    color: #721c24; /* Dark red text color for strong contrast */
-    padding: 20px;
-    border-radius: 8px;
-    max-width: 80%;
-    max-height: 70vh;
-    overflow-y: auto;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    animation: shake 0.5s ease-in-out, fade-in 0.5s ease-in-out;
-}
-
-.delete-popup h2 {
-    font-size: 24px;
-    font-weight: bold;
-    color: #721c24;
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-.delete-popup p {
-    font-size: 18px;
-    text-align: center;
-    margin-bottom: 30px;
-}
-
-.delete-popup .popup-buttons {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-}
-
-.delete-popup button {
-    background-color: #dc3545; /* Red background for delete button */
-    color: #fff;
-    border: none;
-    padding: 15px 30px;
-    font-size: 18px;
-    font-weight: bold;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.delete-popup button:hover {
-    background-color: #c82333; /* Darker red on hover */
-    transform: scale(1.05);
-}
-
-.delete-popup button.cancel {
-    background-color: #28a745; /* Green cancel button */
-}
-
-.delete-popup button.cancel:hover {
-    background-color: #218838;
-}
-
-/* Animation to shake the popup to grab attention */
-@keyframes shake {
-    0% { transform: translateX(0); }
-    25% { transform: translateX(-10px); }
-    50% { transform: translateX(10px); }
-    75% { transform: translateX(-10px); }
-    100% { transform: translateX(0); }
-}
-
-/* Fade-in animation */
-@keyframes fade-in {
-    0% { opacity: 0; }
-    100% { opacity: 1; }
-}
-
-/* Mobile responsive styles */
-@media (max-width: 768px) {
-
-    /* Grid item adjustments */
-    .grid {
-        width: 100%;
-        padding: 10px;
-    }
-
-    .grid-item {
-        max-width: 100%;
-    }
-
-    .filter-container {
-        flex-direction: column;
-        gap: 10px;
-    }
-
-    .filter-container select,
-    .filter-container button {
-        width: 100%;
-    }
-
-    .popup {
-        padding: 16px;
-        max-width: 100%;
-    }
-
-    .popup h2 {
-        font-size: 20px;
-        margin-bottom: 16px;
-    }
-
-    .popup input,
-    .popup textarea,
-    .popup select {
-        padding: 10px;
-        font-size: 14px;
-    }
-
-    .popup button {
-        padding: 10px 20px;
-    }
-
-    /* Adjust text sizes and margins for smaller screens */
-    .field-label {
-        font-size: 12px;
-    }
-
-    .age-validation-popup,
-    .merge-popup,
-    .delete-popup,
-    .edit-popup {
-        padding: 16px;
-        width: 90%;
-    }
-
-    .action-buttons {
-        flex-direction: column;
-        align-items: center;
-        gap: 8px;
-    }
-
-    .age-validation-buttons,
-    .merge-buttons,
-    .delete-buttons {
-        flex-direction: column;
-        gap: 8px;
-    }
-}
-
-#file-input{
-    display:none
-}
-
-/* Extra-large screen adjustments */
-@media (min-width: 1200px) {
-
-    /* Grid Layout */
-    .grid {
-        width: 80%; /* Reduced grid width for larger screens */
-        margin-top: 40px;
-        padding: 40px;
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Larger grid item size */
-    }
-
-    .grid-item {
-        max-width: 300px; /* Limit the max-width of grid items */
-    }
-
-    /* Filter Container */
-    .filter-container {
-        width: 80%; /* Increased width for larger screens */
-        margin: 40px auto;
-        padding: 24px 40px;
-        gap: 16px;
-        font-size: 16px;
-    }
-
-    .filter-container select {
-        font-size: 16px; /* Increased font size for dropdowns */
-        padding: 12px 18px;
-    }
-
-    .filter-container button {
-        font-size: 16px;
-        padding: 12px 24px;
-    }
-
-    /* Popup Styles */
-    .popup {
-        padding: 40px;
-        max-width: 80%;
-        max-height: 80vh;
-        overflow-y: auto;
-    }
-
-    .popup h2 {
-        font-size: 28px; /* Larger title size */
-    }
-
-    .popup input,
-    .popup textarea,
-    .popup select {
-        font-size: 16px;
-        padding: 14px 20px;
-    }
-
-    .popup button {
-        font-size: 16px;
-        padding: 14px 28px;
-    }
-
-    /* Form Field Labels */
-    .field-label {
-        font-size: 16px;
-    }
-
-    /* Scrollbar styling (optional) */
-    .popup::-webkit-scrollbar {
-        width: 10px;
-    }
-
-    .popup::-webkit-scrollbar-thumb {
-        background: #aaa;
-    }
-
-    /* Adjusting action buttons for extra-large screens */
-    .action-buttons {
-        flex-direction: row;
-        gap: 16px;
-        justify-content: flex-start;
-    }
-
-    .age-validation-buttons,
-    .merge-buttons,
-    .delete-buttons {
-        flex-direction: row;
-        gap: 16px;
-    }
-}
+        /* Base styles */
+        body {
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f5f5f5;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 16px;
+            width: 90%;
+            margin-top: 20px;
+            padding: 20px;
+        }
+
+        .grid-item {
+            position: relative;
+            background-color: white;
+            border-radius: 12px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+            aspect-ratio: 1 / 1;
+            width: 100%;
+        }
+
+        .grid-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .grid-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .add-image {
+            background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+            color: white;
+            font-size: 32px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.2s;
+        }
+
+        .add-image:hover {
+            opacity: 0.9;
+        }
+
+        /* Filter container styles */
+        .filter-container {
+            width: 90%;
+            margin: 20px 0;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        body.dark-mode .filter-container, body.dark-mode .popup{
+            background-color: #2d2d2d;
+        }
+
+        body.amoled-mode .filter-container, body.amoled-mode .popup{
+            background-color: #1f1f1f;
+        }
+
+        body.dark-mode .popup h2, body.amoled-mode .popup h2, body.dark-mode .field-label, body.amoled-mode .field-label{
+            color: #ffffff
+        }
+
+        body.dark-mode .delete-popup, body.amoled-mode .delete-popup{
+          color: #ff8e98;
+        }
+
+        .filter-container select {
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: 2px solid #e2e8f0;
+            font-size: 14px;
+            background-color: white;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+
+        .filter-container select:hover {
+            border-color: #6366f1;
+        }
+
+        .filter-container button {
+            padding: 8px 16px;
+            background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: opacity 0.2s;
+        }
+
+        .filter-container button:hover {
+            opacity: 0.9;
+        }
+
+        /* Overlay and popup styles */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .popup {
+            background: white;
+            padding: 32px;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+            animation: slideUp 0.3s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .popup h2 {
+            margin: 0 0 24px 0;
+            color: #1f2937;
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .popup input,
+        .popup textarea,
+        .popup select {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.2s;
+            box-sizing: border-box;
+        }
+
+        .popup input:focus,
+        .popup textarea:focus,
+        .popup select:focus {
+            outline: none;
+            border-color: #6366f1;
+        }
+
+        .popup textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .popup button {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            margin: 8px;
+            transition: opacity 0.2s;
+        }
+
+        .popup button:hover {
+            opacity: 0.9;
+        }
+
+        .popup button.secondary {
+            background: #e2e8f0;
+            color: #4a5568;
+        }
+
+        /* Scrollbar styling */
+        .popup::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .popup::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+
+        .popup::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 4px;
+        }
+
+        .popup::-webkit-scrollbar-thumb:hover {
+            background: #a1a1a1;
+        }
+
+        /* Form field labels */
+        .field-label {
+            display: block;
+            margin-bottom: 8px;
+            color: #4a5568;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        /* Error state for inputs */
+        .popup input:invalid,
+        .popup select:invalid {
+            border-color: #ef4444;
+        }
+
+        /* Delete Popup Styles */
+        .delete-popup {
+            background-color: #f8d7da; /* Light red background for warning */
+            border: 2px solid #f5c6cb; /* Red border to reinforce the warning */
+            color: #721c24; /* Dark red text color for strong contrast */
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 80%;
+            max-height: 70vh;
+            overflow-y: auto;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            animation: shake 0.5s ease-in-out, fade-in 0.5s ease-in-out;
+        }
+
+        .delete-popup h2 {
+            font-size: 24px;
+            font-weight: bold;
+            color: #721c24;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .delete-popup p {
+            font-size: 18px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .delete-popup .popup-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .delete-popup button {
+            background-color: #dc3545; /* Red background for delete button */
+            color: #fff;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .delete-popup button:hover {
+            background-color: #c82333; /* Darker red on hover */
+            transform: scale(1.05);
+        }
+
+        .delete-popup button.cancel {
+            background-color: #28a745; /* Green cancel button */
+        }
+
+        .delete-popup button.cancel:hover {
+            background-color: #218838;
+        }
+
+        /* Animation to shake the popup to grab attention */
+        @keyframes shake {
+            0% {
+                transform: translateX(0);
+            }
+            25% {
+                transform: translateX(-10px);
+            }
+            50% {
+                transform: translateX(10px);
+            }
+            75% {
+                transform: translateX(-10px);
+            }
+            100% {
+                transform: translateX(0);
+            }
+        }
+
+        /* Fade-in animation */
+        @keyframes fade-in {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+
+        /* Mobile responsive styles */
+        @media (max-width: 768px) {
+            /* Grid item adjustments */
+            .grid {
+                width: 100%;
+                padding: 10px;
+            }
+
+            .grid-item {
+                max-width: 100%;
+            }
+
+            .filter-container {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .filter-container select,
+            .filter-container button {
+                width: 100%;
+            }
+
+            .popup {
+                padding: 16px;
+                max-width: 100%;
+            }
+
+            .popup h2 {
+                font-size: 20px;
+                margin-bottom: 16px;
+            }
+
+            .popup input,
+            .popup textarea,
+            .popup select {
+                padding: 10px;
+                font-size: 14px;
+            }
+
+            .popup button {
+                padding: 10px 20px;
+            }
+
+            /* Adjust text sizes and margins for smaller screens */
+            .field-label {
+                font-size: 12px;
+            }
+
+            .age-validation-popup,
+            .merge-popup,
+            .delete-popup,
+            .edit-popup {
+                padding: 16px;
+                width: 90%;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+                align-items: center;
+                gap: 8px;
+            }
+
+            .age-validation-buttons,
+            .merge-buttons,
+            .delete-buttons {
+                flex-direction: column;
+                gap: 8px;
+            }
+        }
+
+        #file-input {
+            display: none;
+        }
+
+        /* Extra-large screen adjustments */
+        @media (min-width: 1200px) {
+            /* Grid Layout */
+            .grid {
+                width: 80%; /* Reduced grid width for larger screens */
+                margin-top: 40px;
+                padding: 40px;
+                grid-template-columns: repeat(
+                    auto-fill,
+                    minmax(300px, 1fr)
+                ); /* Larger grid item size */
+            }
+
+            .grid-item {
+                max-width: 300px; /* Limit the max-width of grid items */
+            }
+
+            /* Filter Container */
+            .filter-container {
+                width: 80%; /* Increased width for larger screens */
+                margin: 40px auto;
+                padding: 24px 40px;
+                gap: 16px;
+                font-size: 16px;
+            }
+
+            .filter-container select {
+                font-size: 16px; /* Increased font size for dropdowns */
+                padding: 12px 18px;
+            }
+
+            .filter-container button {
+                font-size: 16px;
+                padding: 12px 24px;
+            }
+
+            /* Popup Styles */
+            .popup {
+                padding: 40px;
+                max-width: 80%;
+                max-height: 80vh;
+                overflow-y: auto;
+            }
+
+            .popup h2 {
+                font-size: 28px; /* Larger title size */
+            }
+
+            .popup input,
+            .popup textarea,
+            .popup select {
+                font-size: 16px;
+                padding: 14px 20px;
+            }
+
+            .popup button {
+                font-size: 16px;
+                padding: 14px 28px;
+            }
+
+            /* Form Field Labels */
+            .field-label {
+                font-size: 16px;
+            }
+
+            /* Scrollbar styling (optional) */
+            .popup::-webkit-scrollbar {
+                width: 10px;
+            }
+
+            .popup::-webkit-scrollbar-thumb {
+                background: #aaa;
+            }
+
+            /* Adjusting action buttons for extra-large screens */
+            .action-buttons {
+                flex-direction: row;
+                gap: 16px;
+                justify-content: flex-start;
+            }
+
+            .age-validation-buttons,
+            .merge-buttons,
+            .delete-buttons {
+                flex-direction: row;
+                gap: 16px;
+            }
+        }
+
+        /* Dark mode styles */
+        body.dark-mode {
+            background-color: #1a1a1a;
+            color: #fff;
+        }
+
+        body.dark-mode .box,
+        body.dark-mode .loading {
+            background-color: #2d2d2d;
+            color: #fff;
+        }
+
+        body.dark-mode .tag {
+            background-color: #404040;
+            color: #fff;
+        }
+
+        body.dark-mode .pagination-button, body.dark-mode .sort-button, body.dark-mode .share-button, body.dark-mode .import-button, body.dark-mode .random-trait-button {
+            background-color: #2d2d2d;
+            color: #fff;
+            border-color: #404040;
+        }
+
+        body.dark-mode .pagination-button:hover:not(:disabled), body.dark-mode .sort-button:hover, body.dark-mode .share-button:hover, body.dark-mode .import-button:hover, body.dark-mode .random-trait-button:hover{
+            background-color: #404040;
+        }
+
+        body.dark-mode .pagination-button:disabled {
+            background-color: #1a1a1a;
+            color: #666;
+            border-color: #333;
+        }
+
+        body.dark-mode select,
+        body.dark-mode input,
+        body.dark-mode .popup input, 
+        body.dark-mode .popup textarea, 
+        body.dark-mode .popup select {
+            background-color: #2d2d2d;
+            color: #fff;
+            border-color: #404040;
+        }
+
+        /* AMOLED mode styles */
+        body.amoled-mode {
+            background-color: #000;
+            color: #fff;
+        }
+
+        body.amoled-mode .box,
+        body.amoled-mode .loading {
+            background-color: #000;
+            color: #fff;
+            border: 1px solid #333;
+        }
+
+        body.amoled-mode .tag {
+            background-color: #1a1a1a;
+            color: #fff;
+        }
+
+        body.amoled-mode .pagination-button, body.amoled-mode .sort-button, body.amoled-mode .share-button, body.amoled-mode .import-button, body.amoled-mode .random-trait-button{
+            background-color: #000;
+            color: #fff;
+            border-color: #333;
+        }
+
+        body.amoled-mode .pagination-button:hover:not(:disabled), body.amoled-mode .sort-button:hover, body.amoled-mode .share-button:hover, body.amoled-mode .import-button:hover, body.amoled-mode .random-trait-button:hover {
+            background-color: #1a1a1a;
+        }
+
+        body.amoled-mode .pagination-button:disabled {
+            background-color: #000;
+            color: #666;
+            border-color: #1a1a1a;
+        }
+
+        body.amoled-mode select,
+        body.amoled-mode input,
+        body.amoled-mode .popup input, 
+        body.amoled-mode .popup textarea, 
+        body.amoled-mode .popup select {
+            background-color: #000;
+            color: #fff;
+            border-color: #333;
+        }
+
+        .theme-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .theme-button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .theme-button.light {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .theme-button.dark {
+            background: #333;
+            color: #fff;
+        }
+
+        .theme-button.amoled {
+            background: #000;
+            color: #fff;
+        }
+
+        .theme-button.active {
+            outline: 2px solid #007BFF;
+        }
     </style>
 </head>
 <body>
     <h1>Persona Bookmarking Tool</h1>
-
     <div class="filter-container">
-        <select id="gender-filter">
-            <option value="">All Genders</option>
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-            <option value="Non-Binary">Non-Binary</option>
-            <option value="Agender">Agender</option>
-        </select>
-
-        <select id="age-filter">
-            <option value="">All Ages</option>
-        </select>
-
-        <button id="export-btn">Export Data</button>
-        <button id="import-btn">Import Data</button>
-        <input type="file" id="file-input" accept=".json">
+      <select id="gender-filter">
+        <option value="">All Genders</option>
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>
+        <option value="Non-Binary">Non-Binary</option>
+        <option value="Agender">Agender</option>
+      </select>
+      <select id="age-filter">
+        <option value="">All Ages</option>
+      </select>
+      <button id="export-btn">Export Data</button>
+      <button id="import-btn">Import Data</button>
+      <button id="navigate-btn" onclick="window.location.href='https://thatoneunoriginal.github.io/trait%20selector.html'">Go to Trait Selector</button>
+      <input type="file" id="file-input" accept=".json">
+      <div class="theme-buttons">
+        <button class="theme-button light active" onclick="setTheme('light')">Light</button>
+        <button class="theme-button dark" onclick="setTheme('dark')">Dark</button>
+        <button class="theme-button amoled" onclick="setTheme('amoled')">AMOLED</button>
+      </div>
     </div>
 
     <div class="grid" id="image-grid">
-        <!-- Grid items will be dynamically added here -->
-        <div class="grid-item add-image" id="add-image">+</div>
+      <!-- Grid items will be dynamically added here -->
+      <div class="grid-item add-image" id="add-image">+</div>
     </div>
-
     <div class="overlay" id="popup-overlay">
-        <div class="popup" id="image-popup">
-            <h2>Add Image</h2>
-            <input type="url" id="image-url" placeholder="Enter image URL...">
-            <br>
-            <button id="confirm-add">Next</button>
-            <button id="cancel-add">Cancel</button>
+      <div class="popup" id="image-popup">
+        <h2>Add Image</h2>
+        <input type="url" id="image-url" placeholder="Enter image URL...">
+        <br>
+        <button id="confirm-add">Next</button>
+        <button id="cancel-add">Cancel</button>
+      </div>
+      <div class="popup" id="persona-popup" style="display: none;">
+        <h2>Add Persona Details</h2>
+        <label class="field-label" for="persona-name">Name</label>
+        <input type="text" id="persona-name" required>
+        <label class="field-label" for="persona-age">Age (minimum 16)</label>
+        <input type="number" id="persona-age" min="16" required>
+        <label class="field-label" for="persona-gender">Gender</label>
+        <select id="persona-gender" required>
+          <option value="">Select Gender</option>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+          <option value="Non-Binary">Non-Binary</option>
+          <option value="Agender">Agender</option>
+        </select>
+        <label class="field-label" for="persona-pronouns">Pronouns</label>
+        <select id="persona-pronouns" required>
+          <option value="">Select Pronouns</option>
+          <option value="They/Them">They/Them</option>
+          <option value="He/Him">He/Him</option>
+          <option value="She/Her">She/Her</option>
+        </select>
+        <label class="field-label" for="persona-tldr">Personality TL;DR (optional)</label>
+        <textarea id="persona-tldr" rows="2"></textarea>
+        <label class="field-label" for="persona-personality">Personality</label>
+        <textarea id="persona-personality" rows="3" required></textarea>
+        <label class="field-label" for="persona-appearance">Appearance</label>
+        <textarea id="persona-appearance" rows="3" required></textarea>
+        <button id="submit-persona">Add Persona</button>
+        <button id="cancel-persona">Cancel</button>
+      </div>
+      <div class="popup" id="persona-display-popup" style="display: none;">
+        <h2>Persona Information</h2>
+        <p>
+          <strong>Name:</strong>
+          <span id="display-name"></span>
+        </p>
+        <p>
+          <strong>Age:</strong>
+          <span id="display-age"></span>
+        </p>
+        <p>
+          <strong>Gender:</strong>
+          <span id="display-gender"></span>
+        </p>
+        <p>
+          <strong>Pronouns:</strong>
+          <span id="display-pronouns"></span>
+        </p>
+        <p>
+          <strong>Personality TL;DR:</strong>
+          <span id="display-tldr"></span>
+        </p>
+        <p>
+          <strong>Personality:</strong>
+          <span id="display-personality"></span>
+        </p>
+        <p>
+          <strong>Appearance:</strong>
+          <span id="display-appearance"></span>
+        </p>
+        <div class="action-buttons">
+          <button id="close-display">Close</button>
+          <button id="edit-persona" class="edit-button">Edit</button>
+          <button id="delete-persona" class="delete-button">Delete</button>
         </div>
-
-        <div class="popup" id="persona-popup" style="display: none;">
-            <h2>Add Persona Details</h2>
-            
-            <label class="field-label" for="persona-name">Name</label>
-            <input type="text" id="persona-name" required>
-            
-            <label class="field-label" for="persona-age">Age (minimum 16)</label>
-            <input type="number" id="persona-age" min="16" required>
-            
-            <label class="field-label" for="persona-gender">Gender</label>
-            <select id="persona-gender" required>
-                <option value="">Select Gender</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-                <option value="Non-Binary">Non-Binary</option>
-                <option value="Agender">Agender</option>
-            </select>
-            
-            <label class="field-label" for="persona-pronouns">Pronouns</label>
-            <select id="persona-pronouns" required>
-                <option value="">Select Pronouns</option>
-                <option value="They/Them">They/Them</option>
-                <option value="He/Him">He/Him</option>
-                <option value="She/Her">She/Her</option>
-            </select>
-            
-            <label class="field-label" for="persona-tldr">Personality TL;DR (optional)</label>
-            <textarea id="persona-tldr" rows="2"></textarea>
-            
-            <label class="field-label" for="persona-personality">Personality</label>
-            <textarea id="persona-personality" rows="3" required></textarea>
-            
-            <label class="field-label" for="persona-appearance">Appearance</label>
-            <textarea id="persona-appearance" rows="3" required></textarea>
-            
-            <button id="submit-persona">Add Persona</button>
-            <button id="cancel-persona">Cancel</button>
+      </div>
+      <div class="popup delete-popup" id="delete-confirmation-popup">
+        <h3>⚠️ Delete Persona</h3>
+        <p>Are you sure you want to delete this persona? This action cannot be undone.</p>
+        <div class="delete-countdown">Please wait <span id="countdown">5</span> seconds </div>
+        <div class="delete-buttons">
+          <button id="cancel-delete">Cancel</button>
+          <button id="confirm-delete" class="delete-confirm">Yes, Delete</button>
         </div>
-
-        <div class="popup" id="persona-display-popup" style="display: none;">
-            <h2>Persona Information</h2>
-            <p><strong>Name:</strong> <span id="display-name"></span></p>
-            <p><strong>Age:</strong> <span id="display-age"></span></p>
-            <p><strong>Gender:</strong> <span id="display-gender"></span></p>
-            <p><strong>Pronouns:</strong> <span id="display-pronouns"></span></p>
-            <p><strong>Personality TL;DR:</strong> <span id="display-tldr"></span></p>
-            <p><strong>Personality:</strong> <span id="display-personality"></span></p>
-            <p><strong>Appearance:</strong> <span id="display-appearance"></span></p>
-            <div class="action-buttons">
-                <button id="close-display">Close</button>
-                <button id="edit-persona" class="edit-button">Edit</button>
-                <button id="delete-persona" class="delete-button">Delete</button>
-            </div>
+      </div>
+      <div class="popup edit-popup" id="edit-popup">
+        <h2>Edit Persona</h2>
+        <label class="field-label">Image URL</label>
+        <input type="url" id="edit-image-url" required>
+        <label class="field-label">Name</label>
+        <input type="text" id="edit-name" required>
+        <label class="field-label">Age (minimum 16)</label>
+        <input type="number" id="edit-age" min="16" required>
+        <label class="field-label">Gender</label>
+        <select id="edit-gender" required>
+          <option value="">Select Gender</option>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+          <option value="Non-Binary">Non-Binary</option>
+          <option value="Agender">Agender</option>
+        </select>
+        <label class="field-label">Pronouns</label>
+        <select id="edit-pronouns" required>
+          <option value="">Select Pronouns</option>
+          <option value="They/Them">They/Them</option>
+          <option value="He/Him">He/Him</option>
+          <option value="She/Her">She/Her</option>
+        </select>
+        <label class="field-label">Personality TL;DR (optional)</label>
+        <textarea id="edit-tldr" rows="2"></textarea>
+        <label class="field-label">Personality</label>
+        <textarea id="edit-personality" rows="3" required></textarea>
+        <label class="field-label">Appearance</label>
+        <textarea id="edit-appearance" rows="3" required></textarea>
+        <div class="button-group">
+          <button id="cancel-edit">Cancel</button>
+          <button id="save-edit">Save Changes</button>
         </div>
-
-        <div class="popup delete-popup" id="delete-confirmation-popup">
-            <h3>⚠️ Delete Persona</h3>
-            <p>Are you sure you want to delete this persona? This action cannot be undone.</p>
-            <div class="delete-countdown">Please wait <span id="countdown">5</span> seconds</div>
-            <div class="delete-buttons">
-                <button id="cancel-delete">Cancel</button>
-                <button id="confirm-delete" class="delete-confirm">Yes, Delete</button>
-            </div>
+      </div>
+      <div class="popup age-validation-popup" id="age-validation-popup">
+        <h3>Invalid Age Detected</h3>
+        <div class="persona-preview" id="invalid-persona-preview"></div>
+        <div class="age-validation-buttons">
+          <input type="number" id="corrected-age" min="16" placeholder="Enter new age (min 16)" style="width: 150px;">
+          <button id="update-age-btn">Update Age</button>
+          <button id="skip-persona-btn">Skip</button>
         </div>
-
-
-        <div class="popup edit-popup" id="edit-popup">
-            <h2>Edit Persona</h2>
-            
-            <label class="field-label">Image URL</label>
-            <input type="url" id="edit-image-url" required>
-            
-            <label class="field-label">Name</label>
-            <input type="text" id="edit-name" required>
-            
-            <label class="field-label">Age (minimum 16)</label>
-            <input type="number" id="edit-age" min="16" required>
-            
-            <label class="field-label">Gender</label>
-            <select id="edit-gender" required>
-                <option value="">Select Gender</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-                <option value="Non-Binary">Non-Binary</option>
-                <option value="Agender">Agender</option>
-            </select>
-            
-            <label class="field-label">Pronouns</label>
-            <select id="edit-pronouns" required>
-                <option value="">Select Pronouns</option>
-                <option value="They/Them">They/Them</option>
-                <option value="He/Him">He/Him</option>
-                <option value="She/Her">She/Her</option>
-            </select>
-            
-            <label class="field-label">Personality TL;DR (optional)</label>
-            <textarea id="edit-tldr" rows="2"></textarea>
-            
-            <label class="field-label">Personality</label>
-            <textarea id="edit-personality" rows="3" required></textarea>
-            
-            <label class="field-label">Appearance</label>
-            <textarea id="edit-appearance" rows="3" required></textarea>
-            
-            <div class="button-group">
-                <button id="cancel-edit">Cancel</button>
-                <button id="save-edit">Save Changes</button>
-            </div>
+      </div>
+      <div class="popup merge-popup" id="merge-popup">
+        <h3>Import Options</h3>
+        <p>How would you like to handle the imported data?</p>
+        <div class="merge-buttons">
+          <button id="merge-data">Add to Existing Grid</button>
+          <button id="replace-data">Replace Existing Grid</button>
+          <button id="cancel-import">Cancel Import</button>
         </div>
-        
-        <div class="popup age-validation-popup" id="age-validation-popup">
-            <h3>Invalid Age Detected</h3>
-            <div class="persona-preview" id="invalid-persona-preview"></div>
-            <div class="age-validation-buttons">
-                <input type="number" id="corrected-age" min="16" placeholder="Enter new age (min 16)" style="width: 150px;">
-                <button id="update-age-btn">Update Age</button>
-                <button id="skip-persona-btn">Skip</button>
-            </div>
-        </div>
-
-        <div class="popup merge-popup" id="merge-popup">
-            <h3>Import Options</h3>
-            <p>How would you like to handle the imported data?</p>
-            <div class="merge-buttons">
-                <button id="merge-data">Add to Existing Grid</button>
-                <button id="replace-data">Replace Existing Grid</button>
-                <button id="cancel-import">Cancel Import</button>
-            </div>
-        </div>
+      </div>
     </div>
-
     <script>
         let currentPersonaIndex = -1;
         const overlay = document.getElementById('popup-overlay');
@@ -653,7 +802,6 @@ body {
 
         let tempImageUrl = '';
         let tempPersonaData = {};
-        
 
         addImageButton.addEventListener('click', function() {
             hideAllPopups();
@@ -722,22 +870,20 @@ body {
 
         // Function to sanitize the URL by ensuring it's a valid URL format and not harmful
         function sanitizeURL(url) {
-    try {
-        const sanitizedUrl = new URL(url);
-        // Remove potentially harmful query parameters
-        sanitizedUrl.search = '';
-        return sanitizedUrl.href;
-    } catch (e) {
-        return null;
-    }
-}
-
+            try {
+                const sanitizedUrl = new URL(url);
+                // Remove potentially harmful query parameters
+                sanitizedUrl.search = '';
+                return sanitizedUrl.href;
+            } catch (e) {
+                return null;
+            }
+        }
 
         // Function to validate if the URL points to an accepted image type
         function isValidImageFileType(url) {
             return acceptedImageTypes.some(type => url.toLowerCase().endsWith(type));
         }
-
 
         document.getElementById('submit-persona').addEventListener('click', function() {
             const name = document.getElementById('persona-name').value;
@@ -792,7 +938,6 @@ body {
             overlay.style.display = 'none';
         });
 
-
         const genderFilter = document.getElementById('gender-filter');
         const ageFilter = document.getElementById('age-filter');
         const exportBtn = document.getElementById('export-btn');
@@ -826,7 +971,39 @@ body {
         allAgesOption.textContent = 'All Ages';
         ageFilter.insertBefore(allAgesOption, ageFilter.firstChild);
 
+        function initializeAgeFilter() {
+            const ageFilter = document.getElementById('age-filter');
+            ageFilter.innerHTML = ''; // Clear existing options
+
+            // Add the "All Ages" option
+            const allAgesOption = document.createElement('option');
+            allAgesOption.value = '';
+            allAgesOption.textContent = 'All Ages';
+            ageFilter.appendChild(allAgesOption);
+
+            // Only add age options if there are personas
+            if (personas.length > 0) {
+                const existingAges = new Set(personas.map(persona => persona.age));
+                [...existingAges]
+                .sort((a, b) => a - b)
+                    .forEach(age => {
+                        const option = document.createElement('option');
+                        option.value = age;
+                        option.textContent = age;
+                        ageFilter.appendChild(option);
+                    });
+            }
+
+            // Maintain the current selection if it exists in the new options
+            const currentValue = ageFilter.value;
+            if (currentValue) {
+                const exists = Array.from(ageFilter.options).some(option => option.value === currentValue);
+                ageFilter.value = exists ? currentValue : '';
+            }
+        }
+
         function renderGrid() {
+            // Clear existing grid items
             while (grid.firstChild) {
                 if (grid.firstChild === addImageButton) break;
                 grid.removeChild(grid.firstChild);
@@ -839,14 +1016,25 @@ body {
             });
 
             filteredPersonas.forEach((persona, index) => {
-                const actualIndex = personas.indexOf(persona); // Get the actual index from the full personas array
+                const actualIndex = personas.indexOf(persona);
                 const gridItem = createGridItem(persona, actualIndex);
                 grid.insertBefore(gridItem, addImageButton);
             });
 
-            updateAgeFilterOptions(filteredPersonas);
+            // Update age filter options while preserving selection
+            const selectedAge = ageFilter.value;
+            initializeAgeFilter();
+            ageFilter.value = selectedAge;
         }
 
+        // Update the age filter event listener
+        ageFilter.addEventListener('change', (event) => {
+            // Store the selected value
+            const selectedValue = event.target.value;
+            renderGrid();
+            // Restore the selected value after rendering
+            ageFilter.value = selectedValue;
+        });
 
         function updateAgeFilterOptions(filteredPersonas) {
             const existingAges = new Set(personas.map(persona => persona.age)); // Get all unique ages
@@ -869,7 +1057,6 @@ body {
             // Set the selected value to the current filter
             ageFilter.value = ageFilter.value || '';
         }
-
 
         function createGridItem(persona, index) {
             const gridItem = document.createElement('div');
@@ -955,41 +1142,41 @@ body {
 
         // Modify import functionality
         fileInput.addEventListener('change', (e) => {
-    const file = e.target.files[0];
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = (event) => {
-            try {
-                const parsedData = JSON.parse(event.target.result);
-                if (Array.isArray(parsedData)) {
-                    // Store the imported data globally
-                    importedData = parsedData;
-                    
-                    // Find personas with invalid ages
-                    invalidAgePersonas = importedData
-                        .map((p, index) => ({
-                            ...p,
-                            originalIndex: index
-                        }))
-                        .filter(p => !p.age || p.age < 16);
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    try {
+                        const parsedData = JSON.parse(event.target.result);
+                        if (Array.isArray(parsedData)) {
+                            // Store the imported data globally
+                            importedData = parsedData;
 
-                    if (invalidAgePersonas.length > 0) {
-                        currentInvalidIndex = 0;
-                        showAgeValidationPopup();
-                    } else {
-                        showMergeOptionsPopup();
+                            // Find personas with invalid ages
+                            invalidAgePersonas = importedData
+                                .map((p, index) => ({
+                                    ...p,
+                                    originalIndex: index
+                                }))
+                                .filter(p => !p.age || p.age < 16);
+
+                            if (invalidAgePersonas.length > 0) {
+                                currentInvalidIndex = 0;
+                                showAgeValidationPopup();
+                            } else {
+                                showMergeOptionsPopup();
+                            }
+                        } else {
+                            alert('Invalid JSON format. Please ensure the file contains an array of persona data.');
+                        }
+                    } catch (error) {
+                        alert('Error reading file. Please ensure it is a valid JSON file.');
+                        console.error('Import error:', error);
                     }
-                } else {
-                    alert('Invalid JSON format. Please ensure the file contains an array of persona data.');
-                }
-            } catch (error) {
-                alert('Error reading file. Please ensure it is a valid JSON file.');
-                console.error('Import error:', error);
+                };
+                reader.readAsText(file);
             }
-        };
-        reader.readAsText(file);
-    }
-});
+        });
 
         function showMergeOptionsPopup() {
             document.getElementById('merge-popup').style.display = 'block';
@@ -1002,30 +1189,30 @@ body {
         }
 
         document.getElementById('merge-data').addEventListener('click', () => {
-    const validPersonas = getValidPersonasInOrder();
-    // Validate each persona before merging
-    const validatedPersonas = validPersonas.filter(persona => validatePersonaData(persona));
-    
-    if (validatedPersonas.length !== validPersonas.length) {
-        alert('Some personas were skipped due to invalid or missing data.');
-    }
-    
-    personas.push(...validatedPersonas);
-    finalizeImport();
-});
+            const validPersonas = getValidPersonasInOrder();
+            // Validate each persona before merging
+            const validatedPersonas = validPersonas.filter(persona => validatePersonaData(persona));
 
-document.getElementById('replace-data').addEventListener('click', () => {
-    const validPersonas = getValidPersonasInOrder();
-    // Validate each persona before replacing
-    const validatedPersonas = validPersonas.filter(persona => validatePersonaData(persona));
-    
-    if (validatedPersonas.length !== validPersonas.length) {
-        alert('Some personas were skipped due to invalid or missing data.');
-    }
-    
-    personas = validatedPersonas;
-    finalizeImport();
-});
+            if (validatedPersonas.length !== validPersonas.length) {
+                alert('Some personas were skipped due to invalid or missing data.');
+            }
+
+            personas.push(...validatedPersonas);
+            finalizeImport();
+        });
+
+        document.getElementById('replace-data').addEventListener('click', () => {
+            const validPersonas = getValidPersonasInOrder();
+            // Validate each persona before replacing
+            const validatedPersonas = validPersonas.filter(persona => validatePersonaData(persona));
+
+            if (validatedPersonas.length !== validPersonas.length) {
+                alert('Some personas were skipped due to invalid or missing data.');
+            }
+
+            personas = validatedPersonas;
+            finalizeImport();
+        });
 
         document.getElementById('cancel-import').addEventListener('click', () => {
             document.getElementById('merge-popup').style.display = 'none';
@@ -1034,43 +1221,43 @@ document.getElementById('replace-data').addEventListener('click', () => {
         });
 
         function getValidPersonasInOrder() {
-    return importedData.map((p, index) => {
-        // Check if this persona was in invalidAgePersonas and was fixed
-        const fixedPersona = invalidAgePersonas.find(
-            invalid => invalid.originalIndex === index && invalid.age >= 16
-        );
-        
-        // Use the fixed persona if available, otherwise use original if age is valid
-        const personaToUse = fixedPersona || (p.age >= 16 ? p : null);
-        
-        // Ensure all required fields are present and properly formatted
-        if (personaToUse) {
-            return {
-                name: escapeHTML(personaToUse.name || ''),
-                age: parseInt(personaToUse.age) || 16,
-                gender: escapeHTML(personaToUse.gender || ''),
-                pronouns: escapeHTML(personaToUse.pronouns || ''),
-                tldr: escapeHTML(personaToUse.tldr || ''),
-                personality: escapeHTML(personaToUse.personality || ''),
-                appearance: escapeHTML(personaToUse.appearance || ''),
-                imageUrl: sanitizeURL(personaToUse.imageUrl || '') || ''
-            };
-        }
-        return null;
-    }).filter(p => p !== null);
-}
+            return importedData.map((p, index) => {
+                // Check if this persona was in invalidAgePersonas and was fixed
+                const fixedPersona = invalidAgePersonas.find(
+                    invalid => invalid.originalIndex === index && invalid.age >= 16
+                );
 
-function finalizeImport() {
-    localStorage.setItem('gridPersonas', JSON.stringify(personas));
-    renderGrid();
-    hideAllPopups();
-    // Reset import-related variables
-    importedData = [];
-    invalidAgePersonas = [];
-    currentInvalidIndex = 0;
-    // Reset file input
-    fileInput.value = '';
-}
+                // Use the fixed persona if available, otherwise use original if age is valid
+                const personaToUse = fixedPersona || (p.age >= 16 ? p : null);
+
+                // Ensure all required fields are present and properly formatted
+                if (personaToUse) {
+                    return {
+                        name: personaToUse.name || '',
+                        age: parseInt(personaToUse.age) || 16,
+                        gender: personaToUse.gender || '',
+                        pronouns: personaToUse.pronouns || '',
+                        tldr: personaToUse.tldr || '',
+                        personality: personaToUse.personality || '',
+                        appearance: personaToUse.appearance || '',
+                        imageUrl: sanitizeURL(personaToUse.imageUrl || '') || ''
+                    };
+                }
+                return null;
+            }).filter(p => p !== null);
+        }
+
+        function finalizeImport() {
+            localStorage.setItem('gridPersonas', JSON.stringify(personas));
+            renderGrid();
+            hideAllPopups();
+            // Reset import-related variables
+            importedData = [];
+            invalidAgePersonas = [];
+            currentInvalidIndex = 0;
+            // Reset file input
+            fileInput.value = '';
+        }
 
         function hideAllPopups() {
             const popups = [
@@ -1090,7 +1277,6 @@ function finalizeImport() {
                 }
             });
         }
-
 
         function showAgeValidationPopup() {
             const persona = invalidAgePersonas[currentInvalidIndex];
@@ -1117,7 +1303,6 @@ function finalizeImport() {
             }
         });
 
-
         document.getElementById('skip-persona-btn').addEventListener('click', () => {
             handleNextInvalidPersona();
         });
@@ -1132,23 +1317,22 @@ function finalizeImport() {
             }
         }
 
-
         function validatePersonaData(persona) {
-    return (
-        persona.name &&
-        persona.age &&
-        persona.gender &&
-        persona.pronouns &&
-        persona.personality &&
-        persona.appearance &&
-        persona.imageUrl &&
-        typeof persona.age === 'number' &&
-        persona.age >= 16 &&
-        !/[<>]/.test(persona.name) && // Example: Disallow angle brackets
-        !/[<>]/.test(persona.personality) &&
-        !/[<>]/.test(persona.appearance)
-    );
-}
+            return (
+                persona.name &&
+                persona.age &&
+                persona.gender &&
+                persona.pronouns &&
+                persona.personality &&
+                persona.appearance &&
+                persona.imageUrl &&
+                typeof persona.age === 'number' &&
+                persona.age >= 16 &&
+                !/[<>]/.test(persona.name) && // Example: Disallow angle brackets
+                !/[<>]/.test(persona.personality) &&
+                !/[<>]/.test(persona.appearance)
+            );
+        }
 
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
@@ -1160,7 +1344,6 @@ function finalizeImport() {
                 document.getElementById('edit-popup').style.display = 'none';
             }
         });
-
 
         function updateAgeFilter() {
             const selectedValue = ageFilter.value || 'All Ages';
@@ -1326,38 +1509,49 @@ function finalizeImport() {
             const savedPersonas = localStorage.getItem('gridPersonas');
             if (savedPersonas) {
                 personas = JSON.parse(savedPersonas);
-
                 // Validate and update persona ages
                 personas.forEach(persona => {
                     if (persona.age < 16) {
-                        persona.age = 16; // Update age to 16 if below the minimum threshold
+                        persona.age = 16;
                     }
                 });
-
-                // Save updated personas back to localStorage
                 localStorage.setItem('gridPersonas', JSON.stringify(personas));
-
-                // Render the grid with updated personas
-                renderGrid();
             }
+
+            // Initialize the age filter
+            initializeAgeFilter();
+
+            // Then render the grid
+            renderGrid();
+
+            // Load saved theme
+            loadSavedTheme();
         });
 
-        function escapeHTML(str) {
-    return str.replace(/[&<>"'`=\/]/g, function(match) {
-        switch (match) {
-            case '&': return '&amp;';
-            case '<': return '&lt;';
-            case '>': return '&gt;';
-            case '"': return '&quot;';
-            case "'": return '&#039;';
-            case '`': return '&#96;';
-            case '=': return '&#61;';
-            case '/': return '&#47;';
+        function setTheme(theme) {
+            document.body.classList.remove('dark-mode', 'amoled-mode');
+
+            if (theme === 'dark') {
+                document.body.classList.add('dark-mode');
+            } else if (theme === 'amoled') {
+                document.body.classList.add('amoled-mode');
+            }
+
+            const buttons = document.querySelectorAll('.theme-button');
+            buttons.forEach(button => {
+                button.classList.remove('active');
+                if (button.classList.contains(theme)) {
+                    button.classList.add('active');
+                }
+            });
+
+            localStorage.setItem('preferred-theme', theme);
         }
-    });
-}
 
-
+        function loadSavedTheme() {
+            const savedTheme = localStorage.getItem('preferred-theme') || 'light';
+            setTheme(savedTheme);
+        }
     </script>
 </body>
 </html>
