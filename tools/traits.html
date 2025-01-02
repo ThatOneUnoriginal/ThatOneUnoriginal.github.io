@@ -535,7 +535,7 @@
 
                   try {
                       showLoading();
-                      const response = await fetch('https://raw.githubusercontent.com/ThatOneUnoriginal/ThatOneUnoriginal.github.io/refs/heads/main/Character%20Tools/Assets/character_traits_jsonfile.json');
+                      const response = await fetch('https://github.com/ThatOneUnoriginal/ThatOneUnoriginal.github.io/raw/refs/heads/main/assets/json-files/traits.json');
                       if (!response.ok) {
                           throw new Error('Network response was not ok');
                       }
