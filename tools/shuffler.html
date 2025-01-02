@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/ThatOneUnoriginal/ThatOneUnoriginal.github.io/raw/refs/heads/main/assets/Icons/Reorder_Website_Tool.ico">
+  <link rel="icon" type="image/x-icon" href="https://github.com/ThatOneUnoriginal/ThatOneUnoriginal.github.io/raw/refs/heads/main/assets/Icons/Reorder_Website_Tool.ico">
   <title>Json Reordering: T1U Tools</title>
   <style>
     body {
@@ -168,6 +168,10 @@
     }
 
     input[type="file"] {
+      display: none;
+    }
+
+    .file-input-button {
       margin: 15px 0;
       padding: 10px;
       border: 2px solid #007BFF;
@@ -177,6 +181,31 @@
       transition: background-color 0.3s ease, border-color 0.3s ease;
       width: 100%;
       box-sizing: border-box;
+      background-color: #007BFF;
+      color: white;
+    }
+
+    .file-input-button:hover {
+      background-color: #0056b3;
+    }
+
+    .eject-button, body.dark-mode .eject-button, body.amoled-mode .eject-button {
+      margin: 15px 0;
+      padding: 10px;
+      border: 2px solid #dc3545;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s ease, border-color 0.3s ease;
+      width: 100%;
+      box-sizing: border-box;
+      background-color: #dc3545;
+      color: white;
+    }
+
+    .eject-button:hover, body.dark-mode .eject-button:hover, body.amoled-mode .eject-button:hover {
+      background-color: #c82333;
+      border-color: #c82333;
     }
 
     button {
@@ -202,6 +231,7 @@
       gap: 10px;
       margin-bottom: 15px;
     }
+    
 
     .info-grid-buttons button {
       margin: 20px;
@@ -228,7 +258,6 @@
       background-color: #343a40;
     }
 
-
     .info-grid-buttons button.dark-mode:hover {
       background-color: #23272b;
     }
@@ -241,13 +270,18 @@
       background-color: #7a0101;
     }
 
-
     body.dark-mode {
       background: linear-gradient(to right, #1a1a1a, #2d2d2d);
       color: #fff;
     }
 
-    .dark-mode a {
+    body.amoled-mode {
+      background: #000000;
+      color: #ffffff;
+    }
+
+    .dark-mode a,
+    .amoled-mode a {
       color: #fff;
     }
 
@@ -255,35 +289,44 @@
       color: #000;
     }
 
-    .dark-mode .popup {
-      background: #2d2d2d;
+    .dark-mode .popup,
+    .amoled-mode .popup {
+      background: #1a1a1a;
       color: #fff;
     }
 
-    .dark-mode .json-item {
+    .dark-mode .json-item,
+    .amoled-mode .json-item {
       background-color: #2d2d2d;
       border-color: #404040;
     }
 
-    .dark-mode .json-item-content .name {
+    .dark-mode .json-item-content .name,
+    .amoled-mode .json-item-content .name {
       color: #fff;
     }
 
     .dark-mode .info p,
-    .dark-mode h1 {
+    .amoled-mode .info p,
+    .dark-mode h1,
+    .amoled-mode h1 {
       color: #fff;
     }
 
-    .dark-mode button {
+    .dark-mode button,
+    .amoled-mode button {
       background-color: #007BFF;
       color: #fff;
     }
 
-    .dark-mode button:hover {
+    .dark-mode button:hover,
+    .amoled-mode button:hover {
       background-color: #0056b3;
+      border-color: #0056b3
     }
 
-    body.dark-mode input[type="file"] {
+    .dark-mode input[type="file"],
+    .amoled-mode input[type="file"] {
       background-color: #2d2d2d;
       color: white;
       border-color: #404040;
@@ -329,13 +372,15 @@
   <div class="popup">
     <h1>Reorder JSON Entries</h1>
     <!-- File input for uploading JSON file -->
-    <input type="file" id="fileInput" accept=".json">
+    <button class="file-input-button" onclick="document.getElementById('fileInput').click()">Input File Here</button>
+    <input type="file" id="fileInput" accept=".json" onchange="updateButtonText()">
+    <button class="eject-button" id="ejectButton" onclick="ejectFile()" disabled>Eject File</button>
     <div id="jsonContainer">
       <!-- JSON data entries will be rendered here -->
     </div>
     <div class="info-grid-buttons">
       <button id="saveOrder" class="save" disabled>Save Order</button>
-      <button id="darkModeToggle" class="dark-mode">Dark Mode</button>
+      <button id="darkModeToggle" class="dark-mode">Toggle Dark Mode</button>
     </div>
     <div class="info-grid-buttons">
       <button id="sortAlphabetically" class="sort" disabled>Sort Alphabetically</button>
@@ -358,7 +403,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
   <script>
 let jsonData = [];
-
+const body = document.body;
 const fileInput = document.getElementById('fileInput');
 const jsonContainer = document.getElementById('jsonContainer');
 const saveOrderButton = document.getElementById('saveOrder');
@@ -369,6 +414,7 @@ const sortByAgeReverseButton = document.getElementById('sortByAgeReverse');
 const sortByPlatformButton = document.getElementById('sortByPlatform');
 const sortByPlatformReverseButton = document.getElementById('sortByPlatformReverse');
 const darkModeToggle = document.getElementById('darkModeToggle');
+const ejectButton = document.getElementById('ejectButton');
 
 // Enable sorting buttons after JSON is uploaded
 fileInput.addEventListener('change', handleFileUpload);
@@ -452,13 +498,43 @@ function parseAge(age) {
 const preferredTheme = localStorage.getItem('preferred-theme');
 const isDarkMode = preferredTheme === 'dark' || preferredTheme === 'amoled';
 if (isDarkMode) {
-    document.body.classList.add('dark-mode');
-    darkModeToggle.textContent = 'Light Mode';
+    document.body.classList.add(preferredTheme === 'dark' ? 'dark-mode' : 'amoled-mode');
 }
 
+// Update the button text based on the stored theme preference
+function updateDarkModeButtonText() {
+    const currentTheme = localStorage.getItem('preferred-theme');
+    if (currentTheme === 'dark') {
+        darkModeToggle.textContent = 'Toggle AMOLED Mode';
+    } else if (currentTheme === 'amoled') {
+        darkModeToggle.textContent = 'Toggle Light Mode';
+    } else {
+        darkModeToggle.textContent = 'Toggle Dark Mode';
+    }
+}
+
+updateDarkModeButtonText(); // Initial call to set the button text
+
 darkModeToggle.addEventListener('click', () => {
-    const newTheme = document.body.classList.toggle('dark-mode') ? 'dark' : 'light';
-    darkModeToggle.textContent = newTheme === 'dark' ? 'Light Mode' : 'Dark Mode';
+    const currentTheme = localStorage.getItem('preferred-theme');
+    let newTheme;
+
+    if (currentTheme === 'dark') {
+        newTheme = 'amoled';
+    } else if (currentTheme === 'amoled') {
+        newTheme = 'light';
+    } else {
+        newTheme = 'dark';
+    }
+
+    document.body.classList.remove('dark-mode', 'amoled-mode');
+    if (newTheme === 'dark') {
+        document.body.classList.add('dark-mode');
+    } else if (newTheme === 'amoled') {
+        document.body.classList.add('amoled-mode');
+    }
+
+    darkModeToggle.textContent = newTheme === 'light' ? 'Toggle Dark Mode' : (newTheme === 'amoled' ? 'Toggle Light Mode' : 'Toggle AMOLED Mode');
     localStorage.setItem('preferred-theme', newTheme);
 });
 
@@ -553,7 +629,6 @@ function downloadJson(data) {
     URL.revokeObjectURL(url);
 }
 
-
 // Navigation functions
 function goToGrid1() {
     window.location.href = "https://thatoneunoriginal.github.io/tools/merger";
@@ -561,6 +636,39 @@ function goToGrid1() {
 
 function goToGrid2() {
     window.location.href = "https://thatoneunoriginal.github.io/tools/bookmarks/character";
+}
+
+// Update the button text and enable/disable the eject button based on file input
+function updateButtonText() {
+    const fileInput = document.getElementById('fileInput');
+    const ejectButton = document.getElementById('ejectButton');
+    if (fileInput.files.length > 0) {
+        document.querySelector('.file-input-button').textContent = `File Imported: ${fileInput.files[0].name}`;
+        document.querySelector('.file-input-button').style.backgroundColor = 'green';
+        document.querySelector('.file-input-button').style.borderColor = 'green';
+        ejectButton.disabled = false;
+    } else {
+        document.querySelector('.file-input-button').textContent = 'Input File Here';
+        document.querySelector('.file-input-button').style.backgroundColor = '#007BFF';
+        document.querySelector('.file-input-button').style.borderColor = '#007BFF';
+        ejectButton.disabled = true;
+    }
+}
+
+// Eject the selected file
+function ejectFile() {
+    const fileInput = document.getElementById('fileInput');
+    fileInput.value = '';
+    updateButtonText();
+    jsonData = [];
+    jsonContainer.innerHTML = '';
+    saveOrderButton.disabled = true;
+    sortAlphabeticallyButton.disabled = true;
+    sortReverseAlphabeticallyButton.disabled = true;
+    sortByAgeButton.disabled = true;
+    sortByAgeReverseButton.disabled = true;
+    sortByPlatformButton.disabled = true;
+    sortByPlatformReverseButton.disabled = true;
 }
 
   </script>

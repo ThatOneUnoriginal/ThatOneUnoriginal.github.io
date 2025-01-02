@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/ThatOneUnoriginal/ThatOneUnoriginal.github.io/raw/refs/heads/main/assets/Icons/Merger_Website_Logo.ico">
+    <link rel="icon" type="image/x-icon" href="https://github.com/ThatOneUnoriginal/ThatOneUnoriginal.github.io/raw/refs/heads/main/assets/Icons/Merger_Website_Logo.ico">
     <title>Merger Tool: T1U Tools</title>
     <style>
 .info-grid-buttons {
@@ -32,25 +32,40 @@ body.dark-mode .info-grid-buttons button {
   background-color: #007BFF;
 }
 
+body.amoled-mode .info-grid-buttons button {
+  background-color: #007BFF;
+}
+
 .container {
   background: #f9f9f9;
   padding: 20px;
   border-radius: 12px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-  width: 100%;
-  max-width: 600px;
+  width: 90vw;
+  max-width: 90%;
   text-align: center;
-  max-height: 100vh;
+  max-height: 90vh;
   overflow: auto;
 }
+
 
 body.dark-mode {
   background: linear-gradient(to right, #1a1a1a, #2d2d2d);
   color: #f0f0f0;
 }
 
+body.amoled-mode {
+  background: #000000;
+  color: #ffffff;
+}
+
 body.dark-mode .container, body.dark-mode .modal-content {
   background: #2d2d2d;
+  box-shadow: 0 8px 20px rgba(255, 255, 255, 0.1);
+}
+
+body.amoled-mode .container, body.amoled-mode .modal-content {
+  background: #1a1a1a;
   box-shadow: 0 8px 20px rgba(255, 255, 255, 0.1);
 }
 
@@ -67,7 +82,7 @@ body.dark-mode .container, body.dark-mode .modal-content {
 }
 
 h1 {
-  font-size: 24px;
+  font-size: 2.5em;
   margin-bottom: 20px;
   color: #444;
   letter-spacing: 1px;
@@ -75,6 +90,10 @@ h1 {
 
 body.dark-mode h1 {
   color: #f0f0f0;
+}
+
+body.amoled-mode h1 {
+  color: #ffffff;
 }
 
 button {
@@ -99,15 +118,41 @@ body.dark-mode button:hover {
   background-color: #0056b3;
 }
 
+body.amoled-mode button:hover {
+  background-color: #0056b3;
+}
+
 #fileButton2, #fileButton1{
-  background-color: #1d4ccf
+  background-color: #1d4ccf;
+  border: 2px solid #1d4ccf;
+  width: 100% !important;
+}
+
+
+#ejectFile1, #ejectFile2{
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+#ejectFile1:disabled, #ejectFile2:disabled {
+  background-color: transparent;
+  border: 2px dotted #dc3545;
+}
+
+#ejectFile1:not(:disabled), #ejectFile2:not(:disabled) {
+  background-color: #dc3545;
+  border: 2px solid #dc3545;
 }
 
 #fileButton2:hover, #fileButton1:hover{
-  background-color: #1842b6
+  background-color: #1842b6;
+  border-color: #1842b6;
 }
 
 body.dark-mode button {
+  background-color: #007BFF;
+}
+
+body.amoled-mode button {
   background-color: #007BFF;
 }
 
@@ -131,6 +176,11 @@ pre {
 
 body.dark-mode pre {
   background-color: #2d2d2d;
+  color: white;
+}
+
+body.amoled-mode pre {
+  background-color: #000000;
   color: white;
 }
 
@@ -167,6 +217,10 @@ body.dark-mode pre {
 }
 
 body.dark-mode .collapse-expand-button {
+  background-color: #007BFF;
+}
+
+body.amoled-mode .collapse-expand-button {
   background-color: #007BFF;
 }
 
@@ -217,6 +271,17 @@ body.dark-mode .collapse-expand-button {
   width: auto;
 }
 
+.file-group {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Adjusts the spacing between buttons */
+  margin-bottom: 15px; /* Adds space between file groups */
+}
+
+.file-group button {
+  flex: 1; /* Ensures buttons take equal space */
+}
+
 .modal button:hover {
   background-color: #0056b3;
 }
@@ -252,7 +317,6 @@ body.dark-mode .collapse-expand-button {
   }
 }
 
-input[type="file"],
 button {
   width: 100%;
   max-width: 100%;
@@ -325,14 +389,21 @@ body {
         <button class="mobile-button" onclick="showInfoMobile()">Info</button>
         <button class="mobile-button" onclick="goToGridMobile()">Go to Grid</button>
         <button class="mobile-button" onclick="goToGrid1Mobile()">Go to Reorder Tool</button>
-        <button id="fileButton1" onclick="document.getElementById('file1').click()">Input File One Here</button>
-        <input type="file" id="file1" accept=".json" style="display:none;" onchange="updateButtonText(this, 'fileButton1')">
-        <button id="fileButton2" onclick="document.getElementById('file2').click()">Input File Two Here</button>
-        <input type="file" id="file2" accept=".json" style="display:none;" onchange="updateButtonText(this, 'fileButton2')">
+        <div class="file-group">
+          <button id="fileButton1" onclick="document.getElementById('file1').click()">Input File One Here</button>
+          <input type="file" id="file1" accept=".json" style="display:none;" onchange="updateButtonText(this, 'fileButton1')">
+          <button id="ejectFile1" onclick="ejectFile('file1', 'fileButton1', 'ejectFile1')" disabled>Eject File One</button>
+        </div>
+
+        <div class="file-group">
+          <button id="fileButton2" onclick="document.getElementById('file2').click()">Input File Two Here</button>
+          <input type="file" id="file2" accept=".json" style="display:none;" onchange="updateButtonText(this, 'fileButton2')">
+          <button id="ejectFile2" onclick="ejectFile('file2', 'fileButton2', 'ejectFile2')" disabled>Eject File Two</button>
+        </div>
         <button onclick="mergeJSON()">Merge JSON</button>
         <button id="saveButton" onclick="saveJSON()">Save Merged JSON</button>
         <button id="clearButton" onclick="clearData()">Clear Data</button>
-        <button class="dark-mode-toggle" onclick="toggleDarkMode()">Toggle Dark Mode</button>
+        <button class="dark-mode-toggle" onclick="toggleTheme()">Toggle Dark Mode</button>
         <pre id="output"></pre>
       </div>
       <!-- Modal -->
@@ -534,7 +605,6 @@ function saveJSON() {
     downloadAnchorNode.remove();
 }
 
-
 function clearData() {
     mergedData = null;
     document.getElementById('output').textContent = '';
@@ -543,31 +613,56 @@ function clearData() {
     document.getElementById('saveButton').style.display = 'none';
     updateButtonText(document.getElementById('file1'), 'fileButton1');
     updateButtonText(document.getElementById('file2'), 'fileButton2');
+    document.getElementById('ejectFile1').disabled = true;
+    document.getElementById('ejectFile2').disabled = true;
 }
 
-function toggleDarkMode() {
+function toggleTheme() {
     const body = document.body;
-    const isDarkMode = body.classList.toggle('dark-mode');
-    const newTheme = isDarkMode ? 'dark' : 'light';
+    const currentTheme = localStorage.getItem('preferred-theme');
+    let newTheme;
+
+    if (currentTheme === 'dark') {
+        newTheme = 'amoled';
+    } else if (currentTheme === 'amoled') {
+        newTheme = 'light';
+    } else {
+        newTheme = 'dark';
+    }
+
+    body.classList.remove('dark-mode', 'amoled-mode');
+    if (newTheme === 'dark') {
+        body.classList.add('dark-mode');
+    } else if (newTheme === 'amoled') {
+        body.classList.add('amoled-mode');
+    }
+
     localStorage.setItem('preferred-theme', newTheme);
 
     const toggleButton = document.querySelector('.dark-mode-toggle');
     if (toggleButton) {
-        toggleButton.textContent = isDarkMode ? 'Toggle Light Mode' : 'Toggle Dark Mode';
+        toggleButton.textContent = newTheme === 'light' ? 'Toggle Dark Mode' : (newTheme === 'amoled' ? 'Toggle Light Mode' : 'Toggle AMOLED Mode');
     }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+    // Existing theme code
     const preferredTheme = localStorage.getItem('preferred-theme');
-    const isDarkMode = preferredTheme === 'dark' || preferredTheme === 'amoled';
-    if (isDarkMode) {
-        document.body.classList.add('dark-mode');
+    const body = document.body;
+    if (preferredTheme === 'dark') {
+        body.classList.add('dark-mode');
+    } else if (preferredTheme === 'amoled') {
+        body.classList.add('amoled-mode');
     }
 
     const toggleButton = document.querySelector('.dark-mode-toggle');
     if (toggleButton) {
-        toggleButton.textContent = isDarkMode ? 'Toggle Light Mode' : 'Toggle Dark Mode';
+        toggleButton.textContent = preferredTheme === 'light' ? 'Toggle Dark Mode' : (preferredTheme === 'amoled' ? 'Toggle Light Mode' : 'Toggle AMOLED Mode');
     }
+
+    // Add this new code to ensure eject buttons start disabled
+    document.getElementById('ejectFile1').disabled = true;
+    document.getElementById('ejectFile2').disabled = true;
 });
 
 function toggleModal(modalId, show) {
@@ -594,11 +689,27 @@ function updateButtonText(input, buttonId) {
     if (input.files.length > 0) {
         button.textContent = `File Imported: ${input.files[0].name}`;
         button.style.backgroundColor = 'green';
+        button.style.borderColor = 'green';
+        document.getElementById(`ejectFile${buttonId.slice(-1)}`).disabled = false;
     } else {
         button.textContent = buttonId === 'fileButton1' ? 'Input File One Here' : 'Input File Two Here';
         button.style.backgroundColor = '#007BFF';
+        document.getElementById(`ejectFile${buttonId.slice(-1)}`).disabled = true;
     }
 }
+
+function ejectFile(fileInputId, buttonId, ejectButtonId) {
+    const fileInput = document.getElementById(fileInputId);
+    const button = document.getElementById(buttonId);
+    const ejectButton = document.getElementById(ejectButtonId);
+
+    fileInput.value = '';
+    button.textContent = buttonId === 'fileButton1' ? 'Input File One Here' : 'Input File Two Here';
+    button.style.backgroundColor = ''; // Reset background color
+    button.style.cssText = ''; // Reset all inline styles
+    ejectButton.disabled = true;
+}
+
 
 function goToGrid() {
     window.location.href = 'https://thatoneunoriginal.github.io/tools/bookmarks/character';
