@@ -126,6 +126,52 @@
                 width: 100%;
             }
         }
+
+        /* Dark Theme */
+        body.dark-theme {
+            background-color: #1a202c;
+            color: #e2e8f0;
+        }
+
+        body.dark-theme .error-container {
+            background-color: #2d3748;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+        }
+
+        body.dark-theme h2 {
+            color: #e2e8f0;
+        }
+
+        body.dark-theme p {
+            color: #cbd5e0;
+        }
+
+        body.dark-theme .nav-button {
+            background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
+        }
+
+        /* AMOLED Theme */
+        body.amoled-theme {
+            background-color: #000000;
+            color: #ffffff;
+        }
+
+        body.amoled-theme .error-container {
+            background-color: #1a1a1a;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+        }
+
+        body.amoled-theme h2 {
+            color: #ffffff;
+        }
+
+        body.amoled-theme p {
+            color: #aaaaaa;
+        }
+
+        body.amoled-theme .nav-button {
+            background: linear-gradient(135deg, #333333 0%, #1a1a1a 100%);
+        }
     </style>
 </head>
 <body>
@@ -142,5 +188,13 @@
             <a href="https://thatoneunoriginal.github.io/tools/traits" class="nav-button">Personality Trait Picker</a>
         </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const preferredTheme = localStorage.getItem('preferred-theme');
+            if (preferredTheme) {
+                document.body.classList.add(preferredTheme + '-theme');
+            }
+        });
+    </script>
 </body>
 </html>
