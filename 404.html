@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/ThatOneUnoriginal/ThatOneUnoriginal.github.io/refs/heads/main/assets/icons/404_Icon.ico">
     <title>404 - Page Not Found | T1U Tools</title>
     <style>
         body {
@@ -24,7 +25,7 @@
             padding: 2rem;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             max-width: 90%;
-            width: 600px;
+            width: 800px;
             margin: 20px;
             animation: slideUp 0.3s ease-out;
         }
@@ -62,7 +63,7 @@
         .button-container {
             display: flex;
             justify-content: center;
-            gap: 12px;
+            gap: 16px;
             flex-wrap: wrap;
         }
 
@@ -76,7 +77,10 @@
             font-weight: 500;
             text-decoration: none;
             transition: transform 0.2s, opacity 0.2s;
-            min-width: 100px;
+            min-width: 120px;
+            display: inline-block;
+            font-size: 14px;
+            line-height: 1.4;
         }
 
         .nav-button:hover {
@@ -131,11 +135,11 @@
         <h2>Page Not Found</h2>
         <p>Oops! The page you're looking for seems to have vanished. Perhaps it's creating a new persona somewhere else?</p>
         <div class="button-container">
-            <button class="nav-button">Home</button>
-            <button class="nav-button">Tools</button>
-            <button class="nav-button">About</button>
-            <button class="nav-button">Support</button>
-            <button class="nav-button">Contact</button>
+            <a href="https://thatoneunoriginal.github.io/tools/bookmarks/character" class="nav-button">Character Bookmarker</a>
+            <a href="https://thatoneunoriginal.github.io/tools/bookmarks/persona" class="nav-button">Persona Bookmarker</a>
+            <a href="https://thatoneunoriginal.github.io/tools/shuffler" class="nav-button">Character File Shuffler</a>
+            <a href="https://thatoneunoriginal.github.io/tools/merger" class="nav-button">Character File Merger</a>
+            <a href="https://thatoneunoriginal.github.io/tools/traits" class="nav-button">Personality Trait Picker</a>
         </div>
     </div>
 </body>
