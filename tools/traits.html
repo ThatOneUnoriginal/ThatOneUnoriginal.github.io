@@ -68,13 +68,13 @@
             color: #fff;
         }
 
-        body.dark-mode .pagination-button, body.dark-mode .sort-button, body.dark-mode .share-button, body.dark-mode .import-button, body.dark-mode .random-trait-button {
+        body.dark-mode .pagination-button, body.dark-mode .sort-button, body.dark-mode .share-button, body.dark-mode .import-button, body.dark-mode .random-trait-button, body.dark-mode .fetch-beta-list-button {
             background-color: #2d2d2d;
             color: #fff;
             border-color: #404040;
         }
 
-        body.dark-mode .pagination-button:hover:not(:disabled), body.dark-mode .sort-button:hover, body.dark-mode .share-button:hover, body.dark-mode .import-button:hover, body.dark-mode .random-trait-button:hover{
+        body.dark-mode .pagination-button:hover:not(:disabled), body.dark-mode .sort-button:hover, body.dark-mode .share-button:hover, body.dark-mode .import-button:hover, body.dark-mode .random-trait-button:hover, body.dark-mode .fetch-beta-list-button:hover {
             background-color: #404040;
         }
 
@@ -109,13 +109,13 @@
             color: #fff;
         }
 
-        body.amoled-mode .pagination-button, body.amoled-mode .sort-button, body.amoled-mode .share-button, body.amoled-mode .import-button, body.amoled-mode .random-trait-button{
+        body.amoled-mode .pagination-button, body.amoled-mode .sort-button, body.amoled-mode .share-button, body.amoled-mode .import-button, body.amoled-mode .random-trait-button, body.amoled-mode .fetch-beta-list-button {
             background-color: #000;
             color: #fff;
             border-color: #333;
         }
 
-        body.amoled-mode .pagination-button:hover:not(:disabled), body.amoled-mode .sort-button:hover, body.amoled-mode .share-button:hover, body.amoled-mode .import-button:hover, body.amoled-mode .random-trait-button:hover {
+        body.amoled-mode .pagination-button:hover:not(:disabled), body.amoled-mode .sort-button:hover, body.amoled-mode .share-button:hover, body.amoled-mode .import-button:hover, body.amoled-mode .random-trait-button:hover, body.amoled-mode .fetch-beta-list-button:hover {
             background-color: #1a1a1a;
         }
 
@@ -265,7 +265,7 @@
             margin: 10px 0;
         }
 
-        .pagination-button, .sort-button, .share-button, .import-button, .random-trait-button {
+        .pagination-button, .sort-button, .share-button, .import-button, .random-trait-button, .fetch-beta-list-button {
             padding: 8px 12px;
             border: 1px solid #007BFF;
             background-color: white;
@@ -277,7 +277,7 @@
             text-align: center;
         }
 
-        .pagination-button:hover:not(:disabled), .sort-button:hover, .share-button:hover, .import-button:hover, .random-trait-button:hover {
+        .pagination-button:hover:not(:disabled), .sort-button:hover, .share-button:hover, .import-button:hover, .random-trait-button:hover, .fetch-beta-list-button:hover {
             background-color: #007BFF;
             color: white;
         }
@@ -289,7 +289,7 @@
             background-color: #f9f9f9;
         }
 
-        .pagination-button.active, .sort-button:active, .share-button:active, .import-button:active, .random-trait-button:active {
+        .pagination-button.active, .sort-button:active, .share-button:active, .import-button:active, .random-trait-button:active, .fetch-beta-list-button:active {
             background-color: #007BFF;
             color: white;
         }
@@ -387,6 +387,22 @@
             justify-content: center;
             margin-top: 20px;
         }
+
+        .beta-checkbox-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-left: 10px;
+        }
+
+        .beta-checkbox-container input[type="checkbox"] {
+            cursor: pointer;
+        }
+
+        .beta-checkbox-container label {
+            cursor: pointer;
+            user-select: none;
+        }
     </style>
 </head>
 <body>
@@ -399,6 +415,10 @@
           <option value="selected">Selected</option>
         </select>
         <input type="text" id="search-bar" placeholder="Search titles..." oninput="filterResults()">
+        <div class="beta-checkbox-container">
+            <input type="checkbox" id="betaListCheckbox" onchange="toggleBetaListPersistence()">
+            <label for="betaListCheckbox">Always use Beta List</label>
+        </div>
         <div class="theme-buttons">
           <button class="theme-button light active" onclick="setTheme('light')">Light</button>
           <button class="theme-button dark" onclick="setTheme('dark')">Dark</button>
@@ -457,6 +477,7 @@
           let itemsPerPage = 5;
           let isLoading = false;
           let sortOrder = 'asc'; // Default sort order is ascending
+          let currentUrl = 'https://thatoneunoriginal.github.io/assets/json-files/traits.json';
 
           // Show keyboard navigation tooltip
           setTimeout(() => {
@@ -535,7 +556,7 @@
 
                   try {
                       showLoading();
-                      const response = await fetch('https://thatoneunoriginal.github.io/assets/json-files/traits.json');
+                      const response = await fetch(currentUrl);
                       if (!response.ok) {
                           throw new Error('Network response was not ok');
                       }
@@ -875,19 +896,21 @@
           }
 
           function shareSelectedBoxes() {
-    const selectedData = Array.from(selectedBoxes.values());
-    const jsonString = JSON.stringify(selectedData, null, 2);
-    const blob = new Blob([jsonString], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const unixTime = Math.floor(Date.now() / 1000); // Get Unix timestamp
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `T1UTraitTool_Share_${unixTime}.json`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-}
+              const selectedData = Array.from(selectedBoxes.values());
+              const jsonString = JSON.stringify(selectedData, null, 2);
+              const blob = new Blob([jsonString], {
+                  type: 'application/json'
+              });
+              const url = URL.createObjectURL(blob);
+              const unixTime = Math.floor(Date.now() / 1000); // Get Unix timestamp
+              const a = document.createElement('a');
+              a.href = url;
+              a.download = `T1UTraitTool_Share_${unixTime}.json`;
+              document.body.appendChild(a);
+              a.click();
+              document.body.removeChild(a);
+              URL.revokeObjectURL(url);
+          }
 
           function importSelectedBoxes() {
               const fileInput = document.createElement('input');
@@ -942,46 +965,46 @@
           }
 
           function takeSnapshot(event, title) {
-    event.stopPropagation();
-    const box = event.target.closest('.box');
-    if (box) {
-        // Temporarily hide buttons and remove border-radius
-        const originalStyles = {
-            borderRadius: box.style.borderRadius,
-            selectButtonDisplay: window.getComputedStyle(box.querySelector('.select-button')).display,
-            otherButtonsDisplay: window.getComputedStyle(box.querySelectorAll('button:not(.select-button)')[0]).display
-        };
-        box.style.borderRadius = '0';
-        const buttons = box.querySelectorAll('button');
-        buttons.forEach(button => {
-            if (button.classList.contains('select-button')) {
-                button.style.display = 'none';
-            } else {
-                button.style.display = 'none';
-            }
-        });
+              event.stopPropagation();
+              const box = event.target.closest('.box');
+              if (box) {
+                  // Temporarily hide buttons and remove border-radius
+                  const originalStyles = {
+                      borderRadius: box.style.borderRadius,
+                      selectButtonDisplay: window.getComputedStyle(box.querySelector('.select-button')).display,
+                      otherButtonsDisplay: window.getComputedStyle(box.querySelectorAll('button:not(.select-button)')[0]).display
+                  };
+                  box.style.borderRadius = '0';
+                  const buttons = box.querySelectorAll('button');
+                  buttons.forEach(button => {
+                      if (button.classList.contains('select-button')) {
+                          button.style.display = 'none';
+                      } else {
+                          button.style.display = 'none';
+                      }
+                  });
 
-        html2canvas(box).then(canvas => {
-            // Restore original styles
-            box.style.borderRadius = originalStyles.borderRadius;
-            buttons.forEach(button => {
-                if (button.classList.contains('select-button')) {
-                    button.style.display = 'inline-block';
-                } else {
-                    button.style.display = 'initial';
-                }
-            });
+                  html2canvas(box).then(canvas => {
+                      // Restore original styles
+                      box.style.borderRadius = originalStyles.borderRadius;
+                      buttons.forEach(button => {
+                          if (button.classList.contains('select-button')) {
+                              button.style.display = 'inline-block';
+                          } else {
+                              button.style.display = 'initial';
+                          }
+                      });
 
-            const unixTime = Math.floor(Date.now() / 1000); // Get Unix timestamp
-            const link = document.createElement('a');
-            link.download = `T1UTraitTool_${title}_${unixTime}.png`;
-            link.href = canvas.toDataURL();
-            link.click();
-        }).catch(err => {
-            console.error('Failed to take snapshot: ', err);
-        });
-    }
-}
+                      const unixTime = Math.floor(Date.now() / 1000); // Get Unix timestamp
+                      const link = document.createElement('a');
+                      link.download = `T1UTraitTool_${title}_${unixTime}.png`;
+                      link.href = canvas.toDataURL();
+                      link.click();
+                  }).catch(err => {
+                      console.error('Failed to take snapshot: ', err);
+                  });
+              }
+          }
 
           function getRandomTrait() {
               const tagFilter = document.getElementById('tag-filter').value;
@@ -1003,6 +1026,15 @@
                   document.getElementById('search-bar').value = randomTrait;
                   filterResults();
               }
+          }
+
+          function fetchBetaList() {
+              if (currentUrl === 'https://raw.githubusercontent.com/ThatOneUnoriginal/ThatOneUnoriginal.github.io/refs/heads/beta/assets/json-files/traits.json') {
+                  currentUrl = 'https://thatoneunoriginal.github.io/assets/json-files/traits.json';
+              } else {
+                  currentUrl = 'https://raw.githubusercontent.com/ThatOneUnoriginal/ThatOneUnoriginal.github.io/refs/heads/beta/assets/json-files/traits.json';
+              }
+              loadJsonFromUrl();
           }
 
           document.addEventListener('DOMContentLoaded', async () => {
@@ -1038,6 +1070,13 @@
               randomTraitButton.textContent = 'Random Trait';
               randomTraitButton.onclick = getRandomTrait;
               buttonContainer.appendChild(randomTraitButton);
+
+              // Create fetch beta list button
+              const fetchBetaListButton = document.createElement('button');
+              fetchBetaListButton.className = 'fetch-beta-list-button';
+              fetchBetaListButton.textContent = 'Fetch Beta List';
+              fetchBetaListButton.onclick = fetchBetaList;
+              buttonContainer.appendChild(fetchBetaListButton);
 
               // Wait for JSON data to load before displaying boxes
               await loadJsonFromUrl();
