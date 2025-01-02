@@ -41,12 +41,13 @@ body.amoled-mode .info-grid-buttons button {
   padding: 20px;
   border-radius: 12px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-  width: 100%;
-  max-width: 600px;
+  width: 90vw;
+  max-width: 90%;
   text-align: center;
-  max-height: 100vh;
+  max-height: 90vh;
   overflow: auto;
 }
+
 
 body.dark-mode {
   background: linear-gradient(to right, #1a1a1a, #2d2d2d);
@@ -59,7 +60,7 @@ body.amoled-mode {
 }
 
 body.dark-mode .container, body.dark-mode .modal-content {
-  background: #000000;
+  background: #2d2d2d;
   box-shadow: 0 8px 20px rgba(255, 255, 255, 0.1);
 }
 
@@ -81,7 +82,7 @@ body.amoled-mode .container, body.amoled-mode .modal-content {
 }
 
 h1 {
-  font-size: 24px;
+  font-size: 2.5em;
   margin-bottom: 20px;
   color: #444;
   letter-spacing: 1px;
@@ -121,13 +122,30 @@ body.amoled-mode button:hover {
   background-color: #0056b3;
 }
 
-#fileButton2, #fileButton1, #ejectFile1, #ejectFile2{
+#fileButton2, #fileButton1{
   background-color: #1d4ccf;
+  border: 2px solid #1d4ccf;
   width: 100% !important;
 }
 
+
+#ejectFile1, #ejectFile2{
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+#ejectFile1:disabled, #ejectFile2:disabled {
+  background-color: transparent;
+  border: 2px dotted #dc3545;
+}
+
+#ejectFile1:not(:disabled), #ejectFile2:not(:disabled) {
+  background-color: #dc3545;
+  border: 2px solid #dc3545;
+}
+
 #fileButton2:hover, #fileButton1:hover{
-  background-color: #1842b6
+  background-color: #1842b6;
+  border-color: #1842b6;
 }
 
 body.dark-mode button {
@@ -628,6 +646,7 @@ function toggleTheme() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+    // Existing theme code
     const preferredTheme = localStorage.getItem('preferred-theme');
     const body = document.body;
     if (preferredTheme === 'dark') {
@@ -640,6 +659,10 @@ document.addEventListener('DOMContentLoaded', () => {
     if (toggleButton) {
         toggleButton.textContent = preferredTheme === 'light' ? 'Toggle Dark Mode' : (preferredTheme === 'amoled' ? 'Toggle Light Mode' : 'Toggle AMOLED Mode');
     }
+
+    // Add this new code to ensure eject buttons start disabled
+    document.getElementById('ejectFile1').disabled = true;
+    document.getElementById('ejectFile2').disabled = true;
 });
 
 function toggleModal(modalId, show) {
@@ -666,6 +689,7 @@ function updateButtonText(input, buttonId) {
     if (input.files.length > 0) {
         button.textContent = `File Imported: ${input.files[0].name}`;
         button.style.backgroundColor = 'green';
+        button.style.borderColor = 'green';
         document.getElementById(`ejectFile${buttonId.slice(-1)}`).disabled = false;
     } else {
         button.textContent = buttonId === 'fileButton1' ? 'Input File One Here' : 'Input File Two Here';
@@ -681,9 +705,11 @@ function ejectFile(fileInputId, buttonId, ejectButtonId) {
 
     fileInput.value = '';
     button.textContent = buttonId === 'fileButton1' ? 'Input File One Here' : 'Input File Two Here';
-    button.style.backgroundColor = '#007BFF';
+    button.style.backgroundColor = ''; // Reset background color
+    button.style.cssText = ''; // Reset all inline styles
     ejectButton.disabled = true;
 }
+
 
 function goToGrid() {
     window.location.href = 'https://thatoneunoriginal.github.io/tools/bookmarks/character';
