@@ -424,6 +424,18 @@ const ejectButton = document.getElementById('ejectButton');
 // Enable sorting buttons after JSON is uploaded
 fileInput.addEventListener('change', handleFileUpload);
 
+function decodeHTMLEntities(text) {
+    if (!text) return '';
+    const textarea = document.createElement('textarea');
+    textarea.innerHTML = text;
+    return textarea.value;
+}
+
+
+function isPersonaFormat(item) {
+    return item.hasOwnProperty('gender') && item.hasOwnProperty('pronouns') && item.hasOwnProperty('tldr');
+}
+
 function handleFileUpload(event) {
     const file = event.target.files[0];
     if (file && file.type === "application/json") {
@@ -460,38 +472,50 @@ function enableSortingButtons() {
 // Sorting by age (Youngest to Oldest)
 sortByAgeButton.addEventListener('click', () => {
     jsonData.sort((a, b) => parseAge(a.age) - parseAge(b.age));
-    renderJson(); // Re-render after sorting
+    renderJson();
 });
 
 // Sorting by age (Oldest to Youngest)
 sortByAgeReverseButton.addEventListener('click', () => {
     jsonData.sort((a, b) => parseAge(b.age) - parseAge(a.age));
-    renderJson(); // Re-render after sorting
+    renderJson();
 });
 
 // Sorting by platform (A → Z)
 sortByPlatformButton.addEventListener('click', () => {
-    jsonData.sort((a, b) => (a.platform || '').localeCompare(b.platform || ''));
-    renderJson(); // Re-render after sorting
+    const hasPlatform = jsonData.some(item => item.hasOwnProperty('platform'));
+    if (hasPlatform) {
+        jsonData.sort((a, b) => (a.platform || '').localeCompare(b.platform || ''));
+    } else {
+        jsonData.sort((a, b) => (a.gender || '').localeCompare(b.gender || '')); // Fall back to gender for persona format
+    }
+    renderJson();
 });
+
 
 // Sorting by platform (Z → A)
 sortByPlatformReverseButton.addEventListener('click', () => {
-    jsonData.sort((a, b) => (b.platform || '').localeCompare(a.platform || ''));
-    renderJson(); // Re-render after sorting
+    const hasPlatform = jsonData.some(item => item.hasOwnProperty('platform'));
+    if (hasPlatform) {
+        jsonData.sort((a, b) => (b.platform || '').localeCompare(a.platform || ''));
+    } else {
+        jsonData.sort((a, b) => (b.gender || '').localeCompare(a.gender || '')); // Fall back to gender for persona format
+    }
+    renderJson();
 });
 
 // Sorting alphabetically A -> Z
 sortAlphabeticallyButton.addEventListener('click', () => {
     jsonData.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
-    renderJson(); // Re-render after sorting
+    renderJson();
 });
 
 // Sorting alphabetically Z -> A
 sortReverseAlphabeticallyButton.addEventListener('click', () => {
     jsonData.sort((a, b) => (b.name || '').localeCompare(a.name || ''));
-    renderJson(); // Re-render after sorting
+    renderJson();
 });
+
 
 // Function to parse age values
 function parseAge(age) {
@@ -552,25 +576,63 @@ function renderJson() {
             jsonItem.classList.add('json-item');
             jsonItem.setAttribute('data-id', index);
 
-            jsonItem.innerHTML = `
-        <div class="json-item-content">
-          <div class="image-container">
-            <img class="image-preview" src="${item.imageData || 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA...'}" alt="Image Preview">
-          </div>
-          <div class="info">
-            <p class="name"><strong>${item.name || 'Unnamed'}</strong></p>
-            <p class="platform"><strong>Platform:</strong> ${item.platform || 'N/A'}</p>
-            <p class="age"><strong>Age:</strong> ${item.age || 'N/A'}</p>
-            <p class="description"><strong>Description:</strong> ${item.description || 'No description'}</p>
-            <p><strong>Link:</strong> <a href="${item.link || '#'}" target="_blank">${item.link || 'N/A'}</a></p>
-            <p><strong>Tags:</strong> ${item.tags ? item.tags.join(', ') : 'No tags'}</p>
-          </div>
-        </div>
-        <div class="move-buttons">
-          <button class="move-up" data-index="${index}">Up</button>
-          <button class="move-down" data-index="${index}">Down</button>
-        </div>
-      `;
+            // Decode all text fields before display
+            const decodedItem = {
+                ...item,
+                name: decodeHTMLEntities(item.name),
+                description: decodeHTMLEntities(item.description),
+                platform: decodeHTMLEntities(item.platform),
+                gender: decodeHTMLEntities(item.gender),
+                pronouns: decodeHTMLEntities(item.pronouns),
+                tldr: decodeHTMLEntities(item.tldr),
+                personality: decodeHTMLEntities(item.personality),
+                appearance: decodeHTMLEntities(item.appearance)
+            };
+
+            // Check if the item is in persona format
+            if (isPersonaFormat(item)) {
+                jsonItem.innerHTML = `
+                    <div class="json-item-content">
+                        <div class="image-container">
+                            <img class="image-preview" src="${decodedItem.imageUrl || 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA...'}" alt="Image Preview">
+                        </div>
+                        <div class="info">
+                            <p class="name"><strong>${decodedItem.name || 'Unnamed'}</strong></p>
+                            <p class="age"><strong>Age:</strong> ${decodedItem.age || 'N/A'}</p>
+                            <p><strong>Gender:</strong> ${decodedItem.gender || 'N/A'}</p>
+                            <p><strong>Pronouns:</strong> ${decodedItem.pronouns || 'N/A'}</p>
+                            <p class="description"><strong>Summary:</strong> ${decodedItem.tldr || 'No summary available'}</p>
+                            <p class="personality"><strong>Personality:</strong> ${decodedItem.personality || 'No personality details'}</p>
+                            <p class="appearance"><strong>Appearance:</strong> ${decodedItem.appearance !== 'N/A' ? decodedItem.appearance : 'No appearance details'}</p>
+                        </div>
+                    </div>
+                    <div class="move-buttons">
+                        <button class="move-up" data-index="${index}">Up</button>
+                        <button class="move-down" data-index="${index}">Down</button>
+                    </div>
+                `;
+            } else {
+                // Original character format
+                jsonItem.innerHTML = `
+                    <div class="json-item-content">
+                        <div class="image-container">
+                            <img class="image-preview" src="${decodedItem.imageData || 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA...'}" alt="Image Preview">
+                        </div>
+                        <div class="info">
+                            <p class="name"><strong>${decodedItem.name || 'Unnamed'}</strong></p>
+                            <p class="platform"><strong>Platform:</strong> ${decodedItem.platform || 'N/A'}</p>
+                            <p class="age"><strong>Age:</strong> ${decodedItem.age || 'N/A'}</p>
+                            <p class="description"><strong>Description:</strong> ${decodedItem.description || 'No description'}</p>
+                            <p><strong>Link:</strong> <a href="${decodedItem.link || '#'}" target="_blank">${decodeHTMLEntities(decodedItem.link) || 'N/A'}</a></p>
+                            <p><strong>Tags:</strong> ${decodedItem.tags ? decodedItem.tags.map(tag => decodeHTMLEntities(tag)).join(', ') : 'No tags'}</p>
+                        </div>
+                    </div>
+                    <div class="move-buttons">
+                        <button class="move-up" data-index="${index}">Up</button>
+                        <button class="move-down" data-index="${index}">Down</button>
+                    </div>
+                `;
+            }
             jsonContainer.appendChild(jsonItem);
         }
     });
@@ -580,6 +642,8 @@ function renderJson() {
     document.querySelectorAll('.move-up').forEach(button => button.addEventListener('click', moveUp));
     document.querySelectorAll('.move-down').forEach(button => button.addEventListener('click', moveDown));
 }
+
+
 
 // Move item up in the list
 function moveUp(event) {
