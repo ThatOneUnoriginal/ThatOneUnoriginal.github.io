@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/x-icon" href="https://github.com/ThatOneUnoriginal/ThatOneUnoriginal.github.io/raw/refs/heads/main/assets/Icons/Merger_Website_Logo.ico">
+    <meta property="og:title" content="T1U Tools: Save Merger">
+    <meta content="A tool that allows you to merge two save files from the character bookmarking and persona bookmarking website. Includes the ability to remove invalid links, nsfw and automatically removes duplicate tiles." property="og:description" />
+    <meta content="https://thatoneunoriginal.github.io/tools/merger" property="og:url" />
+    <meta content="https://thatoneunoriginal.github.io/assets/Icons/png%20logos/merger.png" property="og:image" />
+    <meta content="#4901FC" data-react-helmet="true" name="theme-color" />
     <title>Merger Tool: T1U Tools</title>
     <style>
 .info-grid-buttons {
@@ -488,26 +493,54 @@ function mergeJSON() {
                 const json1 = JSON.parse(e1.target.result);
                 const json2 = JSON.parse(e2.target.result);
 
-                const combined = [...json1, ...json2];
-                const uniqueMap = new Map();
-
-                combined.forEach((item) => {
-                    if (!uniqueMap.has(item.link)) {
-                        uniqueMap.set(item.link, item);
+                // Detect if first file is persona format
+                const isPersonaFormat = Array.isArray(json1) && json1.length > 0 && 'pronouns' in json1[0];
+                
+                if (isPersonaFormat) {
+                    // If persona format detected, verify second file is also persona format
+                    const isSecondPersonaFormat = Array.isArray(json2) && json2.length > 0 && 'pronouns' in json2[0];
+                    
+                    if (!isSecondPersonaFormat) {
+                        alert('Both files must be in persona format. Please select compatible files.');
+                        return;
                     }
-                });
 
-                mergedData = Array.from(uniqueMap.values()).map((item) => ({
-                    imageData: item.imageData || "",
-                    link: item.link || "https://",
-                    tags: Array.isArray(item.tags) ? item.tags : [],
-                    platform: item.platform || "",
-                    name: item.name || "",
-                    description: item.description || "",
-                    age: item.age || ""
-                }));
+                    // Merge persona files
+                    const combined = [...json1, ...json2];
+                    const uniqueMap = new Map();
 
-                checkForNSFWContent(mergedData);
+                    // Use imageUrl as unique identifier
+                    combined.forEach((item) => {
+                        if (!uniqueMap.has(item.imageUrl)) {
+                            uniqueMap.set(item.imageUrl, item);
+                        }
+                    });
+
+                    mergedData = Array.from(uniqueMap.values());
+                    checkForInvalidLinks(mergedData);
+                } else {
+                    // Handle original character format
+                    const combined = [...json1, ...json2];
+                    const uniqueMap = new Map();
+
+                    combined.forEach((item) => {
+                        if (!uniqueMap.has(item.link)) {
+                            uniqueMap.set(item.link, item);
+                        }
+                    });
+
+                    mergedData = Array.from(uniqueMap.values()).map((item) => ({
+                        imageData: item.imageData || "",
+                        link: item.link || "https://",
+                        tags: Array.isArray(item.tags) ? item.tags : [],
+                        platform: item.platform || "",
+                        name: item.name || "",
+                        description: item.description || "",
+                        age: item.age || ""
+                    }));
+
+                    checkForNSFWContent(mergedData);
+                }
             } catch (error) {
                 alert('Error processing JSON: ' + error.message);
             }
@@ -517,7 +550,50 @@ function mergeJSON() {
     reader1.readAsText(file1);
 }
 
+function normalizePersonaFormat(data) {
+    return data.map(item => ({
+        imageData: item.imageUrl || "",
+        link: item.imageUrl || "https://",
+        tags: [item.gender, item.pronouns].filter(Boolean),
+        platform: "",
+        name: item.name || "",
+        description: `${item.tldr}\n\n${item.personality}`,
+        age: item.age?.toString() || ""
+    }));
+}
+
+function convertToPersonaFormat(data) {
+    return data.map(item => {
+        // Check if it's already in persona format
+        if (item.pronouns) return item;
+
+        // Extract gender and pronouns from tags if possible
+        const gender = item.tags.find(tag => 
+            ['Male', 'Female', 'Non-Binary', 'Agender'].includes(tag)) || 'Unspecified';
+        const pronouns = item.tags.find(tag => 
+            tag.includes('/')) || 'They/Them';
+
+        return {
+            name: item.name,
+            age: parseInt(item.age) || null,
+            gender: gender,
+            pronouns: pronouns,
+            tldr: item.description?.split('\n\n')[0] || '',
+            personality: item.description?.split('\n\n')[1] || item.description || '',
+            appearance: "N/A",
+            imageUrl: item.imageData || item.link
+        };
+    });
+}
+
+
 function checkForNSFWContent(data) {
+    // Skip NSFW check for persona format
+    if (data.length > 0 && 'pronouns' in data[0]) {
+        checkForInvalidLinks(data);
+        return;
+    }
+
     nsfwData = data.filter((item) =>
         item.tags.some((tag) => nsfwTags.includes(tag))
     );
@@ -555,9 +631,12 @@ function isValidURL(url) {
 }
 
 function checkForInvalidLinks(data) {
-    const invalidLinkData = data.filter(
-        (item) => !isValidURL(item.link) || item.link === "https://"
-    );
+    // For persona format, check imageUrl
+    const isPersonaFormat = data.length > 0 && 'pronouns' in data[0];
+    const invalidLinkData = data.filter(item => {
+        const url = isPersonaFormat ? item.imageUrl : item.link;
+        return !isValidURL(url) || url === "https://";
+    });
 
     if (invalidLinkData.length > 0) {
         toggleModal('invalidLinkModal', true);
@@ -569,14 +648,17 @@ function checkForInvalidLinks(data) {
 function handleInvalidLinks(remove) {
     toggleModal('invalidLinkModal', false);
 
+    const isPersonaFormat = mergedData.length > 0 && 'pronouns' in mergedData[0];
     const filteredData = remove ?
-        mergedData.filter(
-            (item) => isValidURL(item.link) && item.link !== "https://"
-        ) :
+        mergedData.filter(item => {
+            const url = isPersonaFormat ? item.imageUrl : item.link;
+            return isValidURL(url) && url !== "https://";
+        }) :
         mergedData;
 
     displayMergedData(filteredData);
 }
+
 
 function displayMergedData(data) {
     mergedData = data;

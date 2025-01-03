@@ -4,9 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trait Selector: T1U Tools</title>
+    <meta property="og:title" content="T1U Tools: Trait Selector">
     <meta content="A collection of personality traits grabbed from the Ideonomy MIT file traits.html with a tagging system, selection system, and more." property="og:description" />
     <meta content="https://thatoneunoriginal.github.io/tools/traits" property="og:url" />
-    <meta content="https://thatoneunoriginal.github.io/assets/Icons/png%20logos/character%20bookmark.png" property="og:image" />
+    <meta content="https://thatoneunoriginal.github.io/assets/Icons/png%20logos/trait%20picker.png" property="og:image" />
     <meta content="#4901FC" data-react-helmet="true" name="theme-color" />
     <link rel="icon" type="image/x-icon" href="https://github.com/ThatOneUnoriginal/ThatOneUnoriginal.github.io/raw/refs/heads/main/assets/Icons/Character%20Trait%20Viewer.ico">
     <style>
@@ -1033,9 +1034,15 @@
           }
 
           function fetchBetaList() {
-    const checkbox = document.getElementById('betaListCheckbox');
-    checkbox.checked = !checkbox.checked;
-    toggleBetaListPersistence();
+    // Simply toggle between beta and stable URLs without affecting checkbox
+    if (currentUrl.includes('beta')) {
+        currentUrl = 'https://thatoneunoriginal.github.io/assets/json-files/traits.json';
+        document.querySelector('.fetch-beta-list-button').textContent = 'Fetch Beta List';
+    } else {
+        currentUrl = 'https://raw.githubusercontent.com/ThatOneUnoriginal/ThatOneUnoriginal.github.io/refs/heads/beta/assets/json-files/traits.json';
+        document.querySelector('.fetch-beta-list-button').textContent = 'Fetch Stable List';
+    }
+    loadJsonFromUrl();
 }
 
 
@@ -1131,7 +1138,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     const checkbox = document.getElementById('betaListCheckbox');
     localStorage.setItem('useBetaList', checkbox.checked);
     
-    // Update the URL and button text based on checkbox state
     if (checkbox.checked) {
         currentUrl = 'https://raw.githubusercontent.com/ThatOneUnoriginal/ThatOneUnoriginal.github.io/refs/heads/beta/assets/json-files/traits.json';
         document.querySelector('.fetch-beta-list-button').textContent = 'Fetch Stable List';
@@ -1142,6 +1148,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     
     loadJsonFromUrl();
 }
+
 
 
       </script>
