@@ -1029,60 +1029,71 @@
           }
 
           function fetchBetaList() {
-              if (currentUrl === 'https://raw.githubusercontent.com/ThatOneUnoriginal/ThatOneUnoriginal.github.io/refs/heads/beta/assets/json-files/traits.json') {
-                  currentUrl = 'https://thatoneunoriginal.github.io/assets/json-files/traits.json';
-              } else {
-                  currentUrl = 'https://raw.githubusercontent.com/ThatOneUnoriginal/ThatOneUnoriginal.github.io/refs/heads/beta/assets/json-files/traits.json';
-              }
-              loadJsonFromUrl();
-          }
+    const checkbox = document.getElementById('betaListCheckbox');
+    checkbox.checked = !checkbox.checked;
+    toggleBetaListPersistence();
+}
 
-          document.addEventListener('DOMContentLoaded', async () => {
-              loadSavedTheme();
-              loadSavedSelections();
-              createPaginationControls(1);
-              updatePaginationInfo(0);
 
-              // Create sort order toggle button
-              const sortButton = document.createElement('button');
-              sortButton.className = 'sort-button';
-              sortButton.textContent = 'Toggle Sort Order';
-              sortButton.onclick = toggleSortOrder;
-              buttonContainer.appendChild(sortButton);
+document.addEventListener('DOMContentLoaded', async () => {
+    loadSavedTheme();
+    loadSavedSelections();
+    createPaginationControls(1);
+    updatePaginationInfo(0);
 
-              // Create share button
-              const shareButton = document.createElement('button');
-              shareButton.className = 'share-button';
-              shareButton.textContent = 'Share';
-              shareButton.onclick = shareSelectedBoxes;
-              buttonContainer.appendChild(shareButton);
+    // Load saved beta list preference
+    const useBetaList = localStorage.getItem('useBetaList') === 'true';
+    const betaCheckbox = document.getElementById('betaListCheckbox');
+    betaCheckbox.checked = useBetaList;
+    
+    // Set initial URL and button text based on saved preference
+    if (useBetaList) {
+        currentUrl = 'https://raw.githubusercontent.com/ThatOneUnoriginal/ThatOneUnoriginal.github.io/refs/heads/beta/assets/json-files/traits.json';
+    } else {
+        currentUrl = 'https://thatoneunoriginal.github.io/assets/json-files/traits.json';
+    }
 
-              // Create import button
-              const importButton = document.createElement('button');
-              importButton.className = 'import-button';
-              importButton.textContent = 'Import';
-              importButton.onclick = importSelectedBoxes;
-              buttonContainer.appendChild(importButton);
+    // Create sort order toggle button
+    const sortButton = document.createElement('button');
+    sortButton.className = 'sort-button';
+    sortButton.textContent = 'Toggle Sort Order';
+    sortButton.onclick = toggleSortOrder;
+    buttonContainer.appendChild(sortButton);
 
-              // Create random trait button
-              const randomTraitButton = document.createElement('button');
-              randomTraitButton.className = 'random-trait-button';
-              randomTraitButton.textContent = 'Random Trait';
-              randomTraitButton.onclick = getRandomTrait;
-              buttonContainer.appendChild(randomTraitButton);
+    // Create share button
+    const shareButton = document.createElement('button');
+    shareButton.className = 'share-button';
+    shareButton.textContent = 'Share';
+    shareButton.onclick = shareSelectedBoxes;
+    buttonContainer.appendChild(shareButton);
 
-              // Create fetch beta list button
-              const fetchBetaListButton = document.createElement('button');
-              fetchBetaListButton.className = 'fetch-beta-list-button';
-              fetchBetaListButton.textContent = 'Fetch Beta List';
-              fetchBetaListButton.onclick = fetchBetaList;
-              buttonContainer.appendChild(fetchBetaListButton);
+    // Create import button
+    const importButton = document.createElement('button');
+    importButton.className = 'import-button';
+    importButton.textContent = 'Import';
+    importButton.onclick = importSelectedBoxes;
+    buttonContainer.appendChild(importButton);
 
-              // Wait for JSON data to load before displaying boxes
-              await loadJsonFromUrl();
-              // Immediately filter and display results after data is loaded
-              filterResults();
-          });
+    // Create random trait button
+    const randomTraitButton = document.createElement('button');
+    randomTraitButton.className = 'random-trait-button';
+    randomTraitButton.textContent = 'Random Trait';
+    randomTraitButton.onclick = getRandomTrait;
+    buttonContainer.appendChild(randomTraitButton);
+
+    // Create fetch beta list button with initial text based on saved preference
+    const fetchBetaListButton = document.createElement('button');
+    fetchBetaListButton.className = 'fetch-beta-list-button';
+    fetchBetaListButton.textContent = useBetaList ? 'Fetch Stable List' : 'Fetch Beta List';
+    fetchBetaListButton.onclick = fetchBetaList;
+    buttonContainer.appendChild(fetchBetaListButton);
+
+    // Wait for JSON data to load before displaying boxes
+    await loadJsonFromUrl();
+    // Immediately filter and display results after data is loaded
+    filterResults();
+});
+
 
           function validateJsonData(data) {
               // Ensure data is an array
@@ -1111,6 +1122,24 @@
                   return item;
               });
           }
+
+          function toggleBetaListPersistence() {
+    const checkbox = document.getElementById('betaListCheckbox');
+    localStorage.setItem('useBetaList', checkbox.checked);
+    
+    // Update the URL and button text based on checkbox state
+    if (checkbox.checked) {
+        currentUrl = 'https://raw.githubusercontent.com/ThatOneUnoriginal/ThatOneUnoriginal.github.io/refs/heads/beta/assets/json-files/traits.json';
+        document.querySelector('.fetch-beta-list-button').textContent = 'Fetch Stable List';
+    } else {
+        currentUrl = 'https://thatoneunoriginal.github.io/assets/json-files/traits.json';
+        document.querySelector('.fetch-beta-list-button').textContent = 'Fetch Beta List';
+    }
+    
+    loadJsonFromUrl();
+}
+
+
       </script>
 </body>
 </html>
