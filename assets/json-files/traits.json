@@ -1205,6 +1205,8 @@
     },
 
 
+
+
     {
         "title": "Absentminded",
         "tag": "Neutral",
@@ -1455,6 +1457,202 @@
         "tag": "Neutral",
         "content": "Not seen or noticeable. Often overlooked or ignored."
     },
+    {
+        "title": "Invisible",
+        "tag": "Neutral",
+        "content": "Not seen or noticeable. Often overlooked or ignored."
+    },
+    {
+        "title": "Ascetic",
+        "tag": "Neutral",
+        "content": "Practicing self-denial and discipline. Living austerely and simply, often for religious or spiritual reasons."
+    },
+    {
+        "title": "Boyish",
+        "tag": "Neutral",
+        "content": "Having or showing characteristics associated with boys. Youthful, enthusiastic, and sometimes immature."
+    },
+    {
+        "title": "Irreligious",
+        "tag": "Neutral",
+        "content": "Lacking religious belief or faith. Not observing or following religious practices or principles."
+    },
+    {
+        "title": "Irreverent",
+        "tag": "Neutral",
+        "content": "Showing a lack of respect for things that are generally taken seriously. Mocking or disrespectful, often in a humorous way."
+    },
+    {
+        "title": "Maternal",
+        "tag": "Neutral",
+        "content": "Having or showing the warmth, affection, and protectiveness of a mother. Nurturing and caring, often in a motherly way."
+    },
+    {
+        "title": "Mellow",
+        "tag": "Neutral",
+        "content": "Gently and pleasantly soothing. Calm, relaxed, and easy-going."
+    },
+    {
+        "title": "Modern",
+        "tag": "Neutral",
+        "content": "Characteristic of or relating to the present or recent times. Progressive and contemporary in style or ideas."
+    },
+    {
+        "title": "Moralistic",
+        "tag": "Neutral",
+        "content": "Having or showing a tendency to make judgments about morality. Often rigid or self-righteous in views about right and wrong."
+    },
+    {
+        "title": "Mystical",
+        "tag": "Neutral",
+        "content": "Involving or having the nature of mysticism. Relating to or characteristic of spiritual or religious experiences that are difficult to define."
+    },
+    {
+        "title": "Noncommittal",
+        "tag": "Neutral",
+        "content": "Not expressing or revealing a clear opinion or position. Neutral and unresponsive, often to avoid making a decision."
+    },
+    {
+        "title": "Noncompetitive",
+        "tag": "Neutral",
+        "content": "Not involving or characterized by competition. Not driven by the desire to win or outdo others."
+    },
+    {
+        "title": "Obedient",
+        "tag": "Neutral",
+        "content": "Complying or willing to comply with orders or rules. Submissive and docile, often in a respectful way."
+    },
+    {
+        "title": "Old-fashioned",
+        "tag": "Neutral",
+        "content": "Characteristic of or relating to a past era. Outdated or conservative in style or ideas."
+    },
+    {
+        "title": "Ordinary",
+        "tag": "Neutral",
+        "content": "With no special or distinctive features. Normal and commonplace, often in a bland or uninteresting way."
+    },
+    {
+        "title": "Outspoken",
+        "tag": "Neutral",
+        "content": "Expressing opinions openly and boldly. Frank and forthright, often to the point of bluntness."
+    },
+    {
+        "title": "Paternalistic",
+        "tag": "Neutral",
+        "content": "Acting or behaving like a father. Protective and authoritative, often in a condescending way."
+    },
+    {
+        "title": "Physical",
+        "tag": "Neutral",
+        "content": "Relating to the body. Involving or requiring bodily contact or activity, often in a vigorous way."
+    },
+    {
+        "title": "Placid",
+        "tag": "Neutral",
+        "content": "Calm and peaceful. Gentle and untroubled, often in a passive way."
+    },
+    {
+        "title": "Political",
+        "tag": "Neutral",
+        "content": "Relating to the government or public affairs of a country. Involved in or influenced by politics."
+    },
+    {
+        "title": "Predictable",
+        "tag": "Neutral",
+        "content": "Predictable"
+    },
+    {
+        "title": "Preoccupied",
+        "tag": "Neutral",
+        "content": "Deeply absorbed or involved in something. Distracted and inattentive to one's surroundings."
+    },
+    {
+        "title": "Private",
+        "tag": "Neutral",
+        "content": "Intended for or restricted to the use of a particular person or group. Kept secret or confidential."
+    },
+    {
+        "title": "Progressive",
+        "tag": "Neutral",
+        "content": "Favoring or promoting change or innovation. Advocating for social and political reform."
+    },
+    {
+        "title": "Proud",
+        "tag": "Neutral",
+        "content": "Feeling deep pleasure or satisfaction from one's own achievements. Having or displaying a high opinion of one's own worth or importance, sometimes to the point of arrogance."
+    },
+    {
+        "title": "Pure",
+        "tag": "Neutral",
+        "content": "Not mixed or adulterated with any other substance or material. Innocent and uncorrupted, often in a moral or spiritual sense."
+    },
+    {
+        "title": "Questioning",
+        "tag": "Neutral",
+        "content": "Having or showing a tendency to ask questions. Skeptical and inquisitive, often in a challenging way."
+    },
+    {
+        "title": "Quiet",
+        "tag": "Neutral",
+        "content": "Making little or no noise. Calm, reserved, and unassuming."
+    },
+    {
+        "title": "Religious",
+        "tag": "Neutral",
+        "content": "Relating to or believing in a religion. Devout and pious, often in a spiritual or moral sense."
+    },
+    {
+        "title": "Reserved",
+        "tag": "Neutral",
+        "content": "Slow or reluctant to reveal one's feelings or opinions. Quiet and restrained, often in a cautious way."
+    },
+    {
+        "title": "Restrained",
+        "tag": "Neutral",
+        "content": "Measured and controlled. Holding back or limiting one's actions or emotions."
+    },
+    {
+        "title": "Retiring",
+        "tag": "Neutral",
+        "content": "Preferring a quiet and private life. Shy and unassuming, often to the point of being withdrawn."
+    },
+    {
+        "title": "Sarcastic",
+        "tag": "Neutral",
+        "content": "Using or denoting language that conveys mocking contempt, ridicule, or irony. Bitter and caustic, often in a humorous way."
+    },
+    {
+        "title": "Self-conscious",
+        "tag": "Neutral",
+        "content": "Unduly aware of oneself as an object of the attention of others. Feeling uncomfortable or embarrassed, often in a social context."
+    },
+    {
+        "title": "Sensual",
+        "tag": "Neutral",
+        "content": "Relating to or consisting in the gratification of the senses. Sexually attractive or exciting."
+    },
+    {
+        "title": "Skeptical",
+        "tag": "Neutral",
+        "content": "Not easily convinced. Doubtful and questioning, often in a disbelieving way."
+    },
+    {
+        "title": "Smooth",
+        "tag": "Neutral",
+        "content": "Having an even and regular surface or consistency. Charming and polished, often in a suave way."
+    },
+    {
+        "title": "Solemn",
+        "tag": "Neutral",
+        "content": "Formal and dignified. Serious and grave, often in a ceremonial or religious context."
+    },
+    {
+        "title": "Solitary",
+        "tag": "Neutral",
+        "content": "Done or existing alone. Prefers being alone, often in a reclusive way."
+    },
+
 
 
     {
@@ -1593,7 +1791,7 @@
         "content": "Showing no sympathy for others' feelings. Hardened and unfeeling."
     },
     {
-        "title": "Cantankerous",
+        "title": "Cantakerous",
         "tag": "Negative",
         "content": "Bad-tempered and argumentative. Difficult to get along with."
     },
@@ -1643,7 +1841,7 @@
         "content": "Showing smug or uncritical satisfaction with oneself. Complacently content with the status quo."
     },
     {
-        "title": "Complaintive",
+        "title": "ComplaintiveComplaintive",
         "tag": "Negative",
         "content": "Tending to complain or express dissatisfaction. Whining and grumbling."
     },
