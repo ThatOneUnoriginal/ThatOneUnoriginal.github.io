@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Persona Bookmarking Tool: T1U Tools</title>
-    <link rel="icon" type="image-x-icon" href="https://github.com/ThatOneUnoriginal/ThatOneUnoriginal.github.io/raw/refs/heads/main/assets/Icons/Persona_Website_Logo.ico">
-    <meta property="og:title" content="T1U Tools: Persona Bookmarking">
-    <meta content="A tool that allows you to easily store and review all the personas you've created including the persona information (age, name, personality, and apperance)." property="og:description" />
-    <meta content="https://thatoneunoriginal.github.io/tools/bookmarks/persona" property="og:url" />
+    <title>Character Bookmarking Tool</title>
+    <link rel="icon" type="image/x-icon" href="https://github.com/ThatOneUnoriginal/ThatOneUnoriginal.github.io/raw/refs/heads/main/assets/Icons/Persona_Website_Logo.ico">
+    <meta property="og:title" content="Character Bookmarking Tool">
+    <meta content="A tool that allows you to easily store and review all the characters you've created including the character information (name, image, tags, and platform)." property="og:description" />
+    <meta content="https://thatoneunoriginal.github.io/tools/bookmarks/character" property="og:url" />
     <meta content="#4901FC" data-react-helmet="true" name="theme-color" />
-    <meta content="https://thatoneunoriginal.github.io/assets/Icons/png%20logos/persona bookmark.png" property="og:image" />
+    <meta content="https://thatoneunoriginal.github.io/assets/Icons/png%20logos/character bookmark.png" property="og:image" />
     <style>
         /* Base styles */
         body {
@@ -542,8 +542,8 @@
 
         body.dark-mode select,
         body.dark-mode input,
-        body.dark-mode .popup input, 
-        body.dark-mode .popup textarea, 
+        body.dark-mode .popup input,
+        body.dark-mode .popup textarea,
         body.dark-mode .popup select {
             background-color: #2d2d2d;
             color: #fff;
@@ -586,8 +586,8 @@
 
         body.amoled-mode select,
         body.amoled-mode input,
-        body.amoled-mode .popup input, 
-        body.amoled-mode .popup textarea, 
+        body.amoled-mode .popup input,
+        body.amoled-mode .popup textarea,
         body.amoled-mode .popup select {
             background-color: #000;
             color: #fff;
@@ -626,29 +626,61 @@
         .theme-button.active {
             outline: 2px solid #007BFF;
         }
+
+        /* Tag pills styles */
+        .tag-pills {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            display: flex;
+            gap: 5px;
+        }
+
+        .tag-pill {
+            background-color: #e2e8f0;
+            color: #4a5568;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .tag-pill span {
+            max-width: 100px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        /* Red outline for specific tags */
+        .grid-item.nsfw,
+        .popup.nsfw {
+            border: 2px solid red;
+        }
+
+        /* Blur effect for NSFW characters */
+        .grid-item img.blur,
+        .popup img.blur {
+            filter: blur(8px);
+        }
     </style>
 </head>
 <body>
-    <h1>Persona Bookmarking Tool</h1>
+    <h1>Character Bookmarking Tool</h1>
     <div class="filter-container">
-      <select id="gender-filter">
-        <option value="">All Genders</option>
-        <option value="Male">Male</option>
-        <option value="Female">Female</option>
-        <option value="Non-Binary">Non-Binary</option>
-        <option value="Agender">Agender</option>
-      </select>
-      <select id="age-filter">
-        <option value="">All Ages</option>
+      <select id="tag-filter">
+        <option value="">All Tags</option>
       </select>
       <button id="export-btn">Export Data</button>
       <button id="import-btn">Import Data</button>
+      <button id="merge-btn">Merge Lists</button>
       <button id="navigate-btn" onclick="window.location.href='https://thatoneunoriginal.github.io/tools/traits'">Go to Trait Selector</button>
       <input type="file" id="file-input" accept=".json">
       <div class="theme-buttons">
-        <button class="theme-button light active" onclick="setTheme('light')">Light</button>
-        <button class="theme-button dark" onclick="setTheme('dark')">Dark</button>
-        <button class="theme-button amoled" onclick="setTheme('amoled')">AMOLED</button>
+        <button class="theme-button active" onclick="toggleTheme()">Toggle Theme</button>
+        <button class="theme-button" onclick="selectRandomCharacter()">Select Random Character</button>
       </div>
     </div>
 
@@ -656,6 +688,14 @@
       <!-- Grid items will be dynamically added here -->
       <div class="grid-item add-image" id="add-image">+</div>
     </div>
+
+    <!-- New filter-container section for NSFW inclusion/exclusion -->
+    <div class="filter-container" style="margin-top: 20px;">
+      <button id="toggle-nsfw">Toggle NSFW in Random Select</button>
+      <button id="blur-nsfw">Blur NSFW Characters</button>
+      <button id="hide-tags">Hide Tags</button>
+    </div>
+
     <div class="overlay" id="popup-overlay">
       <div class="popup" id="image-popup">
         <h2>Add Image</h2>
@@ -664,41 +704,38 @@
         <button id="confirm-add">Next</button>
         <button id="cancel-add">Cancel</button>
       </div>
-      <div class="popup" id="persona-popup" style="display: none;">
-        <h2>Add Persona Details</h2>
-        <label class="field-label" for="persona-name">Name</label>
-        <input type="text" id="persona-name" required>
-        <label class="field-label" for="persona-age">Age (minimum 16)</label>
-        <input type="number" id="persona-age" min="16" required>
-        <label class="field-label" for="persona-gender">Gender</label>
-        <select id="persona-gender" required>
-          <option value="">Select Gender</option>
-          <option value="Male">Male</option>
-          <option value="Female">Female</option>
-          <option value="Non-Binary">Non-Binary</option>
-          <option value="Agender">Agender</option>
-        </select>
-        <label class="field-label" for="persona-pronouns">Pronouns</label>
-        <select id="persona-pronouns" required>
-          <option value="">Select Pronouns</option>
-          <option value="They/Them">They/Them</option>
-          <option value="He/Him">He/Him</option>
-          <option value="She/Her">She/Her</option>
-        </select>
-        <label class="field-label" for="persona-tldr">Personality TL;DR (optional)</label>
-        <textarea id="persona-tldr" rows="2"></textarea>
-        <label class="field-label" for="persona-personality">Personality</label>
-        <textarea id="persona-personality" rows="3" required></textarea>
-        <label class="field-label" for="persona-appearance">Appearance</label>
-        <textarea id="persona-appearance" rows="3" required></textarea>
-        <button id="submit-persona">Add Persona</button>
-        <button id="cancel-persona">Cancel</button>
+      <div class="popup" id="character-popup" style="display: none;">
+        <h2>Add Character Details</h2>
+        <label class="field-label" for="character-name">Name</label>
+        <input type="text" id="character-name" required>
+        <label class="field-label" for="character-platform">Platform</label>
+        <input type="text" id="character-platform" required>
+        <label class="field-label" for="character-tags">Tags (Optional)</label>
+        <input type="text" id="character-tags" placeholder="Comma-separated tags">
+        <label class="field-label" for="character-age">Age (Optional)</label>
+        <input type="text" id="character-age" placeholder="Enter age">
+        <label class="field-label" for="character-gender">Gender (Optional)</label>
+        <input type="text" id="character-gender" placeholder="Enter gender">
+        <label class="field-label" for="character-race">Race (Optional)</label>
+        <input type="text" id="character-race" placeholder="Enter race">
+        <label class="field-label" for="character-link">Link</label>
+        <input type="url" id="character-link" placeholder="Enter character link...">
+        <button id="submit-character">Add Character</button>
+        <button id="cancel-character">Cancel</button>
       </div>
-      <div class="popup" id="persona-display-popup" style="display: none;">
-        <h2>Persona Information</h2>
+      <div class="popup" id="character-display-popup" style="display: none;">
+        <h2>Character Information</h2>
         <p>
           <strong>Name:</strong>
           <span id="display-name"></span>
+        </p>
+        <p>
+          <strong>Platform:</strong>
+          <span id="display-platform"></span>
+        </p>
+        <p>
+          <strong>Tags:</strong>
+          <span id="display-tags"></span>
         </p>
         <p>
           <strong>Age:</strong>
@@ -709,30 +746,22 @@
           <span id="display-gender"></span>
         </p>
         <p>
-          <strong>Pronouns:</strong>
-          <span id="display-pronouns"></span>
+          <strong>Race:</strong>
+          <span id="display-race"></span>
         </p>
         <p>
-          <strong>Personality TL;DR:</strong>
-          <span id="display-tldr"></span>
-        </p>
-        <p>
-          <strong>Personality:</strong>
-          <span id="display-personality"></span>
-        </p>
-        <p>
-          <strong>Appearance:</strong>
-          <span id="display-appearance"></span>
+          <strong>Link:</strong>
+          <a id="display-link" target="_blank"></a>
         </p>
         <div class="action-buttons">
           <button id="close-display">Close</button>
-          <button id="edit-persona" class="edit-button">Edit</button>
-          <button id="delete-persona" class="delete-button">Delete</button>
+          <button id="edit-character" class="edit-button">Edit</button>
+          <button id="delete-character" class="delete-button">Delete</button>
         </div>
       </div>
       <div class="popup delete-popup" id="delete-confirmation-popup">
-        <h3>⚠️ Delete Persona</h3>
-        <p>Are you sure you want to delete this persona? This action cannot be undone.</p>
+        <h3>⚠️ Delete Character</h3>
+        <p>Are you sure you want to delete this character? This action cannot be undone.</p>
         <div class="delete-countdown">Please wait <span id="countdown">5</span> seconds </div>
         <div class="delete-buttons">
           <button id="cancel-delete">Cancel</button>
@@ -740,73 +769,79 @@
         </div>
       </div>
       <div class="popup edit-popup" id="edit-popup">
-        <h2>Edit Persona</h2>
+        <h2>Edit Character</h2>
         <label class="field-label">Image URL</label>
         <input type="url" id="edit-image-url" required>
         <label class="field-label">Name</label>
         <input type="text" id="edit-name" required>
-        <label class="field-label">Age (minimum 16)</label>
-        <input type="number" id="edit-age" min="16" required>
-        <label class="field-label">Gender</label>
-        <select id="edit-gender" required>
-          <option value="">Select Gender</option>
-          <option value="Male">Male</option>
-          <option value="Female">Female</option>
-          <option value="Non-Binary">Non-Binary</option>
-          <option value="Agender">Agender</option>
-        </select>
-        <label class="field-label">Pronouns</label>
-        <select id="edit-pronouns" required>
-          <option value="">Select Pronouns</option>
-          <option value="They/Them">They/Them</option>
-          <option value="He/Him">He/Him</option>
-          <option value="She/Her">She/Her</option>
-        </select>
-        <label class="field-label">Personality TL;DR (optional)</label>
-        <textarea id="edit-tldr" rows="2"></textarea>
-        <label class="field-label">Personality</label>
-        <textarea id="edit-personality" rows="3" required></textarea>
-        <label class="field-label">Appearance</label>
-        <textarea id="edit-appearance" rows="3" required></textarea>
+        <label class="field-label">Platform</label>
+        <input type="text" id="edit-platform" required>
+        <label class="field-label">Tags (Optional)</label>
+        <input type="text" id="edit-tags" placeholder="Comma-separated tags">
+        <label class="field-label">Age (Optional)</label>
+        <input type="text" id="edit-age" placeholder="Enter age">
+        <label class="field-label">Gender (Optional)</label>
+        <input type="text" id="edit-gender" placeholder="Enter gender">
+        <label class="field-label">Race (Optional)</label>
+        <input type="text" id="edit-race" placeholder="Enter race">
+        <label class="field-label">Link</label>
+        <input type="url" id="edit-link" placeholder="Enter character link...">
         <div class="button-group">
           <button id="cancel-edit">Cancel</button>
           <button id="save-edit">Save Changes</button>
         </div>
       </div>
-      <div class="popup age-validation-popup" id="age-validation-popup">
-        <h3>Invalid Age Detected</h3>
-        <div class="persona-preview" id="invalid-persona-preview"></div>
-        <div class="age-validation-buttons">
-          <input type="number" id="corrected-age" min="16" placeholder="Enter new age (min 16)" style="width: 150px;">
-          <button id="update-age-btn">Update Age</button>
-          <button id="skip-persona-btn">Skip</button>
-        </div>
-      </div>
-      <div class="popup merge-popup" id="merge-popup">
-        <h3>Import Options</h3>
-        <p>How would you like to handle the imported data?</p>
-        <div class="merge-buttons">
-          <button id="merge-data">Add to Existing Grid</button>
-          <button id="replace-data">Replace Existing Grid</button>
-          <button id="cancel-import">Cancel Import</button>
+      <div class="popup" id="random-character-popup" style="display: none;">
+        <h2>Random Character</h2>
+        <p>
+          <strong>Name:</strong>
+          <span id="random-display-name"></span>
+        </p>
+        <p>
+          <strong>Platform:</strong>
+          <span id="random-display-platform"></span>
+        </p>
+        <p>
+          <strong>Tags:</strong>
+          <span id="random-display-tags"></span>
+        </p>
+        <p>
+          <strong>Age:</strong>
+          <span id="random-display-age"></span>
+        </p>
+        <p>
+          <strong>Gender:</strong>
+          <span id="random-display-gender"></span>
+        </p>
+        <p>
+          <strong>Race:</strong>
+          <span id="random-display-race"></span>
+        </p>
+        <p>
+          <strong>Link:</strong>
+          <a id="random-display-link" target="_blank"></a>
+        </p>
+        <div class="action-buttons">
+          <button id="roll-again">Roll Again</button>
+          <button id="close-random-display">Close</button>
         </div>
       </div>
     </div>
     <script>
-        let currentPersonaIndex = -1;
+        let currentCharacterIndex = -1;
         const overlay = document.getElementById('popup-overlay');
         const imagePopup = document.getElementById('image-popup');
-        const personaPopup = document.getElementById('persona-popup');
-        const personaDisplayPopup = document.getElementById('persona-display-popup');
+        const characterPopup = document.getElementById('character-popup');
+        const characterDisplayPopup = document.getElementById('character-display-popup');
+        const randomCharacterPopup = document.getElementById('random-character-popup');
         const grid = document.getElementById('image-grid');
         const addImageButton = document.getElementById('add-image');
         const deleteConfirm = document.getElementById('delete-confirmation-popup');
-        const editPersona = document.getElementById('edit-popup');
-        const ageValidator = document.getElementById('age-validation-popup');
+        const editCharacter = document.getElementById('edit-popup');
         const importPopup = document.getElementById('merge-popup');
 
         let tempImageUrl = '';
-        let tempPersonaData = {};
+        let tempCharacterData = {};
 
         addImageButton.addEventListener('click', function() {
             hideAllPopups();
@@ -819,7 +854,7 @@
             overlay.style.display = 'none';
         });
 
-        document.getElementById('cancel-persona').addEventListener('click', () => {
+        document.getElementById('cancel-character').addEventListener('click', () => {
             hideAllPopups();
             overlay.style.display = 'none';
         });
@@ -855,7 +890,7 @@
             tempImage.onload = function() {
                 tempImageUrl = sanitizedUrl; // Assign sanitized image URL
                 imagePopup.style.display = 'none';
-                personaPopup.style.display = 'block';
+                characterPopup.style.display = 'block';
             };
 
             tempImage.onerror = function() {
@@ -890,49 +925,44 @@
             return acceptedImageTypes.some(type => url.toLowerCase().endsWith(type));
         }
 
-        document.getElementById('submit-persona').addEventListener('click', function() {
-            const name = document.getElementById('persona-name').value;
-            const age = parseInt(document.getElementById('persona-age').value);
-            const gender = document.getElementById('persona-gender').value;
-            const pronouns = document.getElementById('persona-pronouns').value;
-            const tldr = document.getElementById('persona-tldr').value;
-            const personality = document.getElementById('persona-personality').value;
-            const appearance = document.getElementById('persona-appearance').value;
+        document.getElementById('submit-character').addEventListener('click', function() {
+            const name = document.getElementById('character-name').value;
+            const platform = document.getElementById('character-platform').value;
+            const tags = document.getElementById('character-tags').value.split(',').map(tag => tag.trim());
+            const age = document.getElementById('character-age').value;
+            const gender = document.getElementById('character-gender').value;
+            const race = document.getElementById('character-race').value;
+            const link = document.getElementById('character-link').value;
 
-            if (age < 16) {
-                alert('Age must be 16 or older.');
-                return;
-            }
-
-            if (name && age && gender && pronouns && personality && appearance) {
-                const personaData = {
+            if (name && platform && link) {
+                const characterData = {
                     name,
+                    platform,
+                    tags,
                     age,
                     gender,
-                    pronouns,
-                    tldr,
-                    personality,
-                    appearance,
+                    race,
+                    link,
                     imageUrl: tempImageUrl
                 };
 
-                personas.push(personaData);
-                localStorage.setItem('gridPersonas', JSON.stringify(personas));
+                characters.push(characterData);
+                localStorage.setItem('gridCharacters', JSON.stringify(characters));
 
-                const gridItem = createGridItem(personaData);
+                const gridItem = createGridItem(characterData);
                 grid.insertBefore(gridItem, addImageButton);
 
                 // Reset form
-                document.getElementById('persona-name').value = '';
-                document.getElementById('persona-age').value = '';
-                document.getElementById('persona-gender').value = '';
-                document.getElementById('persona-pronouns').value = '';
-                document.getElementById('persona-tldr').value = '';
-                document.getElementById('persona-personality').value = '';
-                document.getElementById('persona-appearance').value = '';
+                document.getElementById('character-name').value = '';
+                document.getElementById('character-platform').value = '';
+                document.getElementById('character-tags').value = '';
+                document.getElementById('character-age').value = '';
+                document.getElementById('character-gender').value = '';
+                document.getElementById('character-race').value = '';
+                document.getElementById('character-link').value = '';
 
                 overlay.style.display = 'none';
-                personaPopup.style.display = 'none';
+                characterPopup.style.display = 'none';
             } else {
                 alert('Please fill out all required fields.');
             }
@@ -943,69 +973,25 @@
             overlay.style.display = 'none';
         });
 
-        const genderFilter = document.getElementById('gender-filter');
-        const ageFilter = document.getElementById('age-filter');
+        const tagFilter = document.getElementById('tag-filter');
         const exportBtn = document.getElementById('export-btn');
         const importBtn = document.getElementById('import-btn');
+        const mergeBtn = document.getElementById('merge-btn');
         const fileInput = document.getElementById('file-input');
 
-        let personas = [];
-
-        // Initialize age filter options (16-100)
-        for (let i = 16; i <= 100; i++) {
-            const option = document.createElement('option');
-            option.value = i;
-            option.textContent = i;
-            ageFilter.appendChild(option);
-        }
+        let characters = [];
 
         // Load data from localStorage on page load
         window.addEventListener('DOMContentLoaded', () => {
-            const savedPersonas = localStorage.getItem('gridPersonas');
-            if (savedPersonas) {
-                personas = JSON.parse(savedPersonas);
+            const savedCharacters = localStorage.getItem('gridCharacters');
+            if (savedCharacters) {
+                characters = JSON.parse(savedCharacters);
                 renderGrid();
             }
         });
 
         // Filter event listeners
-        genderFilter.addEventListener('change', renderGrid);
-        ageFilter.addEventListener('change', renderGrid);
-        const allAgesOption = document.createElement('option');
-        allAgesOption.value = ''; // Empty value signifies no age filter
-        allAgesOption.textContent = 'All Ages';
-        ageFilter.insertBefore(allAgesOption, ageFilter.firstChild);
-
-        function initializeAgeFilter() {
-            const ageFilter = document.getElementById('age-filter');
-            ageFilter.innerHTML = ''; // Clear existing options
-
-            // Add the "All Ages" option
-            const allAgesOption = document.createElement('option');
-            allAgesOption.value = '';
-            allAgesOption.textContent = 'All Ages';
-            ageFilter.appendChild(allAgesOption);
-
-            // Only add age options if there are personas
-            if (personas.length > 0) {
-                const existingAges = new Set(personas.map(persona => persona.age));
-                [...existingAges]
-                .sort((a, b) => a - b)
-                    .forEach(age => {
-                        const option = document.createElement('option');
-                        option.value = age;
-                        option.textContent = age;
-                        ageFilter.appendChild(option);
-                    });
-            }
-
-            // Maintain the current selection if it exists in the new options
-            const currentValue = ageFilter.value;
-            if (currentValue) {
-                const exists = Array.from(ageFilter.options).some(option => option.value === currentValue);
-                ageFilter.value = exists ? currentValue : '';
-            }
-        }
+        tagFilter.addEventListener('change', renderGrid);
 
         function renderGrid() {
             // Clear existing grid items
@@ -1014,67 +1000,107 @@
                 grid.removeChild(grid.firstChild);
             }
 
-            const filteredPersonas = personas.filter(persona => {
-                const genderMatch = !genderFilter.value || persona.gender === genderFilter.value;
-                const ageMatch = !ageFilter.value || persona.age === parseInt(ageFilter.value);
-                return genderMatch && ageMatch;
+            const filteredCharacters = characters.filter(character => {
+                const tagMatch = !tagFilter.value || character.tags.includes(tagFilter.value) || (character.tags.some(tag => nsfwTags.includes(tag)) && tagFilter.value === 'NSFW');
+                return tagMatch;
             });
 
-            filteredPersonas.forEach((persona, index) => {
-                const actualIndex = personas.indexOf(persona);
-                const gridItem = createGridItem(persona, actualIndex);
+            filteredCharacters.forEach((character, index) => {
+                const actualIndex = characters.indexOf(character);
+                const gridItem = createGridItem(character, actualIndex);
                 grid.insertBefore(gridItem, addImageButton);
             });
 
-            // Update age filter options while preserving selection
-            const selectedAge = ageFilter.value;
-            initializeAgeFilter();
-            ageFilter.value = selectedAge;
+            // Update tag filter options while preserving selection
+            const selectedTag = tagFilter.value;
+            initializeTagFilter();
+            tagFilter.value = selectedTag;
         }
 
-        // Update the age filter event listener
-        ageFilter.addEventListener('change', (event) => {
-            // Store the selected value
-            const selectedValue = event.target.value;
-            renderGrid();
-            // Restore the selected value after rendering
-            ageFilter.value = selectedValue;
-        });
+        const nsfwTags = ['NSFW', 'Hentai', '18+', '🔞', 'NSFL'];
 
-        function updateAgeFilterOptions(filteredPersonas) {
-            const existingAges = new Set(personas.map(persona => persona.age)); // Get all unique ages
-            ageFilter.innerHTML = ''; // Clear the current dropdown options
+        function initializeTagFilter() {
+            const tagFilter = document.getElementById('tag-filter');
+            tagFilter.innerHTML = ''; // Clear existing options
 
-            // Add "All Ages" option
-            const allAgesOption = document.createElement('option');
-            allAgesOption.value = '';
-            allAgesOption.textContent = 'All Ages';
-            ageFilter.appendChild(allAgesOption);
+            // Add the "All Tags" option
+            const allTagsOption = document.createElement('option');
+            allTagsOption.value = '';
+            allTagsOption.textContent = 'All Tags';
+            tagFilter.appendChild(allTagsOption);
 
-            // Add options for the existing ages in sorted order
-            [...existingAges].sort((a, b) => a - b).forEach(age => {
-                const option = document.createElement('option');
-                option.value = age;
-                option.textContent = age;
-                ageFilter.appendChild(option);
-            });
+            // Only add tag options if there are characters
+            if (characters.length > 0) {
+                const existingTags = new Set(characters.flatMap(character => character.tags.filter(tag => !nsfwTags.includes(tag))));
+                [...existingTags]
+                .sort()
+                .forEach(tag => {
+                    const option = document.createElement('option');
+                    option.value = tag;
+                    option.textContent = tag;
+                    tagFilter.appendChild(option);
+                });
 
-            // Set the selected value to the current filter
-            ageFilter.value = ageFilter.value || '';
+                // Add NSFW option if any character has NSFW tags
+                if (characters.some(character => character.tags.some(tag => nsfwTags.includes(tag)))) {
+                    const nsfwOption = document.createElement('option');
+                    nsfwOption.value = 'NSFW';
+                    nsfwOption.textContent = 'NSFW';
+                    tagFilter.appendChild(nsfwOption);
+                }
+            }
+
+            // Maintain the current selection if it exists in the new options
+            const currentValue = tagFilter.value;
+            if (currentValue) {
+                const exists = Array.from(tagFilter.options).some(option => option.value === currentValue);
+                tagFilter.value = exists ? currentValue : '';
+            }
         }
 
-        function createGridItem(persona, index) {
+        function createGridItem(character, index) {
             const gridItem = document.createElement('div');
             gridItem.className = 'grid-item';
             gridItem.dataset.index = index; // Store the index as a data attribute
 
             const img = document.createElement('img');
-            img.src = persona.imageUrl;
+            img.src = character.imageUrl;
             img.alt = 'User added image';
+
+            // Add blur effect for NSFW characters if the option is enabled
+            const blurNsfw = localStorage.getItem('blurNsfw') === 'true';
+            if (blurNsfw && character.tags.some(tag => nsfwTags.includes(tag))) {
+                img.classList.add('blur');
+            }
+
             gridItem.appendChild(img);
 
+            // Add tag pills
+            const tagPills = document.createElement('div');
+            tagPills.className = 'tag-pills';
+            character.tags.slice(0, 2).forEach(tag => {
+                const tagPill = document.createElement('div');
+                tagPill.className = 'tag-pill';
+                tagPill.innerHTML = `<span>${tag}</span>`;
+                tagPills.appendChild(tagPill);
+            });
+            gridItem.appendChild(tagPills);
+
+            // Add red outline for NSFW tags
+            if (character.tags.some(tag => nsfwTags.includes(tag))) {
+                gridItem.classList.add('nsfw');
+            }
+
+            // Apply the hide tags preference
+            const hideTags = localStorage.getItem('hideTags') === 'true';
+            if (hideTags) {
+                tagPills.style.display = 'none';
+            } else {
+                tagPills.style.display = 'flex';
+            }
+
             gridItem.addEventListener('click', () => {
-                showPersonaDisplay(persona, index);
+                showCharacterDisplay(character, index);
             });
 
             return gridItem;
@@ -1082,14 +1108,14 @@
 
         // Export functionality
         exportBtn.addEventListener('click', () => {
-            const dataStr = JSON.stringify(personas, null, 2);
+            const dataStr = JSON.stringify(characters, null, 2);
             const blob = new Blob([dataStr], {
                 type: 'application/json'
             });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'personas.json';
+            a.download = 'characters.json';
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
@@ -1101,11 +1127,13 @@
             fileInput.click();
         });
 
-        let invalidAgePersonas = [];
-        let currentInvalidIndex = 0;
+        // Merge Lists functionality
+        mergeBtn.addEventListener('click', () => {
+            fileInput.click();
+        });
 
         let importedData = [];
-        let originalPersonas = [];
+        let originalCharacters = [];
         let hasUnsavedChanges = false;
 
         // Add beforeunload event listener for unsaved changes
@@ -1116,25 +1144,23 @@
             }
         });
 
-        // Modify persona form inputs to track changes
-        const personaFormInputs = [
-            'persona-name', 'persona-age', 'persona-gender',
-            'persona-pronouns', 'persona-tldr', 'persona-personality',
-            'persona-appearance'
+        // Modify character form inputs to track changes
+        const characterFormInputs = [
+            'character-name', 'character-platform', 'character-tags', 'character-age', 'character-gender', 'character-race', 'character-link'
         ];
 
-        personaFormInputs.forEach(inputId => {
+        characterFormInputs.forEach(inputId => {
             document.getElementById(inputId).addEventListener('input', () => {
                 hasUnsavedChanges = true;
             });
         });
 
-        // Reset unsaved changes flag when persona is submitted or cancelled
-        document.getElementById('submit-persona').addEventListener('click', () => {
+        // Reset unsaved changes flag when character is submitted or cancelled
+        document.getElementById('submit-character').addEventListener('click', () => {
             hasUnsavedChanges = false;
         });
 
-        document.getElementById('cancel-persona').addEventListener('click', () => {
+        document.getElementById('cancel-character').addEventListener('click', () => {
             if (hasUnsavedChanges) {
                 if (confirm('You have unsaved changes. Are you sure you want to cancel?')) {
                     hasUnsavedChanges = false;
@@ -1157,22 +1183,19 @@
                             // Store the imported data globally
                             importedData = parsedData;
 
-                            // Find personas with invalid ages
-                            invalidAgePersonas = importedData
-                                .map((p, index) => ({
-                                    ...p,
-                                    originalIndex: index
-                                }))
-                                .filter(p => !p.age || p.age < 16);
+                            // Find characters with invalid data
+                            const invalidCharacters = importedData.filter(character => !validateCharacterData(character));
 
-                            if (invalidAgePersonas.length > 0) {
-                                currentInvalidIndex = 0;
-                                showAgeValidationPopup();
-                            } else {
-                                showMergeOptionsPopup();
+                            if (invalidCharacters.length > 0) {
+                                alert('Some characters were skipped due to invalid or missing data.');
                             }
+
+                            // Merge valid characters
+                            characters.push(...importedData.filter(character => validateCharacterData(character)));
+                            localStorage.setItem('gridCharacters', JSON.stringify(characters));
+                            renderGrid();
                         } else {
-                            alert('Invalid JSON format. Please ensure the file contains an array of persona data.');
+                            alert('Invalid JSON format. Please ensure the file contains an array of character data.');
                         }
                     } catch (error) {
                         alert('Error reading file. Please ensure it is a valid JSON file.');
@@ -1183,159 +1206,49 @@
             }
         });
 
-        function showMergeOptionsPopup() {
-            document.getElementById('merge-popup').style.display = 'block';
-            document.getElementById('age-validation-popup').style.display = 'none';
-            document.getElementById('delete-confirmation-popup').style.display = 'none';
-            document.getElementById('persona-display-popup').style.display = 'none';
-            document.getElementById('image-popup').style.display = 'none';
-            document.getElementById('edit-popup').style.display = 'none';
-            overlay.style.display = 'flex';
-        }
+        // Modify merge functionality
+        mergeBtn.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    try {
+                        const parsedData = JSON.parse(event.target.result);
+                        if (Array.isArray(parsedData)) {
+                            // Store the imported data globally
+                            importedData = parsedData;
 
-        document.getElementById('merge-data').addEventListener('click', () => {
-            const validPersonas = getValidPersonasInOrder();
-            // Validate each persona before merging
-            const validatedPersonas = validPersonas.filter(persona => validatePersonaData(persona));
+                            // Find characters with invalid data
+                            const invalidCharacters = importedData.filter(character => !validateCharacterData(character));
 
-            if (validatedPersonas.length !== validPersonas.length) {
-                alert('Some personas were skipped due to invalid or missing data.');
-            }
+                            if (invalidCharacters.length > 0) {
+                                alert('Some characters were skipped due to invalid or missing data.');
+                            }
 
-            personas.push(...validatedPersonas);
-            finalizeImport();
-        });
-
-        document.getElementById('replace-data').addEventListener('click', () => {
-            const validPersonas = getValidPersonasInOrder();
-            // Validate each persona before replacing
-            const validatedPersonas = validPersonas.filter(persona => validatePersonaData(persona));
-
-            if (validatedPersonas.length !== validPersonas.length) {
-                alert('Some personas were skipped due to invalid or missing data.');
-            }
-
-            personas = validatedPersonas;
-            finalizeImport();
-        });
-
-        document.getElementById('cancel-import').addEventListener('click', () => {
-            document.getElementById('merge-popup').style.display = 'none';
-            overlay.style.display = 'none';
-            importedData = [];
-        });
-
-        function getValidPersonasInOrder() {
-            return importedData.map((p, index) => {
-                // Check if this persona was in invalidAgePersonas and was fixed
-                const fixedPersona = invalidAgePersonas.find(
-                    invalid => invalid.originalIndex === index && invalid.age >= 16
-                );
-
-                // Use the fixed persona if available, otherwise use original if age is valid
-                const personaToUse = fixedPersona || (p.age >= 16 ? p : null);
-
-                // Ensure all required fields are present and properly formatted
-                if (personaToUse) {
-                    return {
-                        name: personaToUse.name || '',
-                        age: parseInt(personaToUse.age) || 16,
-                        gender: personaToUse.gender || '',
-                        pronouns: personaToUse.pronouns || '',
-                        tldr: personaToUse.tldr || '',
-                        personality: personaToUse.personality || '',
-                        appearance: personaToUse.appearance || '',
-                        imageUrl: sanitizeURL(personaToUse.imageUrl || '') || ''
-                    };
-                }
-                return null;
-            }).filter(p => p !== null);
-        }
-
-        function finalizeImport() {
-            localStorage.setItem('gridPersonas', JSON.stringify(personas));
-            renderGrid();
-            hideAllPopups();
-            // Reset import-related variables
-            importedData = [];
-            invalidAgePersonas = [];
-            currentInvalidIndex = 0;
-            // Reset file input
-            fileInput.value = '';
-        }
-
-        function hideAllPopups() {
-            const popups = [
-                imagePopup,
-                personaPopup,
-                personaDisplayPopup,
-                document.getElementById('delete-confirmation-popup'),
-                document.getElementById('edit-popup'),
-                document.getElementById('age-validation-popup'),
-                document.getElementById('merge-popup'),
-                document.getElementById('popup-overlay')
-            ];
-
-            popups.forEach(popup => {
-                if (popup) {
-                    popup.style.display = 'none';
-                }
-            });
-        }
-
-        function showAgeValidationPopup() {
-            const persona = invalidAgePersonas[currentInvalidIndex];
-            const previewDiv = document.getElementById('invalid-persona-preview');
-            previewDiv.innerHTML = `
-                <p><strong>Name:</strong> ${persona.name}</p>
-                <p><strong>Current Age:</strong> ${persona.age}</p>
-                <p><strong>Gender:</strong> ${persona.gender}</p>
-            `;
-
-            document.getElementById('age-validation-popup').style.display = 'block';
-            imagePopup.style.display = 'none';
-            overlay.style.display = 'flex';
-            document.getElementById('corrected-age').value = '';
-        }
-
-        document.getElementById('update-age-btn').addEventListener('click', () => {
-            const newAge = parseInt(document.getElementById('corrected-age').value);
-            if (newAge >= 16) {
-                invalidAgePersonas[currentInvalidIndex].age = newAge;
-                handleNextInvalidPersona();
-            } else {
-                alert('Please enter a valid age (16 or above)');
+                            // Merge valid characters
+                            characters.push(...importedData.filter(character => validateCharacterData(character)));
+                            localStorage.setItem('gridCharacters', JSON.stringify(characters));
+                            renderGrid();
+                        } else {
+                            alert('Invalid JSON format. Please ensure the file contains an array of character data.');
+                        }
+                    } catch (error) {
+                        alert('Error reading file. Please ensure it is a valid JSON file.');
+                        console.error('Import error:', error);
+                    }
+                };
+                reader.readAsText(file);
             }
         });
 
-        document.getElementById('skip-persona-btn').addEventListener('click', () => {
-            handleNextInvalidPersona();
-        });
-
-        function handleNextInvalidPersona() {
-            currentInvalidIndex++;
-            if (currentInvalidIndex < invalidAgePersonas.length) {
-                showAgeValidationPopup();
-            } else {
-                document.getElementById('age-validation-popup').style.display = 'none';
-                showMergeOptionsPopup();
-            }
-        }
-
-        function validatePersonaData(persona) {
+        function validateCharacterData(character) {
             return (
-                persona.name &&
-                persona.age &&
-                persona.gender &&
-                persona.pronouns &&
-                persona.personality &&
-                persona.appearance &&
-                persona.imageUrl &&
-                typeof persona.age === 'number' &&
-                persona.age >= 16 &&
-                !/[<>]/.test(persona.name) && // Example: Disallow angle brackets
-                !/[<>]/.test(persona.personality) &&
-                !/[<>]/.test(persona.appearance)
+                character.name &&
+                character.platform &&
+                character.link &&
+                character.imageUrl &&
+                !/[<>]/.test(character.name) && // Example: Disallow angle brackets
+                !/[<>]/.test(character.link)
             );
         }
 
@@ -1343,51 +1256,67 @@
             if (e.key === 'Escape') {
                 overlay.style.display = 'none';
                 imagePopup.style.display = 'none';
-                personaPopup.style.display = 'none';
-                personaDisplayPopup.style.display = 'none';
+                characterPopup.style.display = 'none';
+                characterDisplayPopup.style.display = 'none';
                 document.getElementById('age-validation-popup').style.display = 'none';
                 document.getElementById('edit-popup').style.display = 'none';
             }
         });
 
-        function updateAgeFilter() {
-            const selectedValue = ageFilter.value || 'All Ages';
-            Array.from(ageFilter.options).forEach(option => {
+        function updateTagFilter() {
+            const selectedValue = tagFilter.value || 'All Tags';
+            Array.from(tagFilter.options).forEach(option => {
                 option.selected = option.textContent === selectedValue;
             });
         }
 
-        function showPersonaDisplay(persona, index) {
+        function showCharacterDisplay(character, index) {
             hideAllPopups(); // Hide all popups before showing this one
-            currentPersonaIndex = index;
+            currentCharacterIndex = index;
 
-            document.getElementById('display-name').textContent = persona.name;
-            document.getElementById('display-age').textContent = persona.age;
-            document.getElementById('display-gender').textContent = persona.gender;
-            document.getElementById('display-pronouns').textContent = persona.pronouns;
-            document.getElementById('display-tldr').textContent = persona.tldr || 'Not provided';
-            document.getElementById('display-personality').textContent = persona.personality;
-            document.getElementById('display-appearance').textContent = persona.appearance;
+            document.getElementById('display-name').textContent = character.name;
+            document.getElementById('display-platform').textContent = character.platform;
+            document.getElementById('display-tags').textContent = character.tags.join(', ');
+            document.getElementById('display-age').textContent = character.age || 'N/A';
+            document.getElementById('display-gender').textContent = character.gender || 'N/A';
+            document.getElementById('display-race').textContent = character.race || 'N/A';
+            document.getElementById('display-link').href = character.link;
+            document.getElementById('display-link').textContent = character.link;
 
-            personaDisplayPopup.style.display = 'block';
+            // Add red outline for NSFW tags
+            if (character.tags.some(tag => nsfwTags.includes(tag))) {
+                characterDisplayPopup.classList.add('nsfw');
+            } else {
+                characterDisplayPopup.classList.remove('nsfw');
+            }
+
+            // Add blur effect for NSFW characters if the option is enabled
+            const blurNsfw = localStorage.getItem('blurNsfw') === 'true';
+            if (blurNsfw && character.tags.some(tag => nsfwTags.includes(tag))) {
+                characterDisplayPopup.classList.add('blur');
+            } else {
+                characterDisplayPopup.classList.remove('blur');
+            }
+
+            characterDisplayPopup.style.display = 'block';
             overlay.style.display = 'flex';
         }
 
         // Modify the edit button click handler
-        document.getElementById('edit-persona').addEventListener('click', () => {
+        document.getElementById('edit-character').addEventListener('click', () => {
             hideAllPopups(); // Hide all popups before showing edit popup
-            const persona = personas[currentPersonaIndex];
+            const character = characters[currentCharacterIndex];
             const editPopup = document.getElementById('edit-popup');
 
             // Populate form with current values
-            document.getElementById('edit-image-url').value = persona.imageUrl;
-            document.getElementById('edit-name').value = persona.name;
-            document.getElementById('edit-age').value = persona.age;
-            document.getElementById('edit-gender').value = persona.gender;
-            document.getElementById('edit-pronouns').value = persona.pronouns;
-            document.getElementById('edit-tldr').value = persona.tldr || '';
-            document.getElementById('edit-personality').value = persona.personality;
-            document.getElementById('edit-appearance').value = persona.appearance;
+            document.getElementById('edit-image-url').value = character.imageUrl;
+            document.getElementById('edit-name').value = character.name;
+            document.getElementById('edit-platform').value = character.platform;
+            document.getElementById('edit-tags').value = character.tags.join(', ');
+            document.getElementById('edit-age').value = character.age || '';
+            document.getElementById('edit-gender').value = character.gender || '';
+            document.getElementById('edit-race').value = character.race || '';
+            document.getElementById('edit-link').value = character.link;
 
             editPopup.style.display = 'block';
             overlay.style.display = 'flex';
@@ -1400,60 +1329,48 @@
         // Handle edit cancellation
         document.getElementById('cancel-edit').addEventListener('click', () => {
             hideAllPopups();
-            showPersonaDisplay(personas[currentPersonaIndex], currentPersonaIndex);
+            showCharacterDisplay(characters[currentCharacterIndex], currentCharacterIndex);
         });
 
         // Handle edit save
         document.getElementById('save-edit').addEventListener('click', () => {
-            const updatedPersona = {
+            const updatedCharacter = {
                 imageUrl: document.getElementById('edit-image-url').value,
                 name: document.getElementById('edit-name').value,
-                age: parseInt(document.getElementById('edit-age').value),
-                gender: document.getElementById('edit-gender').value,
-                pronouns: document.getElementById('edit-pronouns').value,
-                tldr: document.getElementById('edit-tldr').value,
-                personality: document.getElementById('edit-personality').value,
-                appearance: document.getElementById('edit-appearance').value
+                platform: document.getElementById('edit-platform').value,
+                tags: document.getElementById('edit-tags').value.split(',').map(tag => tag.trim()),
+                age: document.getElementById('edit-age').value || null,
+                gender: document.getElementById('edit-gender').value || null,
+                race: document.getElementById('edit-race').value || null,
+                link: document.getElementById('edit-link').value
             };
 
-            if (validateUpdatedPersona(updatedPersona)) {
-                personas[currentPersonaIndex] = updatedPersona;
-                localStorage.setItem('gridPersonas', JSON.stringify(personas));
+            if (validateUpdatedCharacter(updatedCharacter)) {
+                characters[currentCharacterIndex] = updatedCharacter;
+                localStorage.setItem('gridCharacters', JSON.stringify(characters));
                 renderGrid();
 
                 // Close edit popup and update display popup
                 document.getElementById('edit-popup').style.display = 'none';
-                showPersonaDisplay(updatedPersona, currentPersonaIndex);
+                showCharacterDisplay(updatedCharacter, currentCharacterIndex);
             }
         });
 
-        function validateUpdatedPersona(persona) {
-            if (!persona.imageUrl || !persona.imageUrl.trim()) {
+        function validateUpdatedCharacter(character) {
+            if (!character.imageUrl || !character.imageUrl.trim()) {
                 alert('Please provide an image URL');
                 return false;
             }
-            if (!persona.name || !persona.name.trim()) {
+            if (!character.name || !character.name.trim()) {
                 alert('Please provide a name');
                 return false;
             }
-            if (!persona.age || persona.age < 16) {
-                alert('Age must be 16 or older');
+            if (!character.platform) {
+                alert('Please select a platform');
                 return false;
             }
-            if (!persona.gender) {
-                alert('Please select a gender');
-                return false;
-            }
-            if (!persona.pronouns) {
-                alert('Please select pronouns');
-                return false;
-            }
-            if (!persona.personality || !persona.personality.trim()) {
-                alert('Please provide personality details');
-                return false;
-            }
-            if (!persona.appearance || !persona.appearance.trim()) {
-                alert('Please provide appearance details');
+            if (!character.link || !character.link.trim()) {
+                alert('Please provide a link');
                 return false;
             }
             return true;
@@ -1463,7 +1380,7 @@
         let deleteTimeout;
         let countdownInterval;
 
-        document.getElementById('delete-persona').addEventListener('click', () => {
+        document.getElementById('delete-character').addEventListener('click', () => {
             hideAllPopups();
             const deletePopup = document.getElementById('delete-confirmation-popup');
             const confirmButton = document.getElementById('confirm-delete');
@@ -1495,8 +1412,8 @@
 
         document.getElementById('confirm-delete').addEventListener('click', function() {
             if (this.classList.contains('active')) {
-                personas.splice(currentPersonaIndex, 1);
-                localStorage.setItem('gridPersonas', JSON.stringify(personas));
+                characters.splice(currentCharacterIndex, 1);
+                localStorage.setItem('gridCharacters', JSON.stringify(characters));
                 renderGrid();
                 document.getElementById('delete-confirmation-popup').style.display = 'none';
                 overlay.style.display = 'none';
@@ -1507,31 +1424,55 @@
             clearTimeout(deleteTimeout);
             clearInterval(countdownInterval);
             hideAllPopups();
-            showPersonaDisplay(personas[currentPersonaIndex], currentPersonaIndex);
+            showCharacterDisplay(characters[currentCharacterIndex], currentCharacterIndex);
         });
 
         window.addEventListener('DOMContentLoaded', () => {
-            const savedPersonas = localStorage.getItem('gridPersonas');
-            if (savedPersonas) {
-                personas = JSON.parse(savedPersonas);
-                // Validate and update persona ages
-                personas.forEach(persona => {
-                    if (persona.age < 16) {
-                        persona.age = 16;
-                    }
-                });
-                localStorage.setItem('gridPersonas', JSON.stringify(personas));
+            const savedCharacters = localStorage.getItem('gridCharacters');
+            if (savedCharacters) {
+                characters = JSON.parse(savedCharacters);
+                renderGrid();
             }
 
-            // Initialize the age filter
-            initializeAgeFilter();
-
-            // Then render the grid
-            renderGrid();
+            // Initialize the tag filter
+            initializeTagFilter();
 
             // Load saved theme
             loadSavedTheme();
+
+            // Load saved NSFW preference
+            const savedNsfwPreference = localStorage.getItem('nsfwPreference');
+            if (savedNsfwPreference) {
+                document.getElementById(savedNsfwPreference).classList.add('active');
+            }
+
+            // Load saved blur NSFW preference
+            const savedBlurNsfw = localStorage.getItem('blurNsfw');
+            if (savedBlurNsfw) {
+                document.getElementById('blur-nsfw').classList.add('active');
+            }
+
+            // Load saved hide tags preference
+            const savedHideTags = localStorage.getItem('hideTags');
+            if (savedHideTags) {
+                document.getElementById('hide-tags').classList.add('active');
+            }
         });
+
+        function toggleTheme() {
+            const currentTheme = localStorage.getItem('preferred-theme') || 'light';
+            let newTheme;
+
+            if (currentTheme === 'light') {
+                newTheme = 'dark';
+            } else if (currentTheme === 'dark') {
+                newTheme = 'amoled';
+            } else {
+                newTheme = 'light';
+            }
+
+            setTheme(newTheme);
+        }
 
         function setTheme(theme) {
             document.body.classList.remove('dark-mode', 'amoled-mode');
@@ -1556,6 +1497,156 @@
         function loadSavedTheme() {
             const savedTheme = localStorage.getItem('preferred-theme') || 'light';
             setTheme(savedTheme);
+        }
+
+        function hideAllPopups() {
+            const popups = [
+                imagePopup,
+                characterPopup,
+                characterDisplayPopup,
+                document.getElementById('delete-confirmation-popup'),
+                document.getElementById('edit-popup'),
+                document.getElementById('age-validation-popup'),
+                document.getElementById('merge-popup'),
+                document.getElementById('popup-overlay'),
+                randomCharacterPopup
+            ];
+
+            popups.forEach(popup => {
+                if (popup) {
+                    popup.style.display = 'none';
+                }
+            });
+        }
+
+        function selectRandomCharacter() {
+            if (characters.length === 0) {
+                alert('No characters available. Please add some characters first.');
+                return;
+            }
+
+            let filteredCharacters = characters;
+            const excludeNsfw = document.getElementById('toggle-nsfw').classList.contains('active');
+
+            if (excludeNsfw) {
+                filteredCharacters = characters.filter(character => !character.tags.some(tag => nsfwTags.includes(tag)));
+            }
+
+            if (filteredCharacters.length === 0) {
+                alert('No non-NSFW characters available. Please add some non-NSFW characters first.');
+                return;
+            }
+
+            const randomIndex = Math.floor(Math.random() * filteredCharacters.length);
+            const randomCharacter = filteredCharacters[randomIndex];
+
+            document.getElementById('random-display-name').textContent = randomCharacter.name;
+            document.getElementById('random-display-platform').textContent = randomCharacter.platform;
+            document.getElementById('random-display-tags').textContent = randomCharacter.tags.join(', ');
+            document.getElementById('random-display-age').textContent = randomCharacter.age || 'N/A';
+            document.getElementById('random-display-gender').textContent = randomCharacter.gender || 'N/A';
+            document.getElementById('random-display-race').textContent = randomCharacter.race || 'N/A';
+            document.getElementById('random-display-link').href = randomCharacter.link;
+            document.getElementById('random-display-link').textContent = randomCharacter.link;
+
+            // Add red outline for NSFW tags
+            if (randomCharacter.tags.some(tag => nsfwTags.includes(tag))) {
+                randomCharacterPopup.classList.add('nsfw');
+            } else {
+                randomCharacterPopup.classList.remove('nsfw');
+            }
+
+            // Add blur effect for NSFW characters if the option is enabled
+            const blurNsfw = localStorage.getItem('blurNsfw') === 'true';
+            if (blurNsfw && randomCharacter.tags.some(tag => nsfwTags.includes(tag))) {
+                randomCharacterPopup.classList.add('blur');
+            } else {
+                randomCharacterPopup.classList.remove('blur');
+            }
+
+            hideAllPopups();
+            randomCharacterPopup.style.display = 'block';
+            overlay.style.display = 'flex';
+        }
+
+        document.getElementById('roll-again').addEventListener('click', selectRandomCharacter);
+
+        document.getElementById('close-random-display').addEventListener('click', () => {
+            hideAllPopups();
+            overlay.style.display = 'none';
+        });
+
+        document.getElementById('toggle-nsfw').addEventListener('click', () => {
+            const button = document.getElementById('toggle-nsfw');
+            button.classList.toggle('active');
+            localStorage.setItem('nsfwPreference', button.classList.contains('active').toString());
+        });
+
+        document.getElementById('blur-nsfw').addEventListener('click', () => {
+            const button = document.getElementById('blur-nsfw');
+            button.classList.toggle('active');
+            localStorage.setItem('blurNsfw', button.classList.contains('active').toString());
+            renderGrid(); // Re-render the grid to apply the blur effect
+        });
+
+        document.getElementById('hide-tags').addEventListener('click', () => {
+            const button = document.getElementById('hide-tags');
+            button.classList.toggle('active');
+            localStorage.setItem('hideTags', button.classList.contains('active').toString());
+            renderGrid(); // Re-render the grid to hide the tags
+        });
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedNsfwPreference = localStorage.getItem('nsfwPreference');
+            if (savedNsfwPreference) {
+                document.getElementById(savedNsfwPreference).classList.add('active');
+            }
+
+            const savedBlurNsfw = localStorage.getItem('blurNsfw');
+            if (savedBlurNsfw) {
+                document.getElementById('blur-nsfw').classList.add('active');
+            }
+
+            const savedHideTags = localStorage.getItem('hideTags');
+            if (savedHideTags) {
+                document.getElementById('hide-tags').classList.add('active');
+            }
+        });
+
+        function renderGrid() {
+            // Clear existing grid items
+            while (grid.firstChild) {
+                if (grid.firstChild === addImageButton) break;
+                grid.removeChild(grid.firstChild);
+            }
+
+            const filteredCharacters = characters.filter(character => {
+                const tagMatch = !tagFilter.value || character.tags.includes(tagFilter.value) || (character.tags.some(tag => nsfwTags.includes(tag)) && tagFilter.value === 'NSFW');
+                return tagMatch;
+            });
+
+            filteredCharacters.forEach((character, index) => {
+                const actualIndex = characters.indexOf(character);
+                const gridItem = createGridItem(character, actualIndex);
+                grid.insertBefore(gridItem, addImageButton);
+            });
+
+            // Update tag filter options while preserving selection
+            const selectedTag = tagFilter.value;
+            initializeTagFilter();
+            tagFilter.value = selectedTag;
+
+            // Apply the hide tags preference
+            const hideTags = localStorage.getItem('hideTags') === 'true';
+            if (hideTags) {
+                document.querySelectorAll('.tag-pills').forEach(tagPills => {
+                    tagPills.style.display = 'none';
+                });
+            } else {
+                document.querySelectorAll('.tag-pills').forEach(tagPills => {
+                    tagPills.style.display = 'flex';
+                });
+            }
         }
     </script>
 </body>
