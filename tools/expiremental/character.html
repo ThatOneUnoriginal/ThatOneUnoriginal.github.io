@@ -1,0 +1,1653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Character Bookmarking Tool</title>
+    <link rel="icon" type="image/x-icon" href="https://github.com/ThatOneUnoriginal/ThatOneUnoriginal.github.io/raw/refs/heads/main/assets/Icons/Persona_Website_Logo.ico">
+    <meta property="og:title" content="Character Bookmarking Tool">
+    <meta content="A tool that allows you to easily store and review all the characters you've created including the character information (name, image, tags, and platform)." property="og:description" />
+    <meta content="https://thatoneunoriginal.github.io/tools/bookmarks/character" property="og:url" />
+    <meta content="#4901FC" data-react-helmet="true" name="theme-color" />
+    <meta content="https://thatoneunoriginal.github.io/assets/Icons/png%20logos/character bookmark.png" property="og:image" />
+    <style>
+        /* Base styles */
+        body {
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f5f5f5;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 16px;
+            width: 90%;
+            margin-top: 20px;
+            padding: 20px;
+        }
+
+        .grid-item {
+            position: relative;
+            background-color: white;
+            border-radius: 12px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+            aspect-ratio: 1 / 1;
+            width: 100%;
+        }
+
+        .grid-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .grid-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .add-image {
+            background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+            color: white;
+            font-size: 32px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.2s;
+        }
+
+        .add-image:hover {
+            opacity: 0.9;
+        }
+
+        /* Filter container styles */
+        .filter-container {
+            width: 90%;
+            margin: 20px 0;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        body.dark-mode .filter-container, body.dark-mode .popup{
+            background-color: #2d2d2d;
+        }
+
+        body.amoled-mode .filter-container, body.amoled-mode .popup{
+            background-color: #1f1f1f;
+        }
+
+        body.dark-mode .popup h2, body.amoled-mode .popup h2, body.dark-mode .field-label, body.amoled-mode .field-label{
+            color: #ffffff
+        }
+
+        body.dark-mode .delete-popup, body.amoled-mode .delete-popup{
+          color: #ff8e98;
+        }
+
+        .filter-container select {
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: 2px solid #e2e8f0;
+            font-size: 14px;
+            background-color: white;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+
+        .filter-container select:hover {
+            border-color: #6366f1;
+        }
+
+        .filter-container button {
+            padding: 8px 16px;
+            background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: opacity 0.2s;
+        }
+
+        .filter-container button:hover {
+            opacity: 0.9;
+        }
+
+        /* Overlay and popup styles */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .popup {
+            background: white;
+            padding: 32px;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+            animation: slideUp 0.3s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .popup h2 {
+            margin: 0 0 24px 0;
+            color: #1f2937;
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .popup input,
+        .popup textarea,
+        .popup select {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.2s;
+            box-sizing: border-box;
+        }
+
+        .popup input:focus,
+        .popup textarea:focus,
+        .popup select:focus {
+            outline: none;
+            border-color: #6366f1;
+        }
+
+        .popup textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .popup button {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            margin: 8px;
+            transition: opacity 0.2s;
+        }
+
+        .popup button:hover {
+            opacity: 0.9;
+        }
+
+        .popup button.secondary {
+            background: #e2e8f0;
+            color: #4a5568;
+        }
+
+        /* Scrollbar styling */
+        .popup::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .popup::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+
+        .popup::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 4px;
+        }
+
+        .popup::-webkit-scrollbar-thumb:hover {
+            background: #a1a1a1;
+        }
+
+        /* Form field labels */
+        .field-label {
+            display: block;
+            margin-bottom: 8px;
+            color: #4a5568;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        /* Error state for inputs */
+        .popup input:invalid,
+        .popup select:invalid {
+            border-color: #ef4444;
+        }
+
+        /* Delete Popup Styles */
+        .delete-popup {
+            background-color: #f8d7da; /* Light red background for warning */
+            border: 2px solid #f5c6cb; /* Red border to reinforce the warning */
+            color: #721c24; /* Dark red text color for strong contrast */
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 80%;
+            max-height: 70vh;
+            overflow-y: auto;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            animation: shake 0.5s ease-in-out, fade-in 0.5s ease-in-out;
+        }
+
+        .delete-popup h2 {
+            font-size: 24px;
+            font-weight: bold;
+            color: #721c24;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .delete-popup p {
+            font-size: 18px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .delete-popup .popup-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .delete-popup button {
+            background-color: #dc3545; /* Red background for delete button */
+            color: #fff;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .delete-popup button:hover {
+            background-color: #c82333; /* Darker red on hover */
+            transform: scale(1.05);
+        }
+
+        .delete-popup button.cancel {
+            background-color: #28a745; /* Green cancel button */
+        }
+
+        .delete-popup button.cancel:hover {
+            background-color: #218838;
+        }
+
+        /* Animation to shake the popup to grab attention */
+        @keyframes shake {
+            0% {
+                transform: translateX(0);
+            }
+            25% {
+                transform: translateX(-10px);
+            }
+            50% {
+                transform: translateX(10px);
+            }
+            75% {
+                transform: translateX(-10px);
+            }
+            100% {
+                transform: translateX(0);
+            }
+        }
+
+        /* Fade-in animation */
+        @keyframes fade-in {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+
+        /* Mobile responsive styles */
+        @media (max-width: 768px) {
+            /* Grid item adjustments */
+            .grid {
+                width: 100%;
+                padding: 10px;
+            }
+
+            .grid-item {
+                max-width: 100%;
+            }
+
+            .filter-container {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .filter-container select,
+            .filter-container button {
+                width: 100%;
+            }
+
+            .popup {
+                padding: 16px;
+                max-width: 100%;
+            }
+
+            .popup h2 {
+                font-size: 20px;
+                margin-bottom: 16px;
+            }
+
+            .popup input,
+            .popup textarea,
+            .popup select {
+                padding: 10px;
+                font-size: 14px;
+            }
+
+            .popup button {
+                padding: 10px 20px;
+            }
+
+            /* Adjust text sizes and margins for smaller screens */
+            .field-label {
+                font-size: 12px;
+            }
+
+            .age-validation-popup,
+            .merge-popup,
+            .delete-popup,
+            .edit-popup {
+                padding: 16px;
+                width: 90%;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+                align-items: center;
+                gap: 8px;
+            }
+
+            .age-validation-buttons,
+            .merge-buttons,
+            .delete-buttons {
+                flex-direction: column;
+                gap: 8px;
+            }
+        }
+
+        #file-input {
+            display: none;
+        }
+
+        /* Extra-large screen adjustments */
+        @media (min-width: 1200px) {
+            /* Grid Layout */
+            .grid {
+                width: 80%; /* Reduced grid width for larger screens */
+                margin-top: 40px;
+                padding: 40px;
+                grid-template-columns: repeat(
+                    auto-fill,
+                    minmax(300px, 1fr)
+                ); /* Larger grid item size */
+            }
+
+            .grid-item {
+                max-width: 300px; /* Limit the max-width of grid items */
+            }
+
+            /* Filter Container */
+            .filter-container {
+                width: 80%; /* Increased width for larger screens */
+                margin: 40px auto;
+                padding: 24px 40px;
+                gap: 16px;
+                font-size: 16px;
+            }
+
+            .filter-container select {
+                font-size: 16px; /* Increased font size for dropdowns */
+                padding: 12px 18px;
+            }
+
+            .filter-container button {
+                font-size: 16px;
+                padding: 12px 24px;
+            }
+
+            /* Popup Styles */
+            .popup {
+                padding: 40px;
+                max-width: 80%;
+                max-height: 80vh;
+                overflow-y: auto;
+            }
+
+            .popup h2 {
+                font-size: 28px; /* Larger title size */
+            }
+
+            .popup input,
+            .popup textarea,
+            .popup select {
+                font-size: 16px;
+                padding: 14px 20px;
+            }
+
+            .popup button {
+                font-size: 16px;
+                padding: 14px 28px;
+            }
+
+            /* Form Field Labels */
+            .field-label {
+                font-size: 16px;
+            }
+
+            /* Scrollbar styling (optional) */
+            .popup::-webkit-scrollbar {
+                width: 10px;
+            }
+
+            .popup::-webkit-scrollbar-thumb {
+                background: #aaa;
+            }
+
+            /* Adjusting action buttons for extra-large screens */
+            .action-buttons {
+                flex-direction: row;
+                gap: 16px;
+                justify-content: flex-start;
+            }
+
+            .age-validation-buttons,
+            .merge-buttons,
+            .delete-buttons {
+                flex-direction: row;
+                gap: 16px;
+            }
+        }
+
+        /* Dark mode styles */
+        body.dark-mode {
+            background-color: #1a1a1a;
+            color: #fff;
+        }
+
+        body.dark-mode .box,
+        body.dark-mode .loading {
+            background-color: #2d2d2d;
+            color: #fff;
+        }
+
+        body.dark-mode .tag {
+            background-color: #404040;
+            color: #fff;
+        }
+
+        body.dark-mode .pagination-button, body.dark-mode .sort-button, body.dark-mode .share-button, body.dark-mode .import-button, body.dark-mode .random-trait-button {
+            background-color: #2d2d2d;
+            color: #fff;
+            border-color: #404040;
+        }
+
+        body.dark-mode .pagination-button:hover:not(:disabled), body.dark-mode .sort-button:hover, body.dark-mode .share-button:hover, body.dark-mode .import-button:hover, body.dark-mode .random-trait-button:hover{
+            background-color: #404040;
+        }
+
+        body.dark-mode .pagination-button:disabled {
+            background-color: #1a1a1a;
+            color: #666;
+            border-color: #333;
+        }
+
+        body.dark-mode select,
+        body.dark-mode input,
+        body.dark-mode .popup input,
+        body.dark-mode .popup textarea,
+        body.dark-mode .popup select {
+            background-color: #2d2d2d;
+            color: #fff;
+            border-color: #404040;
+        }
+
+        /* AMOLED mode styles */
+        body.amoled-mode {
+            background-color: #000;
+            color: #fff;
+        }
+
+        body.amoled-mode .box,
+        body.amoled-mode .loading {
+            background-color: #000;
+            color: #fff;
+            border: 1px solid #333;
+        }
+
+        body.amoled-mode .tag {
+            background-color: #1a1a1a;
+            color: #fff;
+        }
+
+        body.amoled-mode .pagination-button, body.amoled-mode .sort-button, body.amoled-mode .share-button, body.amoled-mode .import-button, body.amoled-mode .random-trait-button{
+            background-color: #000;
+            color: #fff;
+            border-color: #333;
+        }
+
+        body.amoled-mode .pagination-button:hover:not(:disabled), body.amoled-mode .sort-button:hover, body.amoled-mode .share-button:hover, body.amoled-mode .import-button:hover, body.amoled-mode .random-trait-button:hover {
+            background-color: #1a1a1a;
+        }
+
+        body.amoled-mode .pagination-button:disabled {
+            background-color: #000;
+            color: #666;
+            border-color: #1a1a1a;
+        }
+
+        body.amoled-mode select,
+        body.amoled-mode input,
+        body.amoled-mode .popup input,
+        body.amoled-mode .popup textarea,
+        body.amoled-mode .popup select {
+            background-color: #000;
+            color: #fff;
+            border-color: #333;
+        }
+
+        .theme-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .theme-button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .theme-button.light {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .theme-button.dark {
+            background: #333;
+            color: #fff;
+        }
+
+        .theme-button.amoled {
+            background: #000;
+            color: #fff;
+        }
+
+        .theme-button.active {
+            outline: 2px solid #007BFF;
+        }
+
+        /* Tag pills styles */
+        .tag-pills {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            display: flex;
+            gap: 5px;
+        }
+
+        .tag-pill {
+            background-color: #e2e8f0;
+            color: #4a5568;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .tag-pill span {
+            max-width: 100px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        /* Red outline for specific tags */
+        .grid-item.nsfw,
+        .popup.nsfw {
+            border: 2px solid red;
+        }
+
+        /* Blur effect for NSFW characters */
+        .grid-item img.blur,
+        .popup img.blur {
+            filter: blur(8px);
+        }
+    </style>
+</head>
+<body>
+    <h1>Character Bookmarking Tool</h1>
+    <div class="filter-container">
+      <select id="tag-filter">
+        <option value="">All Tags</option>
+      </select>
+      <button id="export-btn">Export Data</button>
+      <button id="import-btn">Import Data</button>
+      <button id="merge-btn">Merge Lists</button>
+      <button id="navigate-btn" onclick="window.location.href='https://thatoneunoriginal.github.io/tools/traits'">Go to Trait Selector</button>
+      <input type="file" id="file-input" accept=".json">
+      <div class="theme-buttons">
+        <button class="theme-button active" onclick="toggleTheme()">Toggle Theme</button>
+        <button class="theme-button" onclick="selectRandomCharacter()">Select Random Character</button>
+      </div>
+    </div>
+
+    <div class="grid" id="image-grid">
+      <!-- Grid items will be dynamically added here -->
+      <div class="grid-item add-image" id="add-image">+</div>
+    </div>
+
+    <!-- New filter-container section for NSFW inclusion/exclusion -->
+    <div class="filter-container" style="margin-top: 20px;">
+      <button id="toggle-nsfw">Toggle NSFW in Random Select</button>
+      <button id="blur-nsfw">Blur NSFW Characters</button>
+      <button id="hide-tags">Hide Tags</button>
+    </div>
+
+    <div class="overlay" id="popup-overlay">
+      <div class="popup" id="image-popup">
+        <h2>Add Image</h2>
+        <input type="url" id="image-url" placeholder="Enter image URL...">
+        <br>
+        <button id="confirm-add">Next</button>
+        <button id="cancel-add">Cancel</button>
+      </div>
+      <div class="popup" id="character-popup" style="display: none;">
+        <h2>Add Character Details</h2>
+        <label class="field-label" for="character-name">Name</label>
+        <input type="text" id="character-name" required>
+        <label class="field-label" for="character-platform">Platform</label>
+        <input type="text" id="character-platform" required>
+        <label class="field-label" for="character-tags">Tags (Optional)</label>
+        <input type="text" id="character-tags" placeholder="Comma-separated tags">
+        <label class="field-label" for="character-age">Age (Optional)</label>
+        <input type="text" id="character-age" placeholder="Enter age">
+        <label class="field-label" for="character-gender">Gender (Optional)</label>
+        <input type="text" id="character-gender" placeholder="Enter gender">
+        <label class="field-label" for="character-race">Race (Optional)</label>
+        <input type="text" id="character-race" placeholder="Enter race">
+        <label class="field-label" for="character-link">Link</label>
+        <input type="url" id="character-link" placeholder="Enter character link...">
+        <button id="submit-character">Add Character</button>
+        <button id="cancel-character">Cancel</button>
+      </div>
+      <div class="popup" id="character-display-popup" style="display: none;">
+        <h2>Character Information</h2>
+        <p>
+          <strong>Name:</strong>
+          <span id="display-name"></span>
+        </p>
+        <p>
+          <strong>Platform:</strong>
+          <span id="display-platform"></span>
+        </p>
+        <p>
+          <strong>Tags:</strong>
+          <span id="display-tags"></span>
+        </p>
+        <p>
+          <strong>Age:</strong>
+          <span id="display-age"></span>
+        </p>
+        <p>
+          <strong>Gender:</strong>
+          <span id="display-gender"></span>
+        </p>
+        <p>
+          <strong>Race:</strong>
+          <span id="display-race"></span>
+        </p>
+        <p>
+          <strong>Link:</strong>
+          <a id="display-link" target="_blank"></a>
+        </p>
+        <div class="action-buttons">
+          <button id="close-display">Close</button>
+          <button id="edit-character" class="edit-button">Edit</button>
+          <button id="delete-character" class="delete-button">Delete</button>
+        </div>
+      </div>
+      <div class="popup delete-popup" id="delete-confirmation-popup">
+        <h3>⚠️ Delete Character</h3>
+        <p>Are you sure you want to delete this character? This action cannot be undone.</p>
+        <div class="delete-countdown">Please wait <span id="countdown">5</span> seconds </div>
+        <div class="delete-buttons">
+          <button id="cancel-delete">Cancel</button>
+          <button id="confirm-delete" class="delete-confirm">Yes, Delete</button>
+        </div>
+      </div>
+      <div class="popup edit-popup" id="edit-popup">
+        <h2>Edit Character</h2>
+        <label class="field-label">Image URL</label>
+        <input type="url" id="edit-image-url" required>
+        <label class="field-label">Name</label>
+        <input type="text" id="edit-name" required>
+        <label class="field-label">Platform</label>
+        <input type="text" id="edit-platform" required>
+        <label class="field-label">Tags (Optional)</label>
+        <input type="text" id="edit-tags" placeholder="Comma-separated tags">
+        <label class="field-label">Age (Optional)</label>
+        <input type="text" id="edit-age" placeholder="Enter age">
+        <label class="field-label">Gender (Optional)</label>
+        <input type="text" id="edit-gender" placeholder="Enter gender">
+        <label class="field-label">Race (Optional)</label>
+        <input type="text" id="edit-race" placeholder="Enter race">
+        <label class="field-label">Link</label>
+        <input type="url" id="edit-link" placeholder="Enter character link...">
+        <div class="button-group">
+          <button id="cancel-edit">Cancel</button>
+          <button id="save-edit">Save Changes</button>
+        </div>
+      </div>
+      <div class="popup" id="random-character-popup" style="display: none;">
+        <h2>Random Character</h2>
+        <p>
+          <strong>Name:</strong>
+          <span id="random-display-name"></span>
+        </p>
+        <p>
+          <strong>Platform:</strong>
+          <span id="random-display-platform"></span>
+        </p>
+        <p>
+          <strong>Tags:</strong>
+          <span id="random-display-tags"></span>
+        </p>
+        <p>
+          <strong>Age:</strong>
+          <span id="random-display-age"></span>
+        </p>
+        <p>
+          <strong>Gender:</strong>
+          <span id="random-display-gender"></span>
+        </p>
+        <p>
+          <strong>Race:</strong>
+          <span id="random-display-race"></span>
+        </p>
+        <p>
+          <strong>Link:</strong>
+          <a id="random-display-link" target="_blank"></a>
+        </p>
+        <div class="action-buttons">
+          <button id="roll-again">Roll Again</button>
+          <button id="close-random-display">Close</button>
+        </div>
+      </div>
+    </div>
+    <script>
+        let currentCharacterIndex = -1;
+        const overlay = document.getElementById('popup-overlay');
+        const imagePopup = document.getElementById('image-popup');
+        const characterPopup = document.getElementById('character-popup');
+        const characterDisplayPopup = document.getElementById('character-display-popup');
+        const randomCharacterPopup = document.getElementById('random-character-popup');
+        const grid = document.getElementById('image-grid');
+        const addImageButton = document.getElementById('add-image');
+        const deleteConfirm = document.getElementById('delete-confirmation-popup');
+        const editCharacter = document.getElementById('edit-popup');
+        const importPopup = document.getElementById('merge-popup');
+
+        let tempImageUrl = '';
+        let tempCharacterData = {};
+
+        addImageButton.addEventListener('click', function() {
+            hideAllPopups();
+            imagePopup.style.display = 'block';
+            overlay.style.display = 'flex';
+        });
+
+        document.getElementById('cancel-add').addEventListener('click', function() {
+            hideAllPopups();
+            overlay.style.display = 'none';
+        });
+
+        document.getElementById('cancel-character').addEventListener('click', () => {
+            hideAllPopups();
+            overlay.style.display = 'none';
+        });
+
+        const acceptedImageTypes = ['.jpg', '.jpeg', '.png', '.gif'];
+
+        document.getElementById('confirm-add').addEventListener('click', function() {
+            const imageUrl = document.getElementById('image-url').value.trim();
+
+            // Step 1: Validate URL
+            if (!isValidURL(imageUrl)) {
+                alert('Invalid URL. Please enter a valid URL.');
+                return;
+            }
+
+            // Step 2: Sanitize URL to ensure it's safe
+            const sanitizedUrl = sanitizeURL(imageUrl);
+            if (!sanitizedUrl) {
+                alert('Invalid URL. Please check the URL and try again.');
+                return;
+            }
+
+            // Step 3: Validate image file type
+            if (!isValidImageFileType(sanitizedUrl)) {
+                alert('Please enter a URL that points to a valid image file (e.g., .jpg, .png, .gif).');
+                return;
+            }
+
+            // Step 4: Attempt to load the image
+            const tempImage = new Image();
+            tempImage.src = sanitizedUrl;
+
+            tempImage.onload = function() {
+                tempImageUrl = sanitizedUrl; // Assign sanitized image URL
+                imagePopup.style.display = 'none';
+                characterPopup.style.display = 'block';
+            };
+
+            tempImage.onerror = function() {
+                alert('Failed to load image. Please check the URL.');
+            };
+        });
+
+        // Function to check if the URL is well-formed
+        function isValidURL(url) {
+            try {
+                const parsedUrl = new URL(url); // Throws if the URL is invalid
+                return parsedUrl.protocol === "http:" || parsedUrl.protocol === "https:";
+            } catch (e) {
+                return false;
+            }
+        }
+
+        // Function to sanitize the URL by ensuring it's a valid URL format and not harmful
+        function sanitizeURL(url) {
+            try {
+                const sanitizedUrl = new URL(url);
+                // Remove potentially harmful query parameters
+                sanitizedUrl.search = '';
+                return sanitizedUrl.href;
+            } catch (e) {
+                return null;
+            }
+        }
+
+        // Function to validate if the URL points to an accepted image type
+        function isValidImageFileType(url) {
+            return acceptedImageTypes.some(type => url.toLowerCase().endsWith(type));
+        }
+
+        document.getElementById('submit-character').addEventListener('click', function() {
+            const name = document.getElementById('character-name').value;
+            const platform = document.getElementById('character-platform').value;
+            const tags = document.getElementById('character-tags').value.split(',').map(tag => tag.trim());
+            const age = document.getElementById('character-age').value;
+            const gender = document.getElementById('character-gender').value;
+            const race = document.getElementById('character-race').value;
+            const link = document.getElementById('character-link').value;
+
+            if (name && platform && link) {
+                const characterData = {
+                    name,
+                    platform,
+                    tags,
+                    age,
+                    gender,
+                    race,
+                    link,
+                    imageUrl: tempImageUrl
+                };
+
+                characters.push(characterData);
+                localStorage.setItem('gridCharacters', JSON.stringify(characters));
+
+                const gridItem = createGridItem(characterData);
+                grid.insertBefore(gridItem, addImageButton);
+
+                // Reset form
+                document.getElementById('character-name').value = '';
+                document.getElementById('character-platform').value = '';
+                document.getElementById('character-tags').value = '';
+                document.getElementById('character-age').value = '';
+                document.getElementById('character-gender').value = '';
+                document.getElementById('character-race').value = '';
+                document.getElementById('character-link').value = '';
+
+                overlay.style.display = 'none';
+                characterPopup.style.display = 'none';
+            } else {
+                alert('Please fill out all required fields.');
+            }
+        });
+
+        document.getElementById('close-display').addEventListener('click', function() {
+            hideAllPopups();
+            overlay.style.display = 'none';
+        });
+
+        const tagFilter = document.getElementById('tag-filter');
+        const exportBtn = document.getElementById('export-btn');
+        const importBtn = document.getElementById('import-btn');
+        const mergeBtn = document.getElementById('merge-btn');
+        const fileInput = document.getElementById('file-input');
+
+        let characters = [];
+
+        // Load data from localStorage on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedCharacters = localStorage.getItem('gridCharacters');
+            if (savedCharacters) {
+                characters = JSON.parse(savedCharacters);
+                renderGrid();
+            }
+        });
+
+        // Filter event listeners
+        tagFilter.addEventListener('change', renderGrid);
+
+        function renderGrid() {
+            // Clear existing grid items
+            while (grid.firstChild) {
+                if (grid.firstChild === addImageButton) break;
+                grid.removeChild(grid.firstChild);
+            }
+
+            const filteredCharacters = characters.filter(character => {
+                const tagMatch = !tagFilter.value || character.tags.includes(tagFilter.value) || (character.tags.some(tag => nsfwTags.includes(tag)) && tagFilter.value === 'NSFW');
+                return tagMatch;
+            });
+
+            filteredCharacters.forEach((character, index) => {
+                const actualIndex = characters.indexOf(character);
+                const gridItem = createGridItem(character, actualIndex);
+                grid.insertBefore(gridItem, addImageButton);
+            });
+
+            // Update tag filter options while preserving selection
+            const selectedTag = tagFilter.value;
+            initializeTagFilter();
+            tagFilter.value = selectedTag;
+        }
+
+        const nsfwTags = ['NSFW', 'Hentai', '18+', '🔞', 'NSFL'];
+
+        function initializeTagFilter() {
+            const tagFilter = document.getElementById('tag-filter');
+            tagFilter.innerHTML = ''; // Clear existing options
+
+            // Add the "All Tags" option
+            const allTagsOption = document.createElement('option');
+            allTagsOption.value = '';
+            allTagsOption.textContent = 'All Tags';
+            tagFilter.appendChild(allTagsOption);
+
+            // Only add tag options if there are characters
+            if (characters.length > 0) {
+                const existingTags = new Set(characters.flatMap(character => character.tags.filter(tag => !nsfwTags.includes(tag))));
+                [...existingTags]
+                .sort()
+                .forEach(tag => {
+                    const option = document.createElement('option');
+                    option.value = tag;
+                    option.textContent = tag;
+                    tagFilter.appendChild(option);
+                });
+
+                // Add NSFW option if any character has NSFW tags
+                if (characters.some(character => character.tags.some(tag => nsfwTags.includes(tag)))) {
+                    const nsfwOption = document.createElement('option');
+                    nsfwOption.value = 'NSFW';
+                    nsfwOption.textContent = 'NSFW';
+                    tagFilter.appendChild(nsfwOption);
+                }
+            }
+
+            // Maintain the current selection if it exists in the new options
+            const currentValue = tagFilter.value;
+            if (currentValue) {
+                const exists = Array.from(tagFilter.options).some(option => option.value === currentValue);
+                tagFilter.value = exists ? currentValue : '';
+            }
+        }
+
+        function createGridItem(character, index) {
+            const gridItem = document.createElement('div');
+            gridItem.className = 'grid-item';
+            gridItem.dataset.index = index; // Store the index as a data attribute
+
+            const img = document.createElement('img');
+            img.src = character.imageUrl;
+            img.alt = 'User added image';
+
+            // Add blur effect for NSFW characters if the option is enabled
+            const blurNsfw = localStorage.getItem('blurNsfw') === 'true';
+            if (blurNsfw && character.tags.some(tag => nsfwTags.includes(tag))) {
+                img.classList.add('blur');
+            }
+
+            gridItem.appendChild(img);
+
+            // Add tag pills
+            const tagPills = document.createElement('div');
+            tagPills.className = 'tag-pills';
+            character.tags.slice(0, 2).forEach(tag => {
+                const tagPill = document.createElement('div');
+                tagPill.className = 'tag-pill';
+                tagPill.innerHTML = `<span>${tag}</span>`;
+                tagPills.appendChild(tagPill);
+            });
+            gridItem.appendChild(tagPills);
+
+            // Add red outline for NSFW tags
+            if (character.tags.some(tag => nsfwTags.includes(tag))) {
+                gridItem.classList.add('nsfw');
+            }
+
+            // Apply the hide tags preference
+            const hideTags = localStorage.getItem('hideTags') === 'true';
+            if (hideTags) {
+                tagPills.style.display = 'none';
+            } else {
+                tagPills.style.display = 'flex';
+            }
+
+            gridItem.addEventListener('click', () => {
+                showCharacterDisplay(character, index);
+            });
+
+            return gridItem;
+        }
+
+        // Export functionality
+        exportBtn.addEventListener('click', () => {
+            const dataStr = JSON.stringify(characters, null, 2);
+            const blob = new Blob([dataStr], {
+                type: 'application/json'
+            });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'characters.json';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        });
+
+        // Import functionality
+        importBtn.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        // Merge Lists functionality
+        mergeBtn.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        let importedData = [];
+        let originalCharacters = [];
+        let hasUnsavedChanges = false;
+
+        // Add beforeunload event listener for unsaved changes
+        window.addEventListener('beforeunload', (e) => {
+            if (hasUnsavedChanges) {
+                e.preventDefault();
+                e.returnValue = '';
+            }
+        });
+
+        // Modify character form inputs to track changes
+        const characterFormInputs = [
+            'character-name', 'character-platform', 'character-tags', 'character-age', 'character-gender', 'character-race', 'character-link'
+        ];
+
+        characterFormInputs.forEach(inputId => {
+            document.getElementById(inputId).addEventListener('input', () => {
+                hasUnsavedChanges = true;
+            });
+        });
+
+        // Reset unsaved changes flag when character is submitted or cancelled
+        document.getElementById('submit-character').addEventListener('click', () => {
+            hasUnsavedChanges = false;
+        });
+
+        document.getElementById('cancel-character').addEventListener('click', () => {
+            if (hasUnsavedChanges) {
+                if (confirm('You have unsaved changes. Are you sure you want to cancel?')) {
+                    hasUnsavedChanges = false;
+                    overlay.style.display = 'none';
+                }
+            } else {
+                overlay.style.display = 'none';
+            }
+        });
+
+        // Modify import functionality
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    try {
+                        const parsedData = JSON.parse(event.target.result);
+                        if (Array.isArray(parsedData)) {
+                            // Store the imported data globally
+                            importedData = parsedData;
+
+                            // Find characters with invalid data
+                            const invalidCharacters = importedData.filter(character => !validateCharacterData(character));
+
+                            if (invalidCharacters.length > 0) {
+                                alert('Some characters were skipped due to invalid or missing data.');
+                            }
+
+                            // Merge valid characters
+                            characters.push(...importedData.filter(character => validateCharacterData(character)));
+                            localStorage.setItem('gridCharacters', JSON.stringify(characters));
+                            renderGrid();
+                        } else {
+                            alert('Invalid JSON format. Please ensure the file contains an array of character data.');
+                        }
+                    } catch (error) {
+                        alert('Error reading file. Please ensure it is a valid JSON file.');
+                        console.error('Import error:', error);
+                    }
+                };
+                reader.readAsText(file);
+            }
+        });
+
+        // Modify merge functionality
+        mergeBtn.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    try {
+                        const parsedData = JSON.parse(event.target.result);
+                        if (Array.isArray(parsedData)) {
+                            // Store the imported data globally
+                            importedData = parsedData;
+
+                            // Find characters with invalid data
+                            const invalidCharacters = importedData.filter(character => !validateCharacterData(character));
+
+                            if (invalidCharacters.length > 0) {
+                                alert('Some characters were skipped due to invalid or missing data.');
+                            }
+
+                            // Merge valid characters
+                            characters.push(...importedData.filter(character => validateCharacterData(character)));
+                            localStorage.setItem('gridCharacters', JSON.stringify(characters));
+                            renderGrid();
+                        } else {
+                            alert('Invalid JSON format. Please ensure the file contains an array of character data.');
+                        }
+                    } catch (error) {
+                        alert('Error reading file. Please ensure it is a valid JSON file.');
+                        console.error('Import error:', error);
+                    }
+                };
+                reader.readAsText(file);
+            }
+        });
+
+        function validateCharacterData(character) {
+            return (
+                character.name &&
+                character.platform &&
+                character.link &&
+                character.imageUrl &&
+                !/[<>]/.test(character.name) && // Example: Disallow angle brackets
+                !/[<>]/.test(character.link)
+            );
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                overlay.style.display = 'none';
+                imagePopup.style.display = 'none';
+                characterPopup.style.display = 'none';
+                characterDisplayPopup.style.display = 'none';
+                document.getElementById('age-validation-popup').style.display = 'none';
+                document.getElementById('edit-popup').style.display = 'none';
+            }
+        });
+
+        function updateTagFilter() {
+            const selectedValue = tagFilter.value || 'All Tags';
+            Array.from(tagFilter.options).forEach(option => {
+                option.selected = option.textContent === selectedValue;
+            });
+        }
+
+        function showCharacterDisplay(character, index) {
+            hideAllPopups(); // Hide all popups before showing this one
+            currentCharacterIndex = index;
+
+            document.getElementById('display-name').textContent = character.name;
+            document.getElementById('display-platform').textContent = character.platform;
+            document.getElementById('display-tags').textContent = character.tags.join(', ');
+            document.getElementById('display-age').textContent = character.age || 'N/A';
+            document.getElementById('display-gender').textContent = character.gender || 'N/A';
+            document.getElementById('display-race').textContent = character.race || 'N/A';
+            document.getElementById('display-link').href = character.link;
+            document.getElementById('display-link').textContent = character.link;
+
+            // Add red outline for NSFW tags
+            if (character.tags.some(tag => nsfwTags.includes(tag))) {
+                characterDisplayPopup.classList.add('nsfw');
+            } else {
+                characterDisplayPopup.classList.remove('nsfw');
+            }
+
+            // Add blur effect for NSFW characters if the option is enabled
+            const blurNsfw = localStorage.getItem('blurNsfw') === 'true';
+            if (blurNsfw && character.tags.some(tag => nsfwTags.includes(tag))) {
+                characterDisplayPopup.classList.add('blur');
+            } else {
+                characterDisplayPopup.classList.remove('blur');
+            }
+
+            characterDisplayPopup.style.display = 'block';
+            overlay.style.display = 'flex';
+        }
+
+        // Modify the edit button click handler
+        document.getElementById('edit-character').addEventListener('click', () => {
+            hideAllPopups(); // Hide all popups before showing edit popup
+            const character = characters[currentCharacterIndex];
+            const editPopup = document.getElementById('edit-popup');
+
+            // Populate form with current values
+            document.getElementById('edit-image-url').value = character.imageUrl;
+            document.getElementById('edit-name').value = character.name;
+            document.getElementById('edit-platform').value = character.platform;
+            document.getElementById('edit-tags').value = character.tags.join(', ');
+            document.getElementById('edit-age').value = character.age || '';
+            document.getElementById('edit-gender').value = character.gender || '';
+            document.getElementById('edit-race').value = character.race || '';
+            document.getElementById('edit-link').value = character.link;
+
+            editPopup.style.display = 'block';
+            overlay.style.display = 'flex';
+        });
+
+        // Add CSS to ensure edit popup is centered
+        document.querySelector('.edit-popup').style.position = 'relative';
+        document.querySelector('.edit-popup').style.margin = 'auto';
+
+        // Handle edit cancellation
+        document.getElementById('cancel-edit').addEventListener('click', () => {
+            hideAllPopups();
+            showCharacterDisplay(characters[currentCharacterIndex], currentCharacterIndex);
+        });
+
+        // Handle edit save
+        document.getElementById('save-edit').addEventListener('click', () => {
+            const updatedCharacter = {
+                imageUrl: document.getElementById('edit-image-url').value,
+                name: document.getElementById('edit-name').value,
+                platform: document.getElementById('edit-platform').value,
+                tags: document.getElementById('edit-tags').value.split(',').map(tag => tag.trim()),
+                age: document.getElementById('edit-age').value || null,
+                gender: document.getElementById('edit-gender').value || null,
+                race: document.getElementById('edit-race').value || null,
+                link: document.getElementById('edit-link').value
+            };
+
+            if (validateUpdatedCharacter(updatedCharacter)) {
+                characters[currentCharacterIndex] = updatedCharacter;
+                localStorage.setItem('gridCharacters', JSON.stringify(characters));
+                renderGrid();
+
+                // Close edit popup and update display popup
+                document.getElementById('edit-popup').style.display = 'none';
+                showCharacterDisplay(updatedCharacter, currentCharacterIndex);
+            }
+        });
+
+        function validateUpdatedCharacter(character) {
+            if (!character.imageUrl || !character.imageUrl.trim()) {
+                alert('Please provide an image URL');
+                return false;
+            }
+            if (!character.name || !character.name.trim()) {
+                alert('Please provide a name');
+                return false;
+            }
+            if (!character.platform) {
+                alert('Please select a platform');
+                return false;
+            }
+            if (!character.link || !character.link.trim()) {
+                alert('Please provide a link');
+                return false;
+            }
+            return true;
+        }
+
+        // Delete functionality
+        let deleteTimeout;
+        let countdownInterval;
+
+        document.getElementById('delete-character').addEventListener('click', () => {
+            hideAllPopups();
+            const deletePopup = document.getElementById('delete-confirmation-popup');
+            const confirmButton = document.getElementById('confirm-delete');
+            const countdownSpan = document.getElementById('countdown');
+            let secondsLeft = 5;
+            document.getElementById('popup-overlay').style.display = 'flex';
+            deletePopup.style.display = 'block';
+            confirmButton.classList.remove('active');
+
+            // Reset countdown
+            clearTimeout(deleteTimeout);
+            clearInterval(countdownInterval);
+
+            countdownSpan.textContent = secondsLeft;
+            countdownInterval = setInterval(() => {
+                secondsLeft--;
+                countdownSpan.textContent = secondsLeft;
+                if (secondsLeft === 0) {
+                    clearInterval(countdownInterval);
+                    confirmButton.classList.add('active');
+                }
+            }, 1000);
+
+            deleteTimeout = setTimeout(() => {
+                confirmButton.classList.add('active');
+            }, 5000);
+
+        });
+
+        document.getElementById('confirm-delete').addEventListener('click', function() {
+            if (this.classList.contains('active')) {
+                characters.splice(currentCharacterIndex, 1);
+                localStorage.setItem('gridCharacters', JSON.stringify(characters));
+                renderGrid();
+                document.getElementById('delete-confirmation-popup').style.display = 'none';
+                overlay.style.display = 'none';
+            }
+        });
+
+        document.getElementById('cancel-delete').addEventListener('click', () => {
+            clearTimeout(deleteTimeout);
+            clearInterval(countdownInterval);
+            hideAllPopups();
+            showCharacterDisplay(characters[currentCharacterIndex], currentCharacterIndex);
+        });
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedCharacters = localStorage.getItem('gridCharacters');
+            if (savedCharacters) {
+                characters = JSON.parse(savedCharacters);
+                renderGrid();
+            }
+
+            // Initialize the tag filter
+            initializeTagFilter();
+
+            // Load saved theme
+            loadSavedTheme();
+
+            // Load saved NSFW preference
+            const savedNsfwPreference = localStorage.getItem('nsfwPreference');
+            if (savedNsfwPreference) {
+                document.getElementById(savedNsfwPreference).classList.add('active');
+            }
+
+            // Load saved blur NSFW preference
+            const savedBlurNsfw = localStorage.getItem('blurNsfw');
+            if (savedBlurNsfw) {
+                document.getElementById('blur-nsfw').classList.add('active');
+            }
+
+            // Load saved hide tags preference
+            const savedHideTags = localStorage.getItem('hideTags');
+            if (savedHideTags) {
+                document.getElementById('hide-tags').classList.add('active');
+            }
+        });
+
+        function toggleTheme() {
+            const currentTheme = localStorage.getItem('preferred-theme') || 'light';
+            let newTheme;
+
+            if (currentTheme === 'light') {
+                newTheme = 'dark';
+            } else if (currentTheme === 'dark') {
+                newTheme = 'amoled';
+            } else {
+                newTheme = 'light';
+            }
+
+            setTheme(newTheme);
+        }
+
+        function setTheme(theme) {
+            document.body.classList.remove('dark-mode', 'amoled-mode');
+
+            if (theme === 'dark') {
+                document.body.classList.add('dark-mode');
+            } else if (theme === 'amoled') {
+                document.body.classList.add('amoled-mode');
+            }
+
+            const buttons = document.querySelectorAll('.theme-button');
+            buttons.forEach(button => {
+                button.classList.remove('active');
+                if (button.classList.contains(theme)) {
+                    button.classList.add('active');
+                }
+            });
+
+            localStorage.setItem('preferred-theme', theme);
+        }
+
+        function loadSavedTheme() {
+            const savedTheme = localStorage.getItem('preferred-theme') || 'light';
+            setTheme(savedTheme);
+        }
+
+        function hideAllPopups() {
+            const popups = [
+                imagePopup,
+                characterPopup,
+                characterDisplayPopup,
+                document.getElementById('delete-confirmation-popup'),
+                document.getElementById('edit-popup'),
+                document.getElementById('age-validation-popup'),
+                document.getElementById('merge-popup'),
+                document.getElementById('popup-overlay'),
+                randomCharacterPopup
+            ];
+
+            popups.forEach(popup => {
+                if (popup) {
+                    popup.style.display = 'none';
+                }
+            });
+        }
+
+        function selectRandomCharacter() {
+            if (characters.length === 0) {
+                alert('No characters available. Please add some characters first.');
+                return;
+            }
+
+            let filteredCharacters = characters;
+            const excludeNsfw = document.getElementById('toggle-nsfw').classList.contains('active');
+
+            if (excludeNsfw) {
+                filteredCharacters = characters.filter(character => !character.tags.some(tag => nsfwTags.includes(tag)));
+            }
+
+            if (filteredCharacters.length === 0) {
+                alert('No non-NSFW characters available. Please add some non-NSFW characters first.');
+                return;
+            }
+
+            const randomIndex = Math.floor(Math.random() * filteredCharacters.length);
+            const randomCharacter = filteredCharacters[randomIndex];
+
+            document.getElementById('random-display-name').textContent = randomCharacter.name;
+            document.getElementById('random-display-platform').textContent = randomCharacter.platform;
+            document.getElementById('random-display-tags').textContent = randomCharacter.tags.join(', ');
+            document.getElementById('random-display-age').textContent = randomCharacter.age || 'N/A';
+            document.getElementById('random-display-gender').textContent = randomCharacter.gender || 'N/A';
+            document.getElementById('random-display-race').textContent = randomCharacter.race || 'N/A';
+            document.getElementById('random-display-link').href = randomCharacter.link;
+            document.getElementById('random-display-link').textContent = randomCharacter.link;
+
+            // Add red outline for NSFW tags
+            if (randomCharacter.tags.some(tag => nsfwTags.includes(tag))) {
+                randomCharacterPopup.classList.add('nsfw');
+            } else {
+                randomCharacterPopup.classList.remove('nsfw');
+            }
+
+            // Add blur effect for NSFW characters if the option is enabled
+            const blurNsfw = localStorage.getItem('blurNsfw') === 'true';
+            if (blurNsfw && randomCharacter.tags.some(tag => nsfwTags.includes(tag))) {
+                randomCharacterPopup.classList.add('blur');
+            } else {
+                randomCharacterPopup.classList.remove('blur');
+            }
+
+            hideAllPopups();
+            randomCharacterPopup.style.display = 'block';
+            overlay.style.display = 'flex';
+        }
+
+        document.getElementById('roll-again').addEventListener('click', selectRandomCharacter);
+
+        document.getElementById('close-random-display').addEventListener('click', () => {
+            hideAllPopups();
+            overlay.style.display = 'none';
+        });
+
+        document.getElementById('toggle-nsfw').addEventListener('click', () => {
+            const button = document.getElementById('toggle-nsfw');
+            button.classList.toggle('active');
+            localStorage.setItem('nsfwPreference', button.classList.contains('active').toString());
+        });
+
+        document.getElementById('blur-nsfw').addEventListener('click', () => {
+            const button = document.getElementById('blur-nsfw');
+            button.classList.toggle('active');
+            localStorage.setItem('blurNsfw', button.classList.contains('active').toString());
+            renderGrid(); // Re-render the grid to apply the blur effect
+        });
+
+        document.getElementById('hide-tags').addEventListener('click', () => {
+            const button = document.getElementById('hide-tags');
+            button.classList.toggle('active');
+            localStorage.setItem('hideTags', button.classList.contains('active').toString());
+            renderGrid(); // Re-render the grid to hide the tags
+        });
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedNsfwPreference = localStorage.getItem('nsfwPreference');
+            if (savedNsfwPreference) {
+                document.getElementById(savedNsfwPreference).classList.add('active');
+            }
+
+            const savedBlurNsfw = localStorage.getItem('blurNsfw');
+            if (savedBlurNsfw) {
+                document.getElementById('blur-nsfw').classList.add('active');
+            }
+
+            const savedHideTags = localStorage.getItem('hideTags');
+            if (savedHideTags) {
+                document.getElementById('hide-tags').classList.add('active');
+            }
+        });
+
+        function renderGrid() {
+            // Clear existing grid items
+            while (grid.firstChild) {
+                if (grid.firstChild === addImageButton) break;
+                grid.removeChild(grid.firstChild);
+            }
+
+            const filteredCharacters = characters.filter(character => {
+                const tagMatch = !tagFilter.value || character.tags.includes(tagFilter.value) || (character.tags.some(tag => nsfwTags.includes(tag)) && tagFilter.value === 'NSFW');
+                return tagMatch;
+            });
+
+            filteredCharacters.forEach((character, index) => {
+                const actualIndex = characters.indexOf(character);
+                const gridItem = createGridItem(character, actualIndex);
+                grid.insertBefore(gridItem, addImageButton);
+            });
+
+            // Update tag filter options while preserving selection
+            const selectedTag = tagFilter.value;
+            initializeTagFilter();
+            tagFilter.value = selectedTag;
+
+            // Apply the hide tags preference
+            const hideTags = localStorage.getItem('hideTags') === 'true';
+            if (hideTags) {
+                document.querySelectorAll('.tag-pills').forEach(tagPills => {
+                    tagPills.style.display = 'none';
+                });
+            } else {
+                document.querySelectorAll('.tag-pills').forEach(tagPills => {
+                    tagPills.style.display = 'flex';
+                });
+            }
+        }
+    </script>
+</body>
+</html>
