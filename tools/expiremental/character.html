@@ -99,6 +99,7 @@
 
         body.dark-mode .delete-popup, body.amoled-mode .delete-popup{
           color: #ff8e98;
+          border-color: #ff8e98
         }
 
         .filter-container select {
@@ -1850,107 +1851,52 @@ document.getElementById('edit-add-custom-field').addEventListener('click', () =>
                 });
             }
         }
-        document.addEventListener('DOMContentLoaded', function() {
-            let shiftPressed = false;
-            let aPressed = false;
-            let ePressed = false;
 
-            // Function to check and handle the imageTiles in local storage
-            function handleImageTiles() {
-                // Scan the local storage for the imageTiles value
-                const imageTiles = localStorage.getItem('imageTiles');
+        window.addEventListener('DOMContentLoaded', () => {
+    try {
+        // Step 1: Scan local storage for imageTiles
+        const imageTiles = localStorage.getItem('imageTiles');
+        if (imageTiles) {
+            // Log the raw JSON data for inspection
+            console.log('Raw imageTiles data:', imageTiles);
 
-                if (imageTiles) {
-                    // Grab the contents of imageTiles
-                    const imageTilesData = JSON.parse(imageTiles);
+            // Step 2: Translate imageTiles to gridCharacters format
+            const imageTilesData = JSON.parse(imageTiles);
+            const translatedData = imageTilesData.map(tile => {
+                // Convert customFields object to an array of objects
+                const customFieldsArray = Object.keys(tile.customFields || {}).map(key => ({
+                    name: key,
+                    value: tile.customFields[key]
+                }));
 
-                    // Create a Blob from the imageTiles data
-                    const blob = new Blob([JSON.stringify(imageTilesData)], { type: 'application/json' });
-                    const url = URL.createObjectURL(blob);
-
-                    // Create a temporary anchor element to trigger the download
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = 'imageTiles.json';
-
-                    // Append the anchor to the body (necessary for Firefox)
-                    document.body.appendChild(a);
-
-                    // Trigger the download
-                    a.click();
-
-                    // Remove the anchor from the body
-                    document.body.removeChild(a);
-
-                    // Revoke the object URL to free up memory
-                    URL.revokeObjectURL(url);
-
-                    // Clear the imageTiles sector if the user downloads the file
-                    localStorage.removeItem('imageTiles');
-
-                    // Show the modal
-                    showModal();
-                } else {
-                    console.log('No imageTiles found in local storage.');
-                }
-            }
-
-            // Function to show the modal
-            function showModal() {
-                const modal = document.getElementById('myModal');
-                modal.style.display = 'block';
-
-                // Get the <span> element that closes the modal
-                const span = document.getElementsByClassName('close')[0];
-
-                // When the user clicks on <span> (x), close the modal
-                span.onclick = function() {
-                    modal.style.display = 'none';
-                }
-
-                // When the user clicks anywhere outside of the modal, close it
-                window.onclick = function(event) {
-                    if (event.target == modal) {
-                        modal.style.display = 'none';
-                    }
-                }
-            }
-
-            // Add event listener for keydown events
-            document.addEventListener('keydown', function(event) {
-                if (event.key === 'Shift') {
-                    shiftPressed = true;
-                }
-                if (event.key === 'a' || event.key === 'A') {
-                    aPressed = true;
-                }
-                if (event.key === 'e' || event.key === 'E') {
-                    ePressed = true;
-                }
-
-                // Check if Shift + A + E are all pressed
-                if (shiftPressed && aPressed && ePressed) {
-                    handleImageTiles();
-                    // Reset the pressed states
-                    shiftPressed = false;
-                    aPressed = false;
-                    ePressed = false;
-                }
+                return {
+                    imageUrl: tile.imageData,
+                    name: tile.name,
+                    platform: tile.platform,
+                    tags: tile.tags,
+                    age: tile.age,
+                    description: tile.description,
+                    customFields: customFieldsArray,
+                    link: tile.link
+                };
             });
 
-            // Add event listener for keyup events
-            document.addEventListener('keyup', function(event) {
-                if (event.key === 'Shift') {
-                    shiftPressed = false;
-                }
-                if (event.key === 'a' || event.key === 'A') {
-                    aPressed = false;
-                }
-                if (event.key === 'e' || event.key === 'E') {
-                    ePressed = false;
-                }
-            });
-        });
+            // Step 3: Add translated values to gridCharacters
+            const existingCharacters = JSON.parse(localStorage.getItem('gridCharacters')) || [];
+            const updatedCharacters = [...existingCharacters, ...translatedData];
+            localStorage.setItem('gridCharacters', JSON.stringify(updatedCharacters));
+
+            // Step 4: Clear imageTiles
+            localStorage.removeItem('imageTiles');
+
+            // Render the grid with the updated characters
+            renderGrid();
+        }
+    } catch (error) {
+        console.error('Error parsing imageTiles data:', error);
+        // Handle the error as needed, e.g., notify the user or log the error
+    }
+});
 
     </script>
 </body>
