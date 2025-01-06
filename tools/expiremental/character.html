@@ -1850,49 +1850,6 @@ document.getElementById('edit-add-custom-field').addEventListener('click', () =>
                 });
             }
         }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            // Function to check and handle the imageTiles in local storage
-            function handleImageTiles() {
-                // Scan the local storage for the imageTiles value
-                const imageTiles = localStorage.getItem('imageTiles');
-
-                if (imageTiles) {
-                    // Grab the contents of imageTiles
-                    const imageTilesData = JSON.parse(imageTiles);
-
-                    // Create a Blob from the imageTiles data
-                    const blob = new Blob([JSON.stringify(imageTilesData)], { type: 'application/json' });
-                    const url = URL.createObjectURL(blob);
-
-                    // Create a temporary anchor element to trigger the download
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = 'imageTiles.json';
-
-                    // Append the anchor to the body (necessary for Firefox)
-                    document.body.appendChild(a);
-
-                    // Trigger the download
-                    a.click();
-
-                    // Remove the anchor from the body
-                    document.body.removeChild(a);
-
-                    // Revoke the object URL to free up memory
-                    URL.revokeObjectURL(url);
-
-                    // Clear the imageTiles sector if the user downloads the file
-                    localStorage.removeItem('imageTiles');
-                } else {
-                    console.log('No imageTiles found in local storage.');
-                }
-            }
-
-            // Automatically trigger the download process when the page loads
-            handleImageTiles();
-        });
-
         document.addEventListener('DOMContentLoaded', function() {
             let shiftPressed = false;
             let aPressed = false;
