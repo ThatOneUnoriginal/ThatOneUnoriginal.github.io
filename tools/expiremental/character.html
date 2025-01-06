@@ -683,7 +683,13 @@
         <button class="theme-button" onclick="selectRandomCharacter()">Select Random Character</button>
       </div>
     </div>
-
+    <div id="popup" class="popup">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <p>Hello! We’re in the process of transitioning from our old bookmarking tool to the new one you’re currently using. As part of this transition, the new page has automatically downloaded a backup of the imageTiles data from the old website. Additionally, the imageTiles section has been completely cleared to remove any leftover data from the old site, ensuring a fresh start with the new system.</p>
+            <p>Please note: The old imageTiles data is not compatible with the new tool. As a result, entries will need to be manually imported into the new system. We appreciate your understanding and patience during this transition.</p>
+        </div>
+    </div>
     <div class="grid" id="image-grid">
       <!-- Grid items will be dynamically added here -->
       <div class="grid-item add-image" id="add-image">+</div>
@@ -720,6 +726,11 @@
         <input type="text" id="character-race" placeholder="Enter race">
         <label class="field-label" for="character-link">Link</label>
         <input type="url" id="character-link" placeholder="Enter character link...">
+        <div id="custom-fields-container">
+            <h3 class="field-label">Custom Fields</h3>
+            <div id="custom-fields-list"></div>
+            <button id="add-custom-field" class="secondary">+ Add Custom Field</button>
+        </div>     
         <button id="submit-character">Add Character</button>
         <button id="cancel-character">Cancel</button>
       </div>
@@ -786,6 +797,11 @@
         <input type="text" id="edit-race" placeholder="Enter race">
         <label class="field-label">Link</label>
         <input type="url" id="edit-link" placeholder="Enter character link...">
+        <div id="edit-custom-fields-container">
+            <h3 class="field-label">Custom Fields</h3>
+            <div id="edit-custom-fields-list"></div>
+            <button id="edit-add-custom-field" class="secondary">+ Add Custom Field</button>
+        </div>
         <div class="button-group">
           <button id="cancel-edit">Cancel</button>
           <button id="save-edit">Save Changes</button>
@@ -859,7 +875,10 @@
             overlay.style.display = 'none';
         });
 
-        const acceptedImageTypes = ['.jpg', '.jpeg', '.png', '.gif'];
+        const acceptedImageTypes = [
+    '.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg', '.bmp', '.ico', 
+    '.tiff', '.tif', '.avif', '.heic', '.heif'
+];
 
         document.getElementById('confirm-add').addEventListener('click', function() {
             const imageUrl = document.getElementById('image-url').value.trim();
@@ -936,15 +955,17 @@
 
             if (name && platform && link) {
                 const characterData = {
-                    name,
-                    platform,
-                    tags,
-                    age,
-                    gender,
-                    race,
-                    link,
-                    imageUrl: tempImageUrl
-                };
+    name,
+    platform,
+    tags,
+    age,
+    gender,
+    race,
+    link,
+    imageUrl: tempImageUrl,
+    customFields: getCustomFieldsData() // New field
+};
+
 
                 characters.push(characterData);
                 localStorage.setItem('gridCharacters', JSON.stringify(characters));
@@ -994,117 +1015,217 @@
         tagFilter.addEventListener('change', renderGrid);
 
         function renderGrid() {
-            // Clear existing grid items
-            while (grid.firstChild) {
-                if (grid.firstChild === addImageButton) break;
-                grid.removeChild(grid.firstChild);
-            }
+    while (grid.firstChild) {
+        if (grid.firstChild === addImageButton) break;
+        grid.removeChild(grid.firstChild);
+    }
 
-            const filteredCharacters = characters.filter(character => {
-                const tagMatch = !tagFilter.value || character.tags.includes(tagFilter.value) || (character.tags.some(tag => nsfwTags.includes(tag)) && tagFilter.value === 'NSFW');
-                return tagMatch;
-            });
+    const filteredCharacters = characters.filter(character => {
+        const tagMatch = !tagFilter.value || 
+            character.tags.includes(tagFilter.value) || 
+            (character.tags.some(tag => nsfwTags.includes(tag)) && tagFilter.value === 'NSFW') ||
+            (character.tags.some(tag => favoriteTags.includes(tag)) && tagFilter.value === 'Favorite');
+        return tagMatch;
+    });
 
-            filteredCharacters.forEach((character, index) => {
-                const actualIndex = characters.indexOf(character);
-                const gridItem = createGridItem(character, actualIndex);
-                grid.insertBefore(gridItem, addImageButton);
-            });
+    filteredCharacters.forEach((character, index) => {
+        const actualIndex = characters.indexOf(character);
+        const gridItem = createGridItem(character, actualIndex);
+        grid.insertBefore(gridItem, addImageButton);
+    });
 
-            // Update tag filter options while preserving selection
-            const selectedTag = tagFilter.value;
-            initializeTagFilter();
-            tagFilter.value = selectedTag;
+    // Update tag filter options while preserving selection
+    const selectedTag = tagFilter.value;
+    initializeTagFilter();
+    tagFilter.value = selectedTag;
+
+    // Apply the hide tags preference
+    const hideTags = localStorage.getItem('hideTags') === 'true';
+    const tagPills = document.querySelectorAll('.tag-pills');
+    tagPills.forEach(pills => {
+        pills.style.display = hideTags ? 'none' : 'flex';
+    });
+}
+
+function createCustomFieldElement(container, isEdit = false) {
+    const fieldDiv = document.createElement('div');
+    fieldDiv.className = 'custom-field-container';
+    fieldDiv.style.marginBottom = '10px';
+    fieldDiv.style.display = 'flex';
+    fieldDiv.style.gap = '10px';
+
+    const nameInput = document.createElement('input');
+    nameInput.type = 'text';
+    nameInput.placeholder = 'Field Name';
+    nameInput.className = 'custom-field-name';
+    nameInput.style.flex = '1';
+
+    const valueInput = document.createElement('input');
+    valueInput.type = 'text';
+    valueInput.placeholder = 'Field Value';
+    valueInput.className = 'custom-field-value';
+    valueInput.style.flex = '1';
+
+    const deleteBtn = document.createElement('button');
+    deleteBtn.textContent = '×';
+    deleteBtn.className = 'delete-custom-field';
+    deleteBtn.style.padding = '0 10px';
+    deleteBtn.onclick = () => fieldDiv.remove();
+
+    fieldDiv.appendChild(nameInput);
+    fieldDiv.appendChild(valueInput);
+    fieldDiv.appendChild(deleteBtn);
+
+    const targetContainer = isEdit ? 
+        document.getElementById('edit-custom-fields-list') :
+        document.getElementById('custom-fields-list');
+    targetContainer.appendChild(fieldDiv);
+}
+
+function getCustomFieldsData(isEdit = false) {
+    const prefix = isEdit ? 'edit-' : '';
+    const containers = document.querySelectorAll(`#${prefix}custom-fields-list .custom-field-container`);
+    const customFields = [];
+
+    containers.forEach(container => {
+        const name = container.querySelector('.custom-field-name').value.trim();
+        const value = container.querySelector('.custom-field-value').value.trim();
+        if (name && value) {
+            customFields.push({ name, value });
         }
+    });
+
+    return customFields;
+}
+
 
         const nsfwTags = ['NSFW', 'Hentai', '18+', '🔞', 'NSFL'];
+        const favoriteTags = ['🤩', '⭐', '💫'];
 
-        function initializeTagFilter() {
-            const tagFilter = document.getElementById('tag-filter');
-            tagFilter.innerHTML = ''; // Clear existing options
-
-            // Add the "All Tags" option
-            const allTagsOption = document.createElement('option');
-            allTagsOption.value = '';
-            allTagsOption.textContent = 'All Tags';
-            tagFilter.appendChild(allTagsOption);
-
-            // Only add tag options if there are characters
-            if (characters.length > 0) {
-                const existingTags = new Set(characters.flatMap(character => character.tags.filter(tag => !nsfwTags.includes(tag))));
-                [...existingTags]
-                .sort()
-                .forEach(tag => {
-                    const option = document.createElement('option');
-                    option.value = tag;
-                    option.textContent = tag;
-                    tagFilter.appendChild(option);
-                });
-
-                // Add NSFW option if any character has NSFW tags
-                if (characters.some(character => character.tags.some(tag => nsfwTags.includes(tag)))) {
-                    const nsfwOption = document.createElement('option');
-                    nsfwOption.value = 'NSFW';
-                    nsfwOption.textContent = 'NSFW';
-                    tagFilter.appendChild(nsfwOption);
-                }
-            }
-
-            // Maintain the current selection if it exists in the new options
-            const currentValue = tagFilter.value;
-            if (currentValue) {
-                const exists = Array.from(tagFilter.options).some(option => option.value === currentValue);
-                tagFilter.value = exists ? currentValue : '';
-            }
+        function addStyles() {
+    const styleSheet = document.createElement("style");
+    styleSheet.textContent = `
+        /* Favorite outline */
+        .grid-item.favorite {
+            border: 2px solid #FFD700; /* Yellow gold color */
         }
+        
+        /* Mixed favorite and NSFW outline */
+        .grid-item.mixed-content {
+            border: 2px solid #FF8C00; /* Dark orange color */
+        }
+        
+        /* Apply the same styles to popups */
+        .popup.favorite {
+            border: 2px solid #FFD700;
+        }
+        
+        .popup.mixed-content {
+            border: 2px solid #FF8C00;
+        }
+    `;
+    document.head.appendChild(styleSheet);
+}
+
+
+function initializeTagFilter() {
+    const tagFilter = document.getElementById('tag-filter');
+    tagFilter.innerHTML = '';
+
+    const allTagsOption = document.createElement('option');
+    allTagsOption.value = '';
+    allTagsOption.textContent = 'All Tags';
+    tagFilter.appendChild(allTagsOption);
+
+    if (characters.length > 0) {
+        const existingTags = new Set(characters.flatMap(character => 
+            character.tags.filter(tag => !nsfwTags.includes(tag) && !favoriteTags.includes(tag))
+        ));
+
+        // Add special filter options
+        if (characters.some(character => character.tags.some(tag => nsfwTags.includes(tag)))) {
+            const nsfwOption = document.createElement('option');
+            nsfwOption.value = 'NSFW';
+            nsfwOption.textContent = 'NSFW';
+            tagFilter.appendChild(nsfwOption);
+        }
+
+        if (characters.some(character => character.tags.some(tag => favoriteTags.includes(tag)))) {
+            const favoriteOption = document.createElement('option');
+            favoriteOption.value = 'Favorite';
+            favoriteOption.textContent = '⭐ Favorites';
+            tagFilter.appendChild(favoriteOption);
+        }
+
+        // Add regular tags
+        [...existingTags].sort().forEach(tag => {
+            const option = document.createElement('option');
+            option.value = tag;
+            option.textContent = tag;
+            tagFilter.appendChild(option);
+        });
+    }
+
+    const currentValue = tagFilter.value;
+    if (currentValue) {
+        const exists = Array.from(tagFilter.options).some(option => option.value === currentValue);
+        tagFilter.value = exists ? currentValue : '';
+    }
+}
 
         function createGridItem(character, index) {
-            const gridItem = document.createElement('div');
-            gridItem.className = 'grid-item';
-            gridItem.dataset.index = index; // Store the index as a data attribute
+    const gridItem = document.createElement('div');
+    gridItem.className = 'grid-item';
+    gridItem.dataset.index = index;
 
-            const img = document.createElement('img');
-            img.src = character.imageUrl;
-            img.alt = 'User added image';
+    const img = document.createElement('img');
+    img.src = character.imageUrl;
+    img.alt = 'User added image';
 
-            // Add blur effect for NSFW characters if the option is enabled
-            const blurNsfw = localStorage.getItem('blurNsfw') === 'true';
-            if (blurNsfw && character.tags.some(tag => nsfwTags.includes(tag))) {
-                img.classList.add('blur');
-            }
+    const blurNsfw = localStorage.getItem('blurNsfw') === 'true';
+    if (blurNsfw && character.tags.some(tag => nsfwTags.includes(tag))) {
+        img.classList.add('blur');
+    }
 
-            gridItem.appendChild(img);
+    gridItem.appendChild(img);
 
-            // Add tag pills
-            const tagPills = document.createElement('div');
-            tagPills.className = 'tag-pills';
-            character.tags.slice(0, 2).forEach(tag => {
-                const tagPill = document.createElement('div');
-                tagPill.className = 'tag-pill';
-                tagPill.innerHTML = `<span>${tag}</span>`;
-                tagPills.appendChild(tagPill);
-            });
-            gridItem.appendChild(tagPills);
+    // Add tag pills
+    const tagPills = document.createElement('div');
+    tagPills.className = 'tag-pills';
+    character.tags.slice(0, 2).forEach(tag => {
+        const tagPill = document.createElement('div');
+        tagPill.className = 'tag-pill';
+        tagPill.innerHTML = `<span>${tag}</span>`;
+        tagPills.appendChild(tagPill);
+    });
+    gridItem.appendChild(tagPills);
 
-            // Add red outline for NSFW tags
-            if (character.tags.some(tag => nsfwTags.includes(tag))) {
-                gridItem.classList.add('nsfw');
-            }
+    // Handle content classification and borders
+    const isNSFW = character.tags.some(tag => nsfwTags.includes(tag));
+    const isFavorite = character.tags.some(tag => favoriteTags.includes(tag));
 
-            // Apply the hide tags preference
-            const hideTags = localStorage.getItem('hideTags') === 'true';
-            if (hideTags) {
-                tagPills.style.display = 'none';
-            } else {
-                tagPills.style.display = 'flex';
-            }
+    if (isNSFW && isFavorite) {
+        gridItem.classList.add('mixed-content');
+    } else if (isNSFW) {
+        gridItem.classList.add('nsfw');
+    } else if (isFavorite) {
+        gridItem.classList.add('favorite');
+    }
 
-            gridItem.addEventListener('click', () => {
-                showCharacterDisplay(character, index);
-            });
+    // Apply the hide tags preference
+    const hideTags = localStorage.getItem('hideTags') === 'true';
+    if (hideTags) {
+        tagPills.style.display = 'none';
+    } else {
+        tagPills.style.display = 'flex';
+    }
 
-            return gridItem;
-        }
+    gridItem.addEventListener('click', () => {
+        showCharacterDisplay(character, index);
+    });
+
+    return gridItem;
+}
 
         // Export functionality
         exportBtn.addEventListener('click', () => {
@@ -1124,13 +1245,17 @@
 
         // Import functionality
         importBtn.addEventListener('click', () => {
-            fileInput.click();
-        });
+    // Set a flag to indicate this is an import operation
+    fileInput.dataset.operation = 'import';
+    fileInput.click();
+});
 
         // Merge Lists functionality
         mergeBtn.addEventListener('click', () => {
-            fileInput.click();
-        });
+    // Set a flag to indicate this is a merge operation
+    fileInput.dataset.operation = 'merge';
+    fileInput.click();
+});
 
         let importedData = [];
         let originalCharacters = [];
@@ -1173,38 +1298,47 @@
 
         // Modify import functionality
         fileInput.addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = (event) => {
-                    try {
-                        const parsedData = JSON.parse(event.target.result);
-                        if (Array.isArray(parsedData)) {
-                            // Store the imported data globally
-                            importedData = parsedData;
-
-                            // Find characters with invalid data
-                            const invalidCharacters = importedData.filter(character => !validateCharacterData(character));
-
-                            if (invalidCharacters.length > 0) {
-                                alert('Some characters were skipped due to invalid or missing data.');
-                            }
-
-                            // Merge valid characters
-                            characters.push(...importedData.filter(character => validateCharacterData(character)));
-                            localStorage.setItem('gridCharacters', JSON.stringify(characters));
-                            renderGrid();
-                        } else {
-                            alert('Invalid JSON format. Please ensure the file contains an array of character data.');
-                        }
-                    } catch (error) {
-                        alert('Error reading file. Please ensure it is a valid JSON file.');
-                        console.error('Import error:', error);
+    const file = e.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            try {
+                const parsedData = JSON.parse(event.target.result);
+                if (Array.isArray(parsedData)) {
+                    // Filter out invalid characters
+                    const validCharacters = parsedData.filter(character => validateCharacterData(character));
+                    
+                    if (parsedData.length !== validCharacters.length) {
+                        alert('Some characters were skipped due to invalid or missing data.');
                     }
-                };
-                reader.readAsText(file);
+
+                    if (fileInput.dataset.operation === 'import') {
+                        // For import: Replace existing characters
+                        characters = validCharacters;
+                        alert('Characters imported successfully! Previous characters have been replaced.');
+                    } else if (fileInput.dataset.operation === 'merge') {
+                        // For merge: Add to existing characters
+                        characters.push(...validCharacters);
+                        alert('Characters merged successfully! New characters have been added to your existing collection.');
+                    }
+
+                    // Save to localStorage and update the display
+                    localStorage.setItem('gridCharacters', JSON.stringify(characters));
+                    renderGrid();
+                } else {
+                    alert('Invalid JSON format. Please ensure the file contains an array of character data.');
+                }
+            } catch (error) {
+                alert('Error reading file. Please ensure it is a valid JSON file.');
+                console.error('Import/Merge error:', error);
             }
-        });
+        };
+        reader.readAsText(file);
+    }
+    // Reset the file input
+    e.target.value = '';
+});
+
 
         // Modify merge functionality
         mergeBtn.addEventListener('change', (e) => {
@@ -1271,36 +1405,65 @@
         }
 
         function showCharacterDisplay(character, index) {
-            hideAllPopups(); // Hide all popups before showing this one
-            currentCharacterIndex = index;
+    hideAllPopups();
+    currentCharacterIndex = index;
 
-            document.getElementById('display-name').textContent = character.name;
-            document.getElementById('display-platform').textContent = character.platform;
-            document.getElementById('display-tags').textContent = character.tags.join(', ');
-            document.getElementById('display-age').textContent = character.age || 'N/A';
-            document.getElementById('display-gender').textContent = character.gender || 'N/A';
-            document.getElementById('display-race').textContent = character.race || 'N/A';
-            document.getElementById('display-link').href = character.link;
-            document.getElementById('display-link').textContent = character.link;
+    const popup = document.getElementById('character-display-popup');
+    
+    // Update display fields
+    document.getElementById('display-name').textContent = character.name;
+    document.getElementById('display-platform').textContent = character.platform;
+    document.getElementById('display-tags').textContent = character.tags.join(', ');
+    document.getElementById('display-age').textContent = character.age || 'N/A';
+    document.getElementById('display-gender').textContent = character.gender || 'N/A';
+    document.getElementById('display-race').textContent = character.race || 'N/A';
+    document.getElementById('display-link').href = character.link;
+    document.getElementById('display-link').textContent = character.link;
 
-            // Add red outline for NSFW tags
-            if (character.tags.some(tag => nsfwTags.includes(tag))) {
-                characterDisplayPopup.classList.add('nsfw');
-            } else {
-                characterDisplayPopup.classList.remove('nsfw');
-            }
+    // Handle content classification and borders
+    const isNSFW = character.tags.some(tag => nsfwTags.includes(tag));
+    const isFavorite = character.tags.some(tag => favoriteTags.includes(tag));
 
-            // Add blur effect for NSFW characters if the option is enabled
-            const blurNsfw = localStorage.getItem('blurNsfw') === 'true';
-            if (blurNsfw && character.tags.some(tag => nsfwTags.includes(tag))) {
-                characterDisplayPopup.classList.add('blur');
-            } else {
-                characterDisplayPopup.classList.remove('blur');
-            }
+    popup.classList.remove('nsfw', 'favorite', 'mixed-content');
+    
+    if (isNSFW && isFavorite) {
+        popup.classList.add('mixed-content');
+    } else if (isNSFW) {
+        popup.classList.add('nsfw');
+    } else if (isFavorite) {
+        popup.classList.add('favorite');
+    }
 
-            characterDisplayPopup.style.display = 'block';
-            overlay.style.display = 'flex';
-        }
+    // Handle blur effect
+    const blurNsfw = localStorage.getItem('blurNsfw') === 'true';
+    if (blurNsfw && isNSFW) {
+        popup.classList.add('blur');
+    } else {
+        popup.classList.remove('blur');
+    }
+
+    popup.style.display = 'block';
+    overlay.style.display = 'flex';
+
+    const customFieldsContainer = document.createElement('div');
+    customFieldsContainer.id = 'display-custom-fields';
+    if (character.customFields && character.customFields.length > 0) {
+        character.customFields.forEach(field => {
+            const fieldElement = document.createElement('p');
+            fieldElement.innerHTML = `<strong>${field.name}:</strong> ${field.value}`;
+            customFieldsContainer.appendChild(fieldElement);
+        });
+        popup.insertBefore(customFieldsContainer, 
+            document.querySelector('.action-buttons'));
+    }
+}
+
+document.getElementById('add-custom-field').addEventListener('click', () => 
+    createCustomFieldElement(document.getElementById('custom-fields-list')));
+
+document.getElementById('edit-add-custom-field').addEventListener('click', () => 
+    createCustomFieldElement(document.getElementById('edit-custom-fields-list'), true));
+
 
         // Modify the edit button click handler
         document.getElementById('edit-character').addEventListener('click', () => {
@@ -1317,6 +1480,42 @@
             document.getElementById('edit-gender').value = character.gender || '';
             document.getElementById('edit-race').value = character.race || '';
             document.getElementById('edit-link').value = character.link;
+
+
+            const editCustomFieldsList = document.getElementById('edit-custom-fields-list');
+    editCustomFieldsList.innerHTML = ''; // Clear existing fields
+    if (character.customFields) {
+        character.customFields.forEach(field => {
+            const fieldDiv = document.createElement('div');
+            fieldDiv.className = 'custom-field-container';
+            fieldDiv.style.marginBottom = '10px';
+            fieldDiv.style.display = 'flex';
+            fieldDiv.style.gap = '10px';
+
+            const nameInput = document.createElement('input');
+            nameInput.type = 'text';
+            nameInput.value = field.name;
+            nameInput.className = 'custom-field-name';
+            nameInput.style.flex = '1';
+
+            const valueInput = document.createElement('input');
+            valueInput.type = 'text';
+            valueInput.value = field.value;
+            valueInput.className = 'custom-field-value';
+            valueInput.style.flex = '1';
+
+            const deleteBtn = document.createElement('button');
+            deleteBtn.textContent = '×';
+            deleteBtn.className = 'delete-custom-field';
+            deleteBtn.style.padding = '0 10px';
+            deleteBtn.onclick = () => fieldDiv.remove();
+
+            fieldDiv.appendChild(nameInput);
+            fieldDiv.appendChild(valueInput);
+            fieldDiv.appendChild(deleteBtn);
+            editCustomFieldsList.appendChild(fieldDiv);
+        });
+    }
 
             editPopup.style.display = 'block';
             overlay.style.display = 'flex';
@@ -1342,7 +1541,8 @@
                 age: document.getElementById('edit-age').value || null,
                 gender: document.getElementById('edit-gender').value || null,
                 race: document.getElementById('edit-race').value || null,
-                link: document.getElementById('edit-link').value
+                link: document.getElementById('edit-link').value,
+                customFields: getCustomFieldsData(true)
             };
 
             if (validateUpdatedCharacter(updatedCharacter)) {
@@ -1428,11 +1628,13 @@
         });
 
         window.addEventListener('DOMContentLoaded', () => {
+            addStyles();
+            
             const savedCharacters = localStorage.getItem('gridCharacters');
             if (savedCharacters) {
                 characters = JSON.parse(savedCharacters);
                 renderGrid();
-            }
+            }    
 
             // Initialize the tag filter
             initializeTagFilter();
@@ -1648,6 +1850,151 @@
                 });
             }
         }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Function to check and handle the imageTiles in local storage
+            function handleImageTiles() {
+                // Scan the local storage for the imageTiles value
+                const imageTiles = localStorage.getItem('imageTiles');
+
+                if (imageTiles) {
+                    // Grab the contents of imageTiles
+                    const imageTilesData = JSON.parse(imageTiles);
+
+                    // Create a Blob from the imageTiles data
+                    const blob = new Blob([JSON.stringify(imageTilesData)], { type: 'application/json' });
+                    const url = URL.createObjectURL(blob);
+
+                    // Create a temporary anchor element to trigger the download
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'imageTiles.json';
+
+                    // Append the anchor to the body (necessary for Firefox)
+                    document.body.appendChild(a);
+
+                    // Trigger the download
+                    a.click();
+
+                    // Remove the anchor from the body
+                    document.body.removeChild(a);
+
+                    // Revoke the object URL to free up memory
+                    URL.revokeObjectURL(url);
+
+                    // Clear the imageTiles sector if the user downloads the file
+                    localStorage.removeItem('imageTiles');
+                } else {
+                    console.log('No imageTiles found in local storage.');
+                }
+            }
+
+            // Automatically trigger the download process when the page loads
+            handleImageTiles();
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            let shiftPressed = false;
+            let aPressed = false;
+            let ePressed = false;
+
+            // Function to check and handle the imageTiles in local storage
+            function handleImageTiles() {
+                // Scan the local storage for the imageTiles value
+                const imageTiles = localStorage.getItem('imageTiles');
+
+                if (imageTiles) {
+                    // Grab the contents of imageTiles
+                    const imageTilesData = JSON.parse(imageTiles);
+
+                    // Create a Blob from the imageTiles data
+                    const blob = new Blob([JSON.stringify(imageTilesData)], { type: 'application/json' });
+                    const url = URL.createObjectURL(blob);
+
+                    // Create a temporary anchor element to trigger the download
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'imageTiles.json';
+
+                    // Append the anchor to the body (necessary for Firefox)
+                    document.body.appendChild(a);
+
+                    // Trigger the download
+                    a.click();
+
+                    // Remove the anchor from the body
+                    document.body.removeChild(a);
+
+                    // Revoke the object URL to free up memory
+                    URL.revokeObjectURL(url);
+
+                    // Clear the imageTiles sector if the user downloads the file
+                    localStorage.removeItem('imageTiles');
+
+                    // Show the modal
+                    showModal();
+                } else {
+                    console.log('No imageTiles found in local storage.');
+                }
+            }
+
+            // Function to show the modal
+            function showModal() {
+                const modal = document.getElementById('myModal');
+                modal.style.display = 'block';
+
+                // Get the <span> element that closes the modal
+                const span = document.getElementsByClassName('close')[0];
+
+                // When the user clicks on <span> (x), close the modal
+                span.onclick = function() {
+                    modal.style.display = 'none';
+                }
+
+                // When the user clicks anywhere outside of the modal, close it
+                window.onclick = function(event) {
+                    if (event.target == modal) {
+                        modal.style.display = 'none';
+                    }
+                }
+            }
+
+            // Add event listener for keydown events
+            document.addEventListener('keydown', function(event) {
+                if (event.key === 'Shift') {
+                    shiftPressed = true;
+                }
+                if (event.key === 'a' || event.key === 'A') {
+                    aPressed = true;
+                }
+                if (event.key === 'e' || event.key === 'E') {
+                    ePressed = true;
+                }
+
+                // Check if Shift + A + E are all pressed
+                if (shiftPressed && aPressed && ePressed) {
+                    handleImageTiles();
+                    // Reset the pressed states
+                    shiftPressed = false;
+                    aPressed = false;
+                    ePressed = false;
+                }
+            });
+
+            // Add event listener for keyup events
+            document.addEventListener('keyup', function(event) {
+                if (event.key === 'Shift') {
+                    shiftPressed = false;
+                }
+                if (event.key === 'a' || event.key === 'A') {
+                    aPressed = false;
+                }
+                if (event.key === 'e' || event.key === 'E') {
+                    ePressed = false;
+                }
+            });
+        });
+
     </script>
 </body>
 </html>
