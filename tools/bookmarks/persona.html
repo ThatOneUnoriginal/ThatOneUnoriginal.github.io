@@ -824,7 +824,10 @@
             overlay.style.display = 'none';
         });
 
-        const acceptedImageTypes = ['.jpg', '.jpeg', '.png', '.gif'];
+        const acceptedImageTypes = [
+    '.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg', '.bmp', '.ico', 
+    '.tiff', '.tif', '.avif', '.heic', '.heif'
+];
 
         document.getElementById('confirm-add').addEventListener('click', function() {
             const imageUrl = document.getElementById('image-url').value.trim();
