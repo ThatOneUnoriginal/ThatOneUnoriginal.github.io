@@ -1652,7 +1652,41 @@
         "tag": "Neutral",
         "content": "Done or existing alone. Prefers being alone, often in a reclusive way."
     },
-
+    {
+        "title": "Stern",
+        "tag": "Neutral",
+        "content": "Severe and uncompromising. Strict and disciplined, often in a harsh way."
+    },
+    {
+        "title": "Stoiid",
+        "tag": "Neutral",
+        "content": "Enduring pain and hardship without showing feelings. Resilient and unemotional, often in a calm way."
+    },
+    {
+        "title": "Strict",
+        "tag": "Neutral",
+        "content": "Demanding that rules are obeyed and maintained. Rigid and inflexible, often in a harsh way."
+    },
+    {
+        "title": "Stubborn",
+        "tag": "Neutral",
+        "content": "Doggedly determined not to change one's attitude or position. Resistant to change or compromise, often in a defiant way."
+    },
+    {
+        "title": "Stylish",
+        "tag": "Neutral",
+        "content": "Fashionably elegant and sophisticated. Having or showing a sense of style."
+    },
+    {
+        "title": "Subjective",
+        "tag": "Neutral",
+        "content": "Based on or influenced by personal feelings, tastes, or opinions. Dependent on the mind or consciousness for its existence."
+    },
+    {
+        "title": "Surprising",
+        "tag": "Neutral",
+        "content": "Causing or capable of causing surprise. Unexpected and unpredictable, often in a pleasing way."
+    },
 
 
     {
