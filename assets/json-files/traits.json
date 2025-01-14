@@ -1687,7 +1687,76 @@
         "tag": "Neutral",
         "content": "Causing or capable of causing surprise. Unexpected and unpredictable, often in a pleasing way."
     },
-
+    {
+        "title": "Tough",
+        "tag": "Neutral",
+        "content": "Able to endure hardship or pain. Resilient and determined, often in a rugged way."
+    },
+    {
+        "title": "Unaggressive",
+        "tag": "Neutral",
+        "content": "Not hostile or belligerent. Peaceful and non-confrontational, often in a gentle way."
+    },
+    {
+        "title": "Unambitious",
+        "tag": "Neutral",
+        "content": "Lacking a strong desire and determination to succeed. Content with one's current situation, often to the point of being complacent."
+    },
+    {
+        "title": "Unceremonious",
+        "tag": "Neutral",
+        "content": "Lacking in ceremony or formality. Informal and casual, often in a abrupt way."
+    },
+    {
+        "title": "Unchanging",
+        "tag": "Neutral",
+        "content": "Not changing or varying. Consistent and steady, often in a monotonous way."
+    },
+    {
+        "title": "Undemanding",
+        "tag": "Neutral",
+        "content": "Not making many demands. Easy to please, often in a modest way."
+    },
+    {
+       "title": "Unfathomable",
+       "tag": "Neutral",
+       "content": "Difficult or impossible to understand. Mysterious and incomprehensible, often in a profound way."
+    },
+    {
+        "title": "Unhurried",
+        "tag": "Neutral",
+        "content": "Not rushed or hurried. Calm and leisurely, often in a relaxed way."
+    },
+    {
+        "title": "Uninhibited",
+        "tag": "Neutral",
+        "content": "Not restrained or held back. Free and unrestricted, often in a spontaneous way."
+    },
+    {
+        "title": "Unpatriotic",
+        "tag": "Neutral",
+        "content": "Not showing love or devotion to one's country. Disloyal and unsupportive, often in a traitorous way."
+    },
+    {
+        "title": "Unpredictable",
+        "tag": "Neutral",
+        "content": "Not able to be predicted. Variable and uncertain, often in an exciting way."
+    },
+    {
+        "title": "Unreligious",
+        "tag": "Neutral",
+        "content": "Not having or showing a belief in religion. Secular and non-spiritual, often in a skeptical way."
+    },
+    {
+        "title": "Unsentimental",
+        "tag": "Neutral",
+        "content": "Not influenced by emotional feelings. Objective and detached, often in a rational way."
+    },
+    {
+        "title": "Whimsical",
+        "tag": "Neutral",
+        "content": "Full of or characterized by whims. Capricious and fanciful, often in a playful way."
+    },
 
     {
         "title": "Abrasive",
