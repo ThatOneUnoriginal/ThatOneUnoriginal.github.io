@@ -1203,9 +1203,36 @@
         "tag": "Positive",
         "content": "Emitting or reflecting light. Glowing with joy, happiness, or positivity, often in a way that inspires others."
     },
-
-
-
+    {
+        "title": "Intellectual",
+        "tag": "Positive",
+        "content": "Possessing a highly developed mind and a strong aptitude for learning. Engaged in or relating to deep thinking, analysis, and the pursuit of knowledge."
+    },
+    {
+        "title": "Analytical",
+        "tag": "Positive",
+        "content": "Able to examine and interpret complex information or situations. Thorough and methodical in thinking and problem-solving."
+    },
+    {
+        "title": "Quick-witted",
+        "tag": "Positive",
+        "content": "Able to think and respond swiftly and cleverly. Sharp and alert in conversations or situations."
+    },
+    {
+        "title": "Inquisitive",
+        "tag": "Positive",
+        "content": "Eager to learn and question things. Curious and investigative, often seeking deeper understanding."
+    },
+    {
+        "title": "Judicious",
+        "tag": "Positive",
+        "content": "Having or showing sound judgment. Wise and prudent, often making well-considered decisions."
+    },
+    {
+        "title": "Erudite",
+        "tag": "Positive",
+        "content": "Having or showing great knowledge. Well-read and learned, often possessing a broad understanding of various subjects."
+    },
 
     {
         "title": "Absentminded",
@@ -1757,8 +1784,21 @@
         "tag": "Neutral",
         "content": "Full of or characterized by whims. Capricious and fanciful, often in a playful way."
     },
-
-
+    {
+        "title": "Mischievous",
+        "tag": "Neutral",
+        "content": "Playfully mischievous or naughty. Enjoying causing lighthearted trouble or disruption, often in a humorous way."
+    },
+    {
+        "title": "Strategic",
+        "tag": "Neutral",
+        "content": "Carefully devising and planning actions to achieve goals. Thoughtful and calculated, often considering long-term impacts."
+    },
+    {
+        "title": "Restless",
+        "tag": "Neutral",
+        "content": "Unable to rest or relax due to agitation or anxiety. Constantly moving or changing position, often due to boredom or dissatisfaction."
+    },
     
     {
         "title": "Abrasive",
@@ -2260,5 +2300,20 @@
         "title": "Fickle",
         "tag": "Negative",
         "content": "Changing frequently. Lacking steadfastness or loyalty."
+    },
+    {
+        "title": "Manipulative",
+        "tag": "Negative",
+        "content": "Attempting to influence or control others to one's own advantage, often in a clever or unscrupulous way. Exploiting situations or people for personal gain, often without regard for their feelings or well-being."
+    },
+    {
+        "title": "Cunning",
+        "tag": "Negative",
+        "content": "Clever and skilled in achieving one's ends, often in a deceitful way. Shrewd and calculating, often using trickery to gain an advantage."
+    },
+    {
+        "title": "Controlling",
+        "tag": "Negative",
+        "content": "Seeking to dominate or command others. Dictating actions or behaviors to satisfy one's own needs or desires."
     }
 ]

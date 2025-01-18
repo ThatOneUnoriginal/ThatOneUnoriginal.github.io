@@ -294,6 +294,23 @@
             background-color: #f9f9f9;
         }
 
+        .tag.selected-tag {
+    background-color: #28a745;
+    color: white;
+    margin-left: 5px;
+}
+
+/* Dark mode style for selected tag */
+body.dark-mode .tag.selected-tag {
+    background-color: #1e7e34;
+}
+
+/* AMOLED mode style for selected tag */
+body.amoled-mode .tag.selected-tag {
+    background-color: #145523;
+    border: 1px solid #28a745;
+}
+
         .pagination-button.active, .sort-button:active, .share-button:active, .import-button:active, .random-trait-button:active, .fetch-beta-list-button:active {
             background-color: #007BFF;
             color: white;
@@ -694,25 +711,39 @@
           }
 
           function getFilteredData() {
-              const tagFilter = document.getElementById('tag-filter').value;
-              const searchQuery = document.getElementById('search-bar').value.toLowerCase();
+    const tagFilter = document.getElementById('tag-filter').value;
+    const searchQuery = document.getElementById('search-bar').value;
+    
+    // Check if the search query is wrapped in quotes
+    const isContentSearch = searchQuery.startsWith('"') && searchQuery.endsWith('"');
+    // Remove quotes if present and convert to lowercase
+    const cleanedQuery = isContentSearch 
+        ? searchQuery.slice(1, -1).toLowerCase() 
+        : searchQuery.toLowerCase();
 
-              const filteredData = jsonData.filter(item => {
-                  const matchesTag = tagFilter === 'all' ||
-                      (tagFilter === 'selected' ? selectedBoxes.has(item.title) : item.tag === tagFilter);
-                  const matchesSearch = item.title.toLowerCase().includes(searchQuery);
-                  return matchesTag && matchesSearch;
-              });
+    const filteredData = jsonData.filter(item => {
+        // Check if item matches the tag filter
+        const matchesTag = tagFilter === 'all' ||
+            (tagFilter === 'selected' ? selectedBoxes.has(item.title) : item.tag === tagFilter);
 
-              // Sort filtered data alphabetically by title
-              return filteredData.sort((a, b) => {
-                  if (sortOrder === 'asc') {
-                      return a.title.localeCompare(b.title);
-                  } else {
-                      return b.title.localeCompare(a.title);
-                  }
-              });
-          }
+        // Search in content if query is wrapped in quotes, otherwise search in title
+        const matchesSearch = isContentSearch
+            ? item.content.toLowerCase().includes(cleanedQuery)
+            : item.title.toLowerCase().includes(cleanedQuery);
+
+        return matchesTag && matchesSearch;
+    });
+
+    // Sort filtered data alphabetically by title
+    return filteredData.sort((a, b) => {
+        if (sortOrder === 'asc') {
+            return a.title.localeCompare(b.title);
+        } else {
+            return b.title.localeCompare(a.title);
+        }
+    });
+}
+
 
           function createPageButtons(totalPages) {
               const buttons = [];
@@ -804,60 +835,61 @@
           }
 
           function populateBoxes(data) {
-              if (isLoading) return;
-              showLoading();
+    if (isLoading) return;
+    showLoading();
 
-              setTimeout(() => {
-                  container.innerHTML = '';
+    setTimeout(() => {
+        container.innerHTML = '';
 
-                  const startIndex = (currentPage - 1) * itemsPerPage;
-                  const endIndex = startIndex + itemsPerPage;
-                  const paginatedData = data.slice(startIndex, endIndex);
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        const endIndex = startIndex + itemsPerPage;
+        const paginatedData = data.slice(startIndex, endIndex);
 
-                  paginatedData.forEach(item => {
-                      const box = document.createElement('div');
-                      box.className = 'box';
-                      if (selectedBoxes.has(item.title)) {
-                          box.classList.add('selected');
-                      }
+        paginatedData.forEach(item => {
+            const box = document.createElement('div');
+            box.className = 'box';
+            if (selectedBoxes.has(item.title)) {
+                box.classList.add('selected');
+            }
 
-                      const selectButtonText = selectedBoxes.has(item.title) ? '✕' : '+';
-                      const selectButtonClass = selectedBoxes.has(item.title) ? 'select-button selected' : 'select-button';
+            const selectButtonText = selectedBoxes.has(item.title) ? '✕' : '+';
+            const selectButtonClass = selectedBoxes.has(item.title) ? 'select-button selected' : 'select-button';
+            const selectedTag = selectedBoxes.has(item.title) ? '<span class="tag selected-tag">Selected</span>' : '';
 
-                      const safeItemData = JSON.stringify(item)
-                          .replace(/"/g, '&quot;')
-                          .replace(/'/g, '&#39;');
+            const safeItemData = JSON.stringify(item)
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
 
-                      box.innerHTML = `
-                          <div class="box-header">
-                              <p class="title">${item.title} <span class="tag">${item.tag}</span></p>
-                              <span class="arrow">▶</span>
-                          </div>
-                          <div class="content">
-                              <p>${item.content}</p>
-                              <button class="${selectButtonClass}" onclick='toggleSelection(event, ${safeItemData})'>${selectButtonText}</button>
-                              <button class="copy-button" onclick='copyMeaning(event, "${item.content}")'>Copy Meaning</button>
-                              <button class="copy-entirety-button" onclick='copyEntirety(event, "${item.title}", "${item.tag}", "${item.content}")'>Copy Entirety</button>
-                              <button class="snapshot-button" onclick='takeSnapshot(event, "${item.title}")'>Snapshot</button>
-                          </div>
-                      `;
+            box.innerHTML = `
+                <div class="box-header">
+                    <p class="title">${item.title} <span class="tag">${item.tag}</span>${selectedTag}</p>
+                    <span class="arrow">▶</span>
+                </div>
+                <div class="content">
+                    <p>${item.content}</p>
+                    <button class="${selectButtonClass}" onclick='toggleSelection(event, ${safeItemData})'>${selectButtonText}</button>
+                    <button class="copy-button" onclick='copyMeaning(event, "${item.content}")'>Copy Meaning</button>
+                    <button class="copy-entirety-button" onclick='copyEntirety(event, "${item.title}", "${item.tag}", "${item.content}")'>Copy Entirety</button>
+                    <button class="snapshot-button" onclick='takeSnapshot(event, "${item.title}")'>Snapshot</button>
+                </div>
+            `;
 
-                      const arrow = box.querySelector('.arrow');
-                      arrow.addEventListener('click', (event) => {
-                          event.stopPropagation();
-                          box.classList.toggle('expanded');
-                      });
+            const arrow = box.querySelector('.arrow');
+            arrow.addEventListener('click', (event) => {
+                event.stopPropagation();
+                box.classList.toggle('expanded');
+            });
 
-                      container.appendChild(box);
-                  });
+            container.appendChild(box);
+        });
 
-                  const totalPages = Math.ceil(data.length / itemsPerPage);
-                  createPaginationControls(totalPages);
-                  updatePaginationInfo(data.length);
+        const totalPages = Math.ceil(data.length / itemsPerPage);
+        createPaginationControls(totalPages);
+        updatePaginationInfo(data.length);
 
-                  hideLoading();
-              }, 200);
-          }
+        hideLoading();
+    }, 200);
+}
 
           function filterResults() {
               const filteredData = getFilteredData();
