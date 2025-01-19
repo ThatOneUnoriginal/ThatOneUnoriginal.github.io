@@ -1799,6 +1799,11 @@
         "tag": "Neutral",
         "content": "Unable to rest or relax due to agitation or anxiety. Constantly moving or changing position, often due to boredom or dissatisfaction."
     },
+    {
+        "title": "Unconventional",
+        "tag": "Neutral",
+        "content": "Not bound by or adhering to convention or conformity. Different and unique, often challenging traditional norms and expectations."
+    },
     
     {
         "title": "Abrasive",
@@ -1986,7 +1991,7 @@
         "content": "Showing smug or uncritical satisfaction with oneself. Complacently content with the status quo."
     },
     {
-        "title": "ComplaintiveComplaintive",
+        "title": "Complaintive",
         "tag": "Negative",
         "content": "Tending to complain or express dissatisfaction. Whining and grumbling."
     },
@@ -2315,5 +2320,165 @@
         "title": "Controlling",
         "tag": "Negative",
         "content": "Seeking to dominate or command others. Dictating actions or behaviors to satisfy one's own needs or desires."
+    },
+    {
+        "title": "Fiery",
+        "tag": "Negative",
+        "content": "Easily provoked or angered. Passionate and intense, often to the point of being volatile."
+    },
+    {
+        "title": "Fixed",
+        "tag": "Negative",
+        "content": "Rigid and unchanging. Stubbornly adhering to one's own views or methods."
+    },
+    {
+        "title": "Flamboyant",
+        "tag": "Negative",
+        "content": "Tending to attract attention because of exuberance, confidence, and stylishness. Often exaggerated or extravagant in behavior."
+    },
+    {
+        "title": "Foolish",
+        "tag": "Foolish",
+        "content": "Lacking good sense or judgment. Often acting impulsively and irrationally."
+    },
+    {
+        "title": "Forgetful",
+        "tag": "Negative",
+        "content": "Tending to forget things easily. Often failing to remember important information or tasks."
+    },
+    {
+        "title": "Fraudulent",
+        "tag": "Negative",
+        "content": "Deliberately deceitful or dishonest. often involving trickery or manipulation for personal gain."
+    },
+    {
+        "title": "Frightening",
+        "tag": "Negative",
+        "content": "Causing fear or alarm. often intimidating or threatening to others."
+    },
+    {
+        "title": "Frivolous",
+        "tag": "Negative",
+        "content": "Not having any serious purpose or value. often trivial or superficial."
+    },
+    {
+        "title": "Gloomy",
+        "tag": "Negative",
+        "content": "Having or showing a depressed or despondent mood. often pessimistic and melancholic."
+    },
+    {
+        "title": "Graceless",
+        "tag": "Negative",
+        "content": "Lacking smoothness and elegance in movement. often awkward or clumsy."
+    },
+    {
+        "title": "Grand",
+        "tag": "Negative",
+        "content": "Impressive and magnificent in appearance or style. often extravagant or pompous."
+    },
+    {
+        "title": "Grim",
+        "tag": "Greedy",
+        "content": "Having or showing an intense and selfish desire for something. often excessively wanting more than is needed or deserved."
+    },
+    {
+        "title": "Gullible",
+        "tag": "Negative",
+        "content": "Easily persuaded to believe something. often overly trusting and naive."
+    },
+    {
+        "title": "Hateful",
+        "tag": "Hateful",
+        "content": "Feeling or showing extreme dislike or ill will. often malicious and spiteful."
+    },
+    {
+        "title": "Haughty",
+        "tag": "Negative",
+        "content": "Having or showing an exaggerated sense of one's own importance. often arrogant and disdainful."
+    },
+    {
+        "title": "Hedonistic",
+        "tag": "Negative",
+        "content": "Pursuing or devoted to pleasure, especially sensual pleasure. often self-indulgent and selfish."
+    },
+    {
+        "title": "Hesitant",
+        "tag": "Negative",
+        "content": "Slow to act or speak due to doubt or uncertainty. often indecisive or timid."
+    },
+    {
+        "title": "Hidebound",
+        "tag": "Negative",
+        "content": "Unwilling or unable to change or adapt. often narrow-minded and inflexible."
+    },
+    {
+        "title": "High-handed",
+        "tag": "Negative",
+        "content": "Acting in an arrogant or domineering manner. often disregarding the feelings or rights of others."
+    },
+    {
+        "title": "Hostile",
+        "tag": "Negative",
+        "content": "Showing or feeling opposition or dislike; unfriendly. often aggressive or antagonistic."
+    },
+    {
+        "title": "Ignorant",
+        "tag": "Negative",
+        "content": "Lacking knowledge, information, or awareness about something in particular. often uneducated or uninformed."
+    },
+    {
+        "title": "Imitative",
+        "tag": "Negative",
+        "content": "Tending to copy or mimic others. often lacking originality or authenticity."
+    },
+    {
+        "title": "Impatient",
+        "tag": "Negative",
+        "content": "Quickly irritated or annoyed by delay or disagreement. often restless and eager for action."
+    },
+    {
+        "title": "Impractical",
+        "tag": "Negative",
+        "content": "Not suitable or possible to actually do or use. often unrealistic or idealistic."
+    },
+    {
+        "title": "Imprudent",
+        "tag": "Negative",
+        "content": "Acting without thought for the consequences. often reckless or foolish."
+    },
+    {
+        "title": "Impulsive",
+        "tag": "Negative",
+        "content": "Acting on a sudden desire or inclination. often spontaneous and unpredictable."
+    },
+    {
+        "title": "Inconsiderate",
+        "tag": "Negative",
+        "content": "Not thinking or caring about the feelings or needs of others. often selfish and thoughtless."
+    },
+    {
+        "title": "Incurious",
+        "tag": "Negative",
+        "content": "Lacking interest or curiosity. often apathetic or indifferent."
+    },
+    {
+        "title": "Indecisive",
+        "tag": "Negative",
+        "content": "Unable to make decisions quickly or confidently. often hesitant or uncertain."
+    },
+    {
+        "title": "Indulgent",
+        "tag": "Negative",
+        "content": "Allowing oneself to enjoy the pleasure of something. often excessive or self-gratifying."
+    },
+    {
+        "title": "Inert",
+        "tag": "Negative",
+        "content": "Lacking the ability or will to move or act. often sluggish or passive."
+    },
+    {
+        "title": "Inhibited",
+        "tag": "Negative",
+        "content": "Unable to act or express oneself freely due to self-consciousness or restraint. often reserved or restrained."
     }
 ]
