@@ -1804,7 +1804,21 @@
         "tag": "Neutral",
         "content": "Not bound by or adhering to convention or conformity. Different and unique, often challenging traditional norms and expectations."
     },
-    
+    {
+        "title": "Mannered",
+        "tag": "Neutral",
+        "content": "Having or showing good manners. Often polite or courteous to an affected or exaggerated degree."
+    },
+    {
+        "title": "Loquacious",
+        "tag": "Neutral",
+        "content": "Tending to talk a lot. Often chatty or talkative to an excessive degree."
+    },
+    {
+        "title": "Rebellious",
+        "tag": "Negative",
+        "content": "Defiant and resistant to authority or convention. often disobedient, insubordinate, or nonconformist."
+    },
     {
         "title": "Abrasive",
         "tag": "Negative",
@@ -2480,5 +2494,185 @@
         "title": "Inhibited",
         "tag": "Negative",
         "content": "Unable to act or express oneself freely due to self-consciousness or restraint. Often reserved or restrained."
+    },
+    {
+        "title": "Insecure",
+        "tag": "Negative",
+        "content": "Uncertain or anxious about oneself. Often lacking confidence or self-assurance."
+    },
+    {
+        "title": "Insensitive",
+        "tag": "Negative",
+        "content": "Showing little regard or consideration for the feelings of others. Often tactless or rude."
+    },
+    {
+        "title": "Insincere",
+        "tag": "Negative",
+        "content": "Not genuinely or truly meant or felt. Often hypocritical or deceitful."
+    },
+    {
+        "title": "Insulting",
+        "tag": "Negative",
+        "content": "Causing or intending to cause hurt or offense. Often disrespectful or rude."
+    },
+    {
+        "title": "Intolerant",
+        "tag": "Negative",
+        "content": "Not willing to accept or respect other people's beliefs, opinions, or behaviors. Often narrow-minded or prejudiced."
+    },
+    {
+        "title": "Irascible",
+        "tag": "Negative",
+        "content": "Having or showing a tendency to be easily angered. Often irritable or short-tempered."
+    },
+    {
+        "title": "Irrational",
+        "tag": "Negative",
+        "content": "Not logical or reasonable. Often unpredictable or illogical."
+    },
+    {
+        "title": "Irresponsible",
+        "tag": "Negative",
+        "content": "Not thinking about or being concerned with the consequences of one's actions. Often careless or reckless."
+    },
+    {
+        "title": "Irritable",
+        "tag": "Negative",
+        "content": "Easily annoyed or impatient. Often short-tempered or snappish."
+    },
+    {
+        "title": "Lazy",
+        "tag": "Negative",
+        "content": "Unwilling to work or make an effort. Often sluggish or idle."
+    },
+    {
+        "title": "Libidinous",
+        "tag": "Negative",
+        "content": "Showing excessive sexual desire. Often lustful or lecherous."
+    },
+    {
+        "title": "Malicious",
+        "tag": "Negative",
+        "content": "Intending to do evil or cause harm. Often spiteful or vindictive."
+    },
+    {
+        "title": "Mannerless",
+        "tag": "Negative",
+        "content": "Lacking good manners. Often rude or impolite."
+    },
+    {
+        "title": "Mawkish",
+        "tag": "Negative",
+        "content": "Excessively or falsely sentimental. Often overly emotional or soppy."
+    },
+    {
+        "title": "Mealymouthed",
+        "tag": "Negative",
+        "content": "Speaking in an indirect or evasive way. Often vague or unclear."
+    },
+    {
+        "title": "Mechanical",
+        "tag": "Negative",
+        "content": "Performed or operating in a rigid and unimaginative way. Often monotonous or repetitive."
+    },
+    {
+        "title": "Meddlesome",
+        "tag": "Negative",
+        "content": "Interfering or intrusive. Often nosy or overly involved in others' affairs."
+    },
+    {
+        "title": "Melancholic",
+        "tag": "Negative",
+        "content": "Having or showing a gloomy and depressed nature. Often sad or pensive."
+    },
+    {
+        "title": "Meretricious",
+        "tag": "Negative",
+        "content": "Attractive in a vulgar or superficial way. Often flashy or gaudy."
+    },
+    {
+        "title": "Messy",
+        "tag": "Negative",
+        "content": "Untidy or disorganized. Often chaotic or cluttered."
+    },
+    {
+        "title": "Miserable",
+        "tag": "Negative",
+        "content": "Very unhappy or unhappy in a way that is pitiful. Often sad or depressed."
+    },
+    {
+        "title": "Miserly",
+        "tag": "Negative",
+        "content": "Reluctant to spend money. Often stingy or penny-pinching."
+    },
+    {
+        "title": "Misguided",
+        "tag": "Negative",
+        "content": "Having or showing faulty judgment or guidance. Often mistaken or ill-advised."
+    },
+    {
+        "title": "Mistaken",
+        "tag": "Negative",
+        "content": "Wrong in one's judgment or belief. Often incorrect or in error."
+    },
+    {
+        "title": "Money-minded",
+        "tag": "Negative",
+        "content": "Excessively concerned with money or financial gain. Often materialistic or greedy."
+    },
+    {
+        "title": "Monstrous",
+        "tag": "Negative",
+        "content": "Extremely cruel or wicked. Often inhuman or brutal."
+    },
+    {
+        "title": "Moody",
+        "tag": "Negative",
+        "content": "Subject to sudden or frequent changes of mood. Often irritable or unpredictable."
+    },
+    {
+        "title": "Morbid",
+        "tag": "Negative",
+        "content": "Having an abnormal and unhealthy interest in disturbing or unpleasant subjects. Often gloomy or gruesome."
+    },
+    {
+        "title": "Muddle-headed",
+        "tag": "Negative",
+        "content": "Confused or unclear in thought. Often muddled or bewildered."
+    },
+    {
+        "title": "Naive",
+        "tag": "Negative",
+        "content": "Lacking experience, wisdom, or judgment. Often gullible or credulous."
+    },
+    {
+        "title": "Narcissistic",
+        "tag": "Negative",
+        "content": "Having an excessive or erotic interest in oneself and one's physical appearance. Often vain or self-absorbed."
+    },
+    {
+        "title": "Narrow",
+        "tag": "Negative",
+        "content": "Limited in scope or range. Often restricted or narrow-minded."
+    },
+    {
+        "title": "Narrow-minded",
+        "tag": "Negative",
+        "content": "Lacking tolerance or flexibility in views or opinions. Often intolerant or prejudiced."
+    },
+    {
+        "title": "Natty",
+        "tag": "Negative",
+        "content": "Dressed in a neat and stylish manner. Often smart or fashionable."
+    },
+    {
+        "title": "Negativistic",
+        "tag": "Negative",
+        "content": "Characterized by habitual negativity and a critical nature. Often pessimistic or cynical."
+    },
+    {
+        "title": "Neglectful",
+        "tag": "Negative",
+        "content": "Failing to care for or pay proper attention to someone or something. Often careless or irresponsible."
     }
 ]
