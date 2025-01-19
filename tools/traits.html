@@ -294,6 +294,23 @@
             background-color: #f9f9f9;
         }
 
+        .tag.selected-tag {
+    background-color: #28a745;
+    color: white;
+    margin-left: 5px;
+}
+
+/* Dark mode style for selected tag */
+body.dark-mode .tag.selected-tag {
+    background-color: #1e7e34;
+}
+
+/* AMOLED mode style for selected tag */
+body.amoled-mode .tag.selected-tag {
+    background-color: #145523;
+    border: 1px solid #28a745;
+}
+
         .pagination-button.active, .sort-button:active, .share-button:active, .import-button:active, .random-trait-button:active, .fetch-beta-list-button:active {
             background-color: #007BFF;
             color: white;
@@ -408,6 +425,57 @@
             cursor: pointer;
             user-select: none;
         }
+
+        /* Add these CSS styles in the <style> section */
+.status-box {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    margin-right: 5px;
+    border-radius: 3px;
+    vertical-align: middle;
+}
+
+.status-box.positive {
+    background-color: #28a745;
+}
+
+.status-box.neutral {
+    background-color: #ffc107;
+}
+
+.status-box.negative {
+    background-color: #dc3545;
+}
+
+/* Add these dark mode styles */
+body.dark-mode .status-box.positive {
+    background-color: #1e7e34;
+}
+
+body.dark-mode .status-box.neutral {
+    background-color: #d39e00;
+}
+
+body.dark-mode .status-box.negative {
+    background-color: #bd2130;
+}
+
+/* Add these AMOLED mode styles */
+body.amoled-mode .status-box.positive {
+    background-color: #145523;
+    border: 1px solid #28a745;
+}
+
+body.amoled-mode .status-box.neutral {
+    background-color: #856600;
+    border: 1px solid #ffc107;
+}
+
+body.amoled-mode .status-box.negative {
+    background-color: #7a1520;
+    border: 1px solid #dc3545;
+}
     </style>
 </head>
 <body>
@@ -491,6 +559,50 @@
                   keyboardTooltip.classList.remove('visible');
               }, 3000);
           }, 1000);
+
+          async function checkListSwitchCompatibility(newUrl) {
+    try {
+        // Fetch the new list data
+        const response = await fetch(newUrl);
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        const newListData = await response.json();
+        
+        // Get currently selected titles
+        const currentSelections = Array.from(selectedBoxes.keys());
+        
+        // Find titles that won't exist in the new list
+        const missingTitles = currentSelections.filter(title => 
+            !newListData.some(item => item.title === title)
+        );
+        
+        // If there are titles that will be lost, show warning
+        if (missingTitles.length > 0) {
+            const warningMessage = `Warning: The following selected traits will be lost if you switch lists:\n\n${missingTitles.join('\n')}\n\nDo you want to continue?`;
+            return {
+                willLoseSelections: true,
+                continueSwitch: confirm(warningMessage),
+                missingTitles
+            };
+        }
+        
+        return {
+            willLoseSelections: false,
+            continueSwitch: true,
+            missingTitles: []
+        };
+    } catch (error) {
+        console.error('Error checking list compatibility:', error);
+        alert('Error checking new list. Please try again.');
+        return {
+            willLoseSelections: false,
+            continueSwitch: false,
+            missingTitles: []
+        };
+    }
+}
+
 
           // Keyboard navigation
           document.addEventListener('keydown', (e) => {
@@ -694,25 +806,39 @@
           }
 
           function getFilteredData() {
-              const tagFilter = document.getElementById('tag-filter').value;
-              const searchQuery = document.getElementById('search-bar').value.toLowerCase();
+    const tagFilter = document.getElementById('tag-filter').value;
+    const searchQuery = document.getElementById('search-bar').value;
+    
+    // Check if the search query is wrapped in quotes
+    const isContentSearch = searchQuery.startsWith('"') && searchQuery.endsWith('"');
+    // Remove quotes if present and convert to lowercase
+    const cleanedQuery = isContentSearch 
+        ? searchQuery.slice(1, -1).toLowerCase() 
+        : searchQuery.toLowerCase();
 
-              const filteredData = jsonData.filter(item => {
-                  const matchesTag = tagFilter === 'all' ||
-                      (tagFilter === 'selected' ? selectedBoxes.has(item.title) : item.tag === tagFilter);
-                  const matchesSearch = item.title.toLowerCase().includes(searchQuery);
-                  return matchesTag && matchesSearch;
-              });
+    const filteredData = jsonData.filter(item => {
+        // Check if item matches the tag filter
+        const matchesTag = tagFilter === 'all' ||
+            (tagFilter === 'selected' ? selectedBoxes.has(item.title) : item.tag === tagFilter);
 
-              // Sort filtered data alphabetically by title
-              return filteredData.sort((a, b) => {
-                  if (sortOrder === 'asc') {
-                      return a.title.localeCompare(b.title);
-                  } else {
-                      return b.title.localeCompare(a.title);
-                  }
-              });
-          }
+        // Search in content if query is wrapped in quotes, otherwise search in title
+        const matchesSearch = isContentSearch
+            ? item.content.toLowerCase().includes(cleanedQuery)
+            : item.title.toLowerCase().includes(cleanedQuery);
+
+        return matchesTag && matchesSearch;
+    });
+
+    // Sort filtered data alphabetically by title
+    return filteredData.sort((a, b) => {
+        if (sortOrder === 'asc') {
+            return a.title.localeCompare(b.title);
+        } else {
+            return b.title.localeCompare(a.title);
+        }
+    });
+}
+
 
           function createPageButtons(totalPages) {
               const buttons = [];
@@ -804,60 +930,64 @@
           }
 
           function populateBoxes(data) {
-              if (isLoading) return;
-              showLoading();
+    if (isLoading) return;
+    showLoading();
 
-              setTimeout(() => {
-                  container.innerHTML = '';
+    setTimeout(() => {
+        container.innerHTML = '';
 
-                  const startIndex = (currentPage - 1) * itemsPerPage;
-                  const endIndex = startIndex + itemsPerPage;
-                  const paginatedData = data.slice(startIndex, endIndex);
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        const endIndex = startIndex + itemsPerPage;
+        const paginatedData = data.slice(startIndex, endIndex);
 
-                  paginatedData.forEach(item => {
-                      const box = document.createElement('div');
-                      box.className = 'box';
-                      if (selectedBoxes.has(item.title)) {
-                          box.classList.add('selected');
-                      }
+        paginatedData.forEach(item => {
+            const box = document.createElement('div');
+            box.className = 'box';
+            if (selectedBoxes.has(item.title)) {
+                box.classList.add('selected');
+            }
 
-                      const selectButtonText = selectedBoxes.has(item.title) ? '✕' : '+';
-                      const selectButtonClass = selectedBoxes.has(item.title) ? 'select-button selected' : 'select-button';
+            const selectButtonText = selectedBoxes.has(item.title) ? '✕' : '+';
+            const selectButtonClass = selectedBoxes.has(item.title) ? 'select-button selected' : 'select-button';
+            const selectedTag = selectedBoxes.has(item.title) ? '<span class="tag selected-tag">Selected</span>' : '';
 
-                      const safeItemData = JSON.stringify(item)
-                          .replace(/"/g, '&quot;')
-                          .replace(/'/g, '&#39;');
+            const safeItemData = JSON.stringify(item)
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
 
-                      box.innerHTML = `
-                          <div class="box-header">
-                              <p class="title">${item.title} <span class="tag">${item.tag}</span></p>
-                              <span class="arrow">▶</span>
-                          </div>
-                          <div class="content">
-                              <p>${item.content}</p>
-                              <button class="${selectButtonClass}" onclick='toggleSelection(event, ${safeItemData})'>${selectButtonText}</button>
-                              <button class="copy-button" onclick='copyMeaning(event, "${item.content}")'>Copy Meaning</button>
-                              <button class="copy-entirety-button" onclick='copyEntirety(event, "${item.title}", "${item.tag}", "${item.content}")'>Copy Entirety</button>
-                              <button class="snapshot-button" onclick='takeSnapshot(event, "${item.title}")'>Snapshot</button>
-                          </div>
-                      `;
+                box.innerHTML = `
+    <div class="box-header">
+        <p class="title">${item.title} 
+            <span class="status-box ${item.tag.toLowerCase()}"></span>
+            <span class="tag">${item.tag}</span>${selectedTag}
+        </p>
+        <span class="arrow">▶</span>
+    </div>
+                <div class="content">
+                    <p>${item.content}</p>
+                    <button class="${selectButtonClass}" onclick='toggleSelection(event, ${safeItemData})'>${selectButtonText}</button>
+                    <button class="copy-button" onclick='copyMeaning(event, "${item.content}")'>Copy Meaning</button>
+                    <button class="copy-entirety-button" onclick='copyEntirety(event, "${item.title}", "${item.tag}", "${item.content}")'>Copy Entirety</button>
+                    <button class="snapshot-button" onclick='takeSnapshot(event, "${item.title}")'>Snapshot</button>
+                </div>
+            `;
 
-                      const arrow = box.querySelector('.arrow');
-                      arrow.addEventListener('click', (event) => {
-                          event.stopPropagation();
-                          box.classList.toggle('expanded');
-                      });
+            const arrow = box.querySelector('.arrow');
+            arrow.addEventListener('click', (event) => {
+                event.stopPropagation();
+                box.classList.toggle('expanded');
+            });
 
-                      container.appendChild(box);
-                  });
+            container.appendChild(box);
+        });
 
-                  const totalPages = Math.ceil(data.length / itemsPerPage);
-                  createPaginationControls(totalPages);
-                  updatePaginationInfo(data.length);
+        const totalPages = Math.ceil(data.length / itemsPerPage);
+        createPaginationControls(totalPages);
+        updatePaginationInfo(data.length);
 
-                  hideLoading();
-              }, 200);
-          }
+        hideLoading();
+    }, 200);
+}
 
           function filterResults() {
               const filteredData = getFilteredData();
@@ -1033,18 +1163,36 @@
               }
           }
 
-          function fetchBetaList() {
-    // Simply toggle between beta and stable URLs without affecting checkbox
-    if (currentUrl.includes('beta')) {
-        currentUrl = 'https://thatoneunoriginal.github.io/assets/json-files/traits.json';
-        document.querySelector('.fetch-beta-list-button').textContent = 'Fetch Beta List';
-    } else {
-        currentUrl = 'https://raw.githubusercontent.com/ThatOneUnoriginal/ThatOneUnoriginal.github.io/refs/heads/beta/assets/json-files/traits.json';
-        document.querySelector('.fetch-beta-list-button').textContent = 'Fetch Stable List';
-    }
-    loadJsonFromUrl();
-}
+          async function fetchBetaList() {
+    const newUrl = currentUrl.includes('beta')
+        ? 'https://thatoneunoriginal.github.io/assets/json-files/traits.json'
+        : 'https://raw.githubusercontent.com/ThatOneUnoriginal/ThatOneUnoriginal.github.io/refs/heads/beta/assets/json-files/traits.json';
 
+    const compatibility = await checkListSwitchCompatibility(newUrl);
+    
+    if (!compatibility.continueSwitch) {
+        // Reset the beta checkbox to its previous state if the user cancels
+        const betaCheckbox = document.getElementById('betaListCheckbox');
+        betaCheckbox.checked = currentUrl.includes('beta');
+        return;
+    }
+
+    // Update URL and button text
+    currentUrl = newUrl;
+    document.querySelector('.fetch-beta-list-button').textContent = 
+        currentUrl.includes('beta') ? 'Fetch Stable List' : 'Fetch Beta List';
+
+    // If we're continuing with the switch, remove any titles that won't exist in the new list
+    if (compatibility.willLoseSelections) {
+        compatibility.missingTitles.forEach(title => {
+            selectedBoxes.delete(title);
+        });
+        saveSelections();
+    }
+
+    // Load the new list
+    await loadJsonFromUrl();
+}
 
 document.addEventListener('DOMContentLoaded', async () => {
     loadSavedTheme();
@@ -1134,19 +1282,38 @@ document.addEventListener('DOMContentLoaded', async () => {
               });
           }
 
-          function toggleBetaListPersistence() {
+          async function toggleBetaListPersistence() {
     const checkbox = document.getElementById('betaListCheckbox');
-    localStorage.setItem('useBetaList', checkbox.checked);
+    const newUrl = checkbox.checked
+        ? 'https://raw.githubusercontent.com/ThatOneUnoriginal/ThatOneUnoriginal.github.io/refs/heads/beta/assets/json-files/traits.json'
+        : 'https://thatoneunoriginal.github.io/assets/json-files/traits.json';
+
+    const compatibility = await checkListSwitchCompatibility(newUrl);
     
-    if (checkbox.checked) {
-        currentUrl = 'https://raw.githubusercontent.com/ThatOneUnoriginal/ThatOneUnoriginal.github.io/refs/heads/beta/assets/json-files/traits.json';
-        document.querySelector('.fetch-beta-list-button').textContent = 'Fetch Stable List';
-    } else {
-        currentUrl = 'https://thatoneunoriginal.github.io/assets/json-files/traits.json';
-        document.querySelector('.fetch-beta-list-button').textContent = 'Fetch Beta List';
+    if (!compatibility.continueSwitch) {
+        // Reset checkbox to previous state if user cancels
+        checkbox.checked = !checkbox.checked;
+        return;
     }
+
+    // Save preference and update URL
+    localStorage.setItem('useBetaList', checkbox.checked);
+    currentUrl = newUrl;
     
-    loadJsonFromUrl();
+    // Update button text
+    document.querySelector('.fetch-beta-list-button').textContent = 
+        checkbox.checked ? 'Fetch Stable List' : 'Fetch Beta List';
+
+    // If we're continuing with the switch, remove any titles that won't exist in the new list
+    if (compatibility.willLoseSelections) {
+        compatibility.missingTitles.forEach(title => {
+            selectedBoxes.delete(title);
+        });
+        saveSelections();
+    }
+
+    // Load the new list
+    await loadJsonFromUrl();
 }
 
 
