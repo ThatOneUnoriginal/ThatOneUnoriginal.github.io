@@ -140,7 +140,7 @@
         "content": "Quick to understand, learn, and devise solutions. Intelligent and skilled."
     },
     {
-        "title": "Colorful",
+        "title": "Colourful / Colorful",
         "tag": "Positive",
         "content": "Vivid and bright. Full of interest and variety."
     },
@@ -267,7 +267,7 @@
     {
         "title": "Efficient",
         "tag": "Positive",
-        "content": "Achieving maximum productivity with minimum wasted effort. Well-organized and competent."
+        "content": "Achieving maximum productivity with minimum wasted effort. Well-organized / organised and competent."
     },
     {
         "title": "Elegant",
@@ -502,7 +502,7 @@
     {
         "title": "Idealistic",
         "tag": "Positive",
-        "content": "Having or driven by high ideals. often unrealistically optimistic."
+        "content": "Having or driven by high ideals. Often unrealistically optimistic."
     },
     {
         "title": "Impressive",
@@ -522,7 +522,7 @@
     {
         "title": "Individualistic",
         "tag": "Positive",
-        "content": "Prioritizing individual freedom and independence. often nonconformist and self-reliant."
+        "content": "Prioritizing individual freedom and independence. Often nonconformist and self-reliant."
     },
     {
         "title": "Inoffensive",
@@ -607,7 +607,7 @@
     {
         "title": "Methodical",
         "tag": "Positive",
-        "content": "Following a systematic and organized approach. Careful and thorough in manner."
+        "content": "Following a systematic and organized / organised approach. Careful and thorough in manner."
     },
     {
         "title": "Meticulous",
@@ -637,7 +637,7 @@
     {
         "title": "Neat",
         "tag": "Positive",
-        "content": "Tidy and well-organized. Clean and orderly in appearance."
+        "content": "Tidy and well-organized / organised. Clean and orderly in appearance."
     },
     {
         "title": "Nonauthoritarian",
@@ -667,10 +667,10 @@
     {
         "title": "Orderly",
         "tag": "Positive",
-        "content": "Neat and well-organized. Structured and methodical."
+        "content": "Neat and well-organized / organised. Structured and methodical."
     },
     {
-        "title": "Organized",
+        "title": "Organized/ Organised",
         "tag": "Positive",
         "content": "Having a systematic and efficient approach. Well-planned and prepared."
     },
@@ -1037,7 +1037,7 @@
     {
         "title": "Systematic",
         "tag": "Positive",
-        "content": "Having or showing a planned and organized approach. Methodical and thorough."
+        "content": "Having or showing a planned and organized / organised approach. Methodical and thorough."
     },
     {
         "title": "Tasteful",
@@ -1057,7 +1057,7 @@
     {
         "title": "Tidy",
         "tag": "Positive",
-        "content": "Neat and well-organized. Clean and orderly."
+        "content": "Neat and well-organized / organised. Clean and orderly."
     },
     {
         "title": "Tolerant",
@@ -1981,9 +1981,9 @@
         "content": "Unfriendly or unenthusiastic. Not warm or affectionate."
     },
     {
-        "title": "Colorless",
+        "title": "Colourless / Colorless",
         "tag": "Negative",
-        "content": "Lacking color or vitality. Dull and uninteresting."
+        "content": "Lacking colour/color or vitality. Dull and uninteresting."
     },
     {
         "title": "Complacent",
@@ -2162,9 +2162,9 @@
         "content": "Not neat or tidy. Rowdy and disruptive."
     },
     {
-        "title": "Disorganized",
+        "title": "Disorganized / Disorganised",
         "tag": "Negative",
-        "content": "Not organized or arranged in a structured way. Chaotic and messy."
+        "content": "Not organized / organised or arranged in a structured way. Chaotic and messy."
     },
     {
         "title": "Disputatious",
@@ -2224,7 +2224,7 @@
     {
         "title": "Egocentric",
         "tag": "Negative",
-        "content": "Thinking only of oneself. Self-centered and selfish."
+        "content": "Thinking only of oneself. Self-centered / centred and selfish."
     },
     {
         "title": "Enervated",
@@ -2349,136 +2349,136 @@
     {
         "title": "Fraudulent",
         "tag": "Negative",
-        "content": "Deliberately deceitful or dishonest. often involving trickery or manipulation for personal gain."
+        "content": "Deliberately deceitful or dishonest. Often involving trickery or manipulation for personal gain."
     },
     {
         "title": "Frightening",
         "tag": "Negative",
-        "content": "Causing fear or alarm. often intimidating or threatening to others."
+        "content": "Causing fear or alarm. Often intimidating or threatening to others."
     },
     {
         "title": "Frivolous",
         "tag": "Negative",
-        "content": "Not having any serious purpose or value. often trivial or superficial."
+        "content": "Not having any serious purpose or value. Often trivial or superficial."
     },
     {
         "title": "Gloomy",
         "tag": "Negative",
-        "content": "Having or showing a depressed or despondent mood. often pessimistic and melancholic."
+        "content": "Having or showing a depressed or despondent mood. Often pessimistic and melancholic."
     },
     {
         "title": "Graceless",
         "tag": "Negative",
-        "content": "Lacking smoothness and elegance in movement. often awkward or clumsy."
+        "content": "Lacking smoothness and elegance in movement. Often awkward or clumsy."
     },
     {
         "title": "Grand",
         "tag": "Negative",
-        "content": "Impressive and magnificent in appearance or style. often extravagant or pompous."
+        "content": "Impressive and magnificent in appearance or style. Often extravagant or pompous."
     },
     {
         "title": "Grim",
         "tag": "Greedy",
-        "content": "Having or showing an intense and selfish desire for something. often excessively wanting more than is needed or deserved."
+        "content": "Having or showing an intense and selfish desire for something. Often excessively wanting more than is needed or deserved."
     },
     {
         "title": "Gullible",
         "tag": "Negative",
-        "content": "Easily persuaded to believe something. often overly trusting and naive."
+        "content": "Easily persuaded to believe something. Often overly trusting and naive."
     },
     {
         "title": "Hateful",
         "tag": "Hateful",
-        "content": "Feeling or showing extreme dislike or ill will. often malicious and spiteful."
+        "content": "Feeling or showing extreme dislike or ill will. Often malicious and spiteful."
     },
     {
         "title": "Haughty",
         "tag": "Negative",
-        "content": "Having or showing an exaggerated sense of one's own importance. often arrogant and disdainful."
+        "content": "Having or showing an exaggerated sense of one's own importance. Often arrogant and disdainful."
     },
     {
         "title": "Hedonistic",
         "tag": "Negative",
-        "content": "Pursuing or devoted to pleasure, especially sensual pleasure. often self-indulgent and selfish."
+        "content": "Pursuing or devoted to pleasure, especially sensual pleasure. Often self-indulgent and selfish."
     },
     {
         "title": "Hesitant",
         "tag": "Negative",
-        "content": "Slow to act or speak due to doubt or uncertainty. often indecisive or timid."
+        "content": "Slow to act or speak due to doubt or uncertainty. Often indecisive or timid."
     },
     {
         "title": "Hidebound",
         "tag": "Negative",
-        "content": "Unwilling or unable to change or adapt. often narrow-minded and inflexible."
+        "content": "Unwilling or unable to change or adapt. Often narrow-minded and inflexible."
     },
     {
         "title": "High-handed",
         "tag": "Negative",
-        "content": "Acting in an arrogant or domineering manner. often disregarding the feelings or rights of others."
+        "content": "Acting in an arrogant or domineering manner. Often disregarding the feelings or rights of others."
     },
     {
         "title": "Hostile",
         "tag": "Negative",
-        "content": "Showing or feeling opposition or dislike; unfriendly. often aggressive or antagonistic."
+        "content": "Showing or feeling opposition or dislike; unfriendly. Often aggressive or antagonistic."
     },
     {
         "title": "Ignorant",
         "tag": "Negative",
-        "content": "Lacking knowledge, information, or awareness about something in particular. often uneducated or uninformed."
+        "content": "Lacking knowledge, information, or awareness about something in particular. Often uneducated or uninformed."
     },
     {
         "title": "Imitative",
         "tag": "Negative",
-        "content": "Tending to copy or mimic others. often lacking originality or authenticity."
+        "content": "Tending to copy or mimic others. Often lacking originality or authenticity."
     },
     {
         "title": "Impatient",
         "tag": "Negative",
-        "content": "Quickly irritated or annoyed by delay or disagreement. often restless and eager for action."
+        "content": "Quickly irritated or annoyed by delay or disagreement. Often restless and eager for action."
     },
     {
         "title": "Impractical",
         "tag": "Negative",
-        "content": "Not suitable or possible to actually do or use. often unrealistic or idealistic."
+        "content": "Not suitable or possible to actually do or use. Often unrealistic or idealistic."
     },
     {
         "title": "Imprudent",
         "tag": "Negative",
-        "content": "Acting without thought for the consequences. often reckless or foolish."
+        "content": "Acting without thought for the consequences. Often reckless or foolish."
     },
     {
         "title": "Impulsive",
         "tag": "Negative",
-        "content": "Acting on a sudden desire or inclination. often spontaneous and unpredictable."
+        "content": "Acting on a sudden desire or inclination. Often spontaneous and unpredictable."
     },
     {
         "title": "Inconsiderate",
         "tag": "Negative",
-        "content": "Not thinking or caring about the feelings or needs of others. often selfish and thoughtless."
+        "content": "Not thinking or caring about the feelings or needs of others. Often selfish and thoughtless."
     },
     {
         "title": "Incurious",
         "tag": "Negative",
-        "content": "Lacking interest or curiosity. often apathetic or indifferent."
+        "content": "Lacking interest or curiosity. Often apathetic or indifferent."
     },
     {
         "title": "Indecisive",
         "tag": "Negative",
-        "content": "Unable to make decisions quickly or confidently. often hesitant or uncertain."
+        "content": "Unable to make decisions quickly or confidently. Often hesitant or uncertain."
     },
     {
         "title": "Indulgent",
         "tag": "Negative",
-        "content": "Allowing oneself to enjoy the pleasure of something. often excessive or self-gratifying."
+        "content": "Allowing oneself to enjoy the pleasure of something. Often excessive or self-gratifying."
     },
     {
         "title": "Inert",
         "tag": "Negative",
-        "content": "Lacking the ability or will to move or act. often sluggish or passive."
+        "content": "Lacking the ability or will to move or act. Often sluggish or passive."
     },
     {
         "title": "Inhibited",
         "tag": "Negative",
-        "content": "Unable to act or express oneself freely due to self-consciousness or restraint. often reserved or restrained."
+        "content": "Unable to act or express oneself freely due to self-consciousness or restraint. Often reserved or restrained."
     }
 ]
