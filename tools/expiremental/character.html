@@ -1049,6 +1049,7 @@
     });
 }
 
+
 function createCustomFieldElement(container, isEdit = false) {
     const fieldDiv = document.createElement('div');
     fieldDiv.className = 'custom-field-container';
@@ -1853,52 +1854,76 @@ document.getElementById('edit-add-custom-field').addEventListener('click', () =>
             }
         }
 
-        window.addEventListener('DOMContentLoaded', () => {
+        window.addEventListener('DOMContentLoaded', async () => {
     try {
         // Step 1: Scan local storage for imageTiles
         const imageTiles = localStorage.getItem('imageTiles');
         if (imageTiles) {
-            // Log the raw JSON data for inspection
             console.log('Raw imageTiles data:', imageTiles);
 
-            // Step 2: Translate imageTiles to gridCharacters format
+            // Step 2: Parse imageTiles data
             const imageTilesData = JSON.parse(imageTiles);
-            const translatedData = imageTilesData.map(tile => {
-                // Convert customFields object to an array of objects
-                const customFieldsArray = Object.keys(tile.customFields || {}).map(key => ({
-                    name: key,
-                    value: tile.customFields[key]
-                }));
-
-                return {
-                    imageUrl: tile.imageData,
-                    name: tile.name,
-                    platform: tile.platform,
-                    tags: tile.tags,
-                    age: tile.age,
-                    description: tile.description,
-                    customFields: customFieldsArray,
-                    link: tile.link
-                };
-            });
-
-            // Step 3: Add translated values to gridCharacters
             const existingCharacters = JSON.parse(localStorage.getItem('gridCharacters')) || [];
-            const updatedCharacters = [...existingCharacters, ...translatedData];
-            localStorage.setItem('gridCharacters', JSON.stringify(updatedCharacters));
 
-            // Step 4: Clear imageTiles
+            // Step 3: Process tiles one by one using a while loop
+            while (imageTilesData.length > 0) {
+                const tile = imageTilesData[0]; // Always process the first tile
+
+                try {
+                    // Convert customFields object to an array of objects
+                    const customFieldsArray = Object.keys(tile.customFields || {}).map(key => ({
+                        name: key,
+                        value: tile.customFields[key]
+                    }));
+
+                    const translatedTile = {
+                        imageUrl: tile.imageData,
+                        name: tile.name,
+                        platform: tile.platform,
+                        tags: tile.tags,
+                        age: tile.age,
+                        description: tile.description,
+                        customFields: customFieldsArray,
+                        link: tile.link
+                    };
+
+                    // Add translated tile to gridCharacters
+                    existingCharacters.push(translatedTile);
+
+                    // Log successful conversion
+                    console.log(`Successfully converted tile: ${tile.name}`);
+
+                    // Remove the processed tile from imageTilesData
+                    imageTilesData.shift(); // Remove the first tile
+
+                    // Update localStorage with the remaining tiles
+                    localStorage.setItem('imageTiles', JSON.stringify(imageTilesData));
+
+                    // Save updated gridCharacters to localStorage
+                    localStorage.setItem('gridCharacters', JSON.stringify(existingCharacters));
+
+                    // Add a small delay to prevent overwhelming the browser
+                    await new Promise(resolve => setTimeout(resolve, 10)); // 10ms delay
+                } catch (error) {
+                    // Log failed conversion
+                    console.error(`Failed to convert tile: ${tile.name}`, error);
+
+                    // Remove the problematic tile to avoid infinite loops
+                    imageTilesData.shift();
+                    localStorage.setItem('imageTiles', JSON.stringify(imageTilesData));
+                }
+            }
+
+            // Step 4: Clear imageTiles if all tiles are processed
             localStorage.removeItem('imageTiles');
 
-            // Render the grid with the updated characters
+            // Step 5: Render the grid with the updated characters
             renderGrid();
         }
     } catch (error) {
         console.error('Error parsing imageTiles data:', error);
-        // Handle the error as needed, e.g., notify the user or log the error
     }
 });
-
     </script>
 </body>
 </html>
