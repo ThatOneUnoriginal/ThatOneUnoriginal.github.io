@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tier List Manager</title>
+    
+    <!-- Material 3 CSS and Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    
+    <style>
+        /* Material 3 Theme Colors - Light Mode */
+        :root {
+            --md-sys-color-primary: #006495;
+            --md-sys-color-surface: #fdfcff;
+            --md-sys-color-surface-container: #eef8ff;
+            --md-sys-color-on-surface: #001f2a;
+            --md-sys-color-outline: #72777f;
+            --md-sys-color-primary-darker: #004d74;
+        }
+
+        /* Dark Mode Colors */
+        [data-theme="dark"] {
+            --md-sys-color-primary: #83cbff;
+            --md-sys-color-surface: #1a1c1e;
+            --md-sys-color-surface-container: #202427;
+            --md-sys-color-on-surface: #e1e2e5;
+            --md-sys-color-outline: #8c9198;
+            --md-sys-color-primary-darker: #4da6e6;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 24px;
+            background: var(--md-sys-color-surface);
+            color: var(--md-sys-color-on-surface);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Container Styles */
+        .lists-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Button Container */
+        .button-container {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+
+        /* List Styles */
+        .tier-list {
+            background: var(--md-sys-color-surface-container);
+            border-radius: 28px;
+            padding: 16px;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            animation: fadeIn 0.3s ease-out;
+            transition: background-color 0.3s;
+        }
+
+        .list-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+            cursor: pointer;
+        }
+
+        .list-title {
+            flex-grow: 1;
+            font-size: 1.5rem;
+            font-weight: 500;
+            margin: 0;
+            padding: 8px;
+            color: var(--md-sys-color-on-surface);
+            transition: color 0.3s;
+        }
+
+        /* Button Styles */
+        .md-button {
+            font-family: 'Roboto', sans-serif;
+            font-weight: 500;
+            font-size: 14px;
+            padding: 10px;
+            border-radius: 20px;
+            border: none;
+            background: var(--md-sys-color-primary);
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            width: 40px;
+            height: 40px;
+        }
+
+        .md-button:hover {
+            background: var(--md-sys-color-primary-darker);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .icon-button {
+            width: 40px;
+            height: 40px;
+            padding: 8px;
+            border-radius: 50%;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--md-sys-color-on-surface);
+            transition: background-color 0.2s;
+        }
+
+        .icon-button:hover {
+            background: rgba(0,0,0,0.05);
+        }
+
+        /* List Items */
+        .list-item {
+            display: flex;
+            align-items: center;
+            padding: 8px;
+            margin: 4px 0;
+            background: var(--md-sys-color-surface);
+            border-radius: 12px;
+            gap: 8px;
+            animation: slideIn 0.2s ease-out;
+            transition: background-color 0.3s;
+        }
+
+        .item-number {
+            min-width: 24px;
+            text-align: right;
+            margin-right: 8px;
+            color: var(--md-sys-color-outline);
+            font-weight: 500;
+        }
+
+        .item-content {
+            flex-grow: 1;
+            color: var(--md-sys-color-on-surface);
+        }
+
+        /* Add Item Form */
+        .add-item-form {
+            display: flex;
+            gap: 8px;
+            margin: 16px 0;
+        }
+
+        .md-input {
+            flex-grow: 1;
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: 1px solid var(--md-sys-color-outline);
+            font-family: 'Roboto', sans-serif;
+            transition: border-color 0.2s;
+            background: var(--md-sys-color-surface);
+            color: var(--md-sys-color-on-surface);
+        }
+
+        .md-input:focus {
+            outline: none;
+            border-color: var(--md-sys-color-primary);
+        }
+
+        /* Color Input */
+        .color-input-container {
+            position: relative;
+        }
+
+        .color-input {
+            position: absolute;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        /* Collapse/Expand functionality */
+        .items-container, .add-item-form {
+            overflow: hidden;
+            transition: max-height 0.3s ease, opacity 0.2s ease;
+        }
+
+        .list-collapsed .items-container,
+        .list-collapsed .add-item-form {
+            max-height: 0 !important;
+            opacity: 0;
+            margin: 0;
+            padding: 0;
+            border: 0;
+        }
+
+        .list-expanded .items-container,
+        .list-expanded .add-item-form {
+            max-height: 2000px; /* Arbitrary large value to accommodate content */
+            opacity: 1;
+        }
+
+        .collapse-icon {
+            transition: transform 0.3s ease;
+            margin-right: 8px;
+        }
+
+        .list-collapsed .collapse-icon {
+            transform: rotate(-90deg);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-10px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="lists-container">
+        <div class="button-container">
+            <button id="add-list" class="md-button" title="New List">
+                <span class="material-icons">add</span>
+            </button>
+            <div class="color-input-container">
+                <button id="recolor" class="md-button" title="Change Color">
+                    <span class="material-icons">palette</span>
+                </button>
+                <input type="color" class="color-input" id="color-picker">
+            </div>
+            <button id="theme-toggle" class="md-button" title="Toggle Dark Mode">
+                <span class="material-icons">brightness_4</span>
+            </button>
+        </div>
+
+        <!-- List Template -->
+        <template id="list-template">
+            <div class="tier-list list-collapsed">
+                <div class="list-header">
+                    <span class="material-icons collapse-icon">expand_more</span>
+                    <h2 class="list-title" contenteditable="true">New List</h2>
+                    <button class="icon-button delete-list" aria-label="Delete list">
+                        <span class="material-icons">delete</span>
+                    </button>
+                </div>
+                
+                <div class="items-container"></div>
+                
+                <div class="add-item-form">
+                    <input type="text" class="md-input" placeholder="Add new item">
+                    <button class="md-button add-item">
+                        <span class="material-icons">add</span>
+                    </button>
+                </div>
+            </div>
+        </template>
+
+        <!-- List Item Template -->
+        <template id="item-template">
+            <div class="list-item">
+                <div class="item-number">1.</div>
+                <div class="item-content"></div>
+                <button class="icon-button move-up" aria-label="Move item up">
+                    <span class="material-icons">arrow_upward</span>
+                </button>
+                <button class="icon-button move-down" aria-label="Move item down">
+                    <span class="material-icons">arrow_downward</span>
+                </button>
+                <button class="icon-button delete-item" aria-label="Delete item">
+                    <span class="material-icons">close</span>
+                </button>
+            </div>
+        </template>
+    </div>
+
+    <script>
+        // DOM Elements
+        const listsContainer = document.querySelector('.lists-container');
+        const addListButton = document.getElementById('add-list');
+        const recolorButton = document.getElementById('recolor');
+        const colorPicker = document.getElementById('color-picker');
+        const themeToggle = document.getElementById('theme-toggle');
+        const listTemplate = document.getElementById('list-template');
+        const itemTemplate = document.getElementById('item-template');
+
+        // Load saved theme, mode and lists
+        document.addEventListener('DOMContentLoaded', () => {
+            loadTheme();
+            loadColorMode();
+            loadLists();
+            updateItemNumbers();
+        });
+
+        // Event Listeners
+        addListButton.addEventListener('click', createNewList);
+        recolorButton.addEventListener('click', () => colorPicker.click());
+        colorPicker.addEventListener('input', updateTheme);
+        themeToggle.addEventListener('click', toggleColorMode);
+        listsContainer.addEventListener('click', handleListActions);
+        listsContainer.addEventListener('keypress', handleItemAdd);
+        listsContainer.addEventListener('input', saveLists);
+        listsContainer.addEventListener('blur', saveLists, true);
+
+        // Create new list
+        function createNewList() {
+            const newList = listTemplate.content.cloneNode(true);
+            const listElement = newList.querySelector('.tier-list');
+            listsContainer.appendChild(newList);
+            
+            // Add click handler for the new list's header
+            const listHeader = listElement.querySelector('.list-header');
+            listHeader.addEventListener('click', (event) => {
+                // Don't toggle if clicking on a button inside the header
+                if (event.target.closest('button')) return;
+                
+                listElement.classList.toggle('list-collapsed');
+                listElement.classList.toggle('list-expanded');
+                saveLists();
+            });
+            
+            saveLists();
+        }
+
+        // Toggle list collapse/expand
+        function toggleListCollapse(event) {
+            // Don't toggle if clicking on a button inside the header
+            if (event.target.closest('button')) return;
+            
+            const list = event.currentTarget.closest('.tier-list');
+            list.classList.toggle('list-collapsed');
+            list.classList.toggle('list-expanded');
+            saveLists();
+        }
+
+        // Handle list actions (delete list, add/delete/move items)
+        function handleListActions(event) {
+            const target = event.target.closest('button');
+            if (!target) return;
+
+            if (target.classList.contains('delete-list')) {
+                const list = target.closest('.tier-list');
+                list.remove();
+                saveLists();
+            }
+            else if (target.classList.contains('add-item')) {
+                const list = target.closest('.tier-list');
+                const input = list.querySelector('.md-input');
+                addItemToList(list, input);
+            }
+            else if (target.classList.contains('delete-item')) {
+                const item = target.closest('.list-item');
+                item.remove();
+                updateItemNumbers();
+                saveLists();
+            }
+            else if (target.classList.contains('move-up')) {
+                const item = target.closest('.list-item');
+                const prevItem = item.previousElementSibling;
+                if (prevItem) {
+                    item.parentNode.insertBefore(item, prevItem);
+                    updateItemNumbers();
+                    saveLists();
+                }
+            }
+            else if (target.classList.contains('move-down')) {
+                const item = target.closest('.list-item');
+                const nextItem = item.nextElementSibling;
+                if (nextItem) {
+                    item.parentNode.insertBefore(nextItem, item);
+                    updateItemNumbers();
+                    saveLists();
+                }
+            }
+        }
+
+        // Handle enter key press in input field
+        function handleItemAdd(event) {
+            if (event.key !== 'Enter') return;
+            
+            const input = event.target;
+            if (!input.classList.contains('md-input')) return;
+            
+            const list = input.closest('.tier-list');
+            addItemToList(list, input);
+        }
+
+        // Add new item to list
+        function addItemToList(list, input) {
+            const text = input.value.trim();
+            if (!text) return;
+
+            const newItem = itemTemplate.content.cloneNode(true);
+            newItem.querySelector('.item-content').textContent = text;
+            
+            const itemsContainer = list.querySelector('.items-container');
+            itemsContainer.appendChild(newItem);
+            
+            input.value = '';
+            input.focus();
+            updateItemNumbers();
+            saveLists();
+        }
+
+        // Update item numbers in all lists
+        function updateItemNumbers() {
+            document.querySelectorAll('.items-container').forEach(container => {
+                const items = container.querySelectorAll('.list-item');
+                items.forEach((item, index) => {
+                    item.querySelector('.item-number').textContent = `${index + 1}.`;
+                });
+            });
+        }
+
+        // Update theme with new color
+        function updateTheme(event) {
+            const color = event.target.value;
+            document.documentElement.style.setProperty('--md-sys-color-primary', color);
+            
+            // Calculate a slightly darker shade for hover effects
+            const darkerColor = shadeColor(color, -20);
+            document.documentElement.style.setProperty('--md-sys-color-primary-darker', darkerColor);
+            
+            // Save the theme color
+            localStorage.setItem('tierListThemeColor', color);
+        }
+
+        // Toggle between light and dark mode
+        function toggleColorMode() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            if (currentTheme === 'dark') {
+                document.documentElement.removeAttribute('data-theme');
+                localStorage.setItem('colorMode', 'light');
+                themeToggle.innerHTML = '<span class="material-icons">brightness_4</span>';
+            } else {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                localStorage.setItem('colorMode', 'dark');
+                themeToggle.innerHTML = '<span class="material-icons">brightness_7</span>';
+            }
+        }
+
+        // Load saved theme
+        function loadTheme() {
+            const savedColor = localStorage.getItem('tierListThemeColor');
+            if (savedColor) {
+                document.documentElement.style.setProperty('--md-sys-color-primary', savedColor);
+                const darkerColor = shadeColor(savedColor, -20);
+                document.documentElement.style.setProperty('--md-sys-color-primary-darker', darkerColor);
+                colorPicker.value = savedColor;
+            }
+        }
+
+        // Load saved color mode
+        function loadColorMode() {
+            const savedMode = localStorage.getItem('colorMode');
+            if (savedMode === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                themeToggle.innerHTML = '<span class="material-icons">brightness_7</span>';
+            } else {
+                themeToggle.innerHTML = '<span class="material-icons">brightness_4</span>';
+            }
+        }
+
+        // Helper function to shade a color
+        function shadeColor(color, percent) {
+            let R = parseInt(color.substring(1,3), 16);
+            let G = parseInt(color.substring(3,5), 16);
+            let B = parseInt(color.substring(5,7), 16);
+
+            R = parseInt(R * (100 + percent) / 100);
+            G = parseInt(G * (100 + percent) / 100);
+            B = parseInt(B * (100 + percent) / 100);
+
+            R = (R<255)?R:255;  
+            G = (G<255)?G:255;  
+            B = (B<255)?B:255;  
+
+            const RR = ((R.toString(16).length==1)?"0"+R.toString(16):R.toString(16));
+            const GG = ((G.toString(16).length==1)?"0"+G.toString(16):G.toString(16));
+            const BB = ((B.toString(16).length==1)?"0"+B.toString(16):B.toString(16));
+
+            return "#"+RR+GG+BB;
+        }
+
+        // Save all lists to local storage
+        function saveLists() {
+            const lists = [];
+            document.querySelectorAll('.tier-list').forEach(list => {
+                const title = list.querySelector('.list-title').textContent;
+                const items = [];
+                const isCollapsed = list.classList.contains('list-collapsed');
+                
+                list.querySelectorAll('.list-item .item-content').forEach(item => {
+                    items.push(item.textContent);
+                });
+                
+                lists.push({ title, items, isCollapsed });
+            });
+            
+            localStorage.setItem('tierLists', JSON.stringify(lists));
+        }
+
+        // Load lists from local storage
+        function loadLists() {
+            const savedLists = localStorage.getItem('tierLists');
+            if (savedLists) {
+                const lists = JSON.parse(savedLists);
+                
+                lists.forEach(listData => {
+                    createNewList();
+                    
+                    // Get the most recently added list
+                    const allLists = document.querySelectorAll('.tier-list');
+                    const newList = allLists[allLists.length - 1];
+                    
+                    // Set the title
+                    newList.querySelector('.list-title').textContent = listData.title;
+                    
+                    // Set collapsed/expanded state
+                    if (listData.isCollapsed) {
+                        newList.classList.add('list-collapsed');
+                        newList.classList.remove('list-expanded');
+                    } else {
+                        newList.classList.add('list-expanded');
+                        newList.classList.remove('list-collapsed');
+                    }
+                    
+                    // Add items
+                    const itemsContainer = newList.querySelector('.items-container');
+                    listData.items.forEach(itemText => {
+                        const newItem = itemTemplate.content.cloneNode(true);
+                        newItem.querySelector('.item-content').textContent = itemText;
+                        itemsContainer.appendChild(newItem);
+                    });
+                });
+                updateItemNumbers();
+            }
+        }
+    </script>
+</body>
+</html>
