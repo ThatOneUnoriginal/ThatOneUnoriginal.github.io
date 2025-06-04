@@ -3,178 +3,188 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tier List Manager</title>
+    <title>Pink Tier List Manager</title>
     
-    <!-- Material 3 CSS and Icons -->
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <!-- Material Icons -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     
     <style>
-        /* Material 3 Theme Colors - Light Mode */
-        :root {
-            --md-sys-color-primary: #006495;
-            --md-sys-color-surface: #fdfcff;
-            --md-sys-color-surface-container: #eef8ff;
-            --md-sys-color-on-surface: #001f2a;
-            --md-sys-color-outline: #72777f;
-            --md-sys-color-primary-darker: #004d74;
-        }
-
-        /* Dark Mode Colors */
-        [data-theme="dark"] {
-            --md-sys-color-primary: #83cbff;
-            --md-sys-color-surface: #1a1c1e;
-            --md-sys-color-surface-container: #202427;
-            --md-sys-color-on-surface: #e1e2e5;
-            --md-sys-color-outline: #8c9198;
-            --md-sys-color-primary-darker: #4da6e6;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
         body {
-            font-family: 'Roboto', sans-serif;
-            margin: 0;
-            padding: 24px;
-            background: var(--md-sys-color-surface);
-            color: var(--md-sys-color-on-surface);
-            transition: background-color 0.3s, color 0.3s;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #f8d7da 0%, #f5b2b7 100%);
+            min-height: 100vh;
+            display: flex;
+            padding: 0;
+            gap: 0;
+            color: rgba(0, 0, 0, 0.8);
+            transition: background 0.3s ease;
         }
 
-        /* Container Styles */
+        .sidebar {
+            width: 120px;
+            background: transparent;
+            padding: 60px 0 0 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 25px;
+            z-index: 2;
+            position: relative;
+        }
+
+        .sidebar .icon {
+            width: 44px;
+            height: 44px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            border: none;
+            color: rgba(0, 0, 0, 0.6);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .sidebar .icon:hover {
+            background: rgba(255, 255, 255, 0.5);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar .icon.active {
+            background: rgba(255, 255, 255, 0.6);
+            color: rgba(0, 0, 0, 0.8);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .sidebar .action-button {
+            width: 44px;
+            height: 44px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            border: none;
+            color: rgba(0, 0, 0, 0.6);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            margin-top: 20px;
+        }
+
+        .sidebar .action-button:hover {
+            background: rgba(255, 255, 255, 0.5);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar .action-button.active {
+            background: rgba(255, 255, 255, 0.6);
+            color: rgba(0, 0, 0, 0.8);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            margin-top: 60px;
+            margin-left: -20px;
+        }
+
+        .content-area {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 20px 0 0 0;
+            padding: 40px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-right: none;
+            border-bottom: none;
+            position: relative;
+            overflow-y: auto;
+            min-height: calc(100vh - 60px);
+            transition: all 0.3s ease;
+        }
+
+        .content-area::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* Tier List Specific Styles */
         .lists-container {
+            position: relative;
+            z-index: 1;
             max-width: 800px;
+            width: 100%;
             margin: 0 auto;
         }
 
-        /* Button Container */
         .button-container {
             display: flex;
-            gap: 8px;
-            margin-bottom: 24px;
+            gap: 12px;
+            margin-bottom: 32px;
+            flex-wrap: wrap;
         }
 
-        /* List Styles */
-        .tier-list {
-            background: var(--md-sys-color-surface-container);
-            border-radius: 28px;
-            padding: 16px;
-            margin-bottom: 24px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            animation: fadeIn 0.3s ease-out;
-            transition: background-color 0.3s;
-        }
-
-        .list-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 16px;
-            cursor: pointer;
-        }
-
-        .list-title {
-            flex-grow: 1;
-            font-size: 1.5rem;
-            font-weight: 500;
-            margin: 0;
-            padding: 8px;
-            color: var(--md-sys-color-on-surface);
-            transition: color 0.3s;
-        }
-
-        /* Button Styles */
-        .md-button {
-            font-family: 'Roboto', sans-serif;
+        .pink-button {
+            font-family: 'Inter', sans-serif;
             font-weight: 500;
             font-size: 14px;
-            padding: 10px;
-            border-radius: 20px;
+            padding: 12px 20px;
+            border-radius: 16px;
             border: none;
-            background: var(--md-sys-color-primary);
-            color: white;
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            color: rgba(0, 0, 0, 0.8);
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.2s;
-            width: 40px;
-            height: 40px;
-        }
-
-        .md-button:hover {
-            background: var(--md-sys-color-primary-darker);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-        }
-
-        .icon-button {
-            width: 40px;
-            height: 40px;
-            padding: 8px;
-            border-radius: 50%;
-            border: none;
-            background: transparent;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--md-sys-color-on-surface);
-            transition: background-color 0.2s;
-        }
-
-        .icon-button:hover {
-            background: rgba(0,0,0,0.05);
-        }
-
-        /* List Items */
-        .list-item {
-            display: flex;
-            align-items: center;
-            padding: 8px;
-            margin: 4px 0;
-            background: var(--md-sys-color-surface);
-            border-radius: 12px;
             gap: 8px;
-            animation: slideIn 0.2s ease-out;
-            transition: background-color 0.3s;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
         }
 
-        .item-number {
-            min-width: 24px;
-            text-align: right;
-            margin-right: 8px;
-            color: var(--md-sys-color-outline);
-            font-weight: 500;
+        .pink-button:hover {
+            background: rgba(255, 255, 255, 0.7);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
         }
 
-        .item-content {
-            flex-grow: 1;
-            color: var(--md-sys-color-on-surface);
+        .pink-button:active {
+            transform: translateY(0);
         }
 
-        /* Add Item Form */
-        .add-item-form {
-            display: flex;
-            gap: 8px;
-            margin: 16px 0;
-        }
-
-        .md-input {
-            flex-grow: 1;
-            padding: 8px 16px;
-            border-radius: 20px;
-            border: 1px solid var(--md-sys-color-outline);
-            font-family: 'Roboto', sans-serif;
-            transition: border-color 0.2s;
-            background: var(--md-sys-color-surface);
-            color: var(--md-sys-color-on-surface);
-        }
-
-        .md-input:focus {
-            outline: none;
-            border-color: var(--md-sys-color-primary);
-        }
-
-        /* Color Input */
         .color-input-container {
             position: relative;
+            display: flex;
         }
 
         .color-input {
@@ -185,10 +195,168 @@
             cursor: pointer;
         }
 
+        /* Tier List Styles */
+        .tier-list {
+            background: rgba(255, 255, 255, 0.35);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            animation: fadeIn 0.5s ease-out;
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .tier-list:hover {
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .list-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            cursor: pointer;
+            gap: 12px;
+            user-select: none;
+        }
+
+        .list-title {
+            flex-grow: 1;
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin: 0;
+            padding: 8px 12px;
+            color: rgba(0, 0, 0, 0.9);
+            background: transparent;
+            border: none;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .list-title:focus {
+            background: rgba(255, 255, 255, 0.5);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.6);
+        }
+
+        .collapse-icon {
+            transition: transform 0.3s ease;
+            color: rgba(0, 0, 0, 0.6);
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        .list-collapsed .collapse-icon {
+            transform: rotate(-90deg);
+        }
+
+        .icon-button {
+            width: 36px;
+            height: 36px;
+            padding: 6px;
+            border-radius: 50%;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(0, 0, 0, 0.6);
+            transition: all 0.3s ease;
+        }
+
+        .icon-button:hover {
+            background: rgba(255, 255, 255, 0.5);
+            transform: scale(1.1);
+            color: rgba(0, 0, 0, 0.8);
+        }
+
+        .icon-button:active {
+            transform: scale(0.95);
+        }
+
+        /* List Items */
+.list-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    margin: 8px 0;
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 16px;
+    gap: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.list-item:hover {
+    background: rgba(255, 255, 255, 0.5);
+    transform: translateY(-4px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+        .item-number {
+            min-width: 28px;
+            text-align: center;
+            color: rgba(0, 0, 0, 0.6);
+            font-weight: 600;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .item-content {
+            flex-grow: 1;
+            color: rgba(0, 0, 0, 0.9);
+            font-weight: 500;
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Add Item Form */
+        .add-item-form {
+            display: flex;
+            gap: 12px;
+            margin: 20px 0 0 0;
+            transition: all 0.3s ease;
+        }
+
+.pink-input {
+    flex-grow: 1;
+    padding: 12px 18px;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    background: rgba(255, 255, 255, 0.4);
+    color: rgba(0, 0, 0, 0.9);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.pink-input:focus {
+    outline: none;
+    background: rgba(255, 255, 255, 0.6);
+    border-color: rgba(255, 255, 255, 0.7);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.pink-input::placeholder {
+    color: rgba(0, 0, 0, 0.4);
+}
+
+
         /* Collapse/Expand functionality */
         .items-container, .add-item-form {
             overflow: hidden;
-            transition: max-height 0.3s ease, opacity 0.2s ease;
+            transition: all 0.4s ease;
         }
 
         .list-collapsed .items-container,
@@ -197,91 +365,185 @@
             opacity: 0;
             margin: 0;
             padding: 0;
-            border: 0;
+            visibility: hidden;
         }
 
         .list-expanded .items-container,
         .list-expanded .add-item-form {
-            max-height: 2000px; /* Arbitrary large value to accommodate content */
+            max-height: 2000px;
             opacity: 1;
+            visibility: visible;
         }
 
-        .collapse-icon {
-            transition: transform 0.3s ease;
-            margin-right: 8px;
-        }
-
-        .list-collapsed .collapse-icon {
-            transform: rotate(-90deg);
+        /* Welcome Message */
+        .welcome-message {
+            text-align: center;
+            color: rgba(0, 0, 0, 0.5);
+            font-size: 18px;
+            font-weight: 400;
+            margin: 60px 0;
+            opacity: 0;
+            animation: fadeIn 1s ease forwards 1s;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px dashed rgba(255, 255, 255, 0.5);
         }
 
         /* Animations */
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+            from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
         @keyframes slideIn {
-            from { opacity: 0; transform: translateX(-10px); }
+            from { opacity: 0; transform: translateX(-20px); }
             to { opacity: 1; transform: translateX(0); }
         }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            body {
+                padding: 0;
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                height: 80px;
+                flex-direction: row;
+                justify-content: center;
+                padding: 20px;
+                gap: 20px;
+            }
+            
+            .main-content {
+                margin-top: 0;
+                margin-left: 0;
+            }
+            
+            .content-area {
+                padding: 20px;
+                border-radius: 0;
+                border: none;
+                min-height: calc(100vh - 80px);
+            }
+
+            .button-container {
+                justify-content: center;
+            }
+
+            .tier-list {
+                padding: 16px;
+            }
+
+            .list-title {
+                font-size: 1.2rem;
+            }
+
+            .welcome-message {
+                margin: 30px 0;
+                padding: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .sidebar .icon {
+                width: 40px;
+                height: 40px;
+            }
+
+            .pink-button {
+                padding: 10px 16px;
+                font-size: 13px;
+            }
+
+            .list-item {
+                padding: 10px 12px;
+                gap: 8px;
+            }
+
+            .icon-button {
+                width: 32px;
+                height: 32px;
+            }
+        }
+
+        
     </style>
 </head>
 <body>
-    <div class="lists-container">
-        <div class="button-container">
-            <button id="add-list" class="md-button" title="New List">
-                <span class="material-icons">add</span>
+    <nav class="sidebar">
+        <!-- Moved action buttons to sidebar -->
+        <button id="add-list" class="action-button" title="New List">
+            <span class="material-icons">add</span>
+        </button>
+        <div class="color-input-container">
+            <button id="recolor" class="action-button" title="Change Theme">
+                <span class="material-icons">palette</span>
             </button>
-            <div class="color-input-container">
-                <button id="recolor" class="md-button" title="Change Color">
-                    <span class="material-icons">palette</span>
-                </button>
-                <input type="color" class="color-input" id="color-picker">
-            </div>
-            <button id="theme-toggle" class="md-button" title="Toggle Dark Mode">
-                <span class="material-icons">brightness_4</span>
-            </button>
+            <input type="color" class="color-input" id="color-picker">
         </div>
+        <button id="export-data" class="action-button" title="Export Data">
+            <span class="material-icons">file_download</span>
+        </button>
+        <button id="import-data" class="action-button" title="Import Data">
+            <span class="material-icons">file_upload</span>
+        </button>
+        <input type="file" id="import-file" style="display: none;" accept=".json">
+    </nav>
+    
+    <div class="main-content">
+        <div class="content-area">
+            <div class="lists-container">
+                <!-- Removed button-container div since buttons are now in sidebar -->
 
-        <!-- List Template -->
-        <template id="list-template">
-            <div class="tier-list list-collapsed">
-                <div class="list-header">
-                    <span class="material-icons collapse-icon">expand_more</span>
-                    <h2 class="list-title" contenteditable="true">New List</h2>
-                    <button class="icon-button delete-list" aria-label="Delete list">
-                        <span class="material-icons">delete</span>
-                    </button>
+                <div class="welcome-message" id="welcome-message">
+                    Create your first tier list to get started
                 </div>
-                
-                <div class="items-container"></div>
-                
-                <div class="add-item-form">
-                    <input type="text" class="md-input" placeholder="Add new item">
-                    <button class="md-button add-item">
-                        <span class="material-icons">add</span>
-                    </button>
-                </div>
-            </div>
-        </template>
 
-        <!-- List Item Template -->
-        <template id="item-template">
-            <div class="list-item">
-                <div class="item-number">1.</div>
-                <div class="item-content"></div>
-                <button class="icon-button move-up" aria-label="Move item up">
-                    <span class="material-icons">arrow_upward</span>
-                </button>
-                <button class="icon-button move-down" aria-label="Move item down">
-                    <span class="material-icons">arrow_downward</span>
-                </button>
-                <button class="icon-button delete-item" aria-label="Delete item">
-                    <span class="material-icons">close</span>
-                </button>
+                <!-- List Template -->
+                <template id="list-template">
+                    <div class="tier-list list-expanded">
+                        <div class="list-header">
+                            <span class="material-icons collapse-icon">expand_more</span>
+                            <h2 class="list-title" contenteditable="true">New Tier List</h2>
+                            <button class="icon-button delete-list" aria-label="Delete list">
+                                <span class="material-icons">delete</span>
+                            </button>
+                        </div>
+                        
+                        <div class="items-container"></div>
+                        
+                        <div class="add-item-form">
+                            <input type="text" class="pink-input" placeholder="Add new item...">
+                            <button class="pink-button add-item">
+                                <span class="material-icons">add</span>
+                            </button>
+                        </div>
+                    </div>
+                </template>
+
+                <!-- List Item Template -->
+                <template id="item-template">
+                    <div class="list-item">
+                        <div class="item-number">1</div>
+                        <div class="item-content" contenteditable="true"></div>
+                        <button class="icon-button move-up" aria-label="Move item up">
+                            <span class="material-icons">keyboard_arrow_up</span>
+                        </button>
+                        <button class="icon-button move-down" aria-label="Move item down">
+                            <span class="material-icons">keyboard_arrow_down</span>
+                        </button>
+                        <button class="icon-button delete-item" aria-label="Delete item">
+                            <span class="material-icons">close</span>
+                        </button>
+                    </div>
+                </template>
             </div>
-        </template>
+        </div>
     </div>
 
     <script>
@@ -290,79 +552,112 @@
         const addListButton = document.getElementById('add-list');
         const recolorButton = document.getElementById('recolor');
         const colorPicker = document.getElementById('color-picker');
-        const themeToggle = document.getElementById('theme-toggle');
         const listTemplate = document.getElementById('list-template');
         const itemTemplate = document.getElementById('item-template');
+        const welcomeMessage = document.getElementById('welcome-message');
+        const exportButton = document.getElementById('export-data');
+        const importButton = document.getElementById('import-data');
+        const importFileInput = document.getElementById('import-file');
 
-        // Load saved theme, mode and lists
+        // Load saved theme and lists
         document.addEventListener('DOMContentLoaded', () => {
             loadTheme();
-            loadColorMode();
             loadLists();
             updateItemNumbers();
+            updateWelcomeMessage();
         });
 
         // Event Listeners
         addListButton.addEventListener('click', createNewList);
         recolorButton.addEventListener('click', () => colorPicker.click());
         colorPicker.addEventListener('input', updateTheme);
-        themeToggle.addEventListener('click', toggleColorMode);
         listsContainer.addEventListener('click', handleListActions);
         listsContainer.addEventListener('keypress', handleItemAdd);
         listsContainer.addEventListener('input', saveLists);
         listsContainer.addEventListener('blur', saveLists, true);
+        exportButton.addEventListener('click', exportData);
+        importButton.addEventListener('click', () => importFileInput.click());
+        importFileInput.addEventListener('change', importData);
+
+        // Sidebar navigation
+        document.querySelectorAll('.sidebar .icon').forEach((icon, index) => {
+            icon.addEventListener('click', () => {
+                document.querySelectorAll('.sidebar .icon').forEach(i => i.classList.remove('active'));
+                icon.classList.add('active');
+            });
+        });
 
         // Create new list
         function createNewList() {
             const newList = listTemplate.content.cloneNode(true);
             const listElement = newList.querySelector('.tier-list');
-            listsContainer.appendChild(newList);
+            
+            // Insert before welcome message
+            const welcomeMsg = document.getElementById('welcome-message');
+            listsContainer.insertBefore(newList, welcomeMsg);
             
             // Add click handler for the new list's header
             const listHeader = listElement.querySelector('.list-header');
             listHeader.addEventListener('click', (event) => {
-                // Don't toggle if clicking on a button inside the header
-                if (event.target.closest('button')) return;
+                if (event.target.closest('button') || event.target.isContentEditable) return;
                 
                 listElement.classList.toggle('list-collapsed');
                 listElement.classList.toggle('list-expanded');
                 saveLists();
             });
             
-            saveLists();
-        }
-
-        // Toggle list collapse/expand
-        function toggleListCollapse(event) {
-            // Don't toggle if clicking on a button inside the header
-            if (event.target.closest('button')) return;
+            // Focus on title for immediate editing
+            const titleElement = listElement.querySelector('.list-title');
+            setTimeout(() => {
+                titleElement.focus();
+                document.execCommand('selectAll', false, null);
+            }, 0);
             
-            const list = event.currentTarget.closest('.tier-list');
-            list.classList.toggle('list-collapsed');
-            list.classList.toggle('list-expanded');
+            // Add event listeners for the new list
+            const addItemButton = listElement.querySelector('.add-item');
+            const inputField = listElement.querySelector('.pink-input');
+            
+            addItemButton.addEventListener('click', () => {
+                addItemToList(listElement, inputField);
+            });
+            
+            inputField.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    addItemToList(listElement, inputField);
+                }
+            });
+            
+            updateWelcomeMessage();
             saveLists();
         }
 
-        // Handle list actions (delete list, add/delete/move items)
+        // Handle list actions
         function handleListActions(event) {
             const target = event.target.closest('button');
             if (!target) return;
 
             if (target.classList.contains('delete-list')) {
                 const list = target.closest('.tier-list');
-                list.remove();
-                saveLists();
+                list.style.animation = 'fadeOut 0.3s ease-out forwards';
+                setTimeout(() => {
+                    list.remove();
+                    updateWelcomeMessage();
+                    saveLists();
+                }, 300);
             }
             else if (target.classList.contains('add-item')) {
                 const list = target.closest('.tier-list');
-                const input = list.querySelector('.md-input');
+                const input = list.querySelector('.pink-input');
                 addItemToList(list, input);
             }
             else if (target.classList.contains('delete-item')) {
                 const item = target.closest('.list-item');
-                item.remove();
-                updateItemNumbers();
-                saveLists();
+                item.style.animation = 'slideOut 0.3s ease-out forwards';
+                setTimeout(() => {
+                    item.remove();
+                    updateItemNumbers();
+                    saveLists();
+                }, 300);
             }
             else if (target.classList.contains('move-up')) {
                 const item = target.closest('.list-item');
@@ -389,7 +684,7 @@
             if (event.key !== 'Enter') return;
             
             const input = event.target;
-            if (!input.classList.contains('md-input')) return;
+            if (!input.classList.contains('pink-input')) return;
             
             const list = input.closest('.tier-list');
             addItemToList(list, input);
@@ -401,10 +696,17 @@
             if (!text) return;
 
             const newItem = itemTemplate.content.cloneNode(true);
-            newItem.querySelector('.item-content').textContent = text;
+            const itemContent = newItem.querySelector('.item-content');
+            itemContent.textContent = text;
             
             const itemsContainer = list.querySelector('.items-container');
             itemsContainer.appendChild(newItem);
+            
+            // Focus on the new item's content for immediate editing
+            setTimeout(() => {
+                itemContent.focus();
+                document.execCommand('selectAll', false, null);
+            }, 0);
             
             input.value = '';
             input.focus();
@@ -417,82 +719,104 @@
             document.querySelectorAll('.items-container').forEach(container => {
                 const items = container.querySelectorAll('.list-item');
                 items.forEach((item, index) => {
-                    item.querySelector('.item-number').textContent = `${index + 1}.`;
+                    item.querySelector('.item-number').textContent = index + 1;
                 });
             });
+        }
+
+        // Update welcome message visibility
+        function updateWelcomeMessage() {
+            const hasLists = document.querySelectorAll('.tier-list').length > 0;
+            welcomeMessage.style.display = hasLists ? 'none' : 'block';
         }
 
         // Update theme with new color
         function updateTheme(event) {
             const color = event.target.value;
-            document.documentElement.style.setProperty('--md-sys-color-primary', color);
             
-            // Calculate a slightly darker shade for hover effects
-            const darkerColor = shadeColor(color, -20);
-            document.documentElement.style.setProperty('--md-sys-color-primary-darker', darkerColor);
+            // Convert hex to HSL for variations
+            const hsl = hexToHsl(color);
+            const lightColor = `hsl(${hsl.h}, ${hsl.s}%, ${Math.min(hsl.l + 20, 90)}%)`;
+            const darkColor = `hsl(${hsl.h}, ${hsl.s}%, ${Math.max(hsl.l - 20, 10)}%)`;
             
-            // Save the theme color
+            // Update background gradient
+            document.body.style.background = `linear-gradient(135deg, ${lightColor} 0%, ${color} 100%)`;
+            
+            // Update content area to be lighter than the background
+            const contentArea = document.querySelector('.content-area');
+            contentArea.style.background = `rgba(255, 255, 255, 0.3)`;
+            contentArea.style.borderColor = `rgba(255, 255, 255, 0.4)`;
+            
+            // Update tier lists to be slightly lighter
+            const tierLists = document.querySelectorAll('.tier-list');
+            tierLists.forEach(list => {
+                list.style.background = `rgba(255, 255, 255, 0.4)`;
+                list.style.borderColor = `rgba(255, 255, 255, 0.5)`;
+            });
+            
+            // Update list items to maintain the hierarchy
+            const listItems = document.querySelectorAll('.list-item');
+            listItems.forEach(item => {
+                item.style.background = `rgba(255, 255, 255, 0.5)`;
+                item.style.borderColor = `rgba(255, 255, 255, 0.6)`;
+            });
+            
+            // Update buttons and inputs to match the new theme
+            const buttons = document.querySelectorAll('.pink-button');
+            buttons.forEach(button => {
+                button.style.background = `rgba(255, 255, 255, 0.6)`;
+                button.style.borderColor = `rgba(255, 255, 255, 0.7)`;
+            });
+            
+            const inputs = document.querySelectorAll('.pink-input');
+            inputs.forEach(input => {
+                input.style.background = `rgba(255, 255, 255, 0.5)`;
+                input.style.borderColor = `rgba(255, 255, 255, 0.6)`;
+            });
+            
+            // Update welcome message
+            welcomeMessage.style.background = `rgba(255, 255, 255, 0.4)`;
+            welcomeMessage.style.borderColor = `rgba(255, 255, 255, 0.5)`;
+            
             localStorage.setItem('tierListThemeColor', color);
-        }
-
-        // Toggle between light and dark mode
-        function toggleColorMode() {
-            const currentTheme = document.documentElement.getAttribute('data-theme');
-            if (currentTheme === 'dark') {
-                document.documentElement.removeAttribute('data-theme');
-                localStorage.setItem('colorMode', 'light');
-                themeToggle.innerHTML = '<span class="material-icons">brightness_4</span>';
-            } else {
-                document.documentElement.setAttribute('data-theme', 'dark');
-                localStorage.setItem('colorMode', 'dark');
-                themeToggle.innerHTML = '<span class="material-icons">brightness_7</span>';
-            }
         }
 
         // Load saved theme
         function loadTheme() {
             const savedColor = localStorage.getItem('tierListThemeColor');
             if (savedColor) {
-                document.documentElement.style.setProperty('--md-sys-color-primary', savedColor);
-                const darkerColor = shadeColor(savedColor, -20);
-                document.documentElement.style.setProperty('--md-sys-color-primary-darker', darkerColor);
                 colorPicker.value = savedColor;
+                updateTheme({ target: { value: savedColor } });
             }
         }
 
-        // Load saved color mode
-        function loadColorMode() {
-            const savedMode = localStorage.getItem('colorMode');
-            if (savedMode === 'dark') {
-                document.documentElement.setAttribute('data-theme', 'dark');
-                themeToggle.innerHTML = '<span class="material-icons">brightness_7</span>';
+        // Helper function to convert hex to HSL
+        function hexToHsl(hex) {
+            const r = parseInt(hex.substr(1, 2), 16) / 255;
+            const g = parseInt(hex.substr(3, 2), 16) / 255;
+            const b = parseInt(hex.substr(5, 2), 16) / 255;
+
+            const max = Math.max(r, g, b);
+            const min = Math.min(r, g, b);
+            let h, s, l = (max + min) / 2;
+
+            if (max === min) {
+                h = s = 0;
             } else {
-                themeToggle.innerHTML = '<span class="material-icons">brightness_4</span>';
+                const d = max - min;
+                s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+                switch (max) {
+                    case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+                    case g: h = (b - r) / d + 2; break;
+                    case b: h = (r - g) / d + 4; break;
+                }
+                h /= 6;
             }
+
+            return { h: Math.round(h * 360), s: Math.round(s * 100), l: Math.round(l * 100) };
         }
 
-        // Helper function to shade a color
-        function shadeColor(color, percent) {
-            let R = parseInt(color.substring(1,3), 16);
-            let G = parseInt(color.substring(3,5), 16);
-            let B = parseInt(color.substring(5,7), 16);
-
-            R = parseInt(R * (100 + percent) / 100);
-            G = parseInt(G * (100 + percent) / 100);
-            B = parseInt(B * (100 + percent) / 100);
-
-            R = (R<255)?R:255;  
-            G = (G<255)?G:255;  
-            B = (B<255)?B:255;  
-
-            const RR = ((R.toString(16).length==1)?"0"+R.toString(16):R.toString(16));
-            const GG = ((G.toString(16).length==1)?"0"+G.toString(16):G.toString(16));
-            const BB = ((B.toString(16).length==1)?"0"+B.toString(16):B.toString(16));
-
-            return "#"+RR+GG+BB;
-        }
-
-        // Save all lists to local storage
+        // Save all lists
         function saveLists() {
             const lists = [];
             document.querySelectorAll('.tier-list').forEach(list => {
@@ -510,7 +834,7 @@
             localStorage.setItem('tierLists', JSON.stringify(lists));
         }
 
-        // Load lists from local storage
+        // Load lists from storage
         function loadLists() {
             const savedLists = localStorage.getItem('tierLists');
             if (savedLists) {
@@ -519,14 +843,11 @@
                 lists.forEach(listData => {
                     createNewList();
                     
-                    // Get the most recently added list
                     const allLists = document.querySelectorAll('.tier-list');
                     const newList = allLists[allLists.length - 1];
                     
-                    // Set the title
                     newList.querySelector('.list-title').textContent = listData.title;
                     
-                    // Set collapsed/expanded state
                     if (listData.isCollapsed) {
                         newList.classList.add('list-collapsed');
                         newList.classList.remove('list-expanded');
@@ -535,7 +856,6 @@
                         newList.classList.remove('list-collapsed');
                     }
                     
-                    // Add items
                     const itemsContainer = newList.querySelector('.items-container');
                     listData.items.forEach(itemText => {
                         const newItem = itemTemplate.content.cloneNode(true);
@@ -546,6 +866,114 @@
                 updateItemNumbers();
             }
         }
+
+        // Export data to JSON file
+        function exportData() {
+            const lists = [];
+            document.querySelectorAll('.tier-list').forEach(list => {
+                const title = list.querySelector('.list-title').textContent;
+                const items = [];
+                const isCollapsed = list.classList.contains('list-collapsed');
+                
+                list.querySelectorAll('.list-item .item-content').forEach(item => {
+                    items.push(item.textContent);
+                });
+                
+                lists.push({ title, items, isCollapsed });
+            });
+            
+            const themeColor = localStorage.getItem('tierListThemeColor');
+            const data = {
+                version: 1,
+                themeColor,
+                lists
+            };
+            
+            const dataStr = JSON.stringify(data, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(dataBlob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'tier-list-data.json';
+            document.body.appendChild(a);
+            a.click();
+            
+            setTimeout(() => {
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }, 0);
+        }
+
+        // Import data from JSON file
+        function importData(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    
+                    // Clear existing lists
+                    document.querySelectorAll('.tier-list').forEach(list => list.remove());
+                    
+                    // Apply theme if exists
+                    if (data.themeColor) {
+                        colorPicker.value = data.themeColor;
+                        updateTheme({ target: { value: data.themeColor } });
+                    }
+                    
+                    // Create new lists from imported data
+                    if (data.lists && Array.isArray(data.lists)) {
+                        data.lists.forEach(listData => {
+                            createNewList();
+                            
+                            const allLists = document.querySelectorAll('.tier-list');
+                            const newList = allLists[allLists.length - 1];
+                            
+                            newList.querySelector('.list-title').textContent = listData.title;
+                            
+                            if (listData.isCollapsed) {
+                                newList.classList.add('list-collapsed');
+                                newList.classList.remove('list-expanded');
+                            } else {
+                                newList.classList.add('list-expanded');
+                                newList.classList.remove('list-collapsed');
+                            }
+                            
+                            const itemsContainer = newList.querySelector('.items-container');
+                            listData.items.forEach(itemText => {
+                                const newItem = itemTemplate.content.cloneNode(true);
+                                newItem.querySelector('.item-content').textContent = itemText;
+                                itemsContainer.appendChild(newItem);
+                            });
+                        });
+                        updateItemNumbers();
+                        updateWelcomeMessage();
+                        saveLists();
+                    }
+                } catch (error) {
+                    alert('Error importing file: ' + error.message);
+                }
+            };
+            reader.readAsText(file);
+            
+            // Reset file input
+            event.target.value = '';
+        }
+
+        // Add fadeOut animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeOut {
+                to { opacity: 0; transform: translateY(-20px); }
+            }
+            @keyframes slideOut {
+                to { opacity: 0; transform: translateX(-100px); }
+            }
+        `;
+        document.head.appendChild(style);
     </script>
 </body>
 </html>
